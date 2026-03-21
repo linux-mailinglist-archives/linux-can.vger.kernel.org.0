@@ -1,1407 +1,215 @@
-Return-Path: <linux-can+bounces-7203-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7204-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uGMOF/GGvWnQ+gIAu9opvQ
-	(envelope-from <linux-can+bounces-7203-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 20 Mar 2026 18:42:09 +0100
+	id cAIoLkOivmmLVAMAu9opvQ
+	(envelope-from <linux-can+bounces-7204-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sat, 21 Mar 2026 14:50:59 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96B9B2DED54
-	for <lists+linux-can@lfdr.de>; Fri, 20 Mar 2026 18:42:08 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2033F2E59DA
+	for <lists+linux-can@lfdr.de>; Sat, 21 Mar 2026 14:50:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 884E73025F4F
-	for <lists+linux-can@lfdr.de>; Fri, 20 Mar 2026 17:36:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BDF9E300F510
+	for <lists+linux-can@lfdr.de>; Sat, 21 Mar 2026 13:50:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F14883D3CE0;
-	Fri, 20 Mar 2026 17:36:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB062BD11;
+	Sat, 21 Mar 2026 13:50:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bA1ONQFu";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="anJqG5T8"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="JnhFWPjf";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ilL7vhbY"
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C55E3CE49E
-	for <linux-can@vger.kernel.org>; Fri, 20 Mar 2026 17:36:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E5D2F1FD7
+	for <linux-can@vger.kernel.org>; Sat, 21 Mar 2026 13:50:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774028193; cv=none; b=grK15NWUpm00vM96FTk69DQJEmxDO/LamZtZ68SkVW8geUhKrDWo6nty7TTmzR+/XXsa/4lXRy6Co/5aJiAJ1z2ylBFd6U6HhTHNcZ5MpPs9QjnRNwXKk0BMPnXKJ+hw98R0aodjKMzVFWEDvg+/JpeChejUFacYsxA8LM3r4jM=
+	t=1774101045; cv=none; b=uvVfKisgTSb/UvimeQpnq5CVlPREuZc6RyzBaW72BJVg9Cv0XR3cMNkhTd9e0bbOxB4I6WRka+sQeseeX0od25/qBQpS+u2anqrcbekEihirvJi/hocIg5p/bb1THRkpxUySbJA40M7YArXlIWK00tZBUejufcAhk5ut/5hjXMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774028193; c=relaxed/simple;
-	bh=dT6LU3HVuS+pVDm5lNgdB0XW4CSVhJap0Ln63nFXlq8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bB1ddhnO0K9Nm0mdJ1cbnNmLGVfEvxlk8fa4e2mpMXE9VfIvHDTXMbf4ulDS2XLllBFEkF0BRhKplxbkiYE/dQ08hPsPMTEp9OXfCAxgu1/cdbvXR8jne2utGtBrhfIrvm8OJfKKON+pPd64lUgAI3nHo/QqS1mAO6acymb3ujs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bA1ONQFu; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=anJqG5T8; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774028189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=1jtTmMHHBkGhLlKZEfVtBXuZE8poHjhmr+mGPaHK7iY=;
-	b=bA1ONQFuGAXCzMnWs6QV8aalYqNplB7VejPFKV2SQN/2cymm2e+ov9/24wXxCk+2ifjYz+
-	yDpNE3GDnfizVd6CKIJlLpxZdOEc9oOywN+McGdFiFykZ2UrL85nUnCqX+1mIPTR+hBpb/
-	WAIak4FZrgiM4EAAZ44QBq+8VvxnnLY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-353-amQHsaQuOCWYUOyKUojdxA-1; Fri, 20 Mar 2026 13:36:27 -0400
-X-MC-Unique: amQHsaQuOCWYUOyKUojdxA-1
-X-Mimecast-MFC-AGG-ID: amQHsaQuOCWYUOyKUojdxA_1774028186
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-485c45885e6so31776755e9.0
-        for <linux-can@vger.kernel.org>; Fri, 20 Mar 2026 10:36:27 -0700 (PDT)
+	s=arc-20240116; t=1774101045; c=relaxed/simple;
+	bh=mKHx+VfRPQw/ItF5UDbBI85OytKLSDar0Sp+oJ606Rs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ZFfMlBIv4IfSeXh5OGYu6IPKLnOxIRUaQ9Thz2gxmOHhlsLaTKvvcw01U0qgFv4+mzqTjsGAFCR8r794TmhAoO8gk/pw6XCqEqvT9uYg/d2PxJDR6DgTD8btSBMR4mZW9DvAuCikQn4io4aSDLIEi8NT1s3cYIYnu3/4ln2VIGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=JnhFWPjf; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ilL7vhbY; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62L4mt3M4020523
+	for <linux-can@vger.kernel.org>; Sat, 21 Mar 2026 13:50:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=nXecX1NuKNC16BMQb4qBGz
+	Rq5LjOcebRUD8yZZIJjtw=; b=JnhFWPjfrRRzGgmN8G1UB11yazMPXDNiLX9wYg
+	/Q8ibRyHtgg+Wim71lhmhzMeP9NRlj4P8rUr+N6ats37jli4b2idNA0yrd/+Vm4Y
+	3bU22VzXmLk21GwcQ9mGaP9aJbJj+j3rf9A9CYIDA5gHL/HqrP6I5m8EVZTHK9J0
+	YWjxdIWd5kZJBNE3zIKPH3426f1IaM/OHXhQupNVCXSALqQVyaa7ZMxvN5xYSwaY
+	zqVkNdZOlsD+S66gPW2creujUKcHZil23kxNsMmq9FsmWPLiq5mhNpNXhWH+8Pts
+	ifZfK00xcrCsyRN2LzEPsny6vqAPMynObd2WqqMEDHrRY5EQ==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4d1jwvgtj2-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-can@vger.kernel.org>; Sat, 21 Mar 2026 13:50:42 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2b091c3f891so941165ad.3
+        for <linux-can@vger.kernel.org>; Sat, 21 Mar 2026 06:50:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774028186; x=1774632986; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1jtTmMHHBkGhLlKZEfVtBXuZE8poHjhmr+mGPaHK7iY=;
-        b=anJqG5T8bTEZrAuS26cfVvA0g1VXrBJ9jn2WLMbPuroAP7YPCTlMtEGjwejOF9+cZb
-         BuDF5I5uvhsdpYRBd48AWczPfiUn0+vhPli2V6DqhaMIT647ttMXroWSuJpIFyfV2twa
-         yjFOpBYvypdjr08dmJ1/mGLkhfZn6mSs/3cblwJ6KTeg8duRzEyhXO4saiWrwvy7q9Xs
-         opUZpxaOzHO0VoLhJU2pWbhizvubG2wKIIFx5JhYD2/gYrUJFWBbPEUtelJnKLi0zv2K
-         sy1f2TZgtTIRzFCqg/N65ZkiRMZDW9rAL03F5bAd45PVJ7CiOIqO3nxgBFabr54YpTQP
-         gN9g==
+        d=oss.qualcomm.com; s=google; t=1774101042; x=1774705842; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nXecX1NuKNC16BMQb4qBGzRq5LjOcebRUD8yZZIJjtw=;
+        b=ilL7vhbYBqiIpj4K1/MJbPnXdlPNTeI86uD5qjtQ8vNNluwOSYyR9+vVWUQW8+Cb0O
+         u4ianka/Ny7FcoVQUcWJUdZnn9fPU8xnQDHZtqKPCDdB4VMEsBH736OExFWmgs46TZsU
+         34GnBB90SJPfXnI5B9ATE2nfBiglDQVEcv5BHYviAp0SgjDPda3TU2xxUHhBi3kZy5Xy
+         1WrETDbLR7og+uhySC2HdZZX/9T49ezGclnlT36ywhZItVJqbsPGQ6SkgCnR5l3IkpRD
+         BC7wEXRYl0Htv1RFr29B8mRVqLjT0BK0FR8jnU6CI8A1Qsh3CvrryUhO/jSAZKF/ITOL
+         uxIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774028186; x=1774632986;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1jtTmMHHBkGhLlKZEfVtBXuZE8poHjhmr+mGPaHK7iY=;
-        b=mc+uzyz+7JUcJzACUpHf1RjVpjk4TDkf7x+SikQRVA2JVESEN8I69KwtjcWJX2Eacf
-         reL7AzimJJBEL+l8ssP6XEYUvzSvUTDi96sI2gJ0V6Yk2f0yRvAJthI1KRx7ecB183EM
-         hHLdzVPtsvQP5jFaszs0z/Aw5o0CZgQ+lKIGUyzwyDLXVaff8W/SmoFDNidZu86GRmuE
-         8BWb1y94U70ZQj+ZnCuj371YfNxmKfffUz9FQRp5NX0C+S59RkEWSkyNKGujKyagZWZD
-         k0Cw5aSAdneQv9X3x6Po5blIgrQdK90iqc/mWb9q35NS7ZNEASKBmIIxHoNoOrDRi+z9
-         ckaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUReXggn3KZ0VgIm76LvE+sRG9i4brJy8q/vJ3ku8bqRd/3LRkGGcw2X4NeIkI4Fx/90CFBuOHlPFM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgQqu+bdm9oloHXJGYAC/ENwqJu2mfg9R/pk77RY6ouaLuNalF
-	be6TwGnmtHcwS94jRATyXjw/JHuxbdN6F/1aaX0Vvd3gMyRgmBp/OuDFXNSzIjG9CWE3uG3at6L
-	Nr4YLd45zckfDNF3i7/nYmHz2XLwhqn1iwTi6IT+I16/qqJqL5CtPaXwDqZ8FPA==
-X-Gm-Gg: ATEYQzwKEtb3ZGfvrcygujkQhENzWlPjkB2LZ17/C/gYgozuSRrTQC4UfEyFpqx/rNI
-	IBzihxQoTG5BeyBCq3GQR8DdX6YGYF1FflXkkuU8m/1CQER7ije7k5yCA6EagmKnJPwFGJdfXYp
-	KpYdU0rlFJUjjrNPLkHn4QEELxYwEKma1qtEg6LFfqE1+u8OC1r0wxmsf0w9S1uo05e5Yg5uaaX
-	kADx9gSPWXJiAFiun6jS9YV/25/P0ZakNuP1A99bSvTUBu1a/Bf+/BZ1WpftJ/wUtdTh/WFPDPS
-	yS3jicRU1PgGqEkKJ4kVm5+XGjdCZ1P98oe6JEOVtxFe89s9bSeHEG+6VUAFxKFE1fToUl87y8G
-	1GCLiSbmP4UoLg/A=
-X-Received: by 2002:a05:600c:8b06:b0:485:41c4:e2e4 with SMTP id 5b1f17b1804b1-486fee1ae91mr61060545e9.23.1774028185692;
-        Fri, 20 Mar 2026 10:36:25 -0700 (PDT)
-X-Received: by 2002:a05:600c:8b06:b0:485:41c4:e2e4 with SMTP id 5b1f17b1804b1-486fee1ae91mr61059915e9.23.1774028184948;
-        Fri, 20 Mar 2026 10:36:24 -0700 (PDT)
-Received: from fedora ([2a01:e0a:257:8c60:80f1:cdf8:48d0:b0a1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486ff109b95sm59226285e9.1.2026.03.20.10.36.23
+        d=1e100.net; s=20251104; t=1774101042; x=1774705842;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nXecX1NuKNC16BMQb4qBGzRq5LjOcebRUD8yZZIJjtw=;
+        b=pNrQHHc36e+slDpwyA7xEHD024S+PaEWxWYEVxCVhpirdZc9T+x9/wx8t4yXY9Quia
+         zMSB0eyRZ8ESayYK4NiPMbHT41y8uipV5AqHPJl3TulRtfxAb2bIpmhNpzg4SyHoKRX9
+         R2f7Ljx77lAlNSW3V0nxqNOy3WAVbSDgXn2SxiASSk5dGP8fVQZTtk4wK8wp1hVxFxFb
+         ltQk4TYscmZwSmz+D2sx3RM/uh3Uw6aqvsp92IZF1Z3uygxd8cnab/gErHFjqxspRNAo
+         VsAO0hxMiUndSWt2pyQIVD6e2IgZ49jaKFSdk5jidVIyy82GWcIE2KBWpb7ZVZxD6Vr+
+         PjHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXkHQNL80vJ8h50R1sqTHoDAalfRRw1QgsqbzVXRsuJ83BhD8L2TrRnMOSzyWAuDc9UMzGaQ8G5Gyw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0Tdlg8LXtfrW4yZrTGOEha8QlrwscsSv/uPOq8pAVuw/wCIrm
+	o2Iw/cucfCtSiqglTmNKl4IufJS5C5Lv63kY/Xb8Wv1B5k31mvDHE0iEFp/UEx4gq9DeeSqQr6k
+	m9ybYYjnAequZw1FhgPMsI8zBmrCzsZevsfBC1iAVwZYckg/gtPza7iyHpWCZbs8=
+X-Gm-Gg: ATEYQzyEOJyT/qDBM0/snkR/SeT9yqHHrlwfaBIKMKIWLZgKvAfdEjw8C0B1OXI+xNG
+	kVRReEoN98lLOPRH2EeF2W+WimUy6kZrmRoL7kvhX2plbUdvUMKzc0he618uIxOJ7OXcSx373JL
+	ZmqeKS+vTMAR/xIqhFQw0Perq+PSNY1VEti43t/O4JtPwrxzJ+ulwzBcaSiQg43UC6dpIvuXgzB
+	GAq2QAVj6gX09pQmUiwGhFTfiMm/E5bjLEEw/xLcoTMjR6T0WRbxQ9q6utfqM2/FJDKVgollULA
+	K+Jd0GMgKbrAaMLErtTo/au9/qveFyk/DZsNiOHl4iNcC7OpMuF0tWYCROoE5kl8EG51VqpA/1d
+	msKacGkNh7XOKPpfHGzTNlHlPCK5HbzeIJG8xjt3g4wg5LzjD9iPlU2mZ6Q==
+X-Received: by 2002:a17:902:ecc7:b0:2ae:5163:c2aa with SMTP id d9443c01a7336-2b0826feed5mr59028865ad.20.1774101041718;
+        Sat, 21 Mar 2026 06:50:41 -0700 (PDT)
+X-Received: by 2002:a17:902:ecc7:b0:2ae:5163:c2aa with SMTP id d9443c01a7336-2b0826feed5mr59028695ad.20.1774101041170;
+        Sat, 21 Mar 2026 06:50:41 -0700 (PDT)
+Received: from hu-vdadhani-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b083516cb9sm54897555ad.2.2026.03.21.06.50.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2026 10:36:23 -0700 (PDT)
-Date: Fri, 20 Mar 2026 18:36:21 +0100
-From: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-To: Harald Mommer <harald.mommer@oss.qualcomm.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	linux-can@vger.kernel.org, virtualization@lists.linux.dev
-Cc: Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
-	Stefano Garzarella <sgarzare@redhat.com>, francesco@valla.it,
-	mvaralar@redhat.com
-Subject: [PATCH v13] can: virtio: Add virtio CAN driver
-Message-ID: <ab2FlQTWUxl0KmlT@fedora>
+        Sat, 21 Mar 2026 06:50:40 -0700 (PDT)
+From: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+To: mkl@pengutronix.de, mani@kernel.org, thomas.kopp@microchip.com,
+        mailhol@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, andersson@kernel.org, konradybcio@kernel.org,
+        linusw@kernel.org, brgl@kernel.org, linux-can@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc: mukesh.savaliya@oss.qualcomm.com, anup.kulkarni@oss.qualcomm.com,
+        Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+Subject: [PATCH v3 0/2] can: mcp251xfd: add XSTBYEN transceiver standby control
+Date: Sat, 21 Mar 2026 19:20:29 +0530
+Message-Id: <20260321135031.3107408-1-viken.dadhaniya@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spamd-Result: default: False [-1.66 / 15.00];
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzIxMDExNSBTYWx0ZWRfX1vUJ0H8qtJAm
+ j6YDYiXoUXz4oovJCBSoMdhiWo1SewzT/8NMYyvD8jO3SJKhfg+FGHTFIUJP1U3cAvGe/QirYYl
+ PiOlokOmflXL6uAniYXMOC/i2q0o8ZYa2l2ZHGHtE3tM0whpd8WNYzTeIXt+NCTrMaOyxCJ6oOf
+ 2XPR6vLyG/PtTEdlKENIkrK9Pck7du0Umzbu77HAtdlGhEl8ufVFz7/wKSwvgqO5TrZw8EP5x0K
+ IUxhIyAvkfbJGR1m37t4fqgWJrZZbLngUT/EmaZvkNe8jld+kLnS1bE22BoUaef9CH+XUMWIyHB
+ y8L4zhI2P9o/NnvFt7N3aq55Sav1KT8A0m+ZKu7hHpLkOwxgF+MGTlrVa3S6xX2Fgm2ovQIj7as
+ BWi6Hj3SkslhLujgQTsvTbA1GAqwjVRy/sr8Bm9GvrjZHPwOMCQNMvQu02UOhhkyJYjJ96Fxwio
+ Ql79nLqAKABJVqJlg5A==
+X-Authority-Analysis: v=2.4 cv=bcdmkePB c=1 sm=1 tr=0 ts=69bea232 cx=c_pps
+ a=cmESyDAEBpBGqyK7t0alAg==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=3aoVsspQhmqNhTY_ZuUA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=1OuFwYUASf3TG4hYMiVC:22
+X-Proofpoint-ORIG-GUID: hH9I6_Vzz7YX7OI9bZvbITk0bZONWHdc
+X-Proofpoint-GUID: hH9I6_Vzz7YX7OI9bZvbITk0bZONWHdc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-21_04,2026-03-20_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 impostorscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 phishscore=0 adultscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603210115
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7203-lists,linux-can=lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	TAGGED_FROM(0.00)[bounces-7204-lists,linux-can=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mvaralar@redhat.com,linux-can@vger.kernel.org];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,oss.qualcomm.com:dkim,oss.qualcomm.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.995];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[viken.dadhaniya@oss.qualcomm.com,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
+	TAGGED_RCPT(0.00)[linux-can,dt];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux.dev:email,qualcomm.com:email,opensynergy.com:email,ti.com:url]
-X-Rspamd-Queue-Id: 96B9B2DED54
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 2033F2E59DA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add virtio CAN driver based on Virtio 1.4 specification (see
-https://github.com/oasis-tcs/virtio-spec/tree/virtio-1.4). The driver
-implements a complete CAN bus interface over Virtio transport,
-supporting both CAN Classic and CAN-FD Ids. In term of frames, it
-supports classic and CAN FD. RTR frames are only supported with classic
-CAN.
+The MCP251xFD provides a dedicated transceiver standby control function
+via the INT0/GPIO0/XSTBY pin, controlled by the XSTBYEN bit in IOCON.
+When enabled, the hardware automatically drives the pin low while the
+controller is active and high when it enters Sleep mode, allowing
+automatic standby control of an external CAN transceiver without
+software intervention.
 
-Usage:
-- "ip link set up can0" - start controller
-- "ip link set down can0" - stop controller
-- "candump can0" - receive frames
-- "cansend can0 123#DEADBEEF" - send frames
+This series adds driver support for the XSTBYEN-based transceiver
+standby control feature.
 
-Signed-off-by: Harald Mommer <harald.mommer@oss.qualcomm.com>
-Co-developed-by: Harald Mommer <harald.mommer@oss.qualcomm.com>
-Signed-off-by: Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>
-Co-developed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>
-Reviewed-by: Francesco Valla <francesco@valla.it>
-Tested-by: Francesco Valla <francesco@valla.it>
-Signed-off-by: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
+Tested on QCS6490 RB3 Gen2 with a PCAN-USB FD adapter: the transceiver is
+active in normal mode, CAN communication works correctly, and the pin is
+automatically managed across sleep and wake transitions.
 ---
-V13:
-- kick device only when some buffers have been added
-- add virtio_can_del_vq() when virtio_can_start() fails  
-- move napi_disable() at the end of virtio_can_freeze()
-- move napi_enable() at beginning of virtio_can_restore()
-- let virtio_can_start() sets CAN_STATE_ERROR_ACTIVE
-- in freeze(), if can_stop() fails, restore the state of the device
-- in restore(), if !netif_running, set CAN_STATE_STOPPED
+v2 -> v3:
 
-V12:
-- check return value in virtio_can_start()
-- use devm_krealloc() in virtio_can_restore() to re-allocate rpkt
-- remove access to cf->len and replace it with len
-- use __counted_by_le()
-- free tx buffers during virtio_can_del_vq()
-- add reinit_completion() for ctrl msgs
+- Dropped device Tree change from this series.
+- Configure xstbyen pin before bringing the controller into normal mode.
+- Add a check in mcp251xfd_gpio_request() to ensure that GPIO0 cannot be
+  used when xstbyen is enabled.
 
-V11:
-* Set CAN_VIRTIO_CAN config before CAN_XILINXCAN
-* Use GFP_ATOMIC in virtio_can_alloc_tx_idx()
-* Use open_candev() and set bittiming.bitrate to CAN_BITRATE_UNKNOWN and
-  data_bittiming.bitrate to CAN_BITRATE_UNKNOWN
-* Fix leak of skb by adding kfree_skb(skb)
-* Fix out-of-bounds in virtio_can_populate_rx_vq()
-* Initialize `ret`
-* Use virtio_reset_device()
-* Add napi_disable() in virtio_can_remove()
-* Propagate error in virtio_can_start() and virtio_can_stop()
+v2 Link: https://lore.kernel.org/all/20260316131950.859748-1-viken.dadhaniya@oss.qualcomm.com/
 
-V10:
-* Follow Reverse Christmas Tree convention
+v1 -> v2:
 
-V9:
-* Remove unnecessary comments
-* Update maintainer list
+- Drop the gpio-hog approach as suggested by Dmitry.
+- Enable hardware‑managed transceiver standby control via the appropriate
+  Device Tree property.
 
-V8:
-* Address nits
-
-V7:
-* Address nits
-* Remove unnecessary comments
-* Remove io_callbacks[]
-* Use guard() syntax
-* Remove kicking for each inbuf
-* replace sdu_len with rpkt_len
-* Use devm_kzalloc()
-* Use scoped_guard() to protect virtqueue_add_sgs() and virtqueue_kicks() for
-  tx queue
-* Tested with vhost-device-can
-  (see https://github.com/rust-vmm/vhost-device/tree/main/vhost-device-can) and
-  Qemu (942b0d3) with [1]. A reviewer observed that the device stops to work
-  after flooding from host. This issue is still present.
-
-[1]
-https://lore.kernel.org/qemu-devel/20251031155617.1223248-1-mvaralar@redhat.com/
-
-V6:
-* Address nits
-* Check for error during register_virtio_can()
-* Remove virtio_device_ready()
-* Allocate virtio_can_rx rpkt[] at probe
-* Define virtio_can_control struct
-* Return VIRTIO_CAN_RESULT_NOT_OK after unlocking
-* Define sdu[] as a flex array for both tx and rx. For rx, use
-  VIRTIO_CAN_F_CAN_FD to figure out the max len for sdu
-* Fix statistics in virtio_can_read_tx_queue() and
-  how we indicate error to the user when getting
-  VIRTIO_CAN_RESULT_NOT_OK
-* Fix syntax of virtio_find_vqs()
-* Drop tx_list
-* Fix values of VIRTIO_CAN_F_LATE_TX_ACK and VIRTIO_CAN_F_RTR_FRAMES
-* Tested with vhost-device-can
-  (see
-  https://github.com/rust-vmm/vhost-device/tree/main/vhost-device-can)
-  and qemu (see
-  https://github.com/virtualopensystems/qemu/tree/vhu-can-rfc) 
-
-V5:
-* Re-base on top of linux-next (next-20240103)
-* Tested with https://github.com/OpenSynergy/qemu/tree/virtio-can-spec-rfc-v3
-
-RFC V4:
-* Apply reverse Christmas tree style
-* Add member *classic_dlc to RX and TX CAN frames
-* Fix race causing a NETDEV_TX_BUSY return
+v1 Link: https://lore.kernel.org/all/20260108125200.2803112-1-viken.dadhaniya@oss.qualcomm.com/
 ---
- MAINTAINERS                     |   9 +
- drivers/net/can/Kconfig         |  12 +
- drivers/net/can/Makefile        |   1 +
- drivers/net/can/virtio_can.c    | 991 ++++++++++++++++++++++++++++++++
- include/uapi/linux/virtio_can.h |  78 +++
- 5 files changed, 1091 insertions(+)
- create mode 100644 drivers/net/can/virtio_can.c
- create mode 100644 include/uapi/linux/virtio_can.h
+Viken Dadhaniya (2):
+  dt-bindings: can: mcp251xfd: add microchip,xstbyen property
+  can: mcp251xfd: add support for XSTBYEN transceiver standby control
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 80cd3498c293..f295a904c93e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -27068,6 +27068,15 @@ F:	drivers/scsi/virtio_scsi.c
- F:	include/uapi/linux/virtio_blk.h
- F:	include/uapi/linux/virtio_scsi.h
- 
-+VIRTIO CAN DRIVER
-+M:	"Harald Mommer" <harald.mommer@oss.qualcomm.com>
-+M:	"Matias Ezequiel Vara Larsen" <mvaralar@redhat.com>
-+L:	virtualization@lists.linux.dev
-+L:	linux-can@vger.kernel.org
-+S:	Maintained
-+F:	drivers/net/can/virtio_can.c
-+F:	include/uapi/linux/virtio_can.h
-+
- VIRTIO CONSOLE DRIVER
- M:	Amit Shah <amit@kernel.org>
- L:	virtualization@lists.linux.dev
-diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-index d43d56694667..f33ae46d9766 100644
---- a/drivers/net/can/Kconfig
-+++ b/drivers/net/can/Kconfig
-@@ -209,6 +209,18 @@ config CAN_TI_HECC
- 	  Driver for TI HECC (High End CAN Controller) module found on many
- 	  TI devices. The device specifications are available from www.ti.com
- 
-+config CAN_VIRTIO_CAN
-+	depends on VIRTIO
-+	tristate "Virtio CAN device support"
-+	default n
-+	help
-+	  Say Y here if you want to support for Virtio CAN.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called virtio-can.
-+
-+	  If unsure, say N.
-+
- config CAN_XILINXCAN
- 	tristate "Xilinx CAN"
- 	depends on ARCH_ZYNQ || ARM64 || MICROBLAZE || COMPILE_TEST
-diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
-index 56138d8ddfd2..2ddea733ed5d 100644
---- a/drivers/net/can/Makefile
-+++ b/drivers/net/can/Makefile
-@@ -32,6 +32,7 @@ obj-$(CONFIG_CAN_PEAK_PCIEFD)	+= peak_canfd/
- obj-$(CONFIG_CAN_SJA1000)	+= sja1000/
- obj-$(CONFIG_CAN_SUN4I)		+= sun4i_can.o
- obj-$(CONFIG_CAN_TI_HECC)	+= ti_hecc.o
-+obj-$(CONFIG_CAN_VIRTIO_CAN)	+= virtio_can.o
- obj-$(CONFIG_CAN_XILINXCAN)	+= xilinx_can.o
- 
- subdir-ccflags-$(CONFIG_CAN_DEBUG_DEVICES) += -DDEBUG
-diff --git a/drivers/net/can/virtio_can.c b/drivers/net/can/virtio_can.c
-new file mode 100644
-index 000000000000..57641c3ed6d0
---- /dev/null
-+++ b/drivers/net/can/virtio_can.c
-@@ -0,0 +1,991 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * CAN bus driver for the Virtio CAN controller
-+ *
-+ * Copyright (C) 2021-2023 OpenSynergy GmbH
-+ * Copyright Red Hat, Inc. 2025
-+ */
-+
-+#include <linux/atomic.h>
-+#include <linux/idr.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/netdevice.h>
-+#include <linux/stddef.h>
-+#include <linux/can/dev.h>
-+#include <linux/virtio.h>
-+#include <linux/virtio_ring.h>
-+#include <linux/virtio_can.h>
-+
-+/* CAN device queues */
-+#define VIRTIO_CAN_QUEUE_TX 0
-+#define VIRTIO_CAN_QUEUE_RX 1
-+#define VIRTIO_CAN_QUEUE_CONTROL 2
-+#define VIRTIO_CAN_QUEUE_COUNT 3
-+
-+#define CAN_KNOWN_FLAGS \
-+	(VIRTIO_CAN_FLAGS_EXTENDED |\
-+	 VIRTIO_CAN_FLAGS_FD |\
-+	 VIRTIO_CAN_FLAGS_RTR)
-+
-+/* Max. number of in flight TX messages */
-+#define VIRTIO_CAN_ECHO_SKB_MAX 128
-+
-+struct virtio_can_tx {
-+	unsigned int putidx;
-+	struct virtio_can_tx_in tx_in;
-+	/* Keep virtio_can_tx_out at the end of the structure due to flex array */
-+	struct virtio_can_tx_out tx_out;
-+};
-+
-+struct virtio_can_control {
-+	struct virtio_can_control_out cpkt_out;
-+	struct virtio_can_control_in cpkt_in;
-+};
-+
-+/* virtio_can private data structure */
-+struct virtio_can_priv {
-+	struct can_priv can;	/* must be the first member */
-+	/* NAPI for RX messages */
-+	struct napi_struct napi;
-+	/* NAPI for TX messages */
-+	struct napi_struct napi_tx;
-+	/* The network device we're associated with */
-+	struct net_device *dev;
-+	/* The virtio device we're associated with */
-+	struct virtio_device *vdev;
-+	/* The virtqueues */
-+	struct virtqueue *vqs[VIRTIO_CAN_QUEUE_COUNT];
-+	/* Lock for TX operations */
-+	spinlock_t tx_lock;
-+	/* Control queue lock */
-+	struct mutex ctrl_lock;
-+	/* Wait for control queue processing without polling */
-+	struct completion ctrl_done;
-+	/* Array of receive queue messages */
-+	struct virtio_can_rx *rpkt;
-+	struct virtio_can_control can_ctr_msg;
-+	/* Data to get and maintain the putidx for local TX echo */
-+	struct ida tx_putidx_ida;
-+	/* In flight TX messages */
-+	atomic_t tx_inflight;
-+	/* Packet length */
-+	int rpkt_len;
-+	/* BusOff pending. Reset after successful indication to upper layer */
-+	bool busoff_pending;
-+};
-+
-+static void virtqueue_napi_schedule(struct napi_struct *napi,
-+				    struct virtqueue *vq)
-+{
-+	if (napi_schedule_prep(napi)) {
-+		virtqueue_disable_cb(vq);
-+		__napi_schedule(napi);
-+	}
-+}
-+
-+static void virtqueue_napi_complete(struct napi_struct *napi,
-+				    struct virtqueue *vq, int processed)
-+{
-+	int opaque;
-+
-+	opaque = virtqueue_enable_cb_prepare(vq);
-+	if (napi_complete_done(napi, processed)) {
-+		if (unlikely(virtqueue_poll(vq, opaque)))
-+			virtqueue_napi_schedule(napi, vq);
-+	} else {
-+		virtqueue_disable_cb(vq);
-+	}
-+}
-+
-+static void virtio_can_free_candev(struct net_device *ndev)
-+{
-+	struct virtio_can_priv *priv = netdev_priv(ndev);
-+
-+	ida_destroy(&priv->tx_putidx_ida);
-+	free_candev(ndev);
-+}
-+
-+static int virtio_can_alloc_tx_idx(struct virtio_can_priv *priv)
-+{
-+	int tx_idx;
-+
-+	tx_idx = ida_alloc_max(&priv->tx_putidx_ida,
-+			       priv->can.echo_skb_max - 1, GFP_ATOMIC);
-+	if (tx_idx >= 0)
-+		atomic_inc(&priv->tx_inflight);
-+
-+	return tx_idx;
-+}
-+
-+static void virtio_can_free_tx_idx(struct virtio_can_priv *priv,
-+				   unsigned int idx)
-+{
-+	ida_free(&priv->tx_putidx_ida, idx);
-+	atomic_dec(&priv->tx_inflight);
-+}
-+
-+/* Create a scatter-gather list representing our input buffer and put
-+ * it in the queue.
-+ *
-+ * Callers should take appropriate locks.
-+ */
-+static int virtio_can_add_inbuf(struct virtqueue *vq, void *buf,
-+				unsigned int size)
-+{
-+	struct scatterlist sg[1];
-+	int ret;
-+
-+	sg_init_one(sg, buf, size);
-+
-+	ret = virtqueue_add_inbuf(vq, sg, 1, buf, GFP_ATOMIC);
-+
-+	return ret;
-+}
-+
-+/* Send a control message with message type either
-+ *
-+ * - VIRTIO_CAN_SET_CTRL_MODE_START or
-+ * - VIRTIO_CAN_SET_CTRL_MODE_STOP.
-+ *
-+ */
-+static u8 virtio_can_send_ctrl_msg(struct net_device *ndev, u16 msg_type)
-+{
-+	struct scatterlist sg_out, sg_in, *sgs[2] = { &sg_out, &sg_in };
-+	struct virtio_can_priv *priv = netdev_priv(ndev);
-+	struct virtqueue *vq = priv->vqs[VIRTIO_CAN_QUEUE_CONTROL];
-+	struct device *dev = &priv->vdev->dev;
-+	unsigned int len;
-+	int err;
-+
-+	guard(mutex)(&priv->ctrl_lock);
-+
-+	priv->can_ctr_msg.cpkt_out.msg_type = cpu_to_le16(msg_type);
-+	sg_init_one(&sg_out, &priv->can_ctr_msg.cpkt_out,
-+		    sizeof(priv->can_ctr_msg.cpkt_out));
-+	sg_init_one(&sg_in, &priv->can_ctr_msg.cpkt_in, sizeof(priv->can_ctr_msg.cpkt_in));
-+
-+	reinit_completion(&priv->ctrl_done);
-+
-+	err = virtqueue_add_sgs(vq, sgs, 1u, 1u, priv, GFP_ATOMIC);
-+	if (err != 0) {
-+		dev_err(dev, "%s(): virtqueue_add_sgs() failed\n", __func__);
-+		return VIRTIO_CAN_RESULT_NOT_OK;
-+	}
-+
-+	if (!virtqueue_kick(vq)) {
-+		dev_err(dev, "%s(): Kick failed\n", __func__);
-+		return VIRTIO_CAN_RESULT_NOT_OK;
-+	}
-+
-+	while (!virtqueue_get_buf(vq, &len) && !virtqueue_is_broken(vq))
-+		wait_for_completion(&priv->ctrl_done);
-+
-+	return priv->can_ctr_msg.cpkt_in.result;
-+}
-+
-+static int virtio_can_start(struct net_device *ndev)
-+{
-+	struct virtio_can_priv *priv = netdev_priv(ndev);
-+	u8 result;
-+
-+	result = virtio_can_send_ctrl_msg(ndev, VIRTIO_CAN_SET_CTRL_MODE_START);
-+	if (result != VIRTIO_CAN_RESULT_OK) {
-+		netdev_err(ndev, "CAN controller start failed\n");
-+		return -EIO;
-+	}
-+
-+	priv->busoff_pending = false;
-+	priv->can.state = CAN_STATE_ERROR_ACTIVE;
-+
-+	return 0;
-+}
-+
-+static int virtio_can_set_mode(struct net_device *dev, enum can_mode mode)
-+{
-+	int err;
-+
-+	switch (mode) {
-+	case CAN_MODE_START:
-+		err = virtio_can_start(dev);
-+		if (err)
-+			return err;
-+		netif_wake_queue(dev);
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static int virtio_can_open(struct net_device *ndev)
-+{
-+	int err;
-+
-+	err = open_candev(ndev);
-+	if (err)
-+		return err;
-+
-+	err = virtio_can_start(ndev);
-+	if (err) {
-+		close_candev(ndev);
-+		return err;
-+	}
-+
-+	netif_start_queue(ndev);
-+
-+	return 0;
-+}
-+
-+static int virtio_can_stop(struct net_device *ndev)
-+{
-+	struct virtio_can_priv *priv = netdev_priv(ndev);
-+	struct device *dev = &priv->vdev->dev;
-+	u8 result;
-+
-+	result = virtio_can_send_ctrl_msg(ndev, VIRTIO_CAN_SET_CTRL_MODE_STOP);
-+	if (result != VIRTIO_CAN_RESULT_OK) {
-+		dev_err(dev, "CAN controller stop failed\n");
-+		return -EIO;
-+	}
-+
-+	priv->busoff_pending = false;
-+	priv->can.state = CAN_STATE_STOPPED;
-+
-+	/* Switch carrier off if device was connected to the bus */
-+	if (netif_carrier_ok(ndev))
-+		netif_carrier_off(ndev);
-+
-+	return 0;
-+}
-+
-+static int virtio_can_close(struct net_device *dev)
-+{
-+	int err;
-+
-+	netif_stop_queue(dev);
-+	/* Keep RX napi active to allow dropping of pending RX CAN messages,
-+	 * keep TX napi active to allow processing of cancelled CAN messages
-+	 */
-+	err = virtio_can_stop(dev);
-+	close_candev(dev);
-+
-+	return err;
-+}
-+
-+static netdev_tx_t virtio_can_start_xmit(struct sk_buff *skb,
-+					 struct net_device *dev)
-+{
-+	struct scatterlist sg_out, sg_in, *sgs[2] = { &sg_out, &sg_in };
-+	const unsigned int hdr_size = sizeof(struct virtio_can_tx_out);
-+	struct canfd_frame *cf = (struct canfd_frame *)skb->data;
-+	struct virtio_can_priv *priv = netdev_priv(dev);
-+	struct virtqueue *vq = priv->vqs[VIRTIO_CAN_QUEUE_TX];
-+	netdev_tx_t xmit_ret = NETDEV_TX_OK;
-+	struct virtio_can_tx *can_tx_msg;
-+	u32 can_flags;
-+	int putidx;
-+	int err;
-+
-+	if (can_dev_dropped_skb(dev, skb))
-+		goto kick; /* No way to return NET_XMIT_DROP here */
-+
-+	/* No local check for CAN_RTR_FLAG or FD frame against negotiated
-+	 * features. The device will reject those anyway if not supported.
-+	 */
-+
-+	can_tx_msg = kzalloc(sizeof(*can_tx_msg) + cf->len, GFP_ATOMIC);
-+	if (!can_tx_msg) {
-+		kfree_skb(skb);
-+		dev->stats.tx_dropped++;
-+		goto kick; /* No way to return NET_XMIT_DROP here */
-+	}
-+
-+	can_tx_msg->tx_out.msg_type = cpu_to_le16(VIRTIO_CAN_TX);
-+	can_flags = 0;
-+
-+	if (cf->can_id & CAN_EFF_FLAG) {
-+		can_flags |= VIRTIO_CAN_FLAGS_EXTENDED;
-+		can_tx_msg->tx_out.can_id = cpu_to_le32(cf->can_id & CAN_EFF_MASK);
-+	} else {
-+		can_tx_msg->tx_out.can_id = cpu_to_le32(cf->can_id & CAN_SFF_MASK);
-+	}
-+	if (cf->can_id & CAN_RTR_FLAG)
-+		can_flags |= VIRTIO_CAN_FLAGS_RTR;
-+	else
-+		memcpy(can_tx_msg->tx_out.sdu, cf->data, cf->len);
-+	if (can_is_canfd_skb(skb))
-+		can_flags |= VIRTIO_CAN_FLAGS_FD;
-+
-+	can_tx_msg->tx_out.flags = cpu_to_le32(can_flags);
-+	can_tx_msg->tx_out.length = cpu_to_le16(cf->len);
-+
-+	sg_init_one(&sg_out, &can_tx_msg->tx_out, hdr_size + cf->len);
-+	sg_init_one(&sg_in, &can_tx_msg->tx_in, sizeof(can_tx_msg->tx_in));
-+
-+	putidx = virtio_can_alloc_tx_idx(priv);
-+
-+	if (unlikely(putidx < 0)) {
-+		/* -ENOMEM or -ENOSPC here. -ENOSPC should not be possible as
-+		 * tx_inflight >= can.echo_skb_max is checked in flow control
-+		 */
-+		WARN_ON_ONCE(putidx == -ENOSPC);
-+		kfree(can_tx_msg);
-+		kfree_skb(skb);
-+		dev->stats.tx_dropped++;
-+		goto kick; /* No way to return NET_XMIT_DROP here */
-+	}
-+
-+	can_tx_msg->putidx = (unsigned int)putidx;
-+
-+	/* Push loopback echo. Will be looped back on TX interrupt/TX NAPI */
-+	can_put_echo_skb(skb, dev, can_tx_msg->putidx, 0);
-+
-+	/* Protect queue and list operations */
-+	scoped_guard(spinlock_irqsave, &priv->tx_lock)
-+		err = virtqueue_add_sgs(vq, sgs, 1u, 1u, can_tx_msg, GFP_ATOMIC);
-+
-+	if (unlikely(err)) {
-+		can_free_echo_skb(dev, can_tx_msg->putidx, NULL);
-+		virtio_can_free_tx_idx(priv, can_tx_msg->putidx);
-+		netif_stop_queue(dev);
-+		kfree(can_tx_msg);
-+		/* Expected never to be seen */
-+		netdev_warn(dev, "TX: Stop queue, err = %d\n", err);
-+		xmit_ret = NETDEV_TX_BUSY;
-+		goto kick;
-+	}
-+
-+	/* Normal flow control: stop queue when no transmission slots left */
-+	if (atomic_read(&priv->tx_inflight) >= priv->can.echo_skb_max ||
-+	    vq->num_free == 0 || (vq->num_free < ARRAY_SIZE(sgs) &&
-+	    !virtio_has_feature(vq->vdev, VIRTIO_RING_F_INDIRECT_DESC))) {
-+		netif_stop_queue(dev);
-+		netdev_dbg(dev, "TX: Normal stop queue\n");
-+	}
-+
-+kick:
-+	if (netif_queue_stopped(dev) || !netdev_xmit_more()) {
-+		scoped_guard(spinlock_irqsave, &priv->tx_lock) {
-+			if (!virtqueue_kick(vq))
-+				netdev_err(dev, "%s(): Kick failed\n", __func__);
-+		}
-+	}
-+
-+	return xmit_ret;
-+}
-+
-+static const struct net_device_ops virtio_can_netdev_ops = {
-+	.ndo_open = virtio_can_open,
-+	.ndo_stop = virtio_can_close,
-+	.ndo_start_xmit = virtio_can_start_xmit,
-+};
-+
-+static int register_virtio_can_dev(struct net_device *dev)
-+{
-+	dev->flags |= IFF_ECHO;	/* we support local echo */
-+	dev->netdev_ops = &virtio_can_netdev_ops;
-+
-+	return register_candev(dev);
-+}
-+
-+static int virtio_can_read_tx_queue(struct virtqueue *vq)
-+{
-+	struct virtio_can_priv *can_priv = vq->vdev->priv;
-+	struct net_device *dev = can_priv->dev;
-+	struct virtio_can_tx *can_tx_msg;
-+	struct net_device_stats *stats;
-+	unsigned int len;
-+	u8 result;
-+
-+	stats = &dev->stats;
-+
-+	scoped_guard(spinlock_irqsave, &can_priv->tx_lock)
-+		can_tx_msg = virtqueue_get_buf(vq, &len);
-+
-+	if (!can_tx_msg)
-+		return 0;
-+
-+	if (unlikely(len < sizeof(struct virtio_can_tx_in))) {
-+		netdev_err(dev, "TX ACK: Device sent no result code\n");
-+		result = VIRTIO_CAN_RESULT_NOT_OK; /* Keep things going */
-+	} else {
-+		result = can_tx_msg->tx_in.result;
-+	}
-+
-+	if (can_priv->can.state < CAN_STATE_BUS_OFF) {
-+		if (result != VIRTIO_CAN_RESULT_OK) {
-+			struct can_frame *skb_cf;
-+			struct sk_buff *skb = alloc_can_err_skb(dev, &skb_cf);
-+
-+			if (skb) {
-+				skb_cf->can_id |= CAN_ERR_CRTL;
-+				skb_cf->data[1] |= CAN_ERR_CRTL_UNSPEC;
-+				netif_rx(skb);
-+			}
-+			netdev_warn(dev, "TX ACK: Result = %u\n", result);
-+			can_free_echo_skb(dev, can_tx_msg->putidx, NULL);
-+			stats->tx_dropped++;
-+		} else {
-+			stats->tx_bytes += can_get_echo_skb(dev, can_tx_msg->putidx,
-+				NULL);
-+			stats->tx_packets++;
-+		}
-+	} else {
-+		netdev_dbg(dev, "TX ACK: Controller inactive, drop echo\n");
-+		can_free_echo_skb(dev, can_tx_msg->putidx, NULL);
-+		stats->tx_dropped++;
-+	}
-+
-+	virtio_can_free_tx_idx(can_priv, can_tx_msg->putidx);
-+
-+	/* Flow control */
-+	if (netif_queue_stopped(dev)) {
-+		netdev_dbg(dev, "TX ACK: Wake up stopped queue\n");
-+		netif_wake_queue(dev);
-+	}
-+
-+	kfree(can_tx_msg);
-+
-+	return 1; /* Queue was not empty so there may be more data */
-+}
-+
-+static int virtio_can_tx_poll(struct napi_struct *napi, int quota)
-+{
-+	struct net_device *dev = napi->dev;
-+	struct virtio_can_priv *priv = netdev_priv(dev);
-+	struct virtqueue *vq = priv->vqs[VIRTIO_CAN_QUEUE_TX];
-+	int work_done = 0;
-+
-+	while (work_done < quota && virtio_can_read_tx_queue(vq) != 0)
-+		work_done++;
-+
-+	if (work_done < quota)
-+		virtqueue_napi_complete(napi, vq, work_done);
-+
-+	return work_done;
-+}
-+
-+static void virtio_can_tx_intr(struct virtqueue *vq)
-+{
-+	struct virtio_can_priv *can_priv = vq->vdev->priv;
-+
-+	virtqueue_disable_cb(vq);
-+	napi_schedule(&can_priv->napi_tx);
-+}
-+
-+/* This function is the NAPI RX poll function and NAPI guarantees that this
-+ * function is not invoked simultaneously on multiple processors.
-+ * Read a RX message from the used queue and sends it to the upper layer.
-+ */
-+static int virtio_can_read_rx_queue(struct virtqueue *vq)
-+{
-+	const unsigned int header_size = sizeof(struct virtio_can_rx);
-+	struct virtio_can_priv *priv = vq->vdev->priv;
-+	struct net_device *dev = priv->dev;
-+	struct net_device_stats *stats;
-+	struct virtio_can_rx *can_rx;
-+	unsigned int transport_len;
-+	struct canfd_frame *cf;
-+	struct sk_buff *skb;
-+	unsigned int len;
-+	u32 can_flags;
-+	u16 msg_type;
-+	u32 can_id;
-+	int ret;
-+
-+	stats = &dev->stats;
-+
-+	can_rx = virtqueue_get_buf(vq, &transport_len);
-+	if (!can_rx)
-+		return 0; /* No more data */
-+
-+	if (transport_len < header_size) {
-+		netdev_warn(dev, "RX: Message too small\n");
-+		goto putback;
-+	}
-+
-+	if (priv->can.state >= CAN_STATE_ERROR_PASSIVE) {
-+		netdev_dbg(dev, "%s(): Controller not active\n", __func__);
-+		goto putback;
-+	}
-+
-+	msg_type = le16_to_cpu(can_rx->msg_type);
-+	if (msg_type != VIRTIO_CAN_RX) {
-+		netdev_warn(dev, "RX: Got unknown msg_type %04x\n", msg_type);
-+		goto putback;
-+	}
-+
-+	len = le16_to_cpu(can_rx->length);
-+	can_flags = le32_to_cpu(can_rx->flags);
-+	can_id = le32_to_cpu(can_rx->can_id);
-+
-+	if (can_flags & ~CAN_KNOWN_FLAGS) {
-+		stats->rx_dropped++;
-+		netdev_warn(dev, "RX: CAN Id 0x%08x: Invalid flags 0x%x\n",
-+			    can_id, can_flags);
-+		goto putback;
-+	}
-+
-+	if (can_flags & VIRTIO_CAN_FLAGS_EXTENDED) {
-+		can_id &= CAN_EFF_MASK;
-+		can_id |= CAN_EFF_FLAG;
-+	} else {
-+		can_id &= CAN_SFF_MASK;
-+	}
-+
-+	if (can_flags & VIRTIO_CAN_FLAGS_RTR) {
-+		if (!virtio_has_feature(vq->vdev, VIRTIO_CAN_F_RTR_FRAMES)) {
-+			stats->rx_dropped++;
-+			netdev_warn(dev, "RX: CAN Id 0x%08x: RTR not negotiated\n",
-+				    can_id);
-+			goto putback;
-+		}
-+		if (can_flags & VIRTIO_CAN_FLAGS_FD) {
-+			stats->rx_dropped++;
-+			netdev_warn(dev, "RX: CAN Id 0x%08x: RTR with FD not possible\n",
-+				    can_id);
-+			goto putback;
-+		}
-+
-+		if (len > 0xF) {
-+			stats->rx_dropped++;
-+			netdev_warn(dev, "RX: CAN Id 0x%08x: RTR with DLC > 0xF\n",
-+				    can_id);
-+			goto putback;
-+		}
-+
-+		if (len > 0x8)
-+			len = 0x8;
-+
-+		can_id |= CAN_RTR_FLAG;
-+	}
-+
-+	if (transport_len < header_size + len) {
-+		netdev_warn(dev, "RX: Message too small for payload\n");
-+		goto putback;
-+	}
-+
-+	if (can_flags & VIRTIO_CAN_FLAGS_FD) {
-+		if (!virtio_has_feature(vq->vdev, VIRTIO_CAN_F_CAN_FD)) {
-+			stats->rx_dropped++;
-+			netdev_warn(dev, "RX: CAN Id 0x%08x: FD not negotiated\n",
-+				    can_id);
-+			goto putback;
-+		}
-+
-+		if (len > CANFD_MAX_DLEN)
-+			len = CANFD_MAX_DLEN;
-+
-+		skb = alloc_canfd_skb(priv->dev, &cf);
-+	} else {
-+		if (!virtio_has_feature(vq->vdev, VIRTIO_CAN_F_CAN_CLASSIC)) {
-+			stats->rx_dropped++;
-+			netdev_warn(dev, "RX: CAN Id 0x%08x: classic not negotiated\n",
-+				    can_id);
-+			goto putback;
-+		}
-+
-+		if (len > CAN_MAX_DLEN)
-+			len = CAN_MAX_DLEN;
-+
-+		skb = alloc_can_skb(priv->dev, (struct can_frame **)&cf);
-+	}
-+	if (!skb) {
-+		stats->rx_dropped++;
-+		netdev_warn(dev, "RX: No skb available\n");
-+		goto putback;
-+	}
-+
-+	cf->can_id = can_id;
-+	cf->len = len;
-+	if (!(can_flags & VIRTIO_CAN_FLAGS_RTR)) {
-+		/* RTR frames have a DLC but no payload */
-+		memcpy(cf->data, can_rx->sdu, len);
-+	}
-+
-+	if (netif_receive_skb(skb) == NET_RX_SUCCESS) {
-+		stats->rx_packets++;
-+		if (!(can_flags & VIRTIO_CAN_FLAGS_RTR))
-+			stats->rx_bytes += len;
-+	}
-+
-+putback:
-+	/* Put processed RX buffer back into avail queue */
-+	ret = virtio_can_add_inbuf(vq, can_rx,
-+				   priv->rpkt_len);
-+	if (!ret)
-+		virtqueue_kick(vq);
-+	return 1; /* Queue was not empty so there may be more data */
-+}
-+
-+static int virtio_can_handle_busoff(struct net_device *dev)
-+{
-+	struct virtio_can_priv *priv = netdev_priv(dev);
-+	struct can_frame *cf;
-+	struct sk_buff *skb;
-+
-+	if (!priv->busoff_pending)
-+		return 0;
-+
-+	if (priv->can.state < CAN_STATE_BUS_OFF) {
-+		netdev_dbg(dev, "entered error bus off state\n");
-+
-+		/* bus-off state */
-+		priv->can.state = CAN_STATE_BUS_OFF;
-+		priv->can.can_stats.bus_off++;
-+		can_bus_off(dev);
-+	}
-+
-+	/* propagate the error condition to the CAN stack */
-+	skb = alloc_can_err_skb(dev, &cf);
-+	if (unlikely(!skb))
-+		return 0;
-+
-+	/* bus-off state */
-+	cf->can_id |= CAN_ERR_BUSOFF;
-+
-+	/* Ensure that the BusOff indication does not get lost */
-+	if (netif_receive_skb(skb) == NET_RX_SUCCESS)
-+		priv->busoff_pending = false;
-+
-+	return 1;
-+}
-+
-+static int virtio_can_rx_poll(struct napi_struct *napi, int quota)
-+{
-+	struct net_device *dev = napi->dev;
-+	struct virtio_can_priv *priv = netdev_priv(dev);
-+	struct virtqueue *vq = priv->vqs[VIRTIO_CAN_QUEUE_RX];
-+	int work_done = 0;
-+
-+	work_done += virtio_can_handle_busoff(dev);
-+
-+	while (work_done < quota && virtio_can_read_rx_queue(vq) != 0)
-+		work_done++;
-+
-+	if (work_done < quota)
-+		virtqueue_napi_complete(napi, vq, work_done);
-+
-+	return work_done;
-+}
-+
-+static void virtio_can_rx_intr(struct virtqueue *vq)
-+{
-+	struct virtio_can_priv *can_priv = vq->vdev->priv;
-+
-+	virtqueue_disable_cb(vq);
-+	napi_schedule(&can_priv->napi);
-+}
-+
-+static void virtio_can_control_intr(struct virtqueue *vq)
-+{
-+	struct virtio_can_priv *can_priv = vq->vdev->priv;
-+
-+	complete(&can_priv->ctrl_done);
-+}
-+
-+static void virtio_can_config_changed(struct virtio_device *vdev)
-+{
-+	struct virtio_can_priv *can_priv = vdev->priv;
-+	u16 status;
-+
-+	status = virtio_cread16(vdev, offsetof(struct virtio_can_config,
-+					       status));
-+
-+	if (!(status & VIRTIO_CAN_S_CTRL_BUSOFF))
-+		return;
-+
-+	if (!can_priv->busoff_pending &&
-+	    can_priv->can.state < CAN_STATE_BUS_OFF) {
-+		can_priv->busoff_pending = true;
-+		napi_schedule(&can_priv->napi);
-+	}
-+}
-+
-+static void virtio_can_populate_rx_vq(struct virtio_device *vdev)
-+{
-+	struct virtio_can_priv *priv = vdev->priv;
-+	struct virtqueue *vq = priv->vqs[VIRTIO_CAN_QUEUE_RX];
-+	unsigned int buf_size = priv->rpkt_len;
-+	int num_elements = vq->num_free;
-+	u8 *buf = (u8 *)priv->rpkt;
-+	unsigned int idx;
-+	int ret = 0;
-+
-+	for (idx = 0; idx < num_elements; idx++) {
-+		ret = virtio_can_add_inbuf(vq, buf, buf_size);
-+		if (ret < 0) {
-+			dev_dbg(&vdev->dev, "rpkt fill: ret=%d, idx=%u, size=%u\n",
-+				ret, idx, buf_size);
-+			break;
-+		}
-+		buf += buf_size;
-+	}
-+
-+	if (idx > 0)
-+		virtqueue_kick(vq);
-+
-+	dev_dbg(&vdev->dev, "%u rpkt added\n", idx);
-+}
-+
-+static int virtio_can_find_vqs(struct virtio_can_priv *priv)
-+{
-+	struct virtqueue_info vqs_info[] = {
-+		{ "can-tx", virtio_can_tx_intr },
-+		{ "can-rx", virtio_can_rx_intr },
-+		{ "can-state-ctrl", virtio_can_control_intr },
-+	};
-+
-+	/* Find the queues. */
-+	return virtio_find_vqs(priv->vdev, VIRTIO_CAN_QUEUE_COUNT, priv->vqs,
-+			       vqs_info, NULL);
-+}
-+
-+/* Function must not be called before virtio_can_find_vqs() has been run */
-+static void virtio_can_del_vq(struct virtio_device *vdev)
-+{
-+	struct virtio_can_priv *priv = vdev->priv;
-+	struct virtqueue *vq = priv->vqs[VIRTIO_CAN_QUEUE_TX];
-+	struct virtio_can_tx *can_tx_msg;
-+	int q;
-+
-+	/* Reset the device */
-+	virtio_reset_device(vdev);
-+
-+	/* From here we have dead silence from the device side so no locks
-+	 * are needed to protect against device side events.
-+	 */
-+
-+	/* Free pending TX buffers which were allocated in virtio_can_start_xmit() */
-+	while ((can_tx_msg = virtqueue_detach_unused_buf(vq))) {
-+		can_free_echo_skb(priv->dev, can_tx_msg->putidx, NULL);
-+		virtio_can_free_tx_idx(priv, can_tx_msg->putidx);
-+		kfree(can_tx_msg);
-+	}
-+
-+	/* RX and control queue buffers are managed elsewhere, just detach */
-+	for (q = VIRTIO_CAN_QUEUE_RX; q < VIRTIO_CAN_QUEUE_COUNT; q++)
-+		while (virtqueue_detach_unused_buf(priv->vqs[q]))
-+			;
-+
-+	if (vdev->config->del_vqs)
-+		vdev->config->del_vqs(vdev);
-+}
-+
-+static void virtio_can_remove(struct virtio_device *vdev)
-+{
-+	struct virtio_can_priv *priv = vdev->priv;
-+	struct net_device *dev = priv->dev;
-+
-+	napi_disable(&priv->napi);
-+	napi_disable(&priv->napi_tx);
-+
-+	unregister_candev(dev);
-+
-+	virtio_can_del_vq(vdev);
-+
-+	virtio_can_free_candev(dev);
-+}
-+
-+static int virtio_can_validate(struct virtio_device *vdev)
-+{
-+	/* CAN needs always access to the config space.
-+	 * Check that the driver can access the config space
-+	 */
-+	if (!vdev->config->get) {
-+		dev_err(&vdev->dev, "%s failure: config access disabled\n",
-+			__func__);
-+		return -EINVAL;
-+	}
-+
-+	if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1)) {
-+		dev_err(&vdev->dev,
-+			"device does not comply with spec version 1.x\n");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int virtio_can_probe(struct virtio_device *vdev)
-+{
-+	struct virtio_can_priv *priv;
-+	struct net_device *dev;
-+	size_t size;
-+	int err;
-+
-+	dev = alloc_candev(sizeof(struct virtio_can_priv),
-+			   VIRTIO_CAN_ECHO_SKB_MAX);
-+	if (!dev)
-+		return -ENOMEM;
-+
-+	priv = netdev_priv(dev);
-+
-+	ida_init(&priv->tx_putidx_ida);
-+
-+	netif_napi_add(dev, &priv->napi, virtio_can_rx_poll);
-+	netif_napi_add(dev, &priv->napi_tx, virtio_can_tx_poll);
-+
-+	SET_NETDEV_DEV(dev, &vdev->dev);
-+
-+	priv->dev = dev;
-+	priv->vdev = vdev;
-+	vdev->priv = priv;
-+
-+	priv->can.do_set_mode = virtio_can_set_mode;
-+	priv->can.bittiming.bitrate = CAN_BITRATE_UNKNOWN;
-+	/* Set Virtio CAN supported operations */
-+	priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING;
-+	if (virtio_has_feature(vdev, VIRTIO_CAN_F_CAN_FD)) {
-+		priv->can.fd.data_bittiming.bitrate = CAN_BITRATE_UNKNOWN;
-+		err = can_set_static_ctrlmode(dev, CAN_CTRLMODE_FD);
-+		if (err != 0)
-+			goto on_failure;
-+	}
-+
-+	/* Initialize virtqueues */
-+	err = virtio_can_find_vqs(priv);
-+	if (err != 0)
-+		goto on_failure;
-+
-+	spin_lock_init(&priv->tx_lock);
-+	mutex_init(&priv->ctrl_lock);
-+
-+	init_completion(&priv->ctrl_done);
-+
-+	priv->rpkt_len = sizeof(struct virtio_can_rx);
-+
-+	if (virtio_has_feature(vdev, VIRTIO_CAN_F_CAN_FD))
-+		priv->rpkt_len += CANFD_MAX_DLEN;
-+	else
-+		priv->rpkt_len += CAN_MAX_DLEN;
-+
-+	size = priv->rpkt_len * priv->vqs[VIRTIO_CAN_QUEUE_RX]->num_free;
-+	priv->rpkt = devm_kzalloc(&vdev->dev, size, GFP_KERNEL);
-+	if (!priv->rpkt) {
-+		virtio_can_del_vq(vdev);
-+		err = -ENOMEM;
-+		goto on_failure;
-+	}
-+	virtio_can_populate_rx_vq(vdev);
-+
-+	err = register_virtio_can_dev(dev);
-+	if (err) {
-+		virtio_can_del_vq(vdev);
-+		goto on_failure;
-+	}
-+
-+	napi_enable(&priv->napi);
-+	napi_enable(&priv->napi_tx);
-+
-+	return 0;
-+
-+on_failure:
-+	virtio_can_free_candev(dev);
-+	return err;
-+}
-+
-+static int __maybe_unused virtio_can_freeze(struct virtio_device *vdev)
-+{
-+	struct virtio_can_priv *priv = vdev->priv;
-+	struct net_device *ndev = priv->dev;
-+
-+	if (netif_running(ndev)) {
-+		int err;
-+
-+		netif_stop_queue(ndev);
-+		netif_device_detach(ndev);
-+		err = virtio_can_stop(ndev);
-+		if (err) {
-+			netif_device_attach(ndev);
-+			netif_start_queue(ndev);
-+			return err;
-+		}
-+	}
-+
-+	napi_disable(&priv->napi);
-+	napi_disable(&priv->napi_tx);
-+
-+	priv->can.state = CAN_STATE_SLEEPING;
-+
-+	virtio_can_del_vq(vdev);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused virtio_can_restore(struct virtio_device *vdev)
-+{
-+	struct virtio_can_priv *priv = vdev->priv;
-+	struct net_device *ndev = priv->dev;
-+	size_t size;
-+	int err;
-+
-+	napi_enable(&priv->napi);
-+	napi_enable(&priv->napi_tx);
-+
-+	err = virtio_can_find_vqs(priv);
-+	if (err != 0)
-+		return err;
-+
-+	size = priv->rpkt_len * priv->vqs[VIRTIO_CAN_QUEUE_RX]->num_free;
-+	priv->rpkt = devm_krealloc(&vdev->dev, priv->rpkt, size, GFP_KERNEL | __GFP_ZERO);
-+	if (!priv->rpkt) {
-+		virtio_can_del_vq(vdev);
-+		return -ENOMEM;
-+	}
-+	virtio_can_populate_rx_vq(vdev);
-+
-+	if (netif_running(ndev)) {
-+		err = virtio_can_start(ndev);
-+		if (err) {
-+			virtio_can_del_vq(vdev);
-+			return err;
-+		}
-+		netif_device_attach(ndev);
-+		netif_start_queue(ndev);
-+	} else {
-+		priv->can.state = CAN_STATE_STOPPED;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct virtio_device_id virtio_can_id_table[] = {
-+	{ VIRTIO_ID_CAN, VIRTIO_DEV_ANY_ID },
-+	{ 0 },
-+};
-+
-+static unsigned int features[] = {
-+	VIRTIO_CAN_F_CAN_CLASSIC,
-+	VIRTIO_CAN_F_CAN_FD,
-+	VIRTIO_CAN_F_LATE_TX_ACK,
-+	VIRTIO_CAN_F_RTR_FRAMES,
-+};
-+
-+static struct virtio_driver virtio_can_driver = {
-+	.feature_table = features,
-+	.feature_table_size = ARRAY_SIZE(features),
-+	.driver.name = KBUILD_MODNAME,
-+	.driver.owner = THIS_MODULE,
-+	.id_table = virtio_can_id_table,
-+	.validate = virtio_can_validate,
-+	.probe = virtio_can_probe,
-+	.remove = virtio_can_remove,
-+	.config_changed = virtio_can_config_changed,
-+#ifdef CONFIG_PM_SLEEP
-+	.freeze = virtio_can_freeze,
-+	.restore = virtio_can_restore,
-+#endif
-+};
-+
-+module_virtio_driver(virtio_can_driver);
-+MODULE_DEVICE_TABLE(virtio, virtio_can_id_table);
-+
-+MODULE_AUTHOR("OpenSynergy GmbH");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("CAN bus driver for Virtio CAN controller");
-diff --git a/include/uapi/linux/virtio_can.h b/include/uapi/linux/virtio_can.h
-new file mode 100644
-index 000000000000..08d7e3e78776
---- /dev/null
-+++ b/include/uapi/linux/virtio_can.h
-@@ -0,0 +1,78 @@
-+/* SPDX-License-Identifier: BSD-3-Clause */
-+/*
-+ * Copyright (C) 2021-2023 OpenSynergy GmbH
-+ * Copyright Red Hat, Inc. 2025
-+ */
-+#ifndef _LINUX_VIRTIO_VIRTIO_CAN_H
-+#define _LINUX_VIRTIO_VIRTIO_CAN_H
-+
-+#include <linux/types.h>
-+#include <linux/virtio_types.h>
-+#include <linux/virtio_ids.h>
-+#include <linux/virtio_config.h>
-+
-+/* Feature bit numbers */
-+#define VIRTIO_CAN_F_CAN_CLASSIC        0
-+#define VIRTIO_CAN_F_CAN_FD             1
-+#define VIRTIO_CAN_F_RTR_FRAMES         2
-+#define VIRTIO_CAN_F_LATE_TX_ACK        3
-+
-+/* CAN Result Types */
-+#define VIRTIO_CAN_RESULT_OK            0
-+#define VIRTIO_CAN_RESULT_NOT_OK        1
-+
-+/* CAN flags to determine type of CAN Id */
-+#define VIRTIO_CAN_FLAGS_EXTENDED       0x8000
-+#define VIRTIO_CAN_FLAGS_FD             0x4000
-+#define VIRTIO_CAN_FLAGS_RTR            0x2000
-+
-+#define VIRTIO_CAN_MAX_DLEN    64 // this is like CANFD_MAX_DLEN
-+
-+struct virtio_can_config {
-+#define VIRTIO_CAN_S_CTRL_BUSOFF (1u << 0) /* Controller BusOff */
-+	/* CAN controller status */
-+	__le16 status;
-+};
-+
-+/* TX queue message types */
-+struct virtio_can_tx_out {
-+#define VIRTIO_CAN_TX                   0x0001
-+	__le16 msg_type;
-+	__le16 length; /* 0..8 CC, 0..64 CAN-FD, 0..2048 CAN-XL, 12 bits */
-+	__u8 reserved_classic_dlc; /* If CAN classic length = 8 then DLC can be 8..15 */
-+	__u8 padding;
-+	__le16 reserved_xl_priority; /* May be needed for CAN XL priority */
-+	__le32 flags;
-+	__le32 can_id;
-+	__u8 sdu[] __counted_by_le(length);
-+};
-+
-+struct virtio_can_tx_in {
-+	__u8 result;
-+};
-+
-+/* RX queue message types */
-+struct virtio_can_rx {
-+#define VIRTIO_CAN_RX                   0x0101
-+	__le16 msg_type;
-+	__le16 length; /* 0..8 CC, 0..64 CAN-FD, 0..2048 CAN-XL, 12 bits */
-+	__u8 reserved_classic_dlc; /* If CAN classic length = 8 then DLC can be 8..15 */
-+	__u8 padding;
-+	__le16 reserved_xl_priority; /* May be needed for CAN XL priority */
-+	__le32 flags;
-+	__le32 can_id;
-+	__u8 sdu[] __counted_by_le(length);
-+};
-+
-+/* Control queue message types */
-+struct virtio_can_control_out {
-+#define VIRTIO_CAN_SET_CTRL_MODE_START  0x0201
-+#define VIRTIO_CAN_SET_CTRL_MODE_STOP   0x0202
-+	__le16 msg_type;
-+};
-+
-+struct virtio_can_control_in {
-+	__u8 result;
-+};
-+
-+#endif /* #ifndef _LINUX_VIRTIO_VIRTIO_CAN_H */
+ .../bindings/net/can/microchip,mcp251xfd.yaml |  8 ++++
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 37 +++++++++++++++++++
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |  1 +
+ 3 files changed, 46 insertions(+)
+
 -- 
-2.42.0
+2.34.1
 
 
