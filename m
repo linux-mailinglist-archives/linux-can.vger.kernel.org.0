@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-7218-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7219-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WF9dO5UYwWn5QQQAu9opvQ
-	(envelope-from <linux-can+bounces-7218-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 23 Mar 2026 11:40:21 +0100
+	id GNH9BHAawWn5QQQAu9opvQ
+	(envelope-from <linux-can+bounces-7219-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 23 Mar 2026 11:48:16 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67C9A2F057E
-	for <lists+linux-can@lfdr.de>; Mon, 23 Mar 2026 11:40:21 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07C0E2F0751
+	for <lists+linux-can@lfdr.de>; Mon, 23 Mar 2026 11:48:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 713E6303EEAE
-	for <lists+linux-can@lfdr.de>; Mon, 23 Mar 2026 10:36:42 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6A796304CEBB
+	for <lists+linux-can@lfdr.de>; Mon, 23 Mar 2026 10:42:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7CF73859D4;
-	Mon, 23 Mar 2026 10:36:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 437E73909B8;
+	Mon, 23 Mar 2026 10:41:53 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CEFC38B7D2
-	for <linux-can@vger.kernel.org>; Mon, 23 Mar 2026 10:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AC239098C
+	for <linux-can@vger.kernel.org>; Mon, 23 Mar 2026 10:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774262200; cv=none; b=Dw/XRJDKF5gXQZ59F1ExGe5QLE1Z1EvPfG8PdeaxWkmCONlOlTEO9T3Waqivq1xujHsZ832CmDw0/cQKZ6GKzpg93Q6R5hgJnqEI7kODZjWM1eIJo6TIdQMoGJlMDU3wX/HhvuWoInxXh95d8YjSx8FwwkZ1BEZ7ElYjD8APiro=
+	t=1774262513; cv=none; b=HdhOrBm0hSKTCllGsKDauDHFJ6eDkP3ScYsXTAuGFZFTUBDzoUD2GxFt49P79QGWlNSa50XwWuYhQlygcrm7vfKNcqBB4zuw4mnJSj1EQ7MYKl1b+JLNYaqvUiOFqfPIKOH/GDCeF4B1a6ofjAQLKR+eNhc7E2Hm99JCizwUmOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774262200; c=relaxed/simple;
-	bh=84cWpFOEfJUrl7OHPV0gcP7TAT6ro+QeEH6UHJ61bvI=;
+	s=arc-20240116; t=1774262513; c=relaxed/simple;
+	bh=Z6GcXlGT7FKbncFELrN6EUuqe1RbllaJTGYxbiWsiQA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jw3XuhE9CCucGFFizT+mKEfKYq8m7jCX3aHp/guUoKhQnCipj1T/wvvQO9CGoG0CdiVXQp6lK/CmTqsxf80JYQ7K6g54ru14pp+XZJ4STJIOiWd1hfvakYLIeEoIRfzH/kLehas8XzdOd2NGzDq819+oKkePival/axofjKMMqw=
+	 Content-Type:Content-Disposition:In-Reply-To; b=GrD4mApHAuvC7h8SbFAt5bcomQPzAG9kESujTH4ADgGZx7MTKKSRWwL9kP3YtjydFh9ZL/O4949lDoALf4Hz8UVY6nNd+Himl6HkOWO5mFfFZI4w6U4p6W5vA+bAMDrmlst+3bHcKwpNyrUcuNwgj6/18mn/m5XzhDPG6afmRV8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -36,32 +36,34 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1w4cdw-0000dP-Ab; Mon, 23 Mar 2026 11:36:20 +0100
+	id 1w4ciw-0001Ls-1M; Mon, 23 Mar 2026 11:41:30 +0100
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1w4cdv-001iAm-1I;
-	Mon, 23 Mar 2026 11:36:19 +0100
+	id 1w4civ-001iBA-2O;
+	Mon, 23 Mar 2026 11:41:29 +0100
 Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 114E250A7F9;
-	Mon, 23 Mar 2026 10:36:19 +0000 (UTC)
-Date: Mon, 23 Mar 2026 11:36:18 +0100
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 5965450A81A;
+	Mon, 23 Mar 2026 10:41:29 +0000 (UTC)
+Date: Mon, 23 Mar 2026 11:41:29 +0100
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-Cc: Harald Mommer <harald.mommer@oss.qualcomm.com>, 
-	Vincent Mailhol <mailhol@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, linux-can@vger.kernel.org, virtualization@lists.linux.dev, 
-	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>, Stefano Garzarella <sgarzare@redhat.com>, francesco@valla.it
-Subject: Re: [PATCH v13] can: virtio: Add virtio CAN driver
-Message-ID: <20260323-hilarious-active-eagle-a0ee74-mkl@pengutronix.de>
+To: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+Cc: mani@kernel.org, thomas.kopp@microchip.com, mailhol@kernel.org, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, andersson@kernel.org, 
+	konradybcio@kernel.org, linusw@kernel.org, brgl@kernel.org, linux-can@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, mukesh.savaliya@oss.qualcomm.com, anup.kulkarni@oss.qualcomm.com
+Subject: Re: [PATCH v3 1/2] dt-bindings: can: mcp251xfd: add
+ microchip,xstbyen property
+Message-ID: <20260323-noble-mysterious-hippogriff-340f73-mkl@pengutronix.de>
 X-AI: stop_reason: "refusal"
-References: <ab2FlQTWUxl0KmlT@fedora>
+References: <20260321135031.3107408-1-viken.dadhaniya@oss.qualcomm.com>
+ <20260321135031.3107408-2-viken.dadhaniya@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -69,9 +71,9 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zsnxvdx43cvgpphl"
+	protocol="application/pgp-signature"; boundary="acu6kjxbnxtaftpm"
 Content-Disposition: inline
-In-Reply-To: <ab2FlQTWUxl0KmlT@fedora>
+In-Reply-To: <20260321135031.3107408-2-viken.dadhaniya@oss.qualcomm.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
@@ -80,15 +82,15 @@ X-Spamd-Result: default: False [-2.56 / 15.00];
 	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7218-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7219-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	RCPT_COUNT_TWELVE(0.00)[18];
 	DMARC_NA(0.00)[pengutronix.de];
 	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -97,107 +99,84 @@ X-Spamd-Result: default: False [-2.56 / 15.00];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	RCVD_COUNT_FIVE(0.00)[6];
 	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux.dev:url,pengutronix.de:mid,pengutronix.de:url]
-X-Rspamd-Queue-Id: 67C9A2F057E
+	TAGGED_RCPT(0.00)[linux-can,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,pengutronix.de:mid,pengutronix.de:url,qualcomm.com:email]
+X-Rspamd-Queue-Id: 07C0E2F0751
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 
---zsnxvdx43cvgpphl
+--acu6kjxbnxtaftpm
 Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v13] can: virtio: Add virtio CAN driver
+Subject: Re: [PATCH v3 1/2] dt-bindings: can: mcp251xfd: add
+ microchip,xstbyen property
 MIME-Version: 1.0
 
-Hello,
+On 21.03.2026 19:20:30, Viken Dadhaniya wrote:
+> Add the boolean property 'microchip,xstbyen' to enable the dedicated
+> transceiver standby control function on the INT0/GPIO0/XSTBY pin of
+> the MCP251xFD family.
+>
+> Signed-off-by: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
 
-The nipa/ai-review bot found these problems:
+This series looks good to me, I think we need an Acked by the DT people.
 
-| https://netdev-ai.bots.linux.dev/ai-review.html?id=3Db046d75a-2de1-4063-b=
-b96-8f64abc65e7d
+regards,
+Marc
 
-commit 0f3cb3b3bc94eaff9b9709b528e498fe6150f9c1
-Author: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-
-can: virtio: Add virtio CAN driver
-
-This commit adds a virtio CAN driver implementing a complete CAN bus
-interface over Virtio transport, supporting both CAN Classic and CAN-FD
-frames.
-
-> diff --git a/drivers/net/can/virtio_can.c b/drivers/net/can/virtio_can.c
-> new file mode 100644
-> index 000000000000..57641c3ed6d0
-> --- /dev/null
-> +++ b/drivers/net/can/virtio_can.c
-
-[ ... ]
-
-> +static int __maybe_unused virtio_can_restore(struct virtio_device *vdev)
-> +{
-> +	struct virtio_can_priv *priv =3D vdev->priv;
-> +	struct net_device *ndev =3D priv->dev;
-> +	size_t size;
-> +	int err;
+> ---
+> v2 -> v3:
+>
+> - No change.
+>
+> v2 Link: https://lore.kernel.org/all/20260316131950.859748-2-viken.dadhan=
+iya@oss.qualcomm.com/
+>
+> v1 -> v2:
+>
+> - Drop the gpio-hog approach as suggested by Dmitry.
+> - Add the microchip,xstbyen property to enable transceiver standby contro=
+l.
+>
+> v1 Link: https://lore.kernel.org/all/20260108125200.2803112-2-viken.dadha=
+niya@oss.qualcomm.com/
+> ---
+>  .../devicetree/bindings/net/can/microchip,mcp251xfd.yaml  | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp251xf=
+d.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
+> index 2d13638ebc6a..28e494262cd9 100644
+> --- a/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml
+> @@ -44,6 +44,14 @@ properties:
+>        signals a pending RX interrupt.
+>      maxItems: 1
+>
+> +  microchip,xstbyen:
+> +    type: boolean
+> +    description:
+> +      If present, configure the INT0/GPIO0/XSTBY pin as transceiver stan=
+dby
+> +      control. The pin is driven low when the controller is active and h=
+igh
+> +      when it enters Sleep mode, allowing automatic standby control of an
+> +      external CAN transceiver connected to this pin.
 > +
-> +	napi_enable(&priv->napi);
-> +	napi_enable(&priv->napi_tx);
-> +
-> +	err =3D virtio_can_find_vqs(priv);
-> +	if (err !=3D 0)
-> +		return err;
-
-What happens to the enabled NAPI instances when this error path is taken?
-virtio_can_restore() enables both NAPI instances at the start, but if
-virtio_can_find_vqs() fails here, the function returns without calling
-napi_disable().
-
-The corresponding virtio_can_freeze() function disables both NAPIs before
-returning, so the restore function leaves the NAPI subsystem in an
-inconsistent state on failure.
-
-If the PM framework retries restore after this failure, the second
-napi_enable() call on an already-enabled NAPI will hit the BUG_ON in
-napi_enable_locked():
-
-net/core/dev.c:napi_enable_locked() {
-	BUG_ON(!test_bit(NAPI_STATE_SCHED, &n->state));
-	...
-}
-
-In contrast, virtio_can_probe() enables NAPI only after all setup
-succeeds, avoiding this issue.
-
-> +
-> +	size =3D priv->rpkt_len * priv->vqs[VIRTIO_CAN_QUEUE_RX]->num_free;
-> +	priv->rpkt =3D devm_krealloc(&vdev->dev, priv->rpkt, size, GFP_KERNEL |=
- __GFP_ZERO);
-> +	if (!priv->rpkt) {
-> +		virtio_can_del_vq(vdev);
-> +		return -ENOMEM;
-> +	}
-
-The same NAPI state issue occurs on this error path.
-
-> +	virtio_can_populate_rx_vq(vdev);
-> +
-> +	if (netif_running(ndev)) {
-> +		err =3D virtio_can_start(ndev);
-> +		if (err) {
-> +			virtio_can_del_vq(vdev);
-> +			return err;
-> +		}
-
-And again on this error path.
-
-Should all three error paths call napi_disable(&priv->napi_tx) and
-napi_disable(&priv->napi) before returning the error code?
+>    spi-max-frequency:
+>      description:
+>        Must be half or less of "clocks" frequency.
+> --
+> 2.34.1
+>
+>
+>
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde          |
@@ -205,16 +184,16 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---zsnxvdx43cvgpphl
+--acu6kjxbnxtaftpm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCacEXoAAKCRDMOmT6rpmt
-0oc0AP4r/E0p8/W4XH5xFsFvHnvCil/2ybFe0uqsmduXn4Gw4QD6A2wQTTGMyyJp
-k6X5ros7i59H9faw/8/FWIR1ffBnmQY=
-=E13T
+iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCacEY1wAKCRDMOmT6rpmt
+0kmlAQCNELR5JUwWlmN5Z24i7Xj/tpKV+XPWrS9q2fn0iE2hLwEAvx+Q7vop5d52
+z+zV1UqbjBCe5rYx+bqEhZyZ5KAd4wE=
+=SepY
 -----END PGP SIGNATURE-----
 
---zsnxvdx43cvgpphl--
+--acu6kjxbnxtaftpm--
 
