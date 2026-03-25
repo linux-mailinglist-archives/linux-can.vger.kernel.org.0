@@ -1,257 +1,219 @@
-Return-Path: <linux-can+bounces-7247-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7248-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KKyMEobOwmnRmQQAu9opvQ
-	(envelope-from <linux-can+bounces-7247-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 24 Mar 2026 18:48:54 +0100
+	id kJo/Nv/Tw2lLuQQAu9opvQ
+	(envelope-from <linux-can+bounces-7248-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 25 Mar 2026 13:24:31 +0100
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A2EF31A4A4
-	for <lists+linux-can@lfdr.de>; Tue, 24 Mar 2026 18:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CF8D324D2F
+	for <lists+linux-can@lfdr.de>; Wed, 25 Mar 2026 13:24:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 64F543040AA4
-	for <lists+linux-can@lfdr.de>; Tue, 24 Mar 2026 17:42:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 04D1D319E3A9
+	for <lists+linux-can@lfdr.de>; Wed, 25 Mar 2026 11:44:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5A283E9589;
-	Tue, 24 Mar 2026 17:42:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C7793D0932;
+	Wed, 25 Mar 2026 11:43:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XZekPgF+";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="mWGVjj+K"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="UGTYVciV"
 X-Original-To: linux-can@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013055.outbound.protection.outlook.com [52.101.72.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4CD3A1691
-	for <linux-can@vger.kernel.org>; Tue, 24 Mar 2026 17:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774374162; cv=none; b=ciHEHvdI1ScEYquIri9SyIJBt44uPt+tyZFW8JRv+92VVci8VFBGqIEcOwq0ee+7J0UYf2XRZOsawO85g+E2iqsz8GKIlyaf35256h1FsnQSsoQ/hkyIaOX/fqWxdP2+tiHeTNFvvGxYMFp85eOYPyhYZNlIiOvXrrj/OwULKJA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774374162; c=relaxed/simple;
-	bh=TJyvrr4HaLk8h/xrwfw3is3omZUyp+y5i6BcRF5lQPM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ODIknc4asc0VcWH65YrTk6dWxztzt1uaqgof69YIvPQxmkdbqIJUdxxs2ooA9jm8rPIAaIZeIfNO9Bavr7z4YAj9JwbstiGMRAwxT6vecVY7kWGUaeconZ1C5mlTJNO3OR4mJ7jMNhq6eRyLFklIz1zis7WkCjLnaDYfVj3530M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XZekPgF+; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=mWGVjj+K; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774374160;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k8hqPRba6xj486YSVHnHmVBfkPNRQNNSk9RXrPw+XUY=;
-	b=XZekPgF+JJruPLDcv3U9lhOGZ7YoxTvVbQzFR12mIRaj12Dj8mOQDyzx6Cjg2XcKXVtgRp
-	5mlm5mlpVa/HgsHO83aDrANNFUEMRuk/GG7bUY8LY0ZjSLbHoM6FMQU3l74LDwp08PpwZ2
-	8RYgL2ychByPC0jCjydH1b9D309C6xw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-225-aXuQw3aHPredOtNSWUv10g-1; Tue, 24 Mar 2026 13:42:38 -0400
-X-MC-Unique: aXuQw3aHPredOtNSWUv10g-1
-X-Mimecast-MFC-AGG-ID: aXuQw3aHPredOtNSWUv10g_1774374157
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-486fc42c83aso17393915e9.0
-        for <linux-can@vger.kernel.org>; Tue, 24 Mar 2026 10:42:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774374155; x=1774978955; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=k8hqPRba6xj486YSVHnHmVBfkPNRQNNSk9RXrPw+XUY=;
-        b=mWGVjj+Kmq0K0rrO8oFyYCRzYaIOxnZ2X+nfzL1U1htenEDFkb+3UZclbrYQzuX6Ns
-         Q3owdpWxkVrql3Dgb4qOdLyMJRXgjHor6BlgXlpOmXFFB+aanZFBt0S9IzhK5LDG0nww
-         +CfJEJCwqbRo69VFNX3oX7GJHhmuPgeGXe+fI3ICFhsgc/EE42p40IKwZ3rkrUmb5ZWb
-         MACtMOQNP9XAkkgrIwoX7gvsUL1HTq95StshQx02b9deLxhxaEjNjUR0ssWRUiXAeXlA
-         X4Ju+ieLMJMrnnGmLMuiplCSgF/NdIxHlJsCGxctHC0n6zQp9EM3ej1IAzjXMXM+crIg
-         55jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774374155; x=1774978955;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k8hqPRba6xj486YSVHnHmVBfkPNRQNNSk9RXrPw+XUY=;
-        b=Rh/7VnKGhGpgHAuxKgmgVDv38mIkKuczyPYmaJLSLwDDuDf/U8YSo6RrRcNTgNZsYG
-         RM0AEXKa6KKzFuajwG1ovcVYQRA9cxxGgI4IQ5FOSJKId6emG59tevn6tcZafM8GjGZ8
-         GPFgqzLmFCnf0J8xw7YPmMQdNgM3dSOJGJspk/ysHEMB/8nMWj+L63Bif2iXsfzRG7Jx
-         SarvCqXde6ZXUpyIa3wUJV1KkAYFHy2FEynFqE4LEMCGH38Hjh0JNLdTqmyAheUPY2xA
-         84GLwiQOZQYr2Hoz9BRVYsB/qsMVgJ5jiGN9c/erI6notXaZ7kOcWlISeBUFJqmhxZ9i
-         IDKw==
-X-Forwarded-Encrypted: i=1; AJvYcCXGaKOz+u5VILpDjTkbyx9LWhQr663NYfmMgOwkFSdUQEb433khxKG6rUgL8e3Z6bauZxxLI05Ewzk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpWUucOrtIA9iV2xr62FIy1du8uSB8P/UNCTArJu0iNlAd2jAs
-	BlL+TuCCD+jkr8I0KGnHIFHwSk8VmKult7x8McNFdGrcLKJeiHhT7J+pSiJEJyiy6NqfOZ+ywKy
-	2CX+pfK+GTtkQp/QncqcbngEeQAFSB5eClMsf5KtqiJEwvo3z+IGamdCeMPNzcg==
-X-Gm-Gg: ATEYQzxxBjsLvMXXQjqGTcS5AIu/qsozpXEX+V2Abk+9MTThwou0HLWSGIG8rysM6E2
-	6BzkbWvLPhD2Blgg1RbOEwah1+PnkGemfOcrKlxgIVrkzuWpFMSB/0KM1h3FSTR5k/XzBRG2U0L
-	G/qN2GJ9dforIcHG9XUCqoGFG40FNRP/GZ7Tf/59iCNrUYgQ4T0l/Y5tKKqjMWqgSFblzx5q6cV
-	R6cTg3IwSzvqLWP6bdVt+IsxbfqrpW0pJd6iO5T2hmnWxhw1yiMrNXbrwW8o7X5Kpg4arrjhsUQ
-	13Frt2uJH0bQyGBD386F/l3LlBgKZ/ykK5pDdgZC/QjIxhxves9BdQa/STMiBkRZ2JYNvfzITww
-	nAslYCtBR/5HNnyc=
-X-Received: by 2002:a05:600c:4705:b0:485:3dfc:57d with SMTP id 5b1f17b1804b1-4871608481emr9678895e9.30.1774374155072;
-        Tue, 24 Mar 2026 10:42:35 -0700 (PDT)
-X-Received: by 2002:a05:600c:4705:b0:485:3dfc:57d with SMTP id 5b1f17b1804b1-4871608481emr9678495e9.30.1774374154616;
-        Tue, 24 Mar 2026 10:42:34 -0700 (PDT)
-Received: from fedora ([2a01:e0a:257:8c60:80f1:cdf8:48d0:b0a1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48716549160sm3084885e9.3.2026.03.24.10.42.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 10:42:34 -0700 (PDT)
-Date: Tue, 24 Mar 2026 18:42:31 +0100
-From: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Harald Mommer <harald.mommer@oss.qualcomm.com>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	linux-can@vger.kernel.org, virtualization@lists.linux.dev,
-	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
-	Stefano Garzarella <sgarzare@redhat.com>, francesco@valla.it
-Subject: Re: [PATCH v13] can: virtio: Add virtio CAN driver
-Message-ID: <acLNB9PYmJ9L0Wvc@fedora>
-References: <ab2FlQTWUxl0KmlT@fedora>
- <20260323-hilarious-active-eagle-a0ee74-mkl@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37D43CFF75;
+	Wed, 25 Mar 2026 11:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774438999; cv=fail; b=bfN30Z2nQHrWN2wAuJQzQuQaewkGlxpi+GxrKhlpIWW90XMAbfFVkBsc3T1lv/OgIKNMiHfeceRsZzalQULwxIsa4IDIIRuvEJpYTLIvufLsc7qMR20k+vvaBqHLz0zIn0gv4j4dlUbtSTy3IlwqHw3VJxEPfXnfa4LvI62X+Vc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774438999; c=relaxed/simple;
+	bh=rkDWyxlGPECYdum0VZpfyB4sdIg61BGNWdDdFIHSLlM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=fmvY1c4xn21KmCN/t65QJ72fHVXUpsu1XPdzwFWdUZNICWjLsuUtNxHtgQFFvoKktGtfzZ8Dbmj9OKIBf7TRr5MN5XQerXHQSOBHONGVnWOZR6oBSvzclZHo5U/l3md2F6mTlhvEkZjz0AFvSnrJUTNM4r80Q0VKcO6ehOVVmXg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=UGTYVciV; arc=fail smtp.client-ip=52.101.72.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HH8ZZQzS2OdB6qF4VXP16jqy/py/KwYbSEWi4QMr5oREoIF0sd6flhhIWocF2d46TCg/pZDGH8wfmtql+BRGcA7v61BUr9a1nSKEc8RtfNZcItViIxbicO186k/0r2qsfPQfIBTIxUSYXri0eKwFniFyhPoQUczblcnTeib+uNLxX9c1oiqy88qlrpKrRguwL85Gd5+zbR6O6s8ZKWlndGsSqA1d3PWfo+CBMG52EBkHp2JLGi/qQWal1U7ijsJOISnuYe+sy69cPa5iK7SE3H793auHu9xD26Sjd51xHhZLinnei/EJ8UFbX8ItO+hFHt5kmnw8AqrJRjaUaJCmkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2vFKXGa9EyD8gCXVhuW4dfTTmiqy4V75PSWVxTxMQzg=;
+ b=jFHsQgypE2B+Al12DONj51EYkCGZVj7Ws1EretlxmcCTgbL48Y4hX0h0YqMmaP/UbvMvJs+8VjXo6YwTb3VMeKMGLXDr7lFK8g6uX0AAjisIg0seD7ONO+paMfXNp7Lmn3iTkGciCqpEvBaAflqRsYQn84G25F28fjN1jWBduFh355tHbgllVtw7beOzmUoATxkhnqbPYHBXqQM1o3+L9eAi3uNOsoMtwWIEGaTyO8APOt7xtlOmouUpysgZJLdJgmzjaxNvtOhE+TBdIsfVXtFwx/bsLB1DJlL7RMLkEqlqVxh1ZNRzCrkyANGjp5z+o1f7u90D8VYl7tWGRHvvAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2vFKXGa9EyD8gCXVhuW4dfTTmiqy4V75PSWVxTxMQzg=;
+ b=UGTYVciVvvAlZoVyaHQ4sIVKvJkenXwmIYlUaIAfT7iwuIBSU3AIfwawHFV6Us0h7VexloxUEmSv8c+eZg/y/Z0vqwTKaCTWeE7aHcrY6HASM56funP/+uvZrLur9BNAgrumKOwJIDknHSO6/yPkYITfjBhLoRMIItipy+Yc1yYytQiDs8HJamwFns3mQqO9s0puCNSw6uET+r9ZqDQ7qsDreAERcrdDMa4bqh5RcPUtz3SyDAavX8yr29bHlZehkdc7AySXTPKonW4eCFucVo5vuMma76+FOC9D9+/vzqLqDUZF4r7JFmU9d00Eite8YBEfEwl2yOB/FQw7JiEyCQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
+ by DU2PR04MB8951.eurprd04.prod.outlook.com (2603:10a6:10:2e2::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Wed, 25 Mar
+ 2026 11:43:14 +0000
+Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
+ ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
+ ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9723.030; Wed, 25 Mar 2026
+ 11:43:13 +0000
+Date: Wed, 25 Mar 2026 13:43:09 +0200
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	spacemit@lists.linux.dev, UNGLinuxDriver@microchip.com,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Nitin Rawat <quic_nitirawa@quicinc.com>
+Subject: Re: [PATCH v5 phy-next 10/27] scsi: ufs: qcom: keep parallel track
+ of PHY power state
+Message-ID: <20260325114309.3k7xkfrffpxp5xq4@skbuf>
+References: <20260319223241.1351137-1-vladimir.oltean@nxp.com>
+ <20260319223241.1351137-11-vladimir.oltean@nxp.com>
+ <ezrcjjwtg5n76w4m65l27szu5mywx66ti3xuprkfcp3x6quvbf@2rew4zrnnbt2>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ezrcjjwtg5n76w4m65l27szu5mywx66ti3xuprkfcp3x6quvbf@2rew4zrnnbt2>
+X-ClientProxiedBy: WA2P291CA0011.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1e::23) To AM9PR04MB8585.eurprd04.prod.outlook.com
+ (2603:10a6:20b:438::13)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260323-hilarious-active-eagle-a0ee74-mkl@pengutronix.de>
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|DU2PR04MB8951:EE_
+X-MS-Office365-Filtering-Correlation-Id: 67580038-d939-42e6-4c8c-08de8a63b29c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|19092799006|1800799024|10070799003|376014|7416014|18002099003|56012099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	TDkLjGCk59oxN3k1h6kJNSkkPPysnIDson/TIrmVIcgitvLI2U93YTY2h5IX9usTD1geEAZ53Ta6v0FnQog3RBCtFzfHVKXaH8a2ff+rlHWLfgsg9du5zgtMxyZJgBake3QxQHNMd4ckY6vKFn28qt69ebzHZpOoazQTPfLWJcNebOe6B+SWwTDfSRRaZbwCa8WYbvaeylgThEXQ6Nlpti7VB6lVDGN9l4e4vVHVP8LYtcaql8naBE8KChH8wHvm7PoL3LuO3b95RRUc2jOiHyoeYKKDkhYZjFAPdjuySt25aZmAYS+rD/zTGzBD7TRxEMTa2Yq59185y5tT5M4LbVPUEPB0kPc2nKfKZ6Oi318nbm3MzmSXRBGQ1uCs97WsEvPFz3FhOyHOIVGj69f/Txivn2ZqNChAq2pqVJzGsRrJ4y+sFQUCJ+32svBOCqZSvfDuAdL5NMB9RZVRSYIbldyr/5pHJVmcpp7HnkDsO0Xp7LMXNnrdwvHhnY7Wycwh3c2siHVVUYE7D3AI3NsznE8KL2L5RrGUMeZkhFNUI2wLHDkQIbmfnmszrPjZ2FOBKJCNUniOSvl+RhyVz/g3r0ctq7EWzftn2L3TxEmo+V0i+VoLQzqcyWHWEVmrBUyX8hG7yf8ZI3fY2O6uan4h9DAZ9FllPesQnXvPRt8rzInQEhwDlGaA02TR70y/I7uyzbthwQKYJtS7abjrALnkrYQhqpaeOp3d7bYwFWQfHmk=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(1800799024)(10070799003)(376014)(7416014)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?iWJmwLPIaoPbZ3tsima06lFTVXZJ+kNEMNmQ1rLIvpkStZFV4qgzde6HZnQF?=
+ =?us-ascii?Q?INw6NbJlg+GlePToErCCZ5GWtlT85g8ZhEu/wuJ+GG1U57oDOvLwnH6Ghdz3?=
+ =?us-ascii?Q?u26jhEN0CJLnhrhVECS087aURkMMqM61Qf/J4oYxdPgqc7xUZekWNrZHFTiz?=
+ =?us-ascii?Q?HN8DkgshAIi7ZEtgpxdMivW2xo7WnG9LbWm/Al2dJtGtJz8QSW9hCAdXb+Ik?=
+ =?us-ascii?Q?71QtFJcf4Q63lOkk+KGeSPWbfYrWb+G6c8n+xxDmez/7ITXrk5dIj44vYZ8I?=
+ =?us-ascii?Q?LQjWW433kNESUzpCrCkHdBxfILWUhsRT5LxsUDKki46x8r6Ehc7HgIzB8EAC?=
+ =?us-ascii?Q?M5I3xb02ApH4fs6UXNUik9AZuY/HlkdJfuR6wEEb7emsbrYaY9nn7gvkPX+f?=
+ =?us-ascii?Q?dqEJtgmAY1MKmS28xFpp56nIZxtUyx8UYfxEdlpGbCdXBaj6Dn4fytOsEC2D?=
+ =?us-ascii?Q?66F5QRM6NKDBtzK4BXaXm1tOydMVgathTqf1rQOtwctkPBn9SbigyrcOeiNl?=
+ =?us-ascii?Q?f1LjUfWjhwLcjBRROm3s4Ff0fhc3YRKNIjTTnLbVZCSvuhu0TcutpzDS+kab?=
+ =?us-ascii?Q?VJdg40ueQCZf7wUCKuBo9AY4Fgl4jFUTxNdYbnkI0V0mL0jXcKgRDFCj7vRI?=
+ =?us-ascii?Q?+VOP+JSPVfMOaWV7X9DFYMS/5M/CCjGgiM4+Mz6s7ZIwG4ZYW2PKWIA1aX8h?=
+ =?us-ascii?Q?B/Xpboh9OSQYsMd9AWc1CZz0qls8+RKQkbkJTjOKyncNLv3qYhgj/SFF6BF6?=
+ =?us-ascii?Q?Ot9tJhW+GXU0XVe6TL5LqpMv4eKbxSPCgHsB5F0R6XwhODXOMuyTH2yWo3q7?=
+ =?us-ascii?Q?s7MxjJzLUusLxLpLTMua31TsI8NuDjvlVMLzzbJ8Lv6Y2nno1uO3X1ORjhJ5?=
+ =?us-ascii?Q?j/lj05Ws2T2x9zp8t9pojrZUhBZWR+A5fj7jdES3A+PZi6Q0TVsB+rDk2Wgy?=
+ =?us-ascii?Q?xUV+PERtmnZn5kandwsQ4qhxUoYbGpu3Zv95c5+ASG0mAWK1dDM0hCsy2vTE?=
+ =?us-ascii?Q?QtFnu4yf4JGlF3wZ5bPV8KyI3KGkxAUSWfVRRrCNlBa8lEyPx47xPXJo383j?=
+ =?us-ascii?Q?txIWhHhIGItWBw2omRI5Uzqte2oJQsZ5M2U4aRMc+jFEMQFla/Shl4BCFHwX?=
+ =?us-ascii?Q?Z2w63YAe1TBhkrY1+TaAxh6mOXGiH57xRbb9/X/oWAjQT3vczTlq3RCZhFqm?=
+ =?us-ascii?Q?L7BCKQ+Ij8vN1MGCjNbPaIg+qwAFR+O27C/oav7zDm8u+U/K/q3qQ8YK27ls?=
+ =?us-ascii?Q?9IjO0MfZ94aNAGD108EVSM0RFoM1sr6furWDySPe1f85ZXEVdcrMkhTRCgGd?=
+ =?us-ascii?Q?AvFqg+5XNokX+gObHI5bccsihztYFauMyTsC2GuuPQgkoyDe3erpPYvaqQL8?=
+ =?us-ascii?Q?qVUSjf8B9dZLZOk5yJL7hn3KAKq38jbLTmjiD8fcvxbRuLKO1Mx1wM8/6mCQ?=
+ =?us-ascii?Q?Fc6gH/MWrMcGhWSzK/Dslqk2j7Ubuf0tk6B+Xu3im8EK0ak7JwDJpooWX+Iz?=
+ =?us-ascii?Q?Dr6noHzzYyvCBIkXKNtId5PlZobxXghD5sroRSJb4Kfwuzaes7JCr/6A2o1H?=
+ =?us-ascii?Q?UZRmsqWudf7MOom+wAtGgrjvjDQ2we0Qye8+xFX/bXhyQ1j+cv2UcDI7DWcN?=
+ =?us-ascii?Q?ThBIH0KpxG8VemFn1KiHZ5rXEKvMIyIhwLOj4pRPSNvRaWZn3sXE183/tZne?=
+ =?us-ascii?Q?ocNRFgVxkGc8nat2Jft2SlaXZuJYscv5Lpw3K8Qe12IzBuvivu5eEP3X8XN9?=
+ =?us-ascii?Q?mVKyWcGIjUJ0oNnObUiC0B1mNf92rabwNV8vH/jsvrrlrbc1jAHH+OXqRziH?=
+X-MS-Exchange-AntiSpam-MessageData-1: CXDuAeGTiO7U+w==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67580038-d939-42e6-4c8c-08de8a63b29c
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2026 11:43:13.8297
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QmhYKydPcdenRdeevcDFt6W4GzHXcXgFQUtOM6MfznRNXgTLw9sJ3AC3Crse1GiM4KbF/sRfeu0rtEGrlVqcbw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8951
+X-Spamd-Result: default: False [0.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7247-lists,linux-can=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-7248-lists,linux-can=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[28];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mvaralar@redhat.com,linux-can@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.dev:url]
-X-Rspamd-Queue-Id: 9A2EF31A4A4
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[vladimir.oltean@nxp.com,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[nxp.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-can];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nxp.com:dkim]
+X-Rspamd-Queue-Id: 3CF8D324D2F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Mar 23, 2026 at 11:36:18AM +0100, Marc Kleine-Budde wrote:
-> Hello,
+On Tue, Mar 24, 2026 at 11:00:10AM +0530, Manivannan Sadhasivam wrote:
+> On Fri, Mar 20, 2026 at 12:32:24AM +0200, Vladimir Oltean wrote:
+> > As explained in the similar ufs-exynos.c change, PHY consumer drivers
+> > should not look at the phy->power_count, because in the general case
+> > there might also be other consumers who have called phy_power_on() too,
+> > so the fact that the power_count is non-zero does not mean that we did.
+> > 
+> > Moreover, struct phy will become opaque soon, so the qcom UFS driver
+> > will not be able to apply this pattern. Keep parallel track of the PHY
+> > power state, instead of looking at a field which will become unavailable
+> > (phy->power_count).
+> > 
+> > About treating the phy_power_off() return code: from an API perspective,
+> > this should have probably returned void, otherwise consumers would be
+> > stuck in a state they can't escape. The provider, phy-qcom-qmp-ufs.c,
+> > does return 0 in its power_off() implementation. I consider it safe to
+> > discard potential errors from phy_power_off() instead of complicating
+> > the phy_powered_on logic.
+> > 
 > 
+> You could even simplify the code by getting rid of the 'phy_powered_on' check
+> altogether. There is no real need to track the PHY power state in this driver.
+> It is safe to call phy_power_off() without any checks.
+> 
+> - Mani
 
-Hello and thanks, I am struggling to come up with a solution for this
-comment.
+Ok.. as the author of commit 7bac65687510 ("scsi: ufs: qcom: Power off
+the PHY if it was already powered on in ufs_qcom_power_up_sequence()"),
+I assume you have hardware to test. Would you mind writing a patch that
+I could pick up to replace this one with?
 
-> The nipa/ai-review bot found these problems:
-> 
-> | https://netdev-ai.bots.linux.dev/ai-review.html?id=b046d75a-2de1-4063-bb96-8f64abc65e7d
-> 
-> commit 0f3cb3b3bc94eaff9b9709b528e498fe6150f9c1
-> Author: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
-> 
-> can: virtio: Add virtio CAN driver
-> 
-> This commit adds a virtio CAN driver implementing a complete CAN bus
-> interface over Virtio transport, supporting both CAN Classic and CAN-FD
-> frames.
-> 
-> > diff --git a/drivers/net/can/virtio_can.c b/drivers/net/can/virtio_can.c
-> > new file mode 100644
-> > index 000000000000..57641c3ed6d0
-> > --- /dev/null
-> > +++ b/drivers/net/can/virtio_can.c
-> 
-> [ ... ]
-> 
-> > +static int __maybe_unused virtio_can_restore(struct virtio_device *vdev)
-> > +{
-> > +	struct virtio_can_priv *priv = vdev->priv;
-> > +	struct net_device *ndev = priv->dev;
-> > +	size_t size;
-> > +	int err;
-> > +
-> > +	napi_enable(&priv->napi);
-> > +	napi_enable(&priv->napi_tx);
-> > +
-> > +	err = virtio_can_find_vqs(priv);
-> > +	if (err != 0)
-> > +		return err;
-> 
-> What happens to the enabled NAPI instances when this error path is taken?
-> virtio_can_restore() enables both NAPI instances at the start, but if
-> virtio_can_find_vqs() fails here, the function returns without calling
-> napi_disable().
-> 
-I was expecting that, if virtio_can_restore() fails, then a successive
-virtio_can_remove() will not hang in napi_disable() since the napis were
-already enabled.  
-
-> The corresponding virtio_can_freeze() function disables both NAPIs before
-> returning, so the restore function leaves the NAPI subsystem in an
-> inconsistent state on failure.
-> 
-> If the PM framework retries restore after this failure, the second
-> napi_enable() call on an already-enabled NAPI will hit the BUG_ON in
-> napi_enable_locked():
->
-
-Does the PM framework really retries if virtio_can_restore() fails? If not, that BUG_ON
-is never reached.
-
-> net/core/dev.c:napi_enable_locked() {
-> 	BUG_ON(!test_bit(NAPI_STATE_SCHED, &n->state));
-> 	...
-> }
-> 
-> In contrast, virtio_can_probe() enables NAPI only after all setup
-> succeeds, avoiding this issue.
-> 
-> > +
-> > +	size = priv->rpkt_len * priv->vqs[VIRTIO_CAN_QUEUE_RX]->num_free;
-> > +	priv->rpkt = devm_krealloc(&vdev->dev, priv->rpkt, size, GFP_KERNEL | __GFP_ZERO);
-> > +	if (!priv->rpkt) {
-> > +		virtio_can_del_vq(vdev);
-> > +		return -ENOMEM;
-> > +	}
-> 
-> The same NAPI state issue occurs on this error path.
-> 
-> > +	virtio_can_populate_rx_vq(vdev);
-> > +
-> > +	if (netif_running(ndev)) {
-> > +		err = virtio_can_start(ndev);
-> > +		if (err) {
-> > +			virtio_can_del_vq(vdev);
-> > +			return err;
-> > +		}
-> 
-> And again on this error path.
-> 
-> Should all three error paths call napi_disable(&priv->napi_tx) and
-> napi_disable(&priv->napi) before returning the error code?
-> 
-> -- 
-> Pengutronix e.K.                 | Marc Kleine-Budde          |
-> Embedded Linux                   | https://www.pengutronix.de |
-> Vertretung Nürnberg              | Phone: +49-5121-206917-129 |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
-
+I suppose that the power_count test is somehow no longer necessary after
+commit 77d2fa54a945 ("scsi: ufs: qcom : Refactor phy_power_on/off
+calls"), but frankly I don't see it - the ufshcd state machine is a bit
+too complicated for me to just statically analyze.
 
