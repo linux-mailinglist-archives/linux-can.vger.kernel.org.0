@@ -1,64 +1,64 @@
-Return-Path: <linux-can+bounces-7277-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7278-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eA7KDsTSxmkhPAUAu9opvQ
-	(envelope-from <linux-can+bounces-7277-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 27 Mar 2026 19:56:04 +0100
+	id eF/iJzzTxmlzPAUAu9opvQ
+	(envelope-from <linux-can+bounces-7278-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 27 Mar 2026 19:58:04 +0100
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id C69F1349721
-	for <lists+linux-can@lfdr.de>; Fri, 27 Mar 2026 19:56:03 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E7A8349830
+	for <lists+linux-can@lfdr.de>; Fri, 27 Mar 2026 19:58:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7BAA630A2D96
-	for <lists+linux-can@lfdr.de>; Fri, 27 Mar 2026 18:52:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F12A230B68FF
+	for <lists+linux-can@lfdr.de>; Fri, 27 Mar 2026 18:52:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F10399018;
-	Fri, 27 Mar 2026 18:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 954CF39D6C9;
+	Fri, 27 Mar 2026 18:49:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="nhvxVNe4"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="lTv9BMyg"
 X-Original-To: linux-can@vger.kernel.org
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013036.outbound.protection.outlook.com [52.101.83.36])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010049.outbound.protection.outlook.com [52.101.84.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2FE393DFD;
-	Fri, 27 Mar 2026 18:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24DE396B9B;
+	Fri, 27 Mar 2026 18:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774637346; cv=fail; b=Z4chlFldZmCMcOf6V3V+Rxbn864BJxoH9svDK+P+6fwc0Xh0xtdYkl0RzkhFOUhnGc+DH0XPO9Khw81lFP9uNiTZda4DecefUeoCfhTkZ6cdVZ0dRae2f6UHILucxWkU3sdLzJEO/k/0d+oNwdCOJ/IJZ7J3MnNWiM+9DV6bn7I=
+	t=1774637348; cv=fail; b=B/+t4bxB/548zOTBBLzuWFSJyubEbbwR2poByHDYjo6h4/22MLqi3sHYXg7mAEOCXk3vj7qjSe6aSuAYKmdVSwppEboL+8QpGAIQRM6x4UOLGKAcrRJs5sUBrIladpXv2cMR+5HqT7viqq9BFXr2bvEWAT5OObCcQeTm1tcO3CM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774637346; c=relaxed/simple;
-	bh=NRFEG6ehqBcKgFcwj/0u0in6gzPJ30IFq1bV52oCC6k=;
+	s=arc-20240116; t=1774637348; c=relaxed/simple;
+	bh=yWu7uuuHULUSp+20Dei2NjEcFIGY5BDwgOfeZTWCHD4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AAJRZw4R6WsE479Shtx9jlHdqQd+9ztCkyAkNpUId1TQJcnxgxoM9PvTSaEfXmvYD+uhqmQ0WrBh5zHC7qO6rgGOQbGUNLZYzBZA44ecZUzvxKqXoxhUzwEGhqJiltm5hvZE4IErKwP5w3fwsFfGV4jPg4UvjjUL7e10BGySKp0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=nhvxVNe4; arc=fail smtp.client-ip=52.101.83.36
+	 Content-Type:MIME-Version; b=igeQb4A31lNQ4u9IbtPZGaupAzNJYQLECvsOKLeGCPWHxjV6fv/o2PI76QaDxajnRJAcqSj78y2m7XrP1irAkraW77lxkGGzO9s1w0H2s6oX77hhwNU3V+6lc8ZmGaUgf9d8G7kkewUiuEz67DqBXSkS0uJJwn5rubMEhOTPpsY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=lTv9BMyg; arc=fail smtp.client-ip=52.101.84.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gEHx6I07Xl9TbMFm+HJTb3unqA432EjutWxDi08/gxZiMT9iXSJMFwEHS1ETY/xIgUMsrPVCczMMTfQouSLCptv7MS+giZ5dDZFKetI/di4Uehi9YJax1X9Vqs6YE3NOV7dR+Xvh40Wz85AhhjLPdLgAvkfb3YuS+J2hjUSpdeDr/r3S8TF1u2u1CtlUcRhkqxyqQkMxKdcETQWDXBuOxiQnQscdIdmVc4It7uNioCYJeAMhH6rq99pWbXCVxIg3yC0j8dwM5BsrKmzkO7RfUZbzjExyTQpkeWDtwjFNqHckFJHhh7XDQkWPc7kQRl0VF5rDOdc+a8BqfYVcTjjweg==
+ b=yAP+RmPi+8qLYYmEfqhFdiAnAbiPfKeOHinikM/+lDkY0/E8tOMdogB7z4ae+/kI+3fmnoW7kjzHIP0kJNr+wW+EEszgEX6HhigPd3k4aF558N+RkqeIZoB+d1dq+Aqd6oy2l4rxvhZblT0TTzkdnh8aXtxtHjNA1sFUhDsVpdaIVX6XgOBwd//ik4ppMBr45GcEhf5bhvNUA7HF63I4nT1XdAI5VpXMhI8eYVseQnlefxEr8j8yR0QtqVicQ3HxarnPEDConuOmTgzFAS6aTxWs7tOuBZ9hA6iKYIyp/sLpqnoYHWbXvQyktC4shX9mEEItvGKVrHoWbhbMqtNlBw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S48+hgH2VmzfEjLMOCn4XbeTFUmmqXzy8WudOwilpqY=;
- b=q5ZYrz/jK9v7ckFnoJHLO15fHGEqTe8ilBND6NtbJgxMmF9cL5S/XhTnUNuzayDcN6KucwPanp9RnUTEKwaolCLJ23qhK1iRfjzyverWNz3iuYjHfp2cjW77hSKIm3mmf8O1ahgpH3HY1DwMMsU+1q7icfvJYsaFZAomxf4u4fiky2J8zvvDkruDu4sGA8bX1oMbP2lbOJxDYX551VHmTjxiGK3kLdxMGpSeZiboLKs7YOiUz6YR4KkOi/6OmNutRpVY10HjQtnJhOfDua62uoC4Yma9GGOQAMRPLScxTIr4fgREHtD7CvWOIuCinanl3uQ0/TsVQtDS8s6/pOZTSA==
+ bh=XJHQIdxatGSBOKq1fCo05grOTfGAB4Wg90ZlPx2X9IM=;
+ b=Ivk1Vj7mBJAdhAjp9oA7WPvUL0k+LeByOlDfDTi6PDm73XyB2qqdOz0IvVJqyeQ7lpthD5U/XIPIRfqH00em7c6DRS/y6yBRWCz0GUmFO3l5VNIfux0V+xJVvsL8E67Zn0E84A/k/bkalAv74tL3jDFudLKKlMIZNcv17+uz8eWSJ5M7FVDA2OyEzyr1kOaA8kSlnS2AASnRTBsCicuDiryo9/L1Zkf7Bctm4M21+k/Qb8RLPbvGFB7e/GBs+M+HC42YK1TMT100Y89jsgxA2aOTejD9UTkQeAKFtQH+3Jp8V+x3szGE/ML+dSJfMrE3ZM8M5vGll4qybuevQwn98Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S48+hgH2VmzfEjLMOCn4XbeTFUmmqXzy8WudOwilpqY=;
- b=nhvxVNe4j2xzpTT1/OlIgj8h0f5Q7y1IqgrfEv26ZbxxoFay4/W3QSrsAUlWlNVF+/UZMpC+5XjDgFXnGGL0D75ZLDmM+SPGgXENETSK4Zqv+7JbbaYb4mtuJZvQxL+vGBk87ntauokV2ai76T4zG3oaK+0cz0I6UjPoEPt5VynAO5WkUCJFN0P2DSZMainWlrUhwH1kEvapa64Cq/x6B0YV0eGuagnvouDT4mMA9edLZomxsAdmyoKAvD/D2wgCS6n8oWk5LxMTEeSmW3JFDW2YJS7Zhy1fqALzdh35rScptXhDyt5hyyxlasfzncGCQU+qDygY85l7djfjktya9w==
+ bh=XJHQIdxatGSBOKq1fCo05grOTfGAB4Wg90ZlPx2X9IM=;
+ b=lTv9BMygZZaB762kAs5DcQdsvGaPV5uKA3B0VwwNh1X9X5ocJUfpoa++G+9saTLIU+QN9Cgg9CGA3+y7rXQwXciYJaqtY4usq6pAWB95nS9z0hmoOlx7zsppPh6+bWeXL1yEP3MS/gmXz6WkMyIlJLWq49/rk1B+OSlmBj2ARDjRc6y0wM/FBAvoVGhLuHQ0YIeIzwTUjUuYQ2Hmh+eKmS+3iZcfmT9jW3BF5SajmAmr/ZVH/wFHEtxghfHkElgRgjMWvdayZ0/5M9FhlraWpJAdP9cIReJfugYrV8kHR3p/3uvZYVt/fNKUZjptOjJnKwyFIAngRvpCNTJg/dWnuQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DU2PR04MB8584.eurprd04.prod.outlook.com (2603:10a6:10:2db::24)
- by MRWPR04MB11287.eurprd04.prod.outlook.com (2603:10a6:501:79::20) with
+ by GV1PR04MB9515.eurprd04.prod.outlook.com (2603:10a6:150:24::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.22; Fri, 27 Mar
- 2026 18:48:59 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Fri, 27 Mar
+ 2026 18:49:01 +0000
 Received: from DU2PR04MB8584.eurprd04.prod.outlook.com
  ([fe80::3f9d:4a01:f53c:952d]) by DU2PR04MB8584.eurprd04.prod.outlook.com
  ([fe80::3f9d:4a01:f53c:952d%5]) with mapi id 15.20.9745.019; Fri, 27 Mar 2026
- 18:48:59 +0000
+ 18:49:00 +0000
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 To: linux-phy@lists.infradead.org
 Cc: Vinod Koul <vkoul@kernel.org>,
@@ -84,24 +84,22 @@ Cc: Vinod Koul <vkoul@kernel.org>,
 	netdev@vger.kernel.org,
 	spacemit@lists.linux.dev,
 	UNGLinuxDriver@microchip.com,
-	Heiko Stueber <heiko@sntech.de>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>
-Subject: [PATCH v6 phy-next 12/28] drm/rockchip: dw_hdmi: avoid direct dereference of phy->dev.of_node
-Date: Fri, 27 Mar 2026 20:46:50 +0200
-Message-ID: <20260327184706.1600329-13-vladimir.oltean@nxp.com>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	JC Kuo <jckuo@nvidia.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Thierry Reding <thierry.reding@gmail.com>
+Subject: [PATCH v6 phy-next 13/28] usb: host: tegra: avoid direct dereference of phy->dev.of_node
+Date: Fri, 27 Mar 2026 20:46:51 +0200
+Message-ID: <20260327184706.1600329-14-vladimir.oltean@nxp.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260327184706.1600329-1-vladimir.oltean@nxp.com>
 References: <20260327184706.1600329-1-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: VI6PEPF00000222.AUTP296.PROD.OUTLOOK.COM
- (2603:10a6:808:1::8f8) To DU2PR04MB8584.eurprd04.prod.outlook.com
+Content-Type: text/plain
+X-ClientProxiedBy: VI6PEPF0000022D.AUTP296.PROD.OUTLOOK.COM
+ (2603:10a6:808:1::8e7) To DU2PR04MB8584.eurprd04.prod.outlook.com
  (2603:10a6:10:2db::24)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
@@ -110,199 +108,206 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8584:EE_|MRWPR04MB11287:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3704dbb6-f262-4fb4-0b09-08de8c31818a
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8584:EE_|GV1PR04MB9515:EE_
+X-MS-Office365-Filtering-Correlation-Id: d5bb4a42-f2cc-41b2-105b-08de8c3182bb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|10070799003|19092799006|18002099003|56012099003|22082099003;
+	BCL:0;ARA:13230040|10070799003|7416014|376014|366016|1800799024|19092799006|56012099003|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	JOgDEosucolsegjG+RBZNlvvP04/WDTKtyetSAeAyLQPryahvNMUotnzm3c3fHmiCcurQ4TkFLizKMTsRh30aA6zPX7WgMXyAhOo+jALXjHM7/5w3RcIgBy1ths7L1r0mfquguICjzC9j0TMSTT4BuwlKEWI/whKAU8+4Zoe5zgJDIw/QqCobe9xrdKPTO7QKi+J5N7xRNYDpoeddnyYo77gXF05puMMi2SRLcXLR7XZXUM2dbQUGuYztNCJ+eg3INMsMRJIawfFUWuEhPNte3MPSMZjEGlHsdPuJAnmZVKQzM4G8ih6FLu7Gg5Z6hZJPbu1mxTRf+S2QEDSeqtmrXsYkYxwH0LcgXX08tgzURaF/Q1P+hj8sJv+kSfbTtsbUpm50GNEgnsQ0cnzbH4Vz7iAD8tapwcATK58qYR5eXMsP9SD04oUmycPxNu1yzG3msNtr103VfBLYvgH67OIXyRZ1yJBMcXf/UbYYR4hAYIRDdR4sSiodCDNgh0nq6h0wyZul7iQromImM0et6GaNRUbm2XcFV62vcHHB8vAsQGiZ0WvLEBIGpx7k85Rtneh6rRyVNdh7TPGCkSWqLQKwp6yCpsIPeYjpsb1lTyVcunoYwTSiKVeNGrpxzygrg/dMt7Sk4g6sYYc28LuBOh1SpvqqYfQr1MXjh7B6Y+RalIBsiZYOiY4LLlMFLGHAZ6onTUtvyNm8ewqZqkaRWrupdtC3AofGT2mvUzOTQPjmsQ=
+	xY1l7aFTeNUm7FNH9tDLJygXQPn4VZ2bLR96AaSj4B6kfsQA6Tk/v1/MlqeRe0MYb+H9NMbc0byBHwUaNc1pPXL0QmGlT6vhE9chhdO4dbYzmFyU38OKlJSsxtkFksX/vGDuu+w0yeyCZUhsEq/+jq1ZY/0oO/wrXuEn/hJlYHCNUCufqvT0xKe4eN141zXEm5+37kH8+fD+S/k9dnZaqn/zvPA6CA/oF3g8E8c/+O8k/0AkSDQu6U6YfM8mRPmmtmE3/VBP++IoNPJMma7HxyDpBwqe1T1seb77qN2O+wn2owYkXSXTTUrhiM37NHbRKFAGk7Fm04nuF1J+WoGTcTXxZ9zKL2DJw8yiW5jcnALpDOXZhnx/JPIYm970KwHIpGuZvl4uWoW4wPi+nB2TzR3DjrJINVNRi3hB+LeuoTMwGNRuNYGjFS2ebc+fQDyqawUfqxtsAM/yuur2P+Re/N45tNt2Q49GALCCLQONn+gEcYJkPJ+1wcAg81tOdR1Zohq8BdH64a8ifNTY6rf+Qn5K9SFdmtvfCSXdRu37fq1OrHxPQ4l0b0fZgPhWcjkaodjkdfNPV9JyyiRrW9AC4uRntKr3jQc1vfLqBo9C5qP9KQwGYsQqNm3g+CT/E4iZGIcgDPBYEcFZWFjGQ6QiMGOZ6SAFIxIieq/yDOzsi30+fcDbbzYHs/UY+ZyGR2ezX98ObR9BHIoejixiFEAN5JbU45dbOd08pTWraMgAcig=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8584.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(10070799003)(19092799006)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8584.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(7416014)(376014)(366016)(1800799024)(19092799006)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SjljbXRraHN5K3k3WGNUYVpOeGhLRlowZWhSWElPMGhkS3UyU0xwU3RITnBq?=
- =?utf-8?B?T1haT2xORzFEQ1ZnMW5TdU9Cc2VmUmprSTVNQXVFc1lPejIwdHF1cy90b3lC?=
- =?utf-8?B?V0pEUjczdjQyYWpDVjZScnVINmdMM1l4L0FQbzFsZXRTRW5yUjRxZE9vSzhL?=
- =?utf-8?B?cTV3UEd0cHc4djhCRGFGQWdQTG5yZGRVNTNuTHhoTkdEa2cxWnFWenA3OGhK?=
- =?utf-8?B?NUZEcVBGM0lQUjNzemx1YzhWdksyb29oc29JWitaZ3RHRTd0RVVjazRReFlr?=
- =?utf-8?B?OEpoMjlkOUgrRVQ0Tzh0MGFpbWt0eGtGVW4yVS9paWxNQUM4UzJ5bk1OemIy?=
- =?utf-8?B?OU85MkErbk9INmppWnk5UHZVUW1PRmM2MTNvNHF0MVB6Zm96YUVUVmJYWGNW?=
- =?utf-8?B?NzZkL085eGMwRnhOSFBBdHR2MXFRZFpsQkJUR2M3SlZJazhGNGFMRHUxbktG?=
- =?utf-8?B?U2l1SHM0VU5hdXd1cUhjbUxJYlV5V24rS3BiSS91a1JMNEdGMlI2VWJPSlIv?=
- =?utf-8?B?bjFHb0hzYTJSRUxGdmx0cm5RMTBabzZ1NFNWN3R5R1Q3RXFwSEJqV1dSU29r?=
- =?utf-8?B?NmhEWGt5MmFIdlhQZ25NQUlJOVM3QVVCQlkzenR4Sm1wWHJKeWtBcnlXYlNz?=
- =?utf-8?B?VjBwNm9VN29heUZVVEZwcUNMRC9HSTNiV2g1aXJPTUdLRHVoZnBXQi9IUGpE?=
- =?utf-8?B?UEFYdHU4dTdVMURldWd1UTMvb3BnRXJLcXM5eHpYeEh0OHJ4ZzluMTRjSzBV?=
- =?utf-8?B?eVF6Z0d6cW1UcjBld090anVBNFZZd0NuMUNTWEhpSEphVTM1L2FzeUtmdWdP?=
- =?utf-8?B?RU5NV3dLOVRzY2FDZzcxWjBpUjNoNVh5M1U5Vjk4VDRBS2QzbE9WRUtwZC9E?=
- =?utf-8?B?dmRlejNpWXYrTWhDL09mY2dhQ1VEOGtNcUZ3MEY5R282Y3hLeWo3VTRMKysw?=
- =?utf-8?B?SFl6VDVPcTRxYmJ6ekIxMGNpNFRTayt3WCs1bDdKSk9OaWVQdWkwbnp5Z2NS?=
- =?utf-8?B?aW5FMmwydklmcGZCS3BxOGRTTE9Ia1lOS0N2NVJadkJNMU1yaXhyZGFmdFlU?=
- =?utf-8?B?VTVEMWUvUTZPRllUeXBnc2wxU3Azdmc0WmdsZFpHOVlkRTFnWFRNQUViakpF?=
- =?utf-8?B?WkUxKzRpUzdPVVlIZ2ZWeUUxL2pUTkdBS1ZGWjJvVzFZVzJCaDlFQm91OGRE?=
- =?utf-8?B?cytwM21vWk85OVJxbFloaEd0akwwWHRGQWQwSXZveTNxaUczT29vQ0JlVk5i?=
- =?utf-8?B?a1VQWXBHSXEvZ3ViT0NkZWFEbVNXdlowMmhRL05mdzBXd2NnS3FWT3FmSlo0?=
- =?utf-8?B?VFhSbVQyOHppVHpTcFN1UmZ5d3o0Q2I2NlNEUHlOaFBiSzlPVUJEbUZNWVRT?=
- =?utf-8?B?VUdhc1FBSnpFTFpNV1dxb2NKL3JrQ3BsOFVrdGxISk05T0Q5Z01PZXBZN0tL?=
- =?utf-8?B?NTlYRXZaaEowWm1Va2kxKzNLVmNhcGxwQWZ4Uk9QWDF3dFhSOUNJZEszRCtD?=
- =?utf-8?B?Y2xuWCtadWxJRWlkakpYR2hrekV2ZjZ2K1FWNEQzNFIvSjdnTXlHUW5ZdytZ?=
- =?utf-8?B?elJ4S2J6M25LQlZUWXF4VkI5K2oyakpsVVlIQ1hpeFZkclNlVXZTems2ZklH?=
- =?utf-8?B?UjJaZ09pOWRhTDNKMENFZVV2MVZMaldIUi9TVVVWQVZDemNoKzNta2xBcENz?=
- =?utf-8?B?ZTZxRjJIT21uNG9kbFI3Y1ZSY0VvSytDKzhXMGpCZ0NRK3oyTGdYWnRsUElM?=
- =?utf-8?B?RDlFazQ2V3lkQk1Ib0t3Nkw1Yk1hWFZYclp2ODZ5K1ExdkJZeWF4WW5SVS9W?=
- =?utf-8?B?TVI2TWNBVmRxT3ZQZ2lkSGJQa2Nua3Y0dDNWUHlGTFd0akN1eGpoVjBuc0E5?=
- =?utf-8?B?c2dUb05GOFgvWCtFQzU3bEEvWWhVNlNhajZnYld0K2Q0MHp0NlZTcTMrdkhw?=
- =?utf-8?B?ZnVlcUJWMUQrUEg5UEhJRHlYMllMRDlPM2tJYTdrdy9ibk1iOFhtZE1meVpt?=
- =?utf-8?B?NVhqZ1JIUXZjanBSWEFucFdtcENGNHFpN3AxUGpFT3EzMFhBUk43SzFFaGFY?=
- =?utf-8?B?OExlbUF0L0RXcnZnTXQ0M3VGY09wREtHWFJZV1dlRFpwS2VuV3hnb3BqSG1V?=
- =?utf-8?B?ZWRHOS9xNHkzS2FYbmVZdlZQZ21mQVY2MkpUek52czJvanVEVm44SittSXRH?=
- =?utf-8?B?Tm9xL01TUHM3QWxVbzBmQ2NBSnM2V1dNRk9qemFVcGJTeGd6UEJlamJTazlP?=
- =?utf-8?B?YlRDUXkwY1RvZWtJOS85Q242ckxnQTYvZkFKZVpubU1iazdPdSsxcVhJcERp?=
- =?utf-8?B?a1d4eEh3TVBZL3B0aXVUQzUxZVdYRTB3eDRmb2JBaFVlRXNzMGtvalkzbFRX?=
- =?utf-8?Q?cm7WpHv+IaDd7+XUBSVkhjNhgiUz03YLQBUOuyEFoixQK?=
-X-MS-Exchange-AntiSpam-MessageData-1: 7Bctp4s+Lqf4u55zlkR5YlhM+thUVaDp7vw=
+	=?us-ascii?Q?3kuVTH5isJjtXFcjLfHmUPHZVYTJwe0pdRhYSCLbJLoF8eHWx2xjGcih42l6?=
+ =?us-ascii?Q?IXUSivaw1PXH6wPwb1gIxIIanvrKSkXpFRdoRk5qm5ZXGvX0JOoaX64ZZ/ph?=
+ =?us-ascii?Q?dW1wGBb/5h3eAGXO8bgorJnSA2AxacH+MquXXb0PWlPo8PowOxRrknq224ok?=
+ =?us-ascii?Q?ZChuPShV23YIXmTKSIlffzAJF5I8ejr8Ax6U2Ax20VHWBQnUN+vHKJYUP8xH?=
+ =?us-ascii?Q?8FA4dlllNDVLb8vaW1U5s5b3o9DFbKM9Lw2zpa0mFQQnX1d3EqZwhpG1neED?=
+ =?us-ascii?Q?LWe8fX0m+ybmNwRer/0Uww2c6BBYFh0+c64zMWYGwiU3O2DnKnBHf5q6tk8O?=
+ =?us-ascii?Q?QPBHqlVPDT42eMOi70JYVyZ/1WBVtkbl+c0aWmWaLXxjXasxUDRoEfMxUXnw?=
+ =?us-ascii?Q?hkU1LqAV8XeyXhsZ5db+0HYBYmKaw2RvFA3BlL87XpBJoW9CHCv8IE0qN45Z?=
+ =?us-ascii?Q?eaFF0UwY3PY/MDBSxy00evxfDXSxkz06O2y7jg+57h82ot5BCI9msGgGf3O8?=
+ =?us-ascii?Q?FAkmNdWjHkvAUCEv5aS/vIcrDfs3jw5gWBtxFfY6KeXdJORb0hV3Z2JJ8trX?=
+ =?us-ascii?Q?mmHq4PWdrhH4/O5zCPX7TnpD68ut6XKe4JMVjvvom/y6zTLdLCmBVfcOPP8/?=
+ =?us-ascii?Q?1gJGEIakvJrrSCaw9zOdd/o0qX1C9JHYsP2OhtaFBxDpJ5JNjng/84KOnqPO?=
+ =?us-ascii?Q?48J3DhkP/zF3Fip2tTQZOdBIzSrxuwVoweSv6OFLvPpCm71FupAcxWr7bqRp?=
+ =?us-ascii?Q?3NE1LbBecy+SoRpoiZKT3IzjQr27sADXX8j1/BMZEr+3hw52MgBozVHxNcfq?=
+ =?us-ascii?Q?WwtwG0+BsouzWge440kOTKlnubq7QDvdJMjpNqmEaHFoEOisXUVeVHwjBHLG?=
+ =?us-ascii?Q?qIuOrIfWrd5xJPH/BGQLFgjwt3+D5wrSKlNNwVfV81giBlPIGI07A+JQPxGX?=
+ =?us-ascii?Q?/NDlENru9gHG6Hb+rU2Mzsjz57HK//3T4sCvk81Dy6FwGL13vuh5qKYTi2P6?=
+ =?us-ascii?Q?WEK0KunJFdnUKQ2RajS02DSGcTzfxyK60zJYRseSsLdxVhU+HvKy8wE9HkrQ?=
+ =?us-ascii?Q?DdzUwVZUWB99svPtpD181nY9et0fki/3aGuoSvY5YJVXs9EfafHtIzNC/88t?=
+ =?us-ascii?Q?UPecvon1D8eIKOKtd2EYNMNbG1uYOxZl1W6w0afurrw5deWTfECe6DVHFqIb?=
+ =?us-ascii?Q?5agdkZjcrzLwohTSnTC4xYQxt40P9BvdE9KWioqwSL/KazDqQODoYBJ46lbV?=
+ =?us-ascii?Q?KAvTDn/5XPaDmdqwbh0TumLTW4+jcgkMlXeG24bmaMIunRttX3HkyyJuVejF?=
+ =?us-ascii?Q?hD34LbxTLYeMhWVkxdQBVHCyiDxQo9LsMDhudLOtQaTACb/pH8f5NP5SF4HL?=
+ =?us-ascii?Q?U0ztVnU3PEuQWSGj5FlWuWk72NXGu5UAK74cm4RODOIkJBUML6eyS8F5DJmI?=
+ =?us-ascii?Q?HmTA0N/BoPCqM+Bif5qSjx8rW3QPoJLUBNd/M1Af0pVeP9EiribIEHCVDpZL?=
+ =?us-ascii?Q?JjTYWW1BC+cHRt4inhkvW2qouk/CMyhHrhD7PJPEt+pdxbuPME9j5/7MB2Tn?=
+ =?us-ascii?Q?zI8zEsbn+iuIpoWVxhhKxF7kpDRZ5d8mXJaYiGpOBV+MT8O+80CMlt1w3Kga?=
+ =?us-ascii?Q?OLpR5A1/iojyiqHGQI7wMgIDQ5mqSVLKZF3mbl7btpPZR1W90mdYEES7Pvro?=
+ =?us-ascii?Q?k2qtJabp8L1USkSHa3+IG0ZhnHlTvGrZ/JVAPM+sXP9HdgV9eGP/2YpPhTs4?=
+ =?us-ascii?Q?OFWfMaMwUJmq1V2QIJbdXnXp5Hm6Iezp18/EJbub0/7g9WjuwJZg1PglVfHe?=
+X-MS-Exchange-AntiSpam-MessageData-1: ROMaaScYYHgBAsZW9q3mwm6eTzy+XK3/iAY=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3704dbb6-f262-4fb4-0b09-08de8c31818a
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5bb4a42-f2cc-41b2-105b-08de8c3182bb
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8584.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2026 18:48:58.8939
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2026 18:49:00.8684
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j2xy9Waqoe3oDnieZjJn8K6urlUMP+z12bYBm/vwALevdIxoC5VaypuViU+lWoz8F20/jKFzZot/cpZqOwnaDQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRWPR04MB11287
-X-Spamd-Result: default: False [0.84 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-MS-Exchange-CrossTenant-UserPrincipalName: L6W2X22ZCBkBcPzVVWy6sr4wwLQeAQ+NSrZJT7tcOv/BRPDGGvDFuY7HTi2S5JcgDppHcFE9sCgw03mZNAZpgA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB9515
+X-Spamd-Result: default: False [2.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[32];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,lists.freedesktop.org,lists.infradead.org,vger.kernel.org,lists.linux.dev,microchip.com,sntech.de,rock-chips.com,linux.intel.com,suse.de,gmail.com,ffwll.ch];
-	TAGGED_FROM(0.00)[bounces-7277-lists,linux-can=lfdr.de];
+	FREEMAIL_CC(0.00)[kernel.org,linaro.org,lists.freedesktop.org,lists.infradead.org,vger.kernel.org,lists.linux.dev,microchip.com,linuxfoundation.org,nvidia.com,intel.com,gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[30];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-7278-lists,linux-can=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[nxp.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[vladimir.oltean@nxp.com,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-can];
+	TAGGED_RCPT(0.00)[linux-can,linaro];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[clkspec.np:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,sntech.de:email,rock-chips.com:email,ffwll.ch:email,intel.com:email,nxp.com:dkim,nxp.com:email,nxp.com:mid,suse.de:email]
-X-Rspamd-Queue-Id: C69F1349721
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linuxfoundation.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email,nxp.com:dkim,nxp.com:email,nxp.com:mid,nvidia.com:email]
+X-Rspamd-Queue-Id: 2E7A8349830
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The dw_hdmi-rockchip driver validates pixel clock rates against the
-HDMI PHY's internal clock provider on certain SoCs like RK3328.
-This is currently achieved by dereferencing hdmi->phy->dev.of_node
-to obtain the provider node, which violates the Generic PHY API's
-encapsulation (the goal is for struct phy to be an opaque pointer
-with a hidden definition, to be interacted with only using API
-functions or NULL pointer checks, for the case where optional variants
-of phy_get() did not find a PHY).
+A piece of context which seems relevant here is that the USB subsystem
+is transitioning from struct usb_phy to struct phy (belonging to the
+Generic PHY subsystem). Commit 1a229d8690a0 ("Revert "usb: phy: add usb
+phy notify port status API"") seems to confirm that this is the case.
 
-Refactor dw_hdmi_rockchip_bind() to perform a manual phandle lookup
-on the "hdmi" PHY index within the controller's DT node. This provides
-a parallel path to the clock provider's OF node without relying on the
-internal structure of the struct phy handle.
+In the transition process, some PHY provider drivers register themselves
+as both Generic PHY and USB PHY in an attempt to bridge the API gap.
+Such is the case with drivers/phy/tegra/xusb.c, accessed here by the
+Tegra USB host driver. This USB host expects the PHY device behind the
+Generic PHY to also be a USB PHY, and calls
+devm_usb_get_phy_by_node(phy->dev.of_node).
+
+The Generic PHY exposes no API to get the OF node from a PHY device, so
+the Tegra USB host driver gets it directly. However, "struct phy" will
+be made an opaque pointer, to avoid misuse, so this will no longer be
+possible.
+
+Considering the fact that the Generic PHY/USB PHY duality is a
+transitional state, I am deliberately not planning to make the life of
+this driver any easier by providing a helper to get to the OF node
+somehow. Instead, implement a parallel lookup path through which the
+Tegra USB host driver can continue to get to the OF node provided by the
+padctl component, using the 'phys' phandle.
+
+Secondly (minor issue) the driver uses the phy->dev.of_node again to
+print using dev_dbg() that a "remote wake" was detected. Just print the
+index at which the PHY appears inside the driver's tegra->phys[] array
+instead.
 
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Heiko Stueber <heiko@sntech.de>
 ---
-Cc: Sandy Huang <hjc@rock-chips.com>
-Cc: "Heiko Stübner" <heiko@sntech.de>
-Cc: Andy Yan <andy.yan@rock-chips.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Simona Vetter <simona@ffwll.ch>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: JC Kuo <jckuo@nvidia.com>
+Cc: Johan Hovold <johan+linaro@kernel.org>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>
+Cc: Thierry Reding <thierry.reding@gmail.com>
 
-v4->v6: none
-v3->v4: add commit message clarification of what is understood by
-        "opaque pointer"
-v1->v3: none
+v5->v6: none
+v4->v5: patch is new
 ---
- drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c | 25 ++++++++++++---------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ drivers/usb/host/xhci-tegra.c | 42 ++++++++++++++++++++++-------------
+ 1 file changed, 26 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c b/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
-index 0dc1eb5d2ae3..7abb42e486c0 100644
---- a/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
-+++ b/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
-@@ -537,21 +537,22 @@ static int dw_hdmi_rockchip_bind(struct device *dev, struct device *master,
- 				 void *data)
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 3f6aa2440b05..46fee219e09a 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -1495,6 +1495,7 @@ static int tegra_xhci_id_notify(struct notifier_block *nb,
+ 
+ static int tegra_xusb_init_usb_phy(struct tegra_xusb *tegra)
  {
- 	struct platform_device *pdev = to_platform_device(dev);
-+	struct device_node *np = dev_of_node(dev);
- 	struct dw_hdmi_plat_data *plat_data;
- 	const struct of_device_id *match;
- 	struct drm_device *drm = data;
- 	struct drm_encoder *encoder;
- 	struct rockchip_hdmi *hdmi;
--	int ret;
-+	int ret, index;
++	struct device_node *np = dev_of_node(tegra->dev);
+ 	unsigned int i;
  
--	if (!pdev->dev.of_node)
-+	if (!np)
- 		return -ENODEV;
+ 	tegra->usbphy = devm_kcalloc(tegra->dev, tegra->num_usb_phys,
+@@ -1508,23 +1509,33 @@ static int tegra_xusb_init_usb_phy(struct tegra_xusb *tegra)
+ 	tegra->otg_usb3_port = -EINVAL;
  
- 	hdmi = devm_kzalloc(&pdev->dev, sizeof(*hdmi), GFP_KERNEL);
- 	if (!hdmi)
- 		return -ENOMEM;
+ 	for (i = 0; i < tegra->num_usb_phys; i++) {
+-		struct phy *phy = tegra_xusb_get_phy(tegra, "usb2", i);
++		struct of_phandle_args args;
++		struct usb_phy *usbphy;
++		int index, err;
++		char prop[8];
  
--	match = of_match_node(dw_hdmi_rockchip_dt_ids, pdev->dev.of_node);
-+	match = of_match_node(dw_hdmi_rockchip_dt_ids, np);
- 	plat_data = devm_kmemdup(&pdev->dev, match->data,
- 					     sizeof(*plat_data), GFP_KERNEL);
- 	if (!plat_data)
-@@ -564,9 +565,9 @@ static int dw_hdmi_rockchip_bind(struct device *dev, struct device *master,
- 	plat_data->priv_data = hdmi;
- 	encoder = &hdmi->encoder.encoder;
+-		if (!phy)
++		snprintf(prop, sizeof(prop), "usb2-%d", i);
++
++		/*
++		 * usb-phy is optional, continue if it's not available.
++		 */
++		index = of_property_match_string(np, "phy-names", prop);
++		if (index < 0)
+ 			continue;
  
--	encoder->possible_crtcs = drm_of_find_possible_crtcs(drm, dev->of_node);
-+	encoder->possible_crtcs = drm_of_find_possible_crtcs(drm, np);
- 	rockchip_drm_encoder_set_crtc_endpoint_id(&hdmi->encoder,
--						  dev->of_node, 0, 0);
-+						  np, 0, 0);
- 
- 	/*
- 	 * If we failed to find the CRTC(s) which this encoder is
-@@ -588,13 +589,17 @@ static int dw_hdmi_rockchip_bind(struct device *dev, struct device *master,
- 		return dev_err_probe(hdmi->dev, ret, "failed to get phy\n");
+-		tegra->usbphy[i] = devm_usb_get_phy_by_node(tegra->dev,
+-							phy->dev.of_node,
+-							&tegra->id_nb);
+-		if (!IS_ERR(tegra->usbphy[i])) {
+-			dev_dbg(tegra->dev, "usbphy-%d registered", i);
+-			otg_set_host(tegra->usbphy[i]->otg, &tegra->hcd->self);
+-		} else {
+-			/*
+-			 * usb-phy is optional, continue if its not available.
+-			 */
+-			tegra->usbphy[i] = NULL;
+-		}
++		err = of_parse_phandle_with_args(np, "phys", "#phy-cells",
++						 index, &args);
++		if (err)
++			continue;
++
++		usbphy = devm_usb_get_phy_by_node(tegra->dev, args.np,
++						  &tegra->id_nb);
++		if (IS_ERR(usbphy))
++			continue;
++
++		tegra->usbphy[i] = usbphy;
++		dev_dbg(tegra->dev, "usbphy-%d registered", i);
++		otg_set_host(tegra->usbphy[i]->otg, &tegra->hcd->self);
  	}
  
--	if (hdmi->phy) {
-+	index = of_property_match_string(np, "phy-names", "hdmi");
-+	if (index >= 0) {
- 		struct of_phandle_args clkspec;
+ 	return 0;
+@@ -2172,8 +2183,7 @@ static void tegra_xhci_disable_phy_wake(struct tegra_xusb *tegra)
+ 			continue;
  
--		clkspec.np = hdmi->phy->dev.of_node;
--		hdmi->hdmiphy_clk = of_clk_get_from_provider(&clkspec);
--		if (IS_ERR(hdmi->hdmiphy_clk))
--			hdmi->hdmiphy_clk = NULL;
-+		if (!of_parse_phandle_with_args(np, "phys", "#phy-cells", index,
-+						&clkspec)) {
-+			hdmi->hdmiphy_clk = of_clk_get_from_provider(&clkspec);
-+			of_node_put(clkspec.np);
-+			if (IS_ERR(hdmi->hdmiphy_clk))
-+				hdmi->hdmiphy_clk = NULL;
-+		}
+ 		if (tegra_xusb_padctl_remote_wake_detected(padctl, tegra->phys[i]))
+-			dev_dbg(tegra->dev, "%pOF remote wake detected\n",
+-				tegra->phys[i]->dev.of_node);
++			dev_dbg(tegra->dev, "PHY %d remote wake detected\n", i);
+ 
+ 		tegra_xusb_padctl_disable_phy_wake(padctl, tegra->phys[i]);
  	}
- 
- 	if (hdmi->chip_data == &rk3568_chip_data) {
 -- 
 2.43.0
 
