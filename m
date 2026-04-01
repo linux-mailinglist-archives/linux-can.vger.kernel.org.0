@@ -1,204 +1,166 @@
-Return-Path: <linux-can+bounces-7305-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7306-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0HkWDsmNy2kuIwYAu9opvQ
-	(envelope-from <linux-can+bounces-7305-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 31 Mar 2026 11:03:05 +0200
+	id wDvbFKPNzGlFWwYAu9opvQ
+	(envelope-from <linux-can+bounces-7306-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 01 Apr 2026 09:47:47 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7B3A366A37
-	for <lists+linux-can@lfdr.de>; Tue, 31 Mar 2026 11:03:04 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56D273763F9
+	for <lists+linux-can@lfdr.de>; Wed, 01 Apr 2026 09:47:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id CED613047411
-	for <lists+linux-can@lfdr.de>; Tue, 31 Mar 2026 08:58:23 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 594D730C7B8E
+	for <lists+linux-can@lfdr.de>; Wed,  1 Apr 2026 07:34:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A00F237997E;
-	Tue, 31 Mar 2026 08:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ZKW5L9ot"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF5E537E30A;
+	Wed,  1 Apr 2026 07:33:55 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8233E959D;
-	Tue, 31 Mar 2026 08:58:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BEDA2E542C
+	for <linux-can@vger.kernel.org>; Wed,  1 Apr 2026 07:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774947501; cv=none; b=bU1N7IqFWSC1vwNS5ZUVWqguvICV77KWu/jTmC5ztUi8b8yUO99HzRGo1Qqp+H8YDBAefb7dnQHioBGMTXAEdYMyQ3+38jeZ1cBTVLj1ph0oD+fke8PAkVgGI4tj6NuRY5q5ccDdY8Z2UEcTHfGVoU5h9ULaXHS8Losv2igBSQc=
+	t=1775028835; cv=none; b=iaZ0vF53UsgvVJdyoD8rXQufoH6NJQ9oMCUJRYiGQc16yxc4Y3g5F7RY+2oyMXpYKIZ4euh1Cj1oi9+wCQbb0jXGu5x85Ozdvy47ihIfIUdWe3BYsrFUSelVvVmj0gqWiP1nrGt41mgTbShwgzq1Yst/XgaFmCSyvJMO532phR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774947501; c=relaxed/simple;
-	bh=vhEXvE0O/F/RZV/QZcufgKiBOH3p2ou+L827KWRrR60=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=S747zh6tS/fdvVrscYW7DEURfPNZ2YH9Wr69YkW334xRG3nzOVMhHFDn70nWLFcNDt09Ha2cnOG7f0fnioVwjTpisTX1NaHtXCqH1l3ENBp2oXKvSAMcQQE00X/RWsH+h5vAFGNbvTt8bQXsrWyvjnDEyeOcV3hLRNT6ObaMUnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ZKW5L9ot; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1774947481; x=1775552281; i=markus.elfring@web.de;
-	bh=vhEXvE0O/F/RZV/QZcufgKiBOH3p2ou+L827KWRrR60=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=ZKW5L9otcr4wnU6hbyTixE/ClYvo5CeV2B4hB2h3gEUq3YQb6lMFcxQQvvPc1tuA
-	 kyFeThPcHULPIocOVf5Rh4l9zfT6nyw1zoIyRVwbPxwiCZrz9AU7SzGD55LfHy54f
-	 qtlD/tVkXEZykmvGs9zI0cMxc1qf/ZnfUHdi5/MTh0GN3uhcyYvdJV4i+2pA+wTDE
-	 HgVa1p7sLblWU07BHXmdtNvwk+aKxuhM3eTQx+gs6Bvd0FnPRybZVWi/ncTUytZxV
-	 7dOvAJXNS+SNTemuj/sKQU01eBZmZY21p4v84oFvspgY4/HeiaNuvDY4SZODyhwor
-	 xKuBmkSW1ASuYbTqpA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from client.hidden.invalid by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MG9DC-1wJdvU0Qqy-00Blxg; Tue, 31
- Mar 2026 10:52:28 +0200
-Message-ID: <155d6442-0d5c-41b0-8955-fb3a656b3e43@web.de>
-Date: Tue, 31 Mar 2026 10:52:07 +0200
+	s=arc-20240116; t=1775028835; c=relaxed/simple;
+	bh=hdflUWalle47wvavTKoBbyFh0m5OhsZ3UXRrYZLUEFg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TfwQjLrZMAHc9M2vwdmjXTXyhB6mUneXY2MFUftmALGQ4pxuJU+vOGzxqpXIMoeJ0FL9xAz9tEVRCAgEA3AegvWkaKJ5A5y8to3JJ85vYIDGqYPVUnyqtNEuf+rEFfZdtjfjwoc8Uxdxs4kD7xYaC7NtP8nzcS1warnMRKHYFbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1w7q57-000765-JP; Wed, 01 Apr 2026 09:33:41 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1w7q56-003AhQ-1b;
+	Wed, 01 Apr 2026 09:33:40 +0200
+Received: from blackshift.org (unknown [IPv6:2a0a:edc0:0:701:a82f:fdef:12b2:33d])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 1BFAE513373;
+	Wed, 01 Apr 2026 07:33:40 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	linux-can@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH net-next 0/6] pull-request: can-next 2026-04-01
+Date: Wed,  1 Apr 2026 09:30:08 +0200
+Message-ID: <20260401073338.5592-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Fourier <fourier.thomas@gmail.com>, linux-can@vger.kernel.org
-Cc: stable@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- "David S. Miller" <davem@davemloft.net>,
- Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol
- <mailhol@kernel.org>, Wolfgang Grandegger <wg@grandegger.com>
-References: <20260330154236.98665-2-fourier.thomas@gmail.com>
-Subject: Re: [PATCH net] can: sja1000: Fix pci_iounmap() buffer
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20260330154236.98665-2-fourier.thomas@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:uBVprllxaEECxDKKI5gUg2yDBCXOK3NqqXs5MKH5+fU9w+BLnFv
- 2RNKrwtI4XW1sIv7Rlz0vFjvFlc61+jicI4nUfm52PY0fFAzTAg8Xhwe1gu+fI5t3uhkE38
- AvIlKDn7n8i8BPlaskb3VPb1Tj35vp9CrCXzABVPsm+aUAOzu37milDqng7WMp8D/NfSlSa
- wbOnLH/B9Cl8pQuAOE4bQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:GrGnifKVOkw=;U6Qu6LpaZ24fkf+K6BJCPPtcS4A
- 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
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[web.de,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[web.de:s=s29768273];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7305-lists,linux-can=lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-7306-lists,linux-can=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[6];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Markus.Elfring@web.de,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[web.de:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	FREEMAIL_FROM(0.00)[web.de];
+	DMARC_NA(0.00)[pengutronix.de];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D7B3A366A37
+	NEURAL_HAM(-0.00)[-0.982];
+	TO_DN_NONE(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	R_DKIM_NA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-can];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 56D273763F9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-> The base_addr is mapped in kvaser_pci_init_one() and the pointer is
-> copied to priv->reg_base in kvaser_pci_add_chan() with offset
-> channel * KVASER_PCI_PORT_BYTES but unmapped without the offset.
->=20
-> Cancel the offset before calling pci_iounmap().
+Hello netdev-team,
 
-Which action would indicate =E2=80=9Ccancelling=E2=80=9D here?
+this is a pull request of 6 patches for net-next/main.
 
+The first patch is by Ethan Nelson-Moore and removes a useless copy of
+PCI_DEVICE_DATA from the ctucanfd driver.
 
-Would it occasionally be preferred to specify selected message recipients
-also in the header =E2=80=9CTo=E2=80=9D?
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv7.0-rc6#n231
+Geert Uytterhoeven's patch for the rcar_can converts the driver to use
+the FIELD_MODIFY macro.
 
-Regards,
-Markus
+Viken Dadhaniya contributes 2 patches for the mcp251xfd driver that
+add transceiver standby control.
+
+The last 2 aptches are by Johan Hovold and refactor the usb endpoint
+lookup of the kvaser_usb and ucan driver.
+
+regards,
+Marc
+
+---
+
+The following changes since commit f1359c240191e686614847905fc861cbda480b47:
+
+  net/iucv: Add missing kernel-doc return value descriptions (2026-03-31 20:14:56 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-7.1-20260401
+
+for you to fetch changes up to 50b4927288144fbd2f947b0e4c0ef32949587e67:
+
+  Merge patch series "can: refactor USB endpoint lookups" (2026-04-01 09:27:58 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-7.1-20260401
+
+----------------------------------------------------------------
+Ethan Nelson-Moore (1):
+      net: can: ctucanfd: remove useless copy of PCI_DEVICE_DATA macro
+
+Geert Uytterhoeven (1):
+      can: rcar_can: Convert to FIELD_MODIFY()
+
+Johan Hovold (2):
+      can: kvaser_usb: leaf: refactor endpoint lookup
+      can: ucan: refactor endpoint lookup
+
+Marc Kleine-Budde (2):
+      Merge patch series "can: mcp251xfd: add XSTBYEN transceiver standby control"
+      Merge patch series "can: refactor USB endpoint lookups"
+
+Viken Dadhaniya (2):
+      dt-bindings: can: mcp251xfd: add microchip,xstbyen property
+      can: mcp251xfd: add support for XSTBYEN transceiver standby control
+
+ .../bindings/net/can/microchip,mcp251xfd.yaml      |  8 +++++
+ drivers/net/can/ctucanfd/ctucanfd_pci.c            |  8 -----
+ drivers/net/can/rcar/rcar_can.c                    |  3 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     | 37 ++++++++++++++++++++
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h          |  1 +
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c   | 25 +++++---------
+ drivers/net/can/usb/ucan.c                         | 40 ++++++----------------
+ 7 files changed, 66 insertions(+), 56 deletions(-)
 
