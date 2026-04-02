@@ -1,193 +1,140 @@
-Return-Path: <linux-can+bounces-7313-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7314-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AG6qLV/9zGnRYgYAu9opvQ
-	(envelope-from <linux-can+bounces-7313-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 01 Apr 2026 13:11:27 +0200
+	id GNrPAfPUzWn4iAYAu9opvQ
+	(envelope-from <linux-can+bounces-7314-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 02 Apr 2026 04:31:15 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 336A5379278
-	for <lists+linux-can@lfdr.de>; Wed, 01 Apr 2026 13:11:26 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AE48382AED
+	for <lists+linux-can@lfdr.de>; Thu, 02 Apr 2026 04:31:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3F9C93173D38
-	for <lists+linux-can@lfdr.de>; Wed,  1 Apr 2026 11:03:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E2C293017C0D
+	for <lists+linux-can@lfdr.de>; Thu,  2 Apr 2026 02:30:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 980C24014B1;
-	Wed,  1 Apr 2026 10:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBBCE27A476;
+	Thu,  2 Apr 2026 02:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K8/4gOBg"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D553FFADF
-	for <linux-can@vger.kernel.org>; Wed,  1 Apr 2026 10:59:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8DA72153D8;
+	Thu,  2 Apr 2026 02:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775041179; cv=none; b=t1E3UEnwB73yAfzmWWhwP8ARirbH6fHdk6dILoW2dF39Jdo33BUx/heMDtEVeldzUgOwFCFHedFuosrhQ6xG77alGr+zb6sgFsnNreLs84FmKpJn2u5u16GbkvZrciMF4l4xhgVNV0YCEgJp+P0tSYWu6IfAgQeG7i4XEeGjRV4=
+	t=1775097047; cv=none; b=LcdNA0Zabd0BrfcbCOCbg41mH9j4x+FeeCinx06SMuNzVd7uIkaOhay/XG3lK41wmd1AMz6QCVr752RKj4GyuOHlfbZLs880X0uSFmSWIVotiQamtPd1aRxrEIyz+4YNp7oT8gOWx100g3oXuY6oo18pSAJ3ay0Vl63QL8XyH6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775041179; c=relaxed/simple;
-	bh=Ope8CY7+795Vdw4uV9G0EQaCrrFUAklBTIr4qOATp1Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u77/GNAkMehjz6QhNROMvvC0XccKoI5RWLWnRvB0kVTRqnpxHUVrqp4UsjG+zs+PbLYCLxoRkPEmV0WReQ/E9HCersXzUMT2stPDLQrkvf+Ap1objOhd36CNNdyrrstS96yKkjEO3lx4fSab2X2BT38J3dkCa+vR5ShAFJOQRJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w7tIG-0000Zc-2c; Wed, 01 Apr 2026 12:59:28 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w7tIE-003C6L-2m;
-	Wed, 01 Apr 2026 12:59:26 +0200
-Received: from pengutronix.de (unknown [IPv6:2a0a:edc0:0:701:a82f:fdef:12b2:33d])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 6CA0A513631;
-	Wed, 01 Apr 2026 10:59:26 +0000 (UTC)
-Date: Wed, 1 Apr 2026 12:59:25 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Thomas Fourier <fourier.thomas@gmail.com>
-Cc: stable@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>, 
-	Wolfgang Grandegger <wg@grandegger.com>, "David S. Miller" <davem@davemloft.net>, 
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] can: sja1000: Fix pci_iounmap() buffer
-Message-ID: <20260401-effective-piculet-of-will-704d4d-mkl@pengutronix.de>
-X-AI: stop_reason: "refusal"
-References: <20260330154236.98665-2-fourier.thomas@gmail.com>
+	s=arc-20240116; t=1775097047; c=relaxed/simple;
+	bh=u9jO/d+tjE5HUITuq2k3nNBzifTjF/tHg52G6x5MFWU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=imZva2wIohKpMBU+0RN5Hq+7Ur7Mgyjwn8OmOkZ/7DF2IN3pBjYdAp1rLDJLXy4ZsnQWeplO+tk/ijbC2CKP0rLX5xxLuDxphGhdnB7SnwC5lU8Y/mfZrQfuxdN8xi2eUGUufOm2ho+Hcmh1WzVArjWfied56E6qLKuaeHeTq9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K8/4gOBg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1219BC19421;
+	Thu,  2 Apr 2026 02:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775097047;
+	bh=u9jO/d+tjE5HUITuq2k3nNBzifTjF/tHg52G6x5MFWU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=K8/4gOBgKqBcOnF+bhU7i6LW8h/8GQsheGC1TaWrvpHASnyiNQR/w/zuSS2nfAdM5
+	 XqO70TIxEuzkYyEQplIHDmn25BPRVOWfbu5cUzcuN8+149nDav+fWA/f40yNO91Vtx
+	 bZ+I2aDXJGPJ9M0pUtQHyj0/o5tcIpG9rLttc6FqqXFkEQoCtEUKCleLGT+VD3XJfm
+	 5LcZbFtxUfbo3wLgOVM24rAgvW0ZaB6yuRBd7D179/6fT6wMrXonXXmKwse5zputFM
+	 FP/8NdQsoepVtR4faluK2im5hEH7JHpdLyporkeVlF1KUB2BAR7lCY4kni4nJiTnQG
+	 BNLBu3bhWkfZg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02E5A3808203;
+	Thu,  2 Apr 2026 02:30:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7zza37utbthxq4gt"
-Content-Disposition: inline
-In-Reply-To: <20260330154236.98665-2-fourier.thomas@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spamd-Result: default: False [-1.06 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 1/6] dt-bindings: can: mcp251xfd: add
+ microchip,xstbyen property
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177509702978.3957493.8041660566894873320.git-patchwork-notify@kernel.org>
+Date: Thu, 02 Apr 2026 02:30:29 +0000
+References: <20260401073338.5592-2-mkl@pengutronix.de>
+In-Reply-To: <20260401073338.5592-2-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ linux-can@vger.kernel.org, kernel@pengutronix.de,
+ viken.dadhaniya@oss.qualcomm.com, conor.dooley@microchip.com
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7313-lists,linux-can=lfdr.de];
-	DMARC_NA(0.00)[pengutronix.de];
-	NEURAL_SPAM(0.00)[0.406];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	TAGGED_FROM(0.00)[bounces-7314-lists,linux-can=lfdr.de,netdevbpf];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_NO_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,pengutronix.de:mid,pengutronix.de:url]
-X-Rspamd-Queue-Id: 336A5379278
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email,microchip.com:email]
+X-Rspamd-Queue-Id: 9AE48382AED
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hello:
 
---7zza37utbthxq4gt
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH net] can: sja1000: Fix pci_iounmap() buffer
-MIME-Version: 1.0
+This series was applied to netdev/net-next.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-On 30.03.2026 17:42:31, Thomas Fourier wrote:
-> The base_addr is mapped in kvaser_pci_init_one() and the pointer is
-> copied to priv->reg_base in kvaser_pci_add_chan() with offset
-> channel * KVASER_PCI_PORT_BYTES but unmapped without the offset.
->
-> Cancel the offset before calling pci_iounmap().
->
-> Fixes: 255a9154319d ("can: sja1000: stop misusing member base_addr of str=
-uct net_device")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Thomas Fourier <fourier.thomas@gmail.com>
+On Wed,  1 Apr 2026 09:30:09 +0200 you wrote:
+> From: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+> 
+> Add the boolean property 'microchip,xstbyen' to enable the dedicated
+> transceiver standby control function on the INT0/GPIO0/XSTBY pin of
+> the MCP251xFD family.
+> 
+> Signed-off-by: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Link: https://patch.msgid.link/20260321135031.3107408-2-viken.dadhaniya@oss.qualcomm.com
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> [...]
 
-The cleanup functions in this driver are a mess. kvaser_pci_del_chan()
-should only delete one channel, but it deletes all. It also unmaps the
-iomem, which belongs into kvaser_pci_remove_one().
+Here is the summary with links:
+  - [net-next,1/6] dt-bindings: can: mcp251xfd: add microchip,xstbyen property
+    https://git.kernel.org/netdev/net-next/c/2f41d7867800
+  - [net-next,2/6] net: can: ctucanfd: remove useless copy of PCI_DEVICE_DATA macro
+    https://git.kernel.org/netdev/net-next/c/1e41cbbe68e6
+  - [net-next,3/6] can: kvaser_usb: leaf: refactor endpoint lookup
+    https://git.kernel.org/netdev/net-next/c/495fac90b8ec
+  - [net-next,4/6] can: mcp251xfd: add support for XSTBYEN transceiver standby control
+    https://git.kernel.org/netdev/net-next/c/ae20301b6119
+  - [net-next,5/6] can: rcar_can: Convert to FIELD_MODIFY()
+    https://git.kernel.org/netdev/net-next/c/11d94d3516c0
+  - [net-next,6/6] can: ucan: refactor endpoint lookup
+    https://git.kernel.org/netdev/net-next/c/581281cb5a1b
 
-What about switching the driver to pcim_enable_device(),
-pcim_request_region(), pcim_iomap() functions instead?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> ---
->  drivers/net/can/sja1000/kvaser_pci.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/can/sja1000/kvaser_pci.c b/drivers/net/can/sja10=
-00/kvaser_pci.c
-> index 95fe9ee1ce32..213fd0eb07e7 100644
-> --- a/drivers/net/can/sja1000/kvaser_pci.c
-> +++ b/drivers/net/can/sja1000/kvaser_pci.c
-> @@ -161,6 +161,7 @@ static void kvaser_pci_del_chan(struct net_device *de=
-v)
->  {
->  	struct sja1000_priv *priv;
->  	struct kvaser_pci *board;
-> +	void __iomem *base_addr;
->  	int i;
->
->  	if (!dev)
-> @@ -186,7 +187,8 @@ static void kvaser_pci_del_chan(struct net_device *de=
-v)
->  	}
->  	unregister_sja1000dev(dev);
->
-> -	pci_iounmap(board->pci_dev, priv->reg_base);
-> +	base_addr =3D priv->reg_base - board->channel * KVASER_PCI_PORT_BYTES;
-> +	pci_iounmap(board->pci_dev, base_addr);
 
-When called from kvaser_pci_remove_one(), "dev" points to the master
-dev, which uses priv->reg_base without an offset, as it's board->channel
-is "0", right?
-
-When called from the error path of kvaser_pci_add_chan(), things go
-wrong, and in the error path of kvaser_pci_init_one(), the pci mem is
-unmapped again.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---7zza37utbthxq4gt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCacz6iwAKCRDMOmT6rpmt
-0odmAQD81TVa/VMDwhrecUb6HKnCAO6NHVpV3LM9adc9uYeH9AEAlfAhhjN+3zrG
-jHdXYDk5sCdin4NgticimjrM8xlB3Qg=
-=/43P
------END PGP SIGNATURE-----
-
---7zza37utbthxq4gt--
 
