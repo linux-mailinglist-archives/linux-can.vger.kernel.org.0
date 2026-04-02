@@ -1,466 +1,453 @@
-Return-Path: <linux-can+bounces-7323-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7324-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UEvqBjlPzmmjmgYAu9opvQ
-	(envelope-from <linux-can+bounces-7323-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 02 Apr 2026 13:12:57 +0200
+	id yIXvAxFuzmnxngYAu9opvQ
+	(envelope-from <linux-can+bounces-7324-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 02 Apr 2026 15:24:33 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F84238827E
-	for <lists+linux-can@lfdr.de>; Thu, 02 Apr 2026 13:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 64339389A33
+	for <lists+linux-can@lfdr.de>; Thu, 02 Apr 2026 15:24:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1583730BBCD6
-	for <lists+linux-can@lfdr.de>; Thu,  2 Apr 2026 11:06:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 251593033D0A
+	for <lists+linux-can@lfdr.de>; Thu,  2 Apr 2026 13:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F14FF3BF67E;
-	Thu,  2 Apr 2026 11:06:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E01763CEB87;
+	Thu,  2 Apr 2026 13:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="NQ8PieMP";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="S3njDjUV"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FA73AC0CD
-	for <linux-can@vger.kernel.org>; Thu,  2 Apr 2026 11:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775127977; cv=none; b=f2gD5tjDLYVUoxiShjO5fSGDBOtQWihIqh48xo/cW1x5pPhzFWHJiX+WGBhBrviJ+ruAmYlP8KrOhi+szr33Jo331x5BgNxrvwlvvyTyhU1GWUidX8ejjrr1ig5Q3nXwJ8sw7yvsucbTck9eblaMT3FQsO0uJvtffh3CC3ES9KY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775127977; c=relaxed/simple;
-	bh=Yd/6Pc5loOp6q2Ae4swq/Wc1w/fliWxGIpt5pwIb6ZE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mwAw0UMbNPkGZskOboZ2pTOl2UVMNzeE+zUw+J5ikqZrieLf1eOHPPvj35JNU5l6FPhg/oM0Cg791s1NE5/gvVKA4hD3y8fQqF8Hbw8vRUyBFN/DQRqh1wFnIJLmf++F4FZ26sc6NiiP7PC72M0VONY0qrmquxkQBhF3Vi2Sa7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w8Fru-0004ZY-BZ; Thu, 02 Apr 2026 13:05:46 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w8Frs-003MQs-2L;
-	Thu, 02 Apr 2026 13:05:44 +0200
-Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 57352514511;
-	Thu, 02 Apr 2026 11:05:44 +0000 (UTC)
-Date: Thu, 2 Apr 2026 13:05:43 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org, 
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, mailhol@kernel.org, 
-	alexandre.belloni@bootlin.com, wim@linux-watchdog.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-Message-ID: <20260402-warping-chameleon-of-prowess-9df780-mkl@pengutronix.de>
-X-AI: stop_reason: "refusal"
-References: <20260402051442.1426672-1-a0282524688@gmail.com>
- <20260402051442.1426672-3-a0282524688@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1654341AC7
+	for <linux-can@vger.kernel.org>; Thu,  2 Apr 2026 13:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775135477; cv=pass; b=WrP0B1z9ZbQH2qJgJ/d5jyMeLlZcoyV1AUqhvtgYPrdKurVNsXQ+CA8j+5NNzFzMw7ro7x9dxD1BzLeWFz2TZIYNuEdLLzmr+PKsAXE6HDwxIMdTtMAiLMtJCfijUuHpwrXFVvlc2tDQ1UhedRwSmN7V57+UAbr79WDoUrY9LNM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775135477; c=relaxed/simple;
+	bh=iH8LV4RCDky78X5eWXeUjL07MTjGujnNwdeqIzy925U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=enqLDkkAy15mXueA7p0pm8L34/pkrK8pN5pHzVEXe6iK7wCx0aC1toBsXbOXErwyNyPOvXCbqtgAI7D0/9OhySyfexJv24ekWwJbGd0iMsd5JQpqxpVHExet3RsJI16pyD5Wcw17tDczCXfNjnQFvE4PVBmZVRRQq2rcw5b2hcY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=NQ8PieMP; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=S3njDjUV; arc=pass smtp.client-ip=85.215.255.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1775135279; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Y4WISioVre73xHomIw+zvbTNPuiQPoLw+8kky+Hf5ihzaCvf/Ib4kCsbNjWWPl38ls
+    WWWVQXRjDZJenhBz+7W9t9tCDt0be+RcPoegYeN4jmJu2uYGBn6WpejOti/KvlnOgyZU
+    PGvbgkqsVG+KqzHGMdQgXRKHtpmlJyHtuRta+ZBLOx+spTT9VboPgSK8oly8XpBBM++V
+    K9RSQ6A0ieJBZq6+X3+XdNeDFxmUxOMP84xYcf+gXEvJI2Un7NZf9S37RekX9Fr47b9b
+    5FxTwLzXGpllRO0IM25heTap+zOL/rLxRlcf4ZAIFA+ZxrC+xTH57EvHuAHTL5J3ujmb
+    5XBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1775135279;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=HCYJBWq5ysVzfKrKuGysKG+gUzFoqClptfOq5FekKSI=;
+    b=T31Mte4wynXxXrg61nnwRat6XvbHSGSdWHkYZNWNkGX1JeayWmf4AkJb3U6CPjzLvp
+    SFareCiK/TrFsuHioCad13EvrHij5R8EWgd+keSnzeYMBEZkHV2rS9dlAH1Gn1TldRyD
+    LvsMl1suwSOMKD2tPxUHsGLireiPXU/DP2ijxl6HqpRvhvAXrbb+zP8/TuqcQG/2FT86
+    JWAQqqvXxcp6+xgpYnlDcK5BsVtbsit8dr1CD86xaQzY0mos6wYZr/udbSJz3vIWSCJK
+    gDYfiRh8qMyOXnvc0GIDl63ZUFZCvHr0ZeOFCW6F9r2iljI4vOaJr82PkZ5klpyS4nlg
+    Ma5w==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1775135279;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=HCYJBWq5ysVzfKrKuGysKG+gUzFoqClptfOq5FekKSI=;
+    b=NQ8PieMPJM5z414VI9cCskkd2TGTauQcitxUkqZIVTRr7B/SUZN1wwXc37aQJo4tZ5
+    LSmXS2uthR9KcT7qeAndq1YLH6Mu9AJpTNmvVge/7X0qKUBPWIYiNiCKFe62Wh2ZJiOF
+    GycFLwBl0bFt4+k9yl68dlVd6iR/XFE8MhrpmoArLnF1DE4/Xo5WN+xmvPQT23l5EzX7
+    w5E+qWiFM4+3ZnEnDK8kCd7O3but76aGZHDI23bVuzZaA6izBX6c/4oUnZjXP3VJPapF
+    d5gZQVLMaYcGQ/FDB6FhzSyAvdmG/8OGDdQgNvOlu3zXd5mB27HXYmDF0T8FNw4+P/hr
+    fOJw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1775135279;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=HCYJBWq5ysVzfKrKuGysKG+gUzFoqClptfOq5FekKSI=;
+    b=S3njDjUVpDfzpM1gj738KDh6bOH0Bdltew3jhTCSrRoaJOaSItHGuS72ZyM0QsgDa8
+    3n20xoA9VbCz4foNP1Cg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7tnZzaltqKDqzOtwjWhW4zc0PyAYA=="
+Received: from [IPV6:2a00:6020:4a38:6810:a255:a92f:6917:94c8]
+    by smtp.strato.de (RZmta 55.0.1 AUTH)
+    with ESMTPSA id Kba96d232D7xf5L
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Thu, 2 Apr 2026 15:07:59 +0200 (CEST)
+Message-ID: <ba4170ca-3e74-49f4-856f-dca130db05ad@hartkopp.net>
+Date: Thu, 2 Apr 2026 15:07:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eduyjgnvxkh2zrsd"
-Content-Disposition: inline
-In-Reply-To: <20260402051442.1426672-3-a0282524688@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spamd-Result: default: False [-1.06 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC can-next 3/3] can: add can diag interface
+To: Filippo Storniolo <fstornio@redhat.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>,
+ Robin van der Gracht <robin@protonic.nl>,
+ Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+ "David S. Miller" <davem@davemloft.net>,
+ Urs Thuermann <urs.thuermann@volkswagen.de>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>
+Cc: linux-can@vger.kernel.org, Stefano Garzarella <sgarzare@redhat.com>,
+ Radu Rendec <rrendec@redhat.com>, Davide Caratti <dcaratti@redhat.com>
+References: <20260402-feat-can-diag-v1-0-245b56434c1b@redhat.com>
+ <20260402-feat-can-diag-v1-3-245b56434c1b@redhat.com>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20260402-feat-can-diag-v1-3-245b56434c1b@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[pengutronix.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FREEMAIL_TO(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-7323-lists,linux-can=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	NEURAL_SPAM(0.00)[0.266];
+	TAGGED_FROM(0.00)[bounces-7324-lists,linux-can=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	DKIM_TRACE(0.00)[hartkopp.net:+];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-can];
-	R_DKIM_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,pengutronix.de:mid,pengutronix.de:url]
-X-Rspamd-Queue-Id: 6F84238827E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,hartkopp.net:dkim,hartkopp.net:mid]
+X-Rspamd-Queue-Id: 64339389A33
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hello Filippo,
 
---eduyjgnvxkh2zrsd
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 2/2] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-MIME-Version: 1.0
+many thanks for your patches.
 
-On 02.04.2026 13:14:42, a0282524688@gmail.com wrote:
-> From: Ming Yu <a0282524688@gmail.com>
->
-> The Nuvoton NCT6694 also provides a Host Interface (HIF) via eSPI
-> to the host to access its features.
->
-> Sub-devices can use the common functions nct6694_read_msg() and
-> nct6694_write_msg() to issue a command. They can also request
-> interrupts that will be called when the HIF device triggers a
-> shared memory interrupt.
->
-> To support multiple transports, the driver configuration is
-> updated to allow selecting between the USB and HIF interfaces.
->
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+I'm not yet convinced we would need this kind of interface as many 
+features in ss(8) are only relevant for IP and not really for CAN.
+
+Btw. having an overview over PIDs and open sockets might be a nice 
+informational feature.
+
+Some remarks at first sight:
+
+On 02.04.26 12:54, Filippo Storniolo wrote:
+> Add the can_diag interface for querying sockets from userspace.
+> ss(8) tool can use this interface to list open sockets.
+> 
+> The userspace ABI is defined in <linux/can_diag.h> and includes
+
+I would suggest <linux/can/diag.h> to match the other CAN netlayer 
+definitions and not bloat the include/linux directory once more.
+
+> netlink request and response structs.  The request queries open
+> can sockets and the response contains socket information fields
+> including the interface index for bound sockets, inode number,
+> transport protocol etc.
+> 
+> Support can be added later by extending can_diag_dump().
+> 
+> Suggested-by: Davide Caratti <dcaratti@redhat.com>
+> Signed-off-by: Filippo Storniolo <fstornio@redhat.com>
 > ---
->  MAINTAINERS                         |   1 +
->  drivers/gpio/gpio-nct6694.c         |   7 -
->  drivers/hwmon/nct6694-hwmon.c       |  21 -
->  drivers/i2c/busses/i2c-nct6694.c    |   7 -
->  drivers/mfd/Kconfig                 |  47 +-
->  drivers/mfd/Makefile                |   3 +-
->  drivers/mfd/nct6694-hif.c           | 649 ++++++++++++++++++++++++++++
->  drivers/mfd/nct6694.c               |  97 +++--
->  drivers/net/can/usb/nct6694_canfd.c |   6 -
->  drivers/rtc/rtc-nct6694.c           |   7 -
->  drivers/watchdog/nct6694_wdt.c      |   7 -
->  include/linux/mfd/nct6694.h         |  51 ++-
->  12 files changed, 787 insertions(+), 116 deletions(-)
->  create mode 100644 drivers/mfd/nct6694-hif.c
->
+>   MAINTAINERS                   |   1 +
+>   include/uapi/linux/can_diag.h |  43 ++++++++++++
+
+include/uapi/linux/can/diag.h
+
+>   net/can/Kconfig               |  10 +++
+>   net/can/Makefile              |   2 +
+>   net/can/can-diag.c            | 153 ++++++++++++++++++++++++++++++++++++++++++
+
+net/can/diag.c
+
+for the same reason.
+
+>   5 files changed, 209 insertions(+)
+> 
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index c3fe46d7c4bc..7b6241faa6df 100644
+> index 7a2ffd9d37d57c0db59e602eeffc2e2f09b613d9..f338ef2380a634a671d06f27bb4dac6f45f4d2a4 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -18899,6 +18899,7 @@ S:	Supported
->  F:	drivers/gpio/gpio-nct6694.c
->  F:	drivers/hwmon/nct6694-hwmon.c
->  F:	drivers/i2c/busses/i2c-nct6694.c
-> +F:	drivers/mfd/nct6694-hif.c
->  F:	drivers/mfd/nct6694.c
->  F:	drivers/net/can/usb/nct6694_canfd.c
->  F:	drivers/rtc/rtc-nct6694.c
-> diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
-> index 3703a61209e6..a279510ece89 100644
-> --- a/drivers/gpio/gpio-nct6694.c
-> +++ b/drivers/gpio/gpio-nct6694.c
-> @@ -12,13 +12,6 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->
-> -/*
-> - * USB command module type for NCT6694 GPIO controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * GPIO controller over the USB interface.
-> - */
-> -#define NCT6694_GPIO_MOD	0xFF
-> -
->  #define NCT6694_GPIO_VER	0x90
->  #define NCT6694_GPIO_VALID	0x110
->  #define NCT6694_GPI_DATA	0x120
-> diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
-> index 6dcf22ca5018..581451875f2c 100644
-> --- a/drivers/hwmon/nct6694-hwmon.c
-> +++ b/drivers/hwmon/nct6694-hwmon.c
-> @@ -15,13 +15,6 @@
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->
-> -/*
-> - * USB command module type for NCT6694 report channel
-> - * This defines the module type used for communication with the NCT6694
-> - * report channel over the USB interface.
-> - */
-> -#define NCT6694_RPT_MOD			0xFF
-> -
->  /* Report channel */
->  /*
->   * The report channel is used to report the status of the hardware monit=
-or
-> @@ -38,13 +31,6 @@
->  #define NCT6694_TIN_STS(x)		(0x6A + (x))
->  #define NCT6694_FIN_STS(x)		(0x6E + (x))
->
-> -/*
-> - * USB command module type for NCT6694 HWMON controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * HWMON controller over the USB interface.
-> - */
-> -#define NCT6694_HWMON_MOD		0x00
-> -
->  /* Command 00h - Hardware Monitor Control */
->  #define NCT6694_HWMON_CONTROL		0x00
->  #define NCT6694_HWMON_CONTROL_SEL	0x00
-> @@ -53,13 +39,6 @@
->  #define NCT6694_HWMON_ALARM		0x02
->  #define NCT6694_HWMON_ALARM_SEL		0x00
->
-> -/*
-> - * USB command module type for NCT6694 PWM controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * PWM controller over the USB interface.
-> - */
-> -#define NCT6694_PWM_MOD			0x01
-> -
->  /* PWM Command - Manual Control */
->  #define NCT6694_PWM_CONTROL		0x01
->  #define NCT6694_PWM_CONTROL_SEL		0x00
-> diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nc=
-t6694.c
-> index 7d8ad997f6d2..7ee209a04d16 100644
-> --- a/drivers/i2c/busses/i2c-nct6694.c
-> +++ b/drivers/i2c/busses/i2c-nct6694.c
-> @@ -11,13 +11,6 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->
-> -/*
-> - * USB command module type for NCT6694 I2C controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * I2C controller over the USB interface.
-> - */
-> -#define NCT6694_I2C_MOD			0x03
-> -
->  /* Command 00h - I2C Deliver */
->  #define NCT6694_I2C_DELIVER		0x00
->  #define NCT6694_I2C_DELIVER_SEL		0x00
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 7192c9d1d268..8a715ec2f79f 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1164,19 +1164,46 @@ config MFD_MENF21BMC
->  	  will be called menf21bmc.
->
->  config MFD_NCT6694
-> -	tristate "Nuvoton NCT6694 support"
-> +	tristate
->  	select MFD_CORE
-> +	help
-> +	  Core MFD support for the Nuvoton NCT6694 peripheral expander.
-> +	  This provides the common APIs and shared structures used by all
-> +	  interfaces (USB, HIF) to access the NCT6694 hardware features
-> +	  such as GPIO, I2C, CAN-FD, Watchdog, ADC, PWM, and RTC.
-> +
-> +	  It is selected automatically by the transport interface drivers.
-> +
-> +config MFD_NCT6694_HIF
-> +	tristate "Nuvoton NCT6694 HIF (eSPI) interface support"
-> +	depends on HAS_IOPORT && ACPI
-> +	select MFD_NCT6694
-> +	select REGMAP_MMIO
-> +	help
-> +	  This enables support for the Nuvoton NCT6694 peripheral expander
-> +	  connected via the Host Interface (HIF) using eSPI transport.
-> +
-> +	  The transport driver uses Super-I/O mapping and shared memory to
-> +	  communicate with the NCT6694 firmware. Enable this option if you
-> +	  are using the NCT6694 over an eSPI interface on an ACPI platform.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called nct6694-hif.
-> +
-> +config MFD_NCT6694_USB
-> +	tristate "Nuvoton NCT6694 USB interface support"
-> +	select MFD_NCT6694
->  	depends on USB
->  	help
-> -	  This enables support for the Nuvoton USB device NCT6694, which shares
-> -	  peripherals.
-> -	  The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> -	  6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> -	  PWM, and RTC.
-> -	  This driver provides core APIs to access the NCT6694 hardware
-> -	  monitoring and control features.
-> -	  Additional drivers must be enabled to utilize the specific
-> -	  functionalities of the device.
-> +	  This enables support for the Nuvoton NCT6694 peripheral expander
-> +	  connected via the USB interface.
-> +
-> +	  The transport driver uses USB bulk and interrupt transfers to
-> +	  communicate with the NCT6694 firmware. Enable this option if you
-> +	  are using the NCT6694 via a USB connection.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called nct6694.
->
->  config MFD_OCELOT
->  	tristate "Microsemi Ocelot External Control Support"
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index e75e8045c28a..4cee9b74978c 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -124,7 +124,8 @@ obj-$(CONFIG_MFD_MC13XXX_I2C)	+=3D mc13xxx-i2c.o
->
->  obj-$(CONFIG_MFD_PF1550)	+=3D pf1550.o
->
-> -obj-$(CONFIG_MFD_NCT6694)	+=3D nct6694.o
-> +obj-$(CONFIG_MFD_NCT6694_HIF)	+=3D nct6694-hif.o
-> +obj-$(CONFIG_MFD_NCT6694_USB)	+=3D nct6694.o
->
->  obj-$(CONFIG_MFD_CORE)		+=3D mfd-core.o
->
-> diff --git a/drivers/mfd/nct6694-hif.c b/drivers/mfd/nct6694-hif.c
+> @@ -5730,6 +5730,7 @@ F:	include/linux/can/skb.h
+>   F:	include/net/can.h
+>   F:	include/net/netns/can.h
+>   F:	include/uapi/linux/can.h
+> +F:	include/uapi/linux/can_diag.h
+>   F:	include/uapi/linux/can/bcm.h
+>   F:	include/uapi/linux/can/gw.h
+>   F:	include/uapi/linux/can/isotp.h
+> diff --git a/include/uapi/linux/can_diag.h b/include/uapi/linux/can_diag.h
 > new file mode 100644
-> index 000000000000..a5953c951eb5
+> index 0000000000000000000000000000000000000000..e63d79f1ab3803a5778407e07d485732a112745a
 > --- /dev/null
-> +++ b/drivers/mfd/nct6694-hif.c
-> @@ -0,0 +1,649 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> +++ b/include/uapi/linux/can_diag.h
+> @@ -0,0 +1,43 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +
+> +#ifndef _UAPI__CAN_DIAG_H__
+
+Why not using _UAPI_CAN_DIAG_H_ here?
+
+> +#define _UAPI__CAN_DIAG_H__
+> +
+> +#include <linux/types.h>
+> +#include <linux/can.h>
+> +
+> +/* Request */
+> +struct can_diag_req {
+> +	__u8	sdiag_family;	/* must be AF_CAN */
+> +	__u8	sdiag_protocol; /* for future filtering of transport protocols */
+> +	__u16	pad;
+> +	__u32	cdiag_states;
+> +	__u32	cdiag_ino;
+> +	__u32	cdiag_show;
+> +	__u32	cdiag_cookie[2];
+> +};
+> +
+> +enum {
+> +	CAN_DIAG_UNSPEC,
+> +	CAN_DIAG_UID,
+> +
+> +	__CAN_DIAG_MAX,
+> +};
+> +
+> +#define CAN_DIAG_MAX (__CAN_DIAG_MAX - 1)
+> +
+> +/* Response */
+> +struct can_diag_msg {
+> +	__u8	cdiag_family;	/* AF_CAN */
+> +	__u8	cdiag_state;
+> +	__u16	cdiag_protocol;
+> +	__u16	cdiag_type;
+> +	__u16	pad16;
+> +	__u32	cdiag_ino;
+> +	canid_t cdiag_tx_id; /* meaningful only for ISO-TP */
+> +	canid_t cdiag_rx_id; /* meaningful only for ISO-TP */
+
+What about the J1939 addressing here which is part of the struct 
+sockaddr_can too?
+
+> +	__s32	cdiag_ifindex;
+> +	__u32	cdiag_cookie[2];
+> +};
+> +
+> +#endif /* _UAPI__CAN_DIAG_H__ */
+> diff --git a/net/can/Kconfig b/net/can/Kconfig
+> index abbb4be7ad2152c66abd2e28dbbd5282ec45d065..ed210d62da7c28798d2f6f1967739e1621093cbf 100644
+> --- a/net/can/Kconfig
+> +++ b/net/can/Kconfig
+> @@ -70,4 +70,14 @@ config CAN_ISOTP
+>   	  as needed e.g. for vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN
+>   	  traffic.
+>   
+> +config CAN_DIAG
+> +	tristate "CAN socket monitoring interface"
+> +	depends on CAN
+> +	default m
+> +	help
+> +	  Support for CAN socket monitoring interface used by the ss tool.
+> +	  If unsure, say Y.
+> +
+> +	  Enable this module so userspace applications can query open sockets.
+> +
+>   endif
+> diff --git a/net/can/Makefile b/net/can/Makefile
+> index 58f2c31c1ef377ef8c5385211e7182d42ac2225a..76a3247aa97c982b864914f7aaa3a5b0e96a2e82 100644
+> --- a/net/can/Makefile
+> +++ b/net/can/Makefile
+> @@ -20,3 +20,5 @@ obj-$(CONFIG_CAN_J1939)	+= j1939/
+>   
+>   obj-$(CONFIG_CAN_ISOTP)	+= can-isotp.o
+>   can-isotp-y		:= isotp.o
+> +
+> +obj-$(CONFIG_CAN_DIAG) += can-diag.o
+
+can-diag.ko is a good name indeed.
+
+Best regards,
+Oliver
+
+> diff --git a/net/can/can-diag.c b/net/can/can-diag.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..77e1fe66e4a6513ff640d0c19c688dcd2e3970ee
+> --- /dev/null
+> +++ b/net/can/can-diag.c
+> @@ -0,0 +1,153 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +/*
-> + * Copyright (C) 2026 Nuvoton Technology Corp.
 > + *
-> + * Nuvoton NCT6694 host-interface (eSPI) transport driver.
+> + * Copyright (C) 2026 Red Hat
+> + * Author: Filippo Storniolo <fstornio@redhat.com>
 > + */
 > +
-> +#include <linux/acpi.h>
-> +#include <linux/bits.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/irq.h>
-> +#include <linux/irqdomain.h>
 > +#include <linux/kernel.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/nct6694.h>
 > +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/unaligned.h>
+> +#include <linux/net.h>
+> +#include <net/netlink.h>
+> +#include <linux/sock_diag.h>
+> +#include <linux/can.h>
+> +#include <linux/can_diag.h>
+> +#include <net/net_namespace.h>
+> +#include <net/sock.h>
+> +#include <linux/netdevice.h>
+> +#include <linux/percpu.h>
+> +#include <linux/user_namespace.h>
 > +
-> +#define DRVNAME "nct6694-hif"
+> +static int sk_diag_fill(struct sock *sk, struct sk_buff *skb,
+> +			struct can_diag_req *req,
+> +			struct user_namespace *user_ns,
+> +			u32 portid, u32 seq, u32 flags, int sk_ino)
+> +{
+> +	struct sockaddr_can can_addr;
+> +	struct can_diag_msg *rep;
+> +	struct nlmsghdr *nlh;
+> +	uid_t uid;
+> +	int err;
 > +
-> +#define NCT6694_POLL_INTERVAL_US	10
-> +#define NCT6694_POLL_TIMEOUT_US		10000
+> +	nlh = nlmsg_put(skb, portid, seq, SOCK_DIAG_BY_FAMILY, sizeof(*rep), flags);
+> +	if (!nlh)
+> +		return -EMSGSIZE;
 > +
-> +/*
-> + * Super-I/O registers
-> + */
-> +#define SIO_REG_LDSEL		0x07	/* Logical device select */
-> +#define SIO_REG_DEVID		0x20	/* Device ID (2 bytes) */
-> +#define SIO_REG_LD_SHM		0x0F	/* Logical device shared memory control */
+> +	rep = nlmsg_data(nlh);
+> +	memset(rep, 0, sizeof(struct can_diag_msg));
 > +
-> +#define SIO_REG_SHM_ENABLE	0x30	/* Enable shared memory */
-> +#define SIO_REG_SHM_BASE_ADDR	0x60	/* Shared memory base address (2 byte=
-s) */
-> +#define SIO_REG_SHM_IRQ_NR	0x70	/* Shared memory interrupt number */
+> +	rep->cdiag_family = AF_CAN;
+> +	rep->cdiag_type = sk->sk_type;
+> +	rep->cdiag_ino = sk_ino;
+> +	rep->cdiag_protocol = sk->sk_protocol;
+> +	rep->cdiag_state = READ_ONCE(sk->sk_state);
+> +	sock_diag_save_cookie(sk, rep->cdiag_cookie);
 > +
-> +#define SIO_REG_UNLOCK_KEY	0x87	/* Key to enable Super-I/O */
-> +#define SIO_REG_LOCK_KEY	0xAA	/* Key to disable Super-I/O */
+> +	uid = from_kuid_munged(user_ns, sk_uid(sk));
+> +	err = nla_put(skb, CAN_DIAG_UID, sizeof(uid_t), &uid);
+> +	if (err < 0) {
+> +		nlmsg_cancel(skb, nlh);
+> +		return err;
+> +	}
 > +
-> +#define SIO_NCT6694B_ID		0xD029
-> +#define SIO_NCT6694D_ID		0x5832
+> +	memset(&can_addr, 0, sizeof(can_addr));
 > +
-> +/*
-> + * Super-I/O Shared Memory Logical Device registers
-> + */
-> +#define NCT6694_SHM_COFS_STS			0x2E
-> +#define NCT6694_SHM_COFS_STS_COFS4W		BIT(7)
+> +	err = kernel_getsockname(sk->sk_socket, (struct sockaddr *)&can_addr);
+> +	if (err < 0) {
+> +		/* Some protocols (e.g. CAN_BCM) do not implement kernel_getsockname().
+> +		 * No error returned because the netlink message is still valid.
+> +		 */
+> +		if (err == -EOPNOTSUPP)
+> +			goto exit_no_err;
 > +
-> +#define NCT6694_SHM_COFS_CTL2			0x3B
-> +#define NCT6694_SHM_COFS_CTL2_COFS4W_IE		BIT(3)
+> +		nlmsg_cancel(skb, nlh);
+> +		return err;
+> +	}
 > +
-> +#define NCT6694_SHM_INTR_STATUS			0x9C	/* Interrupt status register (4 b=
-ytes) */
+> +	rep->cdiag_ifindex = can_addr.can_ifindex;
 > +
-> +enum nct6694_chips {
-> +	NCT6694B =3D 0,
-> +	NCT6694D,
+> +	if (sk->sk_protocol == CAN_ISOTP) {
+> +		rep->cdiag_tx_id = can_addr.can_addr.tp.tx_id;
+> +		rep->cdiag_rx_id = can_addr.can_addr.tp.rx_id;
+> +	}
+> +
+> +exit_no_err:
+> +	nlmsg_end(skb, nlh);
+> +	return 0;
+> +}
+> +
+> +static int can_diag_dump(struct sk_buff *skb, struct netlink_callback *cb)
+> +{
+> +	int num = 0, s_num = cb->args[0];
+> +	struct can_diag_req *req;
+> +	struct net *net;
+> +	struct sock *sk;
+> +
+> +	net = sock_net(skb->sk);
+> +	req = nlmsg_data(cb->nlh);
+> +
+> +	mutex_lock(&net->can.sklist_lock);
+> +	sk_for_each(sk, &net->can.sklist) {
+> +		if (num < s_num)
+> +			goto next;
+> +
+> +		if (sk_diag_fill(sk, skb, req,
+> +				 sk_user_ns(NETLINK_CB(cb->skb).sk),
+> +				 NETLINK_CB(cb->skb).portid,
+> +				 cb->nlh->nlmsg_seq, NLM_F_MULTI,
+> +				 sock_i_ino(sk)) < 0)
+> +			goto done;
+> +next:
+> +		num++;
+> +	}
+> +done:
+> +	mutex_unlock(&net->can.sklist_lock);
+> +	cb->args[0] = num;
+> +
+> +	return skb->len;
+> +}
+> +
+> +static int can_diag_handler_dump(struct sk_buff *skb, struct nlmsghdr *h)
+> +{
+> +	int hdrlen = sizeof(struct can_diag_req);
+> +	struct net *net = sock_net(skb->sk);
+> +	struct can_diag_req *req;
+> +
+> +	if (nlmsg_len(h) < hdrlen)
+> +		return -EINVAL;
+> +
+> +	req = nlmsg_data(h);
+> +	if (req->sdiag_protocol)
+> +		return -EINVAL;
+> +
+> +	if (h->nlmsg_flags & NLM_F_DUMP) {
+> +		struct netlink_dump_control c = {
+> +			.dump = can_diag_dump
+> +		};
+> +		return netlink_dump_start(net->diag_nlsk, skb, h, &c);
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static const struct sock_diag_handler can_diag_handler = {
+> +	.owner = THIS_MODULE,
+> +	.family = AF_CAN,
+> +	.dump = can_diag_handler_dump,
 > +};
 > +
-> +enum nct6694_module_id {
-> +	NCT6694_GPIO0 =3D 0,
-> +	NCT6694_GPIO1,
-> +	NCT6694_GPIO2,
-> +	NCT6694_GPIO3,
-> +	NCT6694_GPIO4,
-> +	NCT6694_GPIO5,
-> +	NCT6694_GPIO6,
-> +	NCT6694_GPIO7,
-> +	NCT6694_GPIO8,
-> +	NCT6694_GPIO9,
-> +	NCT6694_GPIOA,
-> +	NCT6694_GPIOB,
-> +	NCT6694_GPIOC,
-> +	NCT6694_GPIOD,
-> +	NCT6694_GPIOE,
-> +	NCT6694_GPIOF,
-> +	NCT6694_I2C0,
-> +	NCT6694_I2C1,
-> +	NCT6694_I2C2,
-> +	NCT6694_I2C3,
-> +	NCT6694_I2C4,
-> +	NCT6694_I2C5,
-> +	NCT6694_CAN0,
-> +	NCT6694_CAN1,
-> +};
+> +static int __init can_diag_init(void)
+> +{
+> +	pr_info("can: diagnostic module\n");
+> +	return sock_diag_register(&can_diag_handler);
+> +}
 > +
-> +struct __packed nct6694_msg {
-> +	struct nct6694_cmd_header cmd_header;
-> +	struct nct6694_response_header response_header;
-> +	unsigned char *data;
-> +};
+> +static void __exit can_diag_exit(void)
+> +{
+> +	sock_diag_unregister(&can_diag_handler);
+> +}
 > +
-> +struct nct6694_sio_data {
-> +	enum nct6694_chips chip;
-> +	int sioreg;	/* Super-I/O index port */
-> +
-> +	/* Super-I/O access functions */
-> +	int (*sio_enter)(struct nct6694_sio_data *sio_data);
-> +	void (*sio_exit)(struct nct6694_sio_data *sio_data);
-> +	void (*sio_select)(struct nct6694_sio_data *sio_data, int ld);
-> +	int (*sio_inb)(struct nct6694_sio_data *sio_data, int reg);
-> +	int (*sio_inw)(struct nct6694_sio_data *sio_data, int reg);
-> +	void (*sio_outb)(struct nct6694_sio_data *sio_data, int reg, int val);
+> +module_init(can_diag_init);
+> +module_exit(can_diag_exit);
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("CAN socket monitoring via SOCK_DIAG");
+> 
 
-The signatures of the function look a bit strange. I expect functions
-reading/writing bytes use u8 not int, register offsets should probably
-be an unsigned int.
-
-Why do you have pointers to the access functions? Why not use them
-directly?
-
-Marc
-
---
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---eduyjgnvxkh2zrsd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCac5NhQAKCRDMOmT6rpmt
-0iiOAQDPnaCTCz7cHPZcUdH6WW5DKZHAXFfgb03FMRkx/xPipgD/X+mA6FYqehlp
-FMnxD26sUBwZidoKAtEpXxguwwLFGgo=
-=+i7v
------END PGP SIGNATURE-----
-
---eduyjgnvxkh2zrsd--
 
