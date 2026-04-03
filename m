@@ -1,79 +1,81 @@
-Return-Path: <linux-can+bounces-7332-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7333-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sGcFJLSOz2mmxAYAu9opvQ
-	(envelope-from <linux-can+bounces-7332-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 03 Apr 2026 11:56:04 +0200
+	id UHCZD1WPz2kzxQYAu9opvQ
+	(envelope-from <linux-can+bounces-7333-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 03 Apr 2026 11:58:45 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92ACF39307F
-	for <lists+linux-can@lfdr.de>; Fri, 03 Apr 2026 11:56:02 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC70639312D
+	for <lists+linux-can@lfdr.de>; Fri, 03 Apr 2026 11:58:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id CE241307C7B5
-	for <lists+linux-can@lfdr.de>; Fri,  3 Apr 2026 09:53:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6AE613123190
+	for <lists+linux-can@lfdr.de>; Fri,  3 Apr 2026 09:53:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CCFD39D6E4;
-	Fri,  3 Apr 2026 09:50:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2494A3B2FFC;
+	Fri,  3 Apr 2026 09:50:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zm6gx65V"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rfXOxFKU"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A949E23E32B
-	for <linux-can@vger.kernel.org>; Fri,  3 Apr 2026 09:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17CAA39F179
+	for <linux-can@vger.kernel.org>; Fri,  3 Apr 2026 09:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775209817; cv=none; b=ocmPbDWvlbvIBImRAh1fp6fJdIZm5PCXktTLh6MCdfAfOfIpXdbDVrYWiYn4OaA0n4t98wRFV63O2pz2NKO7qaeIOGZp/XoDLjMiY56oM2RXbcD9blOk/Bk+ob1Bc9SnSAIbIVCYm84qFrEkJl6KbckrrEmpoJtk1sJkfwg94H8=
+	t=1775209818; cv=none; b=hyC6fGoFEds01+fVn7OC3LNeXwMhXwuo3QpRxcUg9eYyx4cwqfoPZKAQwpIuio4Hg6JhDc3Ore7y7Li4HicVLKEcloi5HhbbYjHVu9zi3ZafXvAe6Gd+4HwH9AJnUWyiLM3EWJPKR7g1iZIb/+VYqTRb15L1N9a37Z+v6MSbyTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775209817; c=relaxed/simple;
-	bh=G/XTTldBTOOM0QMK0+ZZGC/DPdHMFsB/H2fYQDGye4g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GpMczXN9N9+aSLwZYXYaxVZPYakFz7if+Upz+wyrMi6Ns6nVknjR+CNi8RWyuP6uLPjZaq/YjB3aAYp9JyLt2jKM6v2IuhwzHCatdcpuPlK/dUbJRaPxZ5NrpDCyw2R5nR1ci2DQAvpe8eq6ZJPwZnUIM4pxpD/lmECNZ5Ilks8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zm6gx65V; arc=none smtp.client-ip=209.85.128.49
+	s=arc-20240116; t=1775209818; c=relaxed/simple;
+	bh=6ugWwfQ5L0iabK8CMZr+B4V7AT4RC9S6pPlq4Ilxjxc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ox13r8hLgPYnsey/JLArw3p5WF4/73RyAIM0maRlKRHjfJsIdnvl1gy7Opg6NiRwbqxnsZS9Tw0pM/aiPwbqvkTgfr4Mal2lkuVX4gh/N0bbDwDiXSYTfb8GSpqyoSYpJ9G2sJERMJuiEktWGADG7H2YXIHw+/itCB6LIbsij9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rfXOxFKU; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-486fb14227cso23557915e9.3
-        for <linux-can@vger.kernel.org>; Fri, 03 Apr 2026 02:50:11 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48896199cbaso9443335e9.1
+        for <linux-can@vger.kernel.org>; Fri, 03 Apr 2026 02:50:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775209807; x=1775814607; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J2ExhCCG/Ktc9lkeQiNOn03CChrBuSwykagKy2evogQ=;
-        b=Zm6gx65VX/5Kx7BRz3DgbZPzZ1VlCFHrIScUrpQUjYouEnWqOyl3/sfq65rGuNpeM4
-         SvBKoVhOR9vdDvGuQ1F2xIdQKk8lYqot5enZ+f8IEAs5u5DB7uPlUtonl5XsFOkhtEGz
-         tln8Rq9iR1fdTU5mieM8Xrg3T0R+Hq8fA+Ym+VWu6wh3m2hpedhZjPPEbKF2I4611mos
-         1AqIL8oPmDmvlKIUkitjMpqvHNm4s0W0+AUR9Q/MR852OPUQ99INU2gznEHoU4X90Omy
-         a3U/+p4fbGzDbo/Ttw4psIr6hmGweY7UI1XzNXrqK9qYAa1xkPF5BUkGwdcS2vgW0nBr
-         1SJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775209807; x=1775814607;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1775209809; x=1775814609; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J2ExhCCG/Ktc9lkeQiNOn03CChrBuSwykagKy2evogQ=;
-        b=rFW0peE73TYno2ENourUiOIA+JIEDMbeCK4W5J97XWvfFAmZGSlgQIP4rt6fYJx8k1
-         92hJp2EOqKGhniWcIvgnfaKnXsnBRmQyLmJ9+EDXVL4FynBcl1h8S2AyFG4YPPuMLUN/
-         1GCnIA1n9y4xttsr0YtLPBXe6HHGtwlT81FGb+2HSaNxf4buq7E9Yvp5oFxfGnJWWs6Y
-         6gJCxkM/Bksdi2VmtvipBEkxGzjltxnlCKCi2sywO9Y0A838SJhov437X68C3QQGXiYI
-         0sT0Bkp7eIpGFwGfn0Z9Tk/RlXiM+pb446Lekb96CAxa+bFbKS0jt8uD+QxVnouDDxjo
-         maog==
-X-Forwarded-Encrypted: i=1; AJvYcCV5AsPpGi9sn+aMQ7FtsNfsKITmefzQZMmMqZLlIDeNDjktQd/K/ZqsE8Fs4TQK6Pg35KFLJkjnxOA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBc0wIPou67EIdTdxSXspzup21iBkNJAuw21X+/742NqQYfbcK
-	/vBlHom7mxL7dHqIsjBIIceI+tM2MPkNUMfiJIZberP9l8gzlFw1NxMl
-X-Gm-Gg: ATEYQzyQys+ySqVQSvB1EbR1FpccmOzr31pnecz9LOrQjkXAD1RiyFpwNpA/9tn0yRw
-	vz+oHukrYmiG4fxc+mHNuAe3qOfZFoi9u6PvafLsh5khatsvOBwcKMFD1yngDUHzlKJLCWsetWz
-	Kx5Zy+d7JJXswtA2dimzVLvIr6zG7ZdPDj2T6EdMoOJJ01BsJx3qK11tXDL1un0ErlMpIwb12JL
-	0WRIvxU4SxYcp/xWiW1BkLx0cbIXXvuldA1GcYlFxaGhR0mG5LQ7fB92ra1hlaC9rJgTEsMEhfj
-	jy7tHiqrJb/rlVc7OEpH9Mrac4exVWHQ4bfJGiDB6F/ezbMbN16u03BiQFcQjidpbFsSh19tsa3
-	2PTsA5U+kC0QyWrnHTDEiy06LqhrmcSd1KSJemDrwhleqijiWZ1PPkt0buGzLpNcFtLX8cizdKl
-	vfK5zn8Mm+7mfPJAWXb+DrRN6lt1xclWfff7V8bgEogEsVcSmU
-X-Received: by 2002:a05:600c:34c8:b0:485:3b00:f92e with SMTP id 5b1f17b1804b1-48899715377mr39107515e9.2.1775209807303;
-        Fri, 03 Apr 2026 02:50:07 -0700 (PDT)
+        bh=Jbdj/CfPzvOfHuEeqbKOKvVft4NyhHKd3EC2N1Thlq8=;
+        b=rfXOxFKUe669fED/C70yEKWrycbl9+D2etb/qUGXs1OOFYiwiSChxtiMRr3bqXTAeb
+         3G8mx9smvCKZ07/2LLYNOLbc5hif4moFSf6lpgfzIsCDo6FCAMUc8TJuWeBf4hXbP4OO
+         +Le7xrrmqBdgn8VwyG0ciUVqHzbi16ki+lCWMu54V+u/rvr0k0JEy7axLJrEnEYl4TXI
+         8Rm7EjuaKmdxpYGhbXu+tXgP4zldEKXnqs7GR2N2A9hA/8Ij6OdPEblvNzho4F5JER7I
+         CUUqavOcqNWD8EH5+99Q2ukKpKFfnIC9ET4q3qWUDQkZl9dHyL1l0SdK/prKnunc5BMI
+         VZYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775209809; x=1775814609;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Jbdj/CfPzvOfHuEeqbKOKvVft4NyhHKd3EC2N1Thlq8=;
+        b=aeuu+6Sqvwr//Ia6QN9skXMj1jRCcEdhhGN8JopV31JwuZmCUjxP8zF0fbpwQiv7ND
+         21vPY1Ewoz9nfvsoGkTLSLHnlrlEZ32B093YBNPrsAp7PKIc4FffmXU7g4tValnRi23p
+         I+GCtvGWjUGhINmeqj9HdIvZs1LptwV1gl73uSAj3Bijb5EALoM7RXRNrTrF6GQjuoMv
+         BC/Y6dGi2KoLYCG8utFJX3IwUyAqTmbAkCcixjoFDhXfufp+20danN5KxKNazkd8RGQF
+         Kwnv8dehNJG7GJxorf3htng52N5xCtOyQT7bJofBdAPRwRZa0Prlnu2r5TB/rZl5tyUh
+         Y8BA==
+X-Forwarded-Encrypted: i=1; AJvYcCX1/SH70hoKioXR8l3c8tNzm+/tMrKktGHCr97C3cUZ7NeWqkDy1hkbDhmYrW1BPJIMBGzL5VI5pXE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyt8IShSi/tl651633KC0nb1mOgsSQAn10Em+CBlZiQH/PGTIuv
+	3d90b4hkZVr+/7XZI0K/O98xcH+6PuonAO7pG0sUqxZszntKM6m7AdGd
+X-Gm-Gg: ATEYQzyrCTymk1S6wjEypXVFU+xI+MZTzM+cwMPBRlm8EvcajMRDQCTGTQ2IQ9P1zrS
+	NwiuYkCn+zgEz0Q51J7oq5A1dXSQVpAPLmwxCrRSS9C5NPLSaVCRUyp/e4TyRNtQd04ybhl/MxL
+	8WUHvpWoOW+l04kFRzb1hhm+/a/rXtJG8V88f23ASnkN99hp/58yx1zbHzFOovQzgVCUJaC5eqs
+	yi3/PM1/8Et9xV73pu9VFpBlOXxzeb/uLIxYXQCz3xIJd3W++5daaRnZrc8yCoy3D2RRGEDBrYB
+	n1n712HmhzLW0djWt1LNg80sXLfe57JltFvOFyuuODKFOlKh0I07vNNeynyVcNI4V1TwxNPdT+7
+	PHIe3VupiNmuQzGwx3DBpHRZD5OVUGP7i9NvLEOUuBOKmMqHMpvEy7I8e1qNbWDCFOnz+tKP77y
+	8ViR14zVHtGcU601JHDRDPdV8nMKc5qDpgvZhOtDtldzX1Lpc5
+X-Received: by 2002:a05:600c:8b84:b0:482:f564:d613 with SMTP id 5b1f17b1804b1-488997b2345mr35984745e9.15.1775209808745;
+        Fri, 03 Apr 2026 02:50:08 -0700 (PDT)
 Received: from localhost.localdomain ([2a00:23c4:a758:8a01:58b8:b4b6:c8e1:8690])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48897fc89c0sm25965355e9.1.2026.04.03.02.50.05
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48897fc89c0sm25965355e9.1.2026.04.03.02.50.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 02:50:06 -0700 (PDT)
+        Fri, 03 Apr 2026 02:50:08 -0700 (PDT)
 From: Biju <biju.das.au@gmail.com>
 X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -91,10 +93,12 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	linux-kernel@vger.kernel.org,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH 0/3] Add support for Renesas CAN-FD Bus-Off recovery mode selection
-Date: Fri,  3 Apr 2026 10:49:57 +0100
-Message-ID: <20260403095003.104542-1-biju.das.jz@bp.renesas.com>
+Subject: [PATCH 1/3] dt-bindings: can: renesas,rcar-canfd: Document renesas,bus-off-recovery-mode property
+Date: Fri,  3 Apr 2026 10:49:58 +0100
+Message-ID: <20260403095003.104542-2-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260403095003.104542-1-biju.das.jz@bp.renesas.com>
+References: <20260403095003.104542-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -107,12 +111,12 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7332-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7333-lists,linux-can=lfdr.de];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCPT_COUNT_TWELVE(0.00)[15];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -129,68 +133,53 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-can,dt,renesas];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,renesas.com:email,bp.renesas.com:mid]
-X-Rspamd-Queue-Id: 92ACF39307F
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,bp.renesas.com:mid,renesas.com:email]
+X-Rspamd-Queue-Id: DC70639312D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 From: Biju Das <biju.das.jz@bp.renesas.com>
 
-The CAN-FD IP supports the below Bus-Off recovery modes:
-1) ISO11898-1 compliant
-2) Entry to Channel Halt mode automatically at bus-off entry
-3) Entry to Channel Halt mode automatically at bus-off end
-4) Entry to Channel Halt mode (in bus-off state) by program request
+Document renesas,bus-off-recovery-mode property in the Renesas R-Car
+CAN FD controller binding. This optional u32 property allows selection of
+the bus-off recovery behaviour, supporting four modes:
+0: ISO11898-1 compliant recovery
+1: Automatic entry to Channel Halt mode at bus-off entry (default)
+2: Automatic entry to Channel Halt mode at bus-off end
+3: Entry to Channel Halt mode in bus-off state via program request
 
-Add support for Bus-Off recovery mode selection via the
-renesas,bus-off-recovery-mode device tree property. If the property is
-absent, it defaults to RCANFD_CCTR_BOM_BENTRY (entry to Channel Halt mode
-automatically at bus-off entry) for backward compatibility.
+The default value of 1 ensures backward compatibility when the property is
+omitted.
 
-Testing:
-CANBUS-OFF trigger on RZ/G3E SMARC EVK:-
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+ .../bindings/net/can/renesas,rcar-canfd.yaml          | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Enable
-CONFIG_EXPERT=y
-CONFIG_GPIO_SYSFS=y
-
-echo 556 > /sys/class/gpio/export
-echo 557 > /sys/class/gpio/export
-echo out > /sys/class/gpio/gpio556/direction
-echo out > /sys/class/gpio/gpio557/direction
-echo 1 > /sys/class/gpio/gpio556/value
-echo 1 > /sys/class/gpio/gpio557/value
-
-ip link set can0 down
-ip link set can1 down
-ip link set can0 up type can bitrate 1000000 dbitrate 4000000 fd on restart-ms 100
-ip link set can1 up type can bitrate 1000000 dbitrate 4000000 fd on restart-ms 100
-
-Set the switches SW_GPIO8_CAN0_STB and SW_GPIO9_CAN1_STB to STANDBY mode
-
-candump can0 &
-cansend can1 123#1122334455667788
-
-This will trigger BUS-OFF as CAN is in STANDBY mode
-
-Then, Set the switches SW_GPIO8_CAN0_STB and  SW_GPIO9_CAN1_STB to
-NORMAL mode, the messages started receiving after bus-off errors.
-
-With BOM=0, after bus recovery, Bus-Off recovery interrupt is triggered
-by CAN-FD IP.
-
-Biju Das (3):
-  dt-bindings: can: renesas,rcar-canfd: Document
-    renesas,bus-off-recovery-mode property
-  can: rcar_canfd: Add support for Bus-Off recovery mode selection
-  can: rcar_canfd: Handle Bus-Off recovery interrupt
-
- .../bindings/net/can/renesas,rcar-canfd.yaml  | 11 ++++++++++
- drivers/net/can/rcar/rcar_canfd.c             | 20 +++++++++++++------
- 2 files changed, 25 insertions(+), 6 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+index b9d9dd7a7967..4190e514a7fd 100644
+--- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
++++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+@@ -154,6 +154,17 @@ properties:
+       communication in Classical CAN frame format is disabled. Specify this
+       property to put the controller in FD-Only mode.
+ 
++  renesas,bus-off-recovery-mode:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [ 0, 1, 2, 3 ]
++    default: 1
++    description: |
++      Bus-Off recovery mode selection. Valid values are:
++        <0> : ISO11898-1 compliant
++        <1> : Entry to halt mode automatically at bus-off entry (default)
++        <2> : Entry to halt mode automatically at bus-off end
++        <3> : Entry to halt mode (in bus-off state) by program request
++
+   assigned-clocks:
+     description:
+       Reference to the CANFD clock.  The CANFD clock is a div6 clock and can be
 -- 
 2.43.0
 
