@@ -1,161 +1,266 @@
-Return-Path: <linux-can+bounces-7343-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7344-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iHaAHFwD1WnOzQcAu9opvQ
-	(envelope-from <linux-can+bounces-7343-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 07 Apr 2026 15:15:08 +0200
+	id aMlRDjgN1WlQzwcAu9opvQ
+	(envelope-from <linux-can+bounces-7344-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 07 Apr 2026 15:57:12 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3D4E3AEE73
-	for <lists+linux-can@lfdr.de>; Tue, 07 Apr 2026 15:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D1143AF937
+	for <lists+linux-can@lfdr.de>; Tue, 07 Apr 2026 15:57:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 793193014953
-	for <lists+linux-can@lfdr.de>; Tue,  7 Apr 2026 13:15:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9551730DDF5A
+	for <lists+linux-can@lfdr.de>; Tue,  7 Apr 2026 13:48:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB5F03B6C12;
-	Tue,  7 Apr 2026 13:15:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BFA53B584E;
+	Tue,  7 Apr 2026 13:48:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MTdbOMJf"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VKZyJe9D";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="irsCV5Vs"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6553B635F
-	for <linux-can@vger.kernel.org>; Tue,  7 Apr 2026 13:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8083A3E73
+	for <linux-can@vger.kernel.org>; Tue,  7 Apr 2026 13:48:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775567704; cv=none; b=Nh/upZQ7IUy+UD4gxHygczphSCFxdSuEaO70pXM3EV4ZNi+7+zQCBIvQ5TCqjRA1BmjkAAoKdPRINgeMvGkQtIKwLVrAtmeoRqBfmUWO/wUe/+ARn47cgkxy2xNFToA2O3SzqJdljEYg2WgJynD9dK5mQASddZ9tkANmJZONc9w=
+	t=1775569737; cv=none; b=V1/VRXiAOes2o+qOpgsEvnpW8NxXWd9jwEeAof5NT7qdBK0k6cP/hJ67j+7yJHP8WZMHznA5S+8L+kBxjl3DXPENzk3GwrFqX6EhG7qygakOU9FTCD8IgE9V3aG1zrYItnm6oIYm7bKvlQnTEWzjQAeRjS5mVJQ/TKmjJ71b1rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775567704; c=relaxed/simple;
-	bh=DF92KS7lR8TG5SktVvEPsLa9rP8Xq/XSF2frVXwEcDQ=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=TGkLqUivUk38LA3reKRIu17ME3f/R7nuXKd+ooi0FcfhOapwDduFRZ6JOynUJBN91CuUTxpKpzIOn19xzyg5lMb0Gmza8+bitdtAJORPNAixu0iCymsh1sEAlCgTMAqgj4YkRHI7gjngxgEqOBnVVGiQNsaA86bDn0Hxzw6h8kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MTdbOMJf; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43d01232ff4so156874f8f.1
-        for <linux-can@vger.kernel.org>; Tue, 07 Apr 2026 06:15:03 -0700 (PDT)
+	s=arc-20240116; t=1775569737; c=relaxed/simple;
+	bh=ku//Og96honEKfqlO6IFIyTkbq5vfNMlseA4tBULPUQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KVeR9ZOjafiChJbI5aMSMENq7Gu8bL/u/d1YzPZE0uMo9jOdZZ6L/c6lVgjz42z3f+7K5OfakIqWpg7wrt+hxIfeoiAj4thHoXzteWefz8o/SbeWZz102FPHwB4qR0fGBJPVsjig1/bXr2SIWx5wr5GmC+HnO0nKdFHbJbrUBMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VKZyJe9D; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=irsCV5Vs; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1775569734;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1SemPS/ErL+EkevTHIsXEII6ZD+AkVr3URBNYDRGp7Q=;
+	b=VKZyJe9DiylRorzBRcnY5xBvkBB5TLowIo1ydYwZlamyGa+TSRgPNAodqh9Ep1/UchnZlj
+	juu/caEZqrpWlG/qQfwGloKmvpxMzgsgn8oFM1yFMOJDoFUGkAgYQl/qVAri9LbeCOqekX
+	ASHQm4je5F3NM43UnLTucX3gRre7rtI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-226-LMXWOeeQM4CHp3Sbdsijlw-1; Tue, 07 Apr 2026 09:48:53 -0400
+X-MC-Unique: LMXWOeeQM4CHp3Sbdsijlw-1
+X-Mimecast-MFC-AGG-ID: LMXWOeeQM4CHp3Sbdsijlw_1775569732
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-488bf01961cso4805825e9.0
+        for <linux-can@vger.kernel.org>; Tue, 07 Apr 2026 06:48:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775567702; x=1776172502; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+        d=redhat.com; s=google; t=1775569732; x=1776174532; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=uJvui/baQIu/txwJ5Ha20q2FY1f9Fze38J+v8nYikoA=;
-        b=MTdbOMJfQ535jCQ+aiD+tMAPmx/VsEXx+6Y0bcx0sIxiTol37cEMuxS6culODqZQca
-         ishbncW9tdovM9HTjasVIE6hCKx17mnpVx6CBUttgtJJESn9EXe2Wf3ruwAmgq3dGn8E
-         DUKLk89UtUZrcq8O9kgqKq51u7HnamzEgce9iIdh3NKsogWIEEVdpVw0oZL52uqdPsOh
-         QJoEwGwXgK6Gjcg8gJ7OnfVV3i1yZNqtc/845lVodh0KqMhRNjYlOcsj2Ti70YYcgYxF
-         vygk2WzLzi9ZmMi4bDgHRAh7NFwB60PCfIae4nuE78VYSMY+u8P9KPCNEChZi+6JYLDE
-         VXDw==
+        bh=1SemPS/ErL+EkevTHIsXEII6ZD+AkVr3URBNYDRGp7Q=;
+        b=irsCV5VsOoDmog5LLxcBUMfiYqsnmZ40v5Ar/To8ZLY5OqxXmBBUt67rvo1shgaB54
+         zCQ/Fe3MNvZ2MgTE8cof9iMqKyrahCc1455ByGtKsCtsz8hTISCBdC1BiFn8qzpKEUu+
+         KmgpHJkVOZTvhGngkQ9aRH9OHfKGoC7Ap/mcx/9V4PvZDkv4uGRI/NsdkoThLZNs9kyq
+         i/EqOc3N8ukoGm32BX6fBh71tUEmtEWHmAIP5GV8Rq14t2r79g+DotsXxIopmr1xYcZb
+         13voA67VM/g6cjRea+Tjsspat4ZC91HZCYJALVEuHUMhwpnno81e0L4aIcnoAeElfojD
+         bR/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775567702; x=1776172502;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1775569732; x=1776174532;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uJvui/baQIu/txwJ5Ha20q2FY1f9Fze38J+v8nYikoA=;
-        b=HpWV70SbYBIemjHy8AHBkKcB29Ur5ijsrO27oskoCmGFez8qn/PKmOhWw4HfYT7szL
-         vHYGLT/PM530kg5XlTYcmV6c7B8b7RukBcMsvb2U8Zi+nE96eDyEY6azIoMZUrRTRfwN
-         /zaVAvs1c1bhJ1aSzRpJyMxqAQ2g4YoWBCznJtzxmpbiihIJA94wIhPl4IU9eOrPQkKa
-         2AwyzWfL5mwwwD0Pl22ix5nsb83vaWiV7XDjxI2ZtBk6VS7yzJe9gNyFWolTJNRaYxam
-         OgLsPf+CpZ1y7Gch3wbaQeEehXriVyk2fUCD8u52+rqqyO7Mbt68TKnVwx5kqUeqUQDL
-         /Ufg==
-X-Forwarded-Encrypted: i=1; AJvYcCUad3LmLMKJR2PkKZOofqiO8Fs+j1TBNYygSOdtQ4xcktnLEGnUW5oPYR5A7a8b2ljgKzBfmkTepnQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcNut5WhqccFsHJNoepNOkaqZU2psGxG+VsyQ8M7PeUZTcRU86
-	AGiDd9a0WZGHZrL9wXBHlo11hrhhq0liN4eDBjwwzKQNzrcD5zxd3+aB
-X-Gm-Gg: AeBDieuHW4tFriEpeR9v4CmCPQsP13EcdeCgfWbnlXPeE/OGLHydg8qwIJPQCeWfiBH
-	klthlML5xFY3KgoG57dl4C2FGhIAnCa4s067GgvYQPPNhMHslDkXN3ubDECihJ3dM93scx15AQr
-	06U8jXQV3Fn4ouilKmJXYX5TeG7AEBkzANSNmDJXnA7GpOX78qCzSnUIrSxlFpXpGlGPMgAOVAk
-	pDNhALP9ym8iQSWGdNEbdOmpc94xgKdgzphMvwmmRSC3nzfNeUOMplFqbaUfgLhm180JAwN2Pre
-	p1Zeoix+LZjUuHstgkjdB1SextQx9MAWzpS3Pns13NQjOEUaquacI32QDtInfYtB9ug8EbY2w41
-	kYyW+TasnNncAOnPr5tfjpJVnVl4ts7e4Jenmf8cugkXE+j9eETG+WlkK4/VcV6CuYcrTD89z7c
-	nMs0sU72QfZWhIMmewNyTB2xXlyYA6aiqYHFhiwXs1mP902VzxeyRgqvYjFnjdYbBwtg==
-X-Received: by 2002:a05:6000:26c3:b0:43c:ff6f:d5c with SMTP id ffacd0b85a97d-43d29262a74mr12097140f8f.2.1775567701402;
-        Tue, 07 Apr 2026 06:15:01 -0700 (PDT)
-Received: from [128.93.82.131] (wifi-pro-82-131.paris.inria.fr. [128.93.82.131])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e2a6f1esm47942710f8f.2.2026.04.07.06.15.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Apr 2026 06:15:01 -0700 (PDT)
-Message-ID: <0746a585-710c-4bf0-b54a-41573d56a2e5@gmail.com>
-Date: Tue, 7 Apr 2026 15:15:00 +0200
+        bh=1SemPS/ErL+EkevTHIsXEII6ZD+AkVr3URBNYDRGp7Q=;
+        b=QMGAsvdCLveDOnQAFqnnTbXy8adofREKhjDRQRx65hSyWx9TFXj4B4zqLqaDtrz0Bp
+         SYIbapuilmsnXR6JifqQ8wg9v+oGBBwnqRyUp4R+aIKzPvshdoCms3qVXhafR2C5JffF
+         jVuZhN3LH5cSJPydwTqMhVFo452F8MxfzyCM1tvNvmEcaiv4U7wDXkcFwxT/jJcLYywZ
+         ciC5Z5Ivu/ixvdvnx9l17gVNE0ZV8LSBTWt3GVv980uOW4plgOzNCyeUl4cGU6Z1o+mu
+         pwN78+Zn79uM7eT5MzZCXh+idJzucAvFKZx3lUace9oIFOr1eon2CgqkH1yFqECX6ph6
+         VvZA==
+X-Forwarded-Encrypted: i=1; AJvYcCVzXR4Wo2h0ryQJpppYxG/x7Q3TxIHmKruHfEgrZy1QL+qitLaOzWljH6l/xEMz2Q/ej2aKHRbY4aI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVlBuFQUgSSvYl2p9y68t1hgDntdgm1VvWQfMKoWED6yHwUd+O
+	co+tQ1Ow73oh9XxvY8Xg1xJjLzmkVYKhWv0WmhJvvrVUOS8wjdw7Tpto089IiiwM9kFDrQU9L3R
+	+wlNuCKxqX0QMn6p8JrLzByrgCR5u3gVxloCuRtJYAoR1ngPGvKggOlIh0E7VIA==
+X-Gm-Gg: AeBDietAPbwuoP5ReC2+sNJGg3ezFC0GKB3FA7lIlQgXtyPEDCFnVhXNMJoTP8ZFMUa
+	YcQccycSIaGFIKK/dCZqJqftyXAbKQeLiVQpq7JCj9mX+YtIWIo1rwFY0MzzVcVOZ47+KRHPz4T
+	krOYxU4TY9FgCLHMZYKo0OaacEbpBtz+j9oj7LwQSzxcagWZcHCqGR2IEvb7eRvjm2dgzSrC8Pb
+	cz9TqH/v3qiZCcK9kszNK9XHMZUX9AYEZ1G/7R/Dskq8aGB1nlp0jnSdr3sKPBAQTcbcPe0Wi9z
+	irilyUqq/+mkqPSEWC9F8VJoHDFEXKuxRvInL64tEkCrZXKpNqmRNr2jPxknoMxc1NcSuoR8dNC
+	a/1ghV/DY4Srvj1I=
+X-Received: by 2002:a05:600c:638e:b0:487:59c:2bb8 with SMTP id 5b1f17b1804b1-488997dec25mr231622915e9.27.1775569731573;
+        Tue, 07 Apr 2026 06:48:51 -0700 (PDT)
+X-Received: by 2002:a05:600c:638e:b0:487:59c:2bb8 with SMTP id 5b1f17b1804b1-488997dec25mr231622475e9.27.1775569731074;
+        Tue, 07 Apr 2026 06:48:51 -0700 (PDT)
+Received: from fedora ([2a01:e0a:257:8c60:80f1:cdf8:48d0:b0a1])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e952b0bsm543792925e9.12.2026.04.07.06.48.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 06:48:50 -0700 (PDT)
+Date: Tue, 7 Apr 2026 15:48:48 +0200
+From: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Harald Mommer <harald.mommer@oss.qualcomm.com>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	linux-can@vger.kernel.org, virtualization@lists.linux.dev,
+	Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>,
+	Stefano Garzarella <sgarzare@redhat.com>, francesco@valla.it
+Subject: Re: [PATCH v13] can: virtio: Add virtio CAN driver
+Message-ID: <adULQMZggR9M/Fgx@fedora>
+References: <ab2FlQTWUxl0KmlT@fedora>
+ <20260323-hilarious-active-eagle-a0ee74-mkl@pengutronix.de>
+ <acLNB9PYmJ9L0Wvc@fedora>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Thomas Fourier <fourier.thomas@gmail.com>
-Subject: Re: [PATCH net] can: sja1000: Fix pci_iounmap() buffer
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: stable@vger.kernel.org, Vincent Mailhol <mailhol@kernel.org>,
- Wolfgang Grandegger <wg@grandegger.com>,
- "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260330154236.98665-2-fourier.thomas@gmail.com>
- <20260401-effective-piculet-of-will-704d4d-mkl@pengutronix.de>
-Content-Language: en-US, fr
-In-Reply-To: <20260401-effective-piculet-of-will-704d4d-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <acLNB9PYmJ9L0Wvc@fedora>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_FROM(0.00)[bounces-7343-lists,linux-can=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7344-lists,linux-can=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fourierthomas@gmail.com,linux-can@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	DKIM_TRACE(0.00)[redhat.com:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mvaralar@redhat.com,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: B3D4E3AEE73
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.dev:url,pengutronix.de:url]
+X-Rspamd-Queue-Id: 7D1143AF937
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 01/04/2026 12:59, Marc Kleine-Budde wrote:
-> The cleanup functions in this driver are a mess. kvaser_pci_del_chan()
-> should only delete one channel, but it deletes all. It also unmaps the
-> iomem, which belongs into kvaser_pci_remove_one().
-I'm not quite sure because  kvaser_pci_init_one() allocs and registers all 
-channels, so kvaser_pci_remove_one() should too?
+On Tue, Mar 24, 2026 at 06:42:31PM +0100, Matias Ezequiel Vara Larsen wrote:
+> On Mon, Mar 23, 2026 at 11:36:18AM +0100, Marc Kleine-Budde wrote:
+> > Hello,
+> > 
+> 
+> Hello and thanks, I am struggling to come up with a solution for this
+> comment.
+> 
+> > The nipa/ai-review bot found these problems:
+> > 
+> > | https://netdev-ai.bots.linux.dev/ai-review.html?id=b046d75a-2de1-4063-bb96-8f64abc65e7d
+> > 
+> > commit 0f3cb3b3bc94eaff9b9709b528e498fe6150f9c1
+> > Author: Matias Ezequiel Vara Larsen <mvaralar@redhat.com>
+> > 
+> > can: virtio: Add virtio CAN driver
+> > 
+> > This commit adds a virtio CAN driver implementing a complete CAN bus
+> > interface over Virtio transport, supporting both CAN Classic and CAN-FD
+> > frames.
+> > 
+> > > diff --git a/drivers/net/can/virtio_can.c b/drivers/net/can/virtio_can.c
+> > > new file mode 100644
+> > > index 000000000000..57641c3ed6d0
+> > > --- /dev/null
+> > > +++ b/drivers/net/can/virtio_can.c
+> > 
+> > [ ... ]
+> > 
+> > > +static int __maybe_unused virtio_can_restore(struct virtio_device *vdev)
+> > > +{
+> > > +	struct virtio_can_priv *priv = vdev->priv;
+> > > +	struct net_device *ndev = priv->dev;
+> > > +	size_t size;
+> > > +	int err;
+> > > +
+> > > +	napi_enable(&priv->napi);
+> > > +	napi_enable(&priv->napi_tx);
+> > > +
+> > > +	err = virtio_can_find_vqs(priv);
+> > > +	if (err != 0)
+> > > +		return err;
+> > 
+> > What happens to the enabled NAPI instances when this error path is taken?
+> > virtio_can_restore() enables both NAPI instances at the start, but if
+> > virtio_can_find_vqs() fails here, the function returns without calling
+> > napi_disable().
+> > 
+> I was expecting that, if virtio_can_restore() fails, then a successive
+> virtio_can_remove() will not hang in napi_disable() since the napis were
+> already enabled.  
+> 
 
-> What about switching the driver to pcim_enable_device(),
-> pcim_request_region(), pcim_iomap() functions instead?
-I can write a second patch to do so, this would for sure solve the problem. 
-Should I? I have no way to test it.
+Ping @Marc Kleine-Budde, do you have any comment about the comments
+above?
 
-> When called from kvaser_pci_remove_one(), "dev" points to the master
-> dev, which uses priv->reg_base without an offset, as it's board->channel
-> is "0", right?
-I think you are right, the normal path is fine, but not in the error paths for 
-devices with channel other than 0.
+Thanks, Matias
 
-Regards,
-Thomas
-
-> When called from the error path of kvaser_pci_add_chan(), things go
-> wrong, and in the error path of kvaser_pci_init_one(), the pci mem is
-> unmapped again.
->
-> regards,
-> Marc
->
+> > The corresponding virtio_can_freeze() function disables both NAPIs before
+> > returning, so the restore function leaves the NAPI subsystem in an
+> > inconsistent state on failure.
+> > 
+> > If the PM framework retries restore after this failure, the second
+> > napi_enable() call on an already-enabled NAPI will hit the BUG_ON in
+> > napi_enable_locked():
+> >
+> 
+> Does the PM framework really retries if virtio_can_restore() fails? If not, that BUG_ON
+> is never reached.
+> 
+> > net/core/dev.c:napi_enable_locked() {
+> > 	BUG_ON(!test_bit(NAPI_STATE_SCHED, &n->state));
+> > 	...
+> > }
+> > 
+> > In contrast, virtio_can_probe() enables NAPI only after all setup
+> > succeeds, avoiding this issue.
+> > 
+> > > +
+> > > +	size = priv->rpkt_len * priv->vqs[VIRTIO_CAN_QUEUE_RX]->num_free;
+> > > +	priv->rpkt = devm_krealloc(&vdev->dev, priv->rpkt, size, GFP_KERNEL | __GFP_ZERO);
+> > > +	if (!priv->rpkt) {
+> > > +		virtio_can_del_vq(vdev);
+> > > +		return -ENOMEM;
+> > > +	}
+> > 
+> > The same NAPI state issue occurs on this error path.
+> > 
+> > > +	virtio_can_populate_rx_vq(vdev);
+> > > +
+> > > +	if (netif_running(ndev)) {
+> > > +		err = virtio_can_start(ndev);
+> > > +		if (err) {
+> > > +			virtio_can_del_vq(vdev);
+> > > +			return err;
+> > > +		}
+> > 
+> > And again on this error path.
+> > 
+> > Should all three error paths call napi_disable(&priv->napi_tx) and
+> > napi_disable(&priv->napi) before returning the error code?
+> > 
+> > -- 
+> > Pengutronix e.K.                 | Marc Kleine-Budde          |
+> > Embedded Linux                   | https://www.pengutronix.de |
+> > Vertretung Nürnberg              | Phone: +49-5121-206917-129 |
+> > Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+> 
+> 
 
 
