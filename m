@@ -1,328 +1,128 @@
-Return-Path: <linux-can+bounces-7363-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7364-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +AmRCBDx2GnrjwgAu9opvQ
-	(envelope-from <linux-can+bounces-7363-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 10 Apr 2026 14:46:08 +0200
+	id +Fa8FwzL22lnGwkAu9opvQ
+	(envelope-from <linux-can+bounces-7364-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sun, 12 Apr 2026 18:40:44 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A82713D7A37
-	for <lists+linux-can@lfdr.de>; Fri, 10 Apr 2026 14:46:06 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBD823E4E19
+	for <lists+linux-can@lfdr.de>; Sun, 12 Apr 2026 18:40:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C3E423035B26
-	for <lists+linux-can@lfdr.de>; Fri, 10 Apr 2026 12:44:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C6282300538B
+	for <lists+linux-can@lfdr.de>; Sun, 12 Apr 2026 16:40:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D3581DD877;
-	Fri, 10 Apr 2026 12:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C642C11D6;
+	Sun, 12 Apr 2026 16:40:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b="R67RQokw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MqcifXMx"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80764191F98
-	for <linux-can@vger.kernel.org>; Fri, 10 Apr 2026 12:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.27.42.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F51E2940D;
+	Sun, 12 Apr 2026 16:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775825058; cv=none; b=fZwF1IgwJu8gtjtaWkQqxBmgsp5SuMmYE7N4HnD+93oR5YGu7sQxHpT7WSGN2yYL47K/wVNIPp0QEwKaL8A0MK0iZScAt19KYaBDcGZUZkIypJK+UBfsjRswbzi9AHJYbE0JU1pqSUQVD0YFI/zecSkuaNFgmf45LFuesdbuns0=
+	t=1776012041; cv=none; b=eTEJukl7VEhdx2C7KbM+EA50jGRjcrC6EFntlNXIR+RZFbGUiNgPhw+SLIV1hg7AxlrtK2xPMViR5vztJVPK/8ePpI67X9duFym7oPLHnGAPPnSY8Ye7tayeWpDKQ7eOv/wn/tdPLtXipMJUlFLklFRU6fbYKimI7gi1XFdZQY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775825058; c=relaxed/simple;
-	bh=gcmfIPIxC4htsc+GbGKGUMXyBeUskoJLU6HtUoeWg64=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qE4hGvDJTjWm/EJp4aQM+mpWveBKzdZHWzcTByYs+GB0d7c8OafhouWwK0Q/lv1AxHoa5b8ftrKgS1aHlyLDxLIxnQReMs6mJy+EyH5pUKJceVyuLEaSN2n7O3a1RvvklHTyPJCGwnlL8XRo9wjOZZwkhHdeu1UfHyDLASUMmMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr; spf=pass smtp.mailfrom=free.fr; dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b=R67RQokw; arc=none smtp.client-ip=212.27.42.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=free.fr
-Received: from stf-laptop (unknown [IPv6:2a02:8428:60a1:3e01:f7cf:b982:702d:7118])
-	(Authenticated sender: stephane.grosjean@free.fr)
-	by smtp5-g21.free.fr (Postfix) with ESMTPSA id 88CD75FFB4;
-	Fri, 10 Apr 2026 14:44:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-	s=smtp-20201208; t=1775825047;
-	bh=gcmfIPIxC4htsc+GbGKGUMXyBeUskoJLU6HtUoeWg64=;
-	h=From:To:Cc:Subject:Date:From;
-	b=R67RQokwObv89OWTeE40r9OVe/eChveK5t4tvU58U5tKIiXt+9kyX13MOtMJvRU6T
-	 M2MwA7tpaYEbOEJe0BKyBg9XvpQ+sOQPvbrGP89QcQABwCilyy8VvkcThHLjH+V42V
-	 8l+UYxbAiE05oSTcCWZb22ayPkMyhhfh6aWzXUnvNFPVaeHD2nueyZBlcvmrWFso9L
-	 Fcwtt2KXAk+woLyDPlKLD5tyUsbisknOkf+ti6jiM5Sv5e8yM3VESxf4Q2nLRSuEUl
-	 K9qW++phekbAdzObZZfHcxonE/x7l4onpD85syvPz/P1YPUDp6E/7KgEjRYmfJEXLf
-	 10fhtMaFlxphQ==
-From: =?UTF-8?q?St=C3=A9phane=20Grosjean?= <stephane.grosjean@free.fr>
-To: linux-can Mailing List <linux-can@vger.kernel.org>
-Cc: =?UTF-8?q?St=C3=A9phane=20Grosjean?= <s.grosjean@peak-system.fr>
-Subject: [PATCH] can: peak: Modification of references to email accounts being deleted
-Date: Fri, 10 Apr 2026 14:42:17 +0200
-Message-ID: <20260410124251.40506-1-stephane.grosjean@free.fr>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1776012041; c=relaxed/simple;
+	bh=yfvYKjvfe6VfNgpCX5sn8DqOYdWmN3CiusmCGMfQzCU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=fF41ixZr/LCIiiQ4f8EVUTBbJYp26scfeljnCSvaWi5YvxThGW1OMsEbZjwlBq9pEQCbJG2fHy3Dlb3UgrZMhu3YgP+dd7uiH9ckUzbLcYZ8tdrb3UwNvTN/z5b+5lgXceGjs0snon1NLha+jNoYSnFL0UXfVP+cmb3VZ7c/kNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MqcifXMx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA4EC19424;
+	Sun, 12 Apr 2026 16:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776012040;
+	bh=yfvYKjvfe6VfNgpCX5sn8DqOYdWmN3CiusmCGMfQzCU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=MqcifXMxSnPkgJLxUdmcAPVwPqhWiUGu/O6L06u8TrD72GZ9sLTv/x5lWRQw+KmDf
+	 BL4l5RIJlgGHMD0HRDdXebICNa13U4xbeAezbI4nXlWTBEinAiD89PGgSMfZnAj7TF
+	 wbQO1VeRC15hZ95d4eJ/6pXOqKhLIq5gFLcKxSetdB+MyRLfoF5ytZoMyLMsxUBAIm
+	 owDITFzjf4ozHUFxwFLOeRgHzu1AoPx7/yoOokxu8EHqeWPwKChJ+qAnXobua+scPD
+	 SdNadxFEKDv5QJGDmQw7FMWdKwSsaYaKt5eAoM6DZybweqpyY4sXGbbGz9FxXqaN4G
+	 2nIckDZJBOlUA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CDA93809A8C;
+	Sun, 12 Apr 2026 16:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+Subject: Re: [PATCH net 1/2] can: ucan: fix devres lifetime
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177601201296.3337647.8959317568301522098.git-patchwork-notify@kernel.org>
+Date: Sun, 12 Apr 2026 16:40:12 +0000
+References: <20260409165942.588421-2-mkl@pengutronix.de>
+In-Reply-To: <20260409165942.588421-2-mkl@pengutronix.de>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ linux-can@vger.kernel.org, kernel@pengutronix.de, johan@kernel.org,
+ stable@vger.kernel.org, jakob.unterwurzacher@theobroma-systems.com
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[free.fr,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[free.fr:s=smtp-20201208];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7363-lists,linux-can=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWO(0.00)[2];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCVD_TLS_LAST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7364-lists,linux-can=lfdr.de,netdevbpf];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stephane.grosjean@free.fr,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[free.fr:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_NO_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-can@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FREEMAIL_FROM(0.00)[free.fr]
-X-Rspamd-Queue-Id: A82713D7A37
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,pengutronix.de:email]
+X-Rspamd-Queue-Id: DBD823E4E19
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Stéphane Grosjean <s.grosjean@peak-system.fr>
+Hello:
 
-Following the sale of PEAK-System France by HMS-Networks, this update is
-intended to change all my @hms-networks.com email addresses to my new
-@peak-system.fr address.
+This series was applied to netdev/net.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-Signed-off-by: Stéphane Grosjean <s.grosjean@peak-system.fr>
----
- .mailmap                                      | 4 ++--
- drivers/net/can/peak_canfd/peak_canfd.c       | 2 +-
- drivers/net/can/peak_canfd/peak_canfd_user.h  | 2 +-
- drivers/net/can/peak_canfd/peak_pciefd_main.c | 4 ++--
- drivers/net/can/sja1000/peak_pci.c            | 4 ++--
- drivers/net/can/sja1000/peak_pcmcia.c         | 4 ++--
- drivers/net/can/usb/peak_usb/pcan_usb.c       | 2 +-
- drivers/net/can/usb/peak_usb/pcan_usb_core.c  | 4 ++--
- drivers/net/can/usb/peak_usb/pcan_usb_core.h  | 2 +-
- drivers/net/can/usb/peak_usb/pcan_usb_fd.c    | 2 +-
- drivers/net/can/usb/peak_usb/pcan_usb_pro.c   | 2 +-
- drivers/net/can/usb/peak_usb/pcan_usb_pro.h   | 2 +-
- include/linux/can/dev/peak_canfd.h            | 2 +-
- 13 files changed, 18 insertions(+), 18 deletions(-)
+On Thu,  9 Apr 2026 18:57:07 +0200 you wrote:
+> From: Johan Hovold <johan@kernel.org>
+> 
+> USB drivers bind to USB interfaces and any device managed resources
+> should have their lifetime tied to the interface rather than parent USB
+> device. This avoids issues like memory leaks when drivers are unbound
+> without their devices being physically disconnected (e.g. on probe
+> deferral or configuration changes).
+> 
+> [...]
 
-diff --git a/.mailmap b/.mailmap
-index 22c5ab1c5d55..48cbab98d728 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -789,8 +789,8 @@ Sriram Yagnaraman <sriram.yagnaraman@ericsson.com> <sriram.yagnaraman@est.tech>
- Stanislav Fomichev <sdf@fomichev.me> <sdf@google.com>
- Stanislav Fomichev <sdf@fomichev.me> <stfomichev@gmail.com>
- Stefan Wahren <wahrenst@gmx.net> <stefan.wahren@i2se.com>
--Stéphane Grosjean <stephane.grosjean@hms-networks.com> <s.grosjean@peak-system.com>
--Stéphane Grosjean <stephane.grosjean@hms-networks.com> <stephane.grosjean@free.fr>
-+Stéphane Grosjean <s.grosjean@peak-system.fr> <s.grosjean@peak-system.com>
-+Stéphane Grosjean <s.grosjean@peak-system.fr> <stephane.grosjean@free.fr>
- Stéphane Witzmann <stephane.witzmann@ubpmes.univ-bpclermont.fr>
- Stephen Hemminger <stephen@networkplumber.org> <shemminger@linux-foundation.org>
- Stephen Hemminger <stephen@networkplumber.org> <shemminger@osdl.org>
-diff --git a/drivers/net/can/peak_canfd/peak_canfd.c b/drivers/net/can/peak_canfd/peak_canfd.c
-index 06cb2629f66a..4fd1aefb780f 100644
---- a/drivers/net/can/peak_canfd/peak_canfd.c
-+++ b/drivers/net/can/peak_canfd/peak_canfd.c
-@@ -2,7 +2,7 @@
- /* Copyright (C) 2007, 2011 Wolfgang Grandegger <wg@grandegger.com>
-  *
-  * Copyright (C) 2016-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  */
- 
- #include <linux/can.h>
-diff --git a/drivers/net/can/peak_canfd/peak_canfd_user.h b/drivers/net/can/peak_canfd/peak_canfd_user.h
-index 60c6542028cf..dc0ecb566a85 100644
---- a/drivers/net/can/peak_canfd/peak_canfd_user.h
-+++ b/drivers/net/can/peak_canfd/peak_canfd_user.h
-@@ -2,7 +2,7 @@
- /* CAN driver for PEAK System micro-CAN based adapters
-  *
-  * Copyright (C) 2003-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  */
- #ifndef PEAK_CANFD_USER_H
- #define PEAK_CANFD_USER_H
-diff --git a/drivers/net/can/peak_canfd/peak_pciefd_main.c b/drivers/net/can/peak_canfd/peak_pciefd_main.c
-index 93558e33bc02..7c749301ea84 100644
---- a/drivers/net/can/peak_canfd/peak_pciefd_main.c
-+++ b/drivers/net/can/peak_canfd/peak_pciefd_main.c
-@@ -4,7 +4,7 @@
-  * Derived from the PCAN project file driver/src/pcan_pci.c:
-  *
-  * Copyright (C) 2001-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  */
- 
- #include <linux/kernel.h>
-@@ -19,7 +19,7 @@
- 
- #include "peak_canfd_user.h"
- 
--MODULE_AUTHOR("Stéphane Grosjean <stephane.grosjean@hms-networks.com>");
-+MODULE_AUTHOR("Stéphane Grosjean <s.grosjean@peak-system.fr>");
- MODULE_DESCRIPTION("Socket-CAN driver for PEAK PCAN PCIe/M.2 FD family cards");
- MODULE_LICENSE("GPL v2");
- 
-diff --git a/drivers/net/can/sja1000/peak_pci.c b/drivers/net/can/sja1000/peak_pci.c
-index 4cc4a1581dd1..69c61ccf621d 100644
---- a/drivers/net/can/sja1000/peak_pci.c
-+++ b/drivers/net/can/sja1000/peak_pci.c
-@@ -5,7 +5,7 @@
-  * Derived from the PCAN project file driver/src/pcan_pci.c:
-  *
-  * Copyright (C) 2001-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  */
- 
- #include <linux/kernel.h>
-@@ -22,7 +22,7 @@
- 
- #include "sja1000.h"
- 
--MODULE_AUTHOR("Stéphane Grosjean <stephane.grosjean@hms-networks.com>");
-+MODULE_AUTHOR("Stéphane Grosjean <s.grosjean@peak-system.fr>");
- MODULE_DESCRIPTION("Socket-CAN driver for PEAK PCAN PCI family cards");
- MODULE_LICENSE("GPL v2");
- 
-diff --git a/drivers/net/can/sja1000/peak_pcmcia.c b/drivers/net/can/sja1000/peak_pcmcia.c
-index 42a77d435b39..c3c2aa21da47 100644
---- a/drivers/net/can/sja1000/peak_pcmcia.c
-+++ b/drivers/net/can/sja1000/peak_pcmcia.c
-@@ -4,7 +4,7 @@
-  * Derived from the PCAN project file driver/src/pcan_pccard.c
-  *
-  * Copyright (C) 2006-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  */
- #include <linux/kernel.h>
- #include <linux/module.h>
-@@ -19,7 +19,7 @@
- #include <linux/can/dev.h>
- #include "sja1000.h"
- 
--MODULE_AUTHOR("Stéphane Grosjean <stephane.grosjean@hms-networks.com>");
-+MODULE_AUTHOR("Stéphane Grosjean <s.grosjean@peak-system.fr>");
- MODULE_DESCRIPTION("CAN driver for PEAK-System PCAN-PC Cards");
- MODULE_LICENSE("GPL v2");
- 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
-index 9278a1522aae..8fd058c32856 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
-@@ -4,7 +4,7 @@
-  * Derived from the PCAN project file driver/src/pcan_usb.c
-  *
-  * Copyright (C) 2003-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  *
-  * Many thanks to Klaus Hitschler <klaus.hitschler@gmx.de>
-  */
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-index cf48bb26d46d..c7933d1acc99 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-@@ -4,7 +4,7 @@
-  * Derived from the PCAN project file driver/src/pcan_usb_core.c
-  *
-  * Copyright (C) 2003-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  *
-  * Many thanks to Klaus Hitschler <klaus.hitschler@gmx.de>
-  */
-@@ -24,7 +24,7 @@
- 
- #include "pcan_usb_core.h"
- 
--MODULE_AUTHOR("Stéphane Grosjean <stephane.grosjean@hms-networks.com>");
-+MODULE_AUTHOR("Stéphane Grosjean <s.grosjean@peak-system.fr>");
- MODULE_DESCRIPTION("CAN driver for PEAK-System USB adapters");
- MODULE_LICENSE("GPL v2");
- 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.h b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
-index d1c1897d47b9..65999f04f4b7 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_core.h
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
-@@ -4,7 +4,7 @@
-  * Derived from the PCAN project file driver/src/pcan_usb_core.c
-  *
-  * Copyright (C) 2003-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  *
-  * Many thanks to Klaus Hitschler <klaus.hitschler@gmx.de>
-  */
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-index eb4f5884ad73..ef9fd693e9bd 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-@@ -3,7 +3,7 @@
-  * CAN driver for PEAK System PCAN-USB FD / PCAN-USB Pro FD adapter
-  *
-  * Copyright (C) 2013-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  */
- #include <linux/ethtool.h>
- #include <linux/module.h>
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-index 4bfa8d0fbb32..aefcded8e12a 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-@@ -4,7 +4,7 @@
-  * Derived from the PCAN project file driver/src/pcan_usbpro.c
-  *
-  * Copyright (C) 2003-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  */
- #include <linux/ethtool.h>
- #include <linux/module.h>
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.h b/drivers/net/can/usb/peak_usb/pcan_usb_pro.h
-index 162c7546d3a8..d669c9e610c7 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.h
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.h
-@@ -4,7 +4,7 @@
-  * Derived from the PCAN project file driver/src/pcan_usbpro_fw.h
-  *
-  * Copyright (C) 2003-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  */
- #ifndef PCAN_USB_PRO_H
- #define PCAN_USB_PRO_H
-diff --git a/include/linux/can/dev/peak_canfd.h b/include/linux/can/dev/peak_canfd.h
-index d3788a3d0942..056e0efa649f 100644
---- a/include/linux/can/dev/peak_canfd.h
-+++ b/include/linux/can/dev/peak_canfd.h
-@@ -3,7 +3,7 @@
-  * CAN driver for PEAK System micro-CAN based adapters
-  *
-  * Copyright (C) 2003-2025 PEAK System-Technik GmbH
-- * Author: Stéphane Grosjean <stephane.grosjean@hms-networks.com>
-+ * Author: Stéphane Grosjean <s.grosjean@peak-system.fr>
-  */
- #ifndef PUCAN_H
- #define PUCAN_H
+Here is the summary with links:
+  - [net,1/2] can: ucan: fix devres lifetime
+    https://git.kernel.org/netdev/net/c/fed4626501c8
+  - [net,2/2] can: raw: fix ro->uniq use-after-free in raw_rcv()
+    https://git.kernel.org/netdev/net/c/a535a9217ca3
+
+You are awesome, thank you!
 -- 
-2.53.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
