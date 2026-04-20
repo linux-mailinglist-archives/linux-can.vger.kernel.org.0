@@ -1,34 +1,34 @@
-Return-Path: <linux-can+bounces-7377-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7378-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CJDRE9hG5mk+uAEAu9opvQ
-	(envelope-from <linux-can+bounces-7377-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 20 Apr 2026 17:31:36 +0200
+	id 2MOlJ6hS5mmcuwEAu9opvQ
+	(envelope-from <linux-can+bounces-7378-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 20 Apr 2026 18:22:00 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB48242E416
-	for <lists+linux-can@lfdr.de>; Mon, 20 Apr 2026 17:31:35 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 429A742F60A
+	for <lists+linux-can@lfdr.de>; Mon, 20 Apr 2026 18:21:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 304453003608
-	for <lists+linux-can@lfdr.de>; Mon, 20 Apr 2026 15:22:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 98108322748D
+	for <lists+linux-can@lfdr.de>; Mon, 20 Apr 2026 15:22:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8549B26AA91;
-	Mon, 20 Apr 2026 15:22:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ECDA2D321B;
+	Mon, 20 Apr 2026 15:22:38 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A822475CF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726A717A31C
 	for <linux-can@vger.kernel.org>; Mon, 20 Apr 2026 15:22:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776698557; cv=none; b=OuWJSeZVxNU4N9BmWzt5+5lGdt3JZdQxLNIrRsGgwKeYEUCcjIQY1OgddUBrbN74xSErKINRNM0HG2tdxX/3TlST9KkmWrFCrOWmDh3dgmB8+oaevTyLFEui+z8Hijvry59CSg1VXwwIz6FleA5MXDhvwMNOLpeMs5wacsUWxaY=
+	t=1776698558; cv=none; b=VEw/E34HPo2m8PYPQoqAlI0faLfZk6hlnICHyQNF37b4GPV7togxEyUqCpD807E82fuY+6aq2sIBGul2ODkrsMxSWIxqX2xPZ7TC+zTcV3Q+IzoLAeTP8bYoho2ek8gASxk0VhZSyLlIkJxAD8MQ3UM3sMzsQjWALpREDIS8kgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776698557; c=relaxed/simple;
-	bh=0KaerXIyJN3eXCD1YIorjpzmF1dKF4uSJl0beyOMDpk=;
+	s=arc-20240116; t=1776698558; c=relaxed/simple;
+	bh=q/QVc6ij1mBGLl8lUSqFUGhEz8ttoxN7gPO6+7gXinM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PlmT8QLijxv7ovhPt9yJpXZFH+SsyQdycRkpqwb3Vy25xJVYbjwTWeDWjMnXHt3Gmtm19Fg/AxOI3/Qxt5JHCwU06pKTWQw4wYQy7QxaBNWOuZ7+JADpq7D73wf78Nf8Ehh0Vk2rJ4iiRk4v0+DU/zVISKzWnuV6EJN67CyGAv8=
+	 MIME-Version; b=jiCz0cmQ3qtuQiD40sabo1xc3/QbLXSg/Da03AQuGAvKXuiOaboDQsg7FULaZ5m1nsz+PJx8Fuk9xJvA2HNIUkqu0lswFcvd86GsRIeUlpB0pz1w3CwmMZhoIavYR2UEz7btDV0oeWF7Xqb/5z5+BMawCtvqQDVJhr20ErNAMQA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -36,16 +36,16 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ore@pengutronix.de>)
-	id 1wEqSE-0000bd-7P; Mon, 20 Apr 2026 17:22:30 +0200
+	id 1wEqSE-0000be-9b; Mon, 20 Apr 2026 17:22:30 +0200
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1wEqSD-006MEv-3D;
+	id 1wEqSE-006MEy-0B;
 	Mon, 20 Apr 2026 17:22:30 +0200
 Received: from ore by dude04 with local (Exim 4.98.2)
 	(envelope-from <ore@pengutronix.de>)
-	id 1wEqSD-00000002RXM-3o1c;
+	id 1wEqSD-00000002RXt-45So;
 	Mon, 20 Apr 2026 17:22:29 +0200
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Robin van der Gracht <robin@protonic.nl>,
@@ -55,9 +55,9 @@ Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
 	kernel@pengutronix.de,
 	linux-can@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/3] net: can: j1939: move j1939_xtp_abort enum to header
-Date: Mon, 20 Apr 2026 17:22:25 +0200
-Message-ID: <20260420152228.581421-2-o.rempel@pengutronix.de>
+Subject: [PATCH v1 2/3] net: can: j1939: move J1939_MIN_NAMELEN to shared header
+Date: Mon, 20 Apr 2026 17:22:26 +0200
+Message-ID: <20260420152228.581421-3-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260420152228.581421-1-o.rempel@pengutronix.de>
 References: <20260420152228.581421-1-o.rempel@pengutronix.de>
@@ -76,246 +76,68 @@ X-Spamd-Result: default: False [0.04 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-can];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DMARC_NA(0.00)[pengutronix.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-7378-lists,linux-can=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[pengutronix.de];
+	TAGGED_RCPT(0.00)[linux-can];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	FROM_NEQ_ENVFROM(0.00)[o.rempel@pengutronix.de,linux-can@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	R_DKIM_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7377-lists,linux-can=lfdr.de];
+	NEURAL_HAM(-0.00)[-0.999];
 	RCVD_COUNT_FIVE(0.00)[6];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: DB48242E416
+	R_DKIM_NA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,pengutronix.de:mid,pengutronix.de:email]
+X-Rspamd-Queue-Id: 429A742F60A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Move j1939_xtp_abort to j1939-priv.h to allow KUnit tests to reference
-transport abort codes.
+Move J1939_MIN_NAMELEN macro from socket.c to j1939-priv.h to prepare
+for KUnit test infrastructure.
 
 No functional change.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- net/can/j1939/j1939-priv.h | 92 ++++++++++++++++++++++++++++++++++++++
- net/can/j1939/transport.c  | 91 -------------------------------------
- 2 files changed, 92 insertions(+), 91 deletions(-)
+ net/can/j1939/j1939-priv.h | 2 ++
+ net/can/j1939/socket.c     | 2 --
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
-index 81f58924b4ac..b82706505103 100644
+index b82706505103..cf646644f538 100644
 --- a/net/can/j1939/j1939-priv.h
 +++ b/net/can/j1939/j1939-priv.h
-@@ -28,6 +28,98 @@ enum j1939_sk_errqueue_type {
- 	J1939_ERRQUEUE_RX_ABORT,
- };
+@@ -12,6 +12,8 @@
+ #include <linux/can/j1939.h>
+ #include <net/sock.h>
  
-+/* J1939 Transport Protocol Abort Codes */
-+enum j1939_xtp_abort {
-+	J1939_XTP_NO_ABORT = 0,
-+	J1939_XTP_ABORT_BUSY = 1,
-+	/* Already in one or more connection managed sessions and
-+	 * cannot support another.
-+	 *
-+	 * EALREADY:
-+	 * Operation already in progress
-+	 */
++#define J1939_MIN_NAMELEN CAN_REQUIRED_SIZE(struct sockaddr_can, can_addr.j1939)
 +
-+	J1939_XTP_ABORT_RESOURCE = 2,
-+	/* System resources were needed for another task so this
-+	 * connection managed session was terminated.
-+	 *
-+	 * EMSGSIZE:
-+	 * The socket type requires that message be sent atomically,
-+	 * and the size of the message to be sent made this
-+	 * impossible.
-+	 */
-+
-+	J1939_XTP_ABORT_TIMEOUT = 3,
-+	/* A timeout occurred and this is the connection abort to
-+	 * close the session.
-+	 *
-+	 * EHOSTUNREACH:
-+	 * The destination host cannot be reached (probably because
-+	 * the host is down or a remote router cannot reach it).
-+	 */
-+
-+	J1939_XTP_ABORT_GENERIC = 4,
-+	/* CTS messages received when data transfer is in progress
-+	 *
-+	 * EBADMSG:
-+	 * Not a data message
-+	 */
-+
-+	J1939_XTP_ABORT_FAULT = 5,
-+	/* Maximal retransmit request limit reached
-+	 *
-+	 * ENOTRECOVERABLE:
-+	 * State not recoverable
-+	 */
-+
-+	J1939_XTP_ABORT_UNEXPECTED_DATA = 6,
-+	/* Unexpected data transfer packet
-+	 *
-+	 * ENOTCONN:
-+	 * Transport endpoint is not connected
-+	 */
-+
-+	J1939_XTP_ABORT_BAD_SEQ = 7,
-+	/* Bad sequence number (and software is not able to recover)
-+	 *
-+	 * EILSEQ:
-+	 * Illegal byte sequence
-+	 */
-+
-+	J1939_XTP_ABORT_DUP_SEQ = 8,
-+	/* Duplicate sequence number (and software is not able to
-+	 * recover)
-+	 */
-+
-+	J1939_XTP_ABORT_EDPO_UNEXPECTED = 9,
-+	/* Unexpected EDPO packet (ETP) or Message size > 1785 bytes
-+	 * (TP)
-+	 */
-+
-+	J1939_XTP_ABORT_BAD_EDPO_PGN = 10,
-+	/* Unexpected EDPO PGN (PGN in EDPO is bad) */
-+
-+	J1939_XTP_ABORT_EDPO_OUTOF_CTS = 11,
-+	/* EDPO number of packets is greater than CTS */
-+
-+	J1939_XTP_ABORT_BAD_EDPO_OFFSET = 12,
-+	/* Bad EDPO offset */
-+
-+	J1939_XTP_ABORT_OTHER_DEPRECATED = 13,
-+	/* Deprecated. Use 250 instead (Any other reason)  */
-+
-+	J1939_XTP_ABORT_ECTS_UNXPECTED_PGN = 14,
-+	/* Unexpected ECTS PGN (PGN in ECTS is bad) */
-+
-+	J1939_XTP_ABORT_ECTS_TOO_BIG = 15,
-+	/* ECTS requested packets exceeds message size */
-+
-+	J1939_XTP_ABORT_OTHER = 250,
-+	/* Any other reason (if a Connection Abort reason is
-+	 * identified that is not listed in the table use code 250)
-+	 */
-+};
-+
- /* j1939 devices */
- struct j1939_ecu {
- 	struct list_head list;
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index df93d57907da..46540da76ca9 100644
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -32,97 +32,6 @@
- #define J1939_ETP_CMD_EOMA 0x17
- #define J1939_ETP_CMD_ABORT 0xff
+ /* Timeout to receive the abort signal over loop back. In case CAN
+  * bus is open, the timeout should be triggered.
+  */
+diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+index 0502b030d238..2191bfe117dc 100644
+--- a/net/can/j1939/socket.c
++++ b/net/can/j1939/socket.c
+@@ -21,8 +21,6 @@
  
--enum j1939_xtp_abort {
--	J1939_XTP_NO_ABORT = 0,
--	J1939_XTP_ABORT_BUSY = 1,
--	/* Already in one or more connection managed sessions and
--	 * cannot support another.
--	 *
--	 * EALREADY:
--	 * Operation already in progress
--	 */
+ #include "j1939-priv.h"
+ 
+-#define J1939_MIN_NAMELEN CAN_REQUIRED_SIZE(struct sockaddr_can, can_addr.j1939)
 -
--	J1939_XTP_ABORT_RESOURCE = 2,
--	/* System resources were needed for another task so this
--	 * connection managed session was terminated.
--	 *
--	 * EMSGSIZE:
--	 * The socket type requires that message be sent atomically,
--	 * and the size of the message to be sent made this
--	 * impossible.
--	 */
--
--	J1939_XTP_ABORT_TIMEOUT = 3,
--	/* A timeout occurred and this is the connection abort to
--	 * close the session.
--	 *
--	 * EHOSTUNREACH:
--	 * The destination host cannot be reached (probably because
--	 * the host is down or a remote router cannot reach it).
--	 */
--
--	J1939_XTP_ABORT_GENERIC = 4,
--	/* CTS messages received when data transfer is in progress
--	 *
--	 * EBADMSG:
--	 * Not a data message
--	 */
--
--	J1939_XTP_ABORT_FAULT = 5,
--	/* Maximal retransmit request limit reached
--	 *
--	 * ENOTRECOVERABLE:
--	 * State not recoverable
--	 */
--
--	J1939_XTP_ABORT_UNEXPECTED_DATA = 6,
--	/* Unexpected data transfer packet
--	 *
--	 * ENOTCONN:
--	 * Transport endpoint is not connected
--	 */
--
--	J1939_XTP_ABORT_BAD_SEQ = 7,
--	/* Bad sequence number (and software is not able to recover)
--	 *
--	 * EILSEQ:
--	 * Illegal byte sequence
--	 */
--
--	J1939_XTP_ABORT_DUP_SEQ = 8,
--	/* Duplicate sequence number (and software is not able to
--	 * recover)
--	 */
--
--	J1939_XTP_ABORT_EDPO_UNEXPECTED = 9,
--	/* Unexpected EDPO packet (ETP) or Message size > 1785 bytes
--	 * (TP)
--	 */
--
--	J1939_XTP_ABORT_BAD_EDPO_PGN = 10,
--	/* Unexpected EDPO PGN (PGN in EDPO is bad) */
--
--	J1939_XTP_ABORT_EDPO_OUTOF_CTS = 11,
--	/* EDPO number of packets is greater than CTS */
--
--	J1939_XTP_ABORT_BAD_EDPO_OFFSET = 12,
--	/* Bad EDPO offset */
--
--	J1939_XTP_ABORT_OTHER_DEPRECATED = 13,
--	/* Deprecated. Use 250 instead (Any other reason)  */
--
--	J1939_XTP_ABORT_ECTS_UNXPECTED_PGN = 14,
--	/* Unexpected ECTS PGN (PGN in ECTS is bad) */
--
--	J1939_XTP_ABORT_ECTS_TOO_BIG = 15,
--	/* ECTS requested packets exceeds message size */
--
--	J1939_XTP_ABORT_OTHER = 250,
--	/* Any other reason (if a Connection Abort reason is
--	 * identified that is not listed in the table use code 250)
--	 */
--};
--
- static unsigned int j1939_tp_block = 255;
- static unsigned int j1939_tp_packet_delay;
- static unsigned int j1939_tp_padding = 1;
+ /* conversion function between struct sock::sk_priority from linux and
+  * j1939 priority field
+  */
 -- 
 2.47.3
 
