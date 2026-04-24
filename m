@@ -1,162 +1,183 @@
-Return-Path: <linux-can+bounces-7397-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7398-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KB+fMpyL62lBNwAAu9opvQ
-	(envelope-from <linux-can+bounces-7397-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 24 Apr 2026 17:26:20 +0200
+	id AKhVAvS262kJQgAAu9opvQ
+	(envelope-from <linux-can+bounces-7398-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 24 Apr 2026 20:31:16 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F0D2460C17
-	for <lists+linux-can@lfdr.de>; Fri, 24 Apr 2026 17:26:20 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CFD0462712
+	for <lists+linux-can@lfdr.de>; Fri, 24 Apr 2026 20:31:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 115D63008522
-	for <lists+linux-can@lfdr.de>; Fri, 24 Apr 2026 15:24:35 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2D2DC30060B2
+	for <lists+linux-can@lfdr.de>; Fri, 24 Apr 2026 18:31:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E243043DB;
-	Fri, 24 Apr 2026 15:24:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED0172DD60E;
+	Fri, 24 Apr 2026 18:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mdNgmecG"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="fxu7cgeR";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="yygaXGi8"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.161])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DC63033FB
-	for <linux-can@vger.kernel.org>; Fri, 24 Apr 2026 15:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E496E23D7C2;
+	Fri, 24 Apr 2026 18:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.161
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777044271; cv=pass; b=I1mOW87LJrjTzACvkLJZVVGMOBijZrZFZmlHleyRajgZDy/RonnWkp4DQekjjpDL3sGO9tpGU0+JuzVKeExUISQZUwrLSsA9XkqXd4wsVqarugjbWmVjZQ8MbHEZ7LFdKGJ4EwnaQz5WemCS/Wy+TR4vSdLtbxbOcD5+DECEKvg=
+	t=1777055468; cv=pass; b=LnX5fV6zr0xRS4ZivdjdpP0BKZexDUgIHi2lWak0FhENlaUBe8kiyclGTco3yY50cRWAUeC4pWncT8cK5FzOxHOH6MYewIBWK7TT9AAQvxU7RgfvtjDLFSG6EUdi++7pvmZ1YEppx0TwhsO7vP8fkt4vbFs2zsUnkdFtL7yyQ3I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777044271; c=relaxed/simple;
-	bh=yH8+Sry6dHTFa/pt3SEk0ESCeEwjtApOsyPrSEoxtLE=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=UuGj44L5/kaCgnGxlgmlF+Sni6P00Dmq3ffhNJdSd5MjSIIz5o2o9bNDxx2ajt51LyDEiwPTMkIb6SmNp/VNla3RgoDpkoCbVyDVJ5MZkb+9lWbfzjPmlQt8v2NoW3JvEnH/wZHO7Te7EuVjJ5PyLT2X99IpuqE7yDvr6mfeMmY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mdNgmecG; arc=pass smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-7b4ee3a88e1so80640737b3.1
-        for <linux-can@vger.kernel.org>; Fri, 24 Apr 2026 08:24:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777044270; cv=none;
-        d=google.com; s=arc-20240605;
-        b=eEBiO1tozRyhnBik1gpjT9FdX2DoFS7maUkMkFpaFmcgixo0zI+g7eobg/mmUB05o3
-         6/X6+70qXgJ8VpXoLqHnOGbfHoejJDdrVoQDwcnC8qlFC3awUhkl4k70xqgDmKI2pb42
-         kmpELVVq+5rGg5af9tc+rQ3f8GNmA/oTCfmmLN1bGOfolEqF6f8I0cEHnNk4c5gV03tJ
-         BxOxl9KsEbOkXpJKEcJxqx9BPcQNLn35IGAdVR3afdwOsoeMOYg2ZN60MrtF+PPeQh9X
-         ndPSZsFil1ZIs+OlbK5egzxQEHjGwj/EMcZFVyJuH6/7nM4vJ2LFObIAn5mFAn46apIQ
-         X0iQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=0mqOnHBPqmI9jYLsGKachyOemePYqbuCMH8FskR7d/8=;
-        fh=Ps0kqod93ftUfdf1pEsAyz8+M9Cwzr72PDKZWQmynzk=;
-        b=UsUkjuOus6ehBHuymm1pYpTYg3JibXeCHEHluwO7CSDcGiRNztdOCvW16mHL2RatNQ
-         6kFDjvR6CXKwfEHHcRMdBsElDKjxG2f402J/Wk9KO3BtjsbD0V3rSvZuIpX5uYO0aErh
-         gx2os98DHgvEpbicBOcyrNv/kpXgsQfbvbXScXjCadf9Vd4hL+zVkWdUNf3vr2MqFoz0
-         kOtenYAgX8E+3tTD5FL4qYFs7lFpg0kxkODev1brmxNl4dZMIcmCN5PR++yi4qE91gup
-         jHF7+M2Plix/wfeTVeqLSSNrTxeNRtF6D4eyNVLVILm24YuLY9K1qwzgPqw8N9GBC1Da
-         cVUw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777044270; x=1777649070; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0mqOnHBPqmI9jYLsGKachyOemePYqbuCMH8FskR7d/8=;
-        b=mdNgmecG3Y294HHnEZxB94YN/kE/VBsu+xSaH9m+rXMlL8gTYvr13uJ/9J1yKrp9tu
-         lh4pHUzRhrt2UNP0lMG0ZaBPYV+Ocbifz/KPEdYmvbgewdAUkMp2nHfviX9yKNZxhHWg
-         fFP0hj9sn0JAqwWdV5O9YZ3YOSK8s2ZjEoZFx/fx2c6lS9rIjdCZpYtfKwtg82vzwuTK
-         jzs/Te5e/pYj8xxXkwoVMRILbvzH+zFH+tOKfPdu4mX3XK0J2eYeXAuug0iGrt8eQr4E
-         lMZroZa5wqhN8V6QzKdbJHSFhpJa21hADysf4+NvfjjcG/XKgT6NjUS/qKUQBgIpsbzx
-         UPdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777044270; x=1777649070;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0mqOnHBPqmI9jYLsGKachyOemePYqbuCMH8FskR7d/8=;
-        b=e15eFZFAd21AtK4Bj5esPLmkX6iIiYqzaC/wMUA8nmv8Vtns7fRCVxC71OE2LSqD5r
-         INFD1Pg8T3df8bl8bYr4M1KdeB7r49+BOSbQAVYWSDmeDY228/PaicvPxNX1z8QQqThr
-         2pAjIRr/x1XI2hZTZPMs1yk+ZxbDhnDuojGbkS/QaxLI/z/3LP8XjgMS/6fpMSGxpyD1
-         gJTTqVjYFWXbZk2qtCTrpIFXF41IKD6TwXd3W9NJXo3oJPifVlwFXdvIaR5YCY7OYpHG
-         1rLKM6wqeuoQ/0L0kV48WlDFTQSl8qYZX/5Bx3+Qp+fvr2CbM1RkL/VZMvce56wdTjEk
-         j3rg==
-X-Gm-Message-State: AOJu0YyE+3MLE+j4lmRqS3NWPwO/NxWmPb5weJtgVsbJKc3CZPGoFoxY
-	xvMiedl0HdUc/3/VIUGxiESUZJIGCJHP7VFYsrMueHAS78cSFLf21FSXEvdzjWl7I1Of4J7z7iJ
-	cnNlbaxQ4XGTMBjlX4irPH914NxzVbIk=
-X-Gm-Gg: AeBDievBQypH0JN8jJaJTWEXZRsJ0FpBMJ76D23njLBL6qJDJocTEmtT1CQwE2WGPGK
-	/e6tr9gJAAsf93eaCHLgXZS7o0UpgyW5L21bxRdpXH7OPnOzux/pwOzRMFXfW+XjWug4j9vcg/m
-	KriahvcshUF+vElPhyncaXGFIlkvPEgtKS+9Q0iMIfHsj+vLC/risnes6aTbbq6S4orvhHSJ6Ye
-	lAXE3qtsda4/FphPup3A71K//y2bH2D3eSe5Z0ENfFhQKfSvjhzdTVpb9Jl8BWyVikR0CEkep9I
-	YpNUiyluHuxkH0tkfQ==
-X-Received: by 2002:a05:690c:6e87:b0:7a2:80a9:93d1 with SMTP id
- 00721157ae682-7b9ecf98abbmr329086097b3.25.1777044269745; Fri, 24 Apr 2026
- 08:24:29 -0700 (PDT)
+	s=arc-20240116; t=1777055468; c=relaxed/simple;
+	bh=8UFXQ9+IIlyZAxi+DOyhrzD/wbcHW6F9AQF8JuL81mY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PSxd9f9Cuw+UvXJ/rb8k++JUpoE4iRz2JGdBu5BeamK+y9eVKH8zpx6GaEWy0JqFgHwiAHN7adV376xjqzyHbaQ75JEz+GxIUj6dHe8QamgP+EqThYh8/q7vpppPrYYh+j2+eq0HtQrf0PEII1QOJAPfq5P+m1xTlUViAV5gJDc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=fxu7cgeR; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=yygaXGi8; arc=pass smtp.client-ip=81.169.146.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1777055458; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=G0h6ESaR8+cAymOtrYKq2SzMQy6sjIjdmmO2HYPPZ6j2rLoVRAXjCNGGMs9tKmoKhe
+    MpHo5SiAw51nQNnwpJ+1EgJ+30V22KhfIXIvzC3bxwqFYnHVmyE7Y5ERYgEWiT3fYhlY
+    ToD3/j9gJnmDqeDgHmV+NFnOMzz8zeLdUbJfRc14S73x5v+Hz7b3J3MheAXpJ515eJiX
+    1j7NJfH0mXTeE6+K69CRfxlWXWg9bHqE1vpnNFEweEBCxPTq4BQDpXVQKvcw+2HbHSVM
+    MOnLOBUQvNF1nHdgQjADHs/ZuaWZoe1eEkIyKQpVX06R9YMsQ2DmSV9fwXrZRc8sjHXO
+    2XDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1777055458;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=I2/R/qHEFom66RiLpTQoWQh/pDQ5W4FJAJiRD+vPSZI=;
+    b=PlnMtMKB8CYKLHmvKWBRjoKRA328hjzdU5yFLLvRy583yvNhedS0t8I8f1wyavIFvK
+    4XfliolwVYZrXWyINUXHoNpuKONngbYqevrrxN57eoBxAeamv5zqfGynnSBG7tlg5w52
+    ln0viKsbNxJrWZrnYXAvY4tyIOlU7eCbtBBGYNwtmuqo2/My3Ln/jucG+lXD+nuboHgm
+    WF8kVtsTO1inoaXSoQEX0Ctyryz+9hul1tTFfwTxGDSbasMn4Qmx2OByXfcXIlNXYNd9
+    vUV42ykfNmT2/YzJjuoiReR/a7QBVlFOY8ZhkBmNPEmW+2yS9P8iyHf8B5wvra+LU6q2
+    F9ig==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1777055457;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=I2/R/qHEFom66RiLpTQoWQh/pDQ5W4FJAJiRD+vPSZI=;
+    b=fxu7cgeRGVC5RKm/a2ZvPavn97LSsy3qTaEqACgWK9THa5XEiBdtprZ2OyeO73vcue
+    g2dPQDMep84+Ux+Hg+V3qO4y4D4rHTExVKQ2zKcgh/nY3R+fLd+10qBuywvAxm9+rymA
+    t44c/d25MDQiTAES9rjVj2KcOBdGExTbBoIHGEogGlIbo56M+il5d+reqRaNA//cbbye
+    +mlshTlPcNQGh6xtmnHJoEf9072OF52TEZkVi3t8TbmoKOQwXU991YJantgxidtJsJVr
+    7KPEyOK3rNfk1n/vh7scxqtQz9h+0JOn5wK8zSzxx2b0LuuWxlN7cEqAcFPacEPL2TKv
+    GXQw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1777055457;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=I2/R/qHEFom66RiLpTQoWQh/pDQ5W4FJAJiRD+vPSZI=;
+    b=yygaXGi8e2H+b1Wnl9cRLqukL4a9w91yrhcePCdEgvElLf5RCmX3HRdQ7hbBnbVfHf
+    5hkSD/KIfrRAWG8w+TBw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7tgYTqjtr/gWT0HtAFTmQeHuqmWZQ=="
+Received: from [IPV6:2a00:6020:4a38:6800:f493:fb24:b10c:c543]
+    by smtp.strato.de (RZmta 55.0.1 AUTH)
+    with ESMTPSA id Kba96d23OIUvp27
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Fri, 24 Apr 2026 20:30:57 +0200 (CEST)
+Message-ID: <f7db8780-dec9-49ed-9a6c-b679fa1dc311@hartkopp.net>
+Date: Fri, 24 Apr 2026 20:30:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Ginger <ginger.jzllee@gmail.com>
-Date: Fri, 24 Apr 2026 23:24:19 +0800
-X-Gm-Features: AQROBzCBmgD8T8SODZI8KbqFyhfJ7gmKSk7y4Nr9-oZbRHPS2xG3IzyvMvlPDV4
-Message-ID: <CAGp+u1ZUNzJaiGNBrOoHARe9zZ=UNgpBYmmgTTtgywgq6tf8VA@mail.gmail.com>
-Subject: [bug report] Potential order bug in 'drivers/net/can/vxcan.c',
+User-Agent: Mozilla Thunderbird
+Subject: Re: [bug report] Potential order bug in 'drivers/net/can/vxcan.c',
  primarily in 'vxcan_dellink()'
-To: mkl@pengutronix.de
+To: Ginger <ginger.jzllee@gmail.com>, mkl@pengutronix.de
 Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 2F0D2460C17
+References: <CAGp+u1ZUNzJaiGNBrOoHARe9zZ=UNgpBYmmgTTtgywgq6tf8VA@mail.gmail.com>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <CAGp+u1ZUNzJaiGNBrOoHARe9zZ=UNgpBYmmgTTtgywgq6tf8VA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 0CFD0462712
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7397-lists,linux-can=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7398-lists,linux-can=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com,pengutronix.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gingerjzllee@gmail.com,linux-can@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCPT_COUNT_THREE(0.00)[4];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[hartkopp.net:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 
-Dear Linux kernel maintainers,
+Hello Ginger,
 
-My research-based static analyzer found a potential order bug within
-the ' drivers/net/can' subsystem, more specifically, in '
-drivers/net/can/vxcan.c'.
+On 24.04.26 17:24, Ginger wrote:
+> Dear Linux kernel maintainers,
+> 
+> My research-based static analyzer found a potential order bug within
+> the ' drivers/net/can' subsystem, more specifically, in '
+> drivers/net/can/vxcan.c'.
+> 
+> Kernel version: long-term kernel v6.18.9
+> 
+> Potential issue:
+> T0:
+> vxcan_dellink
+>      --> RCU_INIT_POINTER(priv->peer, NULL);
+>      --> unregister_netdevice_queue(dev, head);
+> 
+> In T0, the priv->peer field is nullified before the device is
+> unregistered from the kernel in 'unregister_netdevice_queue()'.
+> Considering that many other kernel functions rely on the existence of
+> the netdev and dereferences 'priv->peer', e.g., vxcan_open() and
+> vxcan_xmit(), it is possible to cause null pointer deref in concurrent
+> executions.
+> 
 
-Kernel version: long-term kernel v6.18.9
+The code in
 
-Potential issue:
-T0:
-vxcan_dellink
-    --> RCU_INIT_POINTER(priv->peer, NULL);
-    --> unregister_netdevice_queue(dev, head);
+https://elixir.bootlin.com/linux/v7.0.1/source/drivers/net/can/vxcan.c#L282
 
-In T0, the priv->peer field is nullified before the device is
-unregistered from the kernel in 'unregister_netdevice_queue()'.
-Considering that many other kernel functions rely on the existence of
-the netdev and dereferences 'priv->peer', e.g., vxcan_open() and
-vxcan_xmit(), it is possible to cause null pointer deref in concurrent
-executions.
+is copied from
 
-Thank you for your time and consideration.
+https://elixir.bootlin.com/linux/v7.0.1/source/drivers/net/veth.c#L1931
 
-Sincerely,
-Ginger
+which contains the following comment:
+
+	/* Note : dellink() is called from default_device_exit_batch(),
+	 * before a rcu_synchronize() point. The devices are guaranteed
+	 * not being freed before one RCU grace period.
+	 */
+	RCU_INIT_POINTER(priv->peer, NULL);
+	unregister_netdevice_queue(dev, head);
+
+So I'm pretty sure this case is addressed.
+
+Best regards,
+Oliver
+
 
