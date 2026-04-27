@@ -1,485 +1,230 @@
-Return-Path: <linux-can+bounces-7403-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7406-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mK6eGokO72kq4wAAu9opvQ
-	(envelope-from <linux-can+bounces-7403-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 09:21:45 +0200
+	id kOyXLMBD72kx/gAAu9opvQ
+	(envelope-from <linux-can+bounces-7406-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 13:08:48 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C017246E46B
-	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 09:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EF2404717FB
+	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 13:08:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 06570300212F
-	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 07:19:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D70A63022079
+	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 11:05:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CCBC36C9E5;
-	Mon, 27 Apr 2026 07:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694783B584A;
+	Mon, 27 Apr 2026 11:05:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=solid-run.com header.i=@solid-run.com header.b="ka1fyl7N";
+	dkim=pass (2048-bit key) header.d=solid-run.com header.i=@solid-run.com header.b="ka1fyl7N"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F8D0362130
-	for <linux-can@vger.kernel.org>; Mon, 27 Apr 2026 07:19:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777274396; cv=none; b=hk/7quIqsw01wQ2K5Drf5i6c5niXhtmQElWie/yTEr36rb3Vjjz38XTjZqbi/Rc70Q5ukHRdRtVujEyOpW3x5ISgFG/MgOnkWsuj+qeoF6QxaoyrFe7/SNulC8p5IxHUtSM99zj2W1gnzOZPpNarmAI42EUBurrKzSM2RneqKsE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777274396; c=relaxed/simple;
-	bh=hTYN9NArd8jE13N8QT/jTPWekkr2QXK1W46Xzosr0aQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dwxO23iNM0eJJllrE5sZQfeQqTZmWBJSXmeogWvKyS61MSuZVxTuvDgWl6Pnmq/hTp2OD2xlsC6O8CnwcUhELrS/FUiNQOOjz2+fb9qh2vIQ+/WQqLgwK3QeVp1oxfwCZrMtKQz4S7emNYKTjLz00q/6z8AjuCkbuEfs4frI9QE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [223.64.68.8])
-	by gateway (Coremail) with SMTP id _____8CxnOm1De9pdUMEAA--.12728S3;
-	Mon, 27 Apr 2026 15:18:13 +0800 (CST)
-Received: from kernelserver (unknown [223.64.68.8])
-	by front1 (Coremail) with SMTP id qMiowJCxWeCvDe9p0pJ1AA--.27085S4;
-	Mon, 27 Apr 2026 15:18:11 +0800 (CST)
-From: Binbin Zhou <zhoubinbin@loongson.cn>
-To: Binbin Zhou <zhoubb.aaron@gmail.com>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Bingxiong Li <libingxiong@loongson.cn>
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>,
-	loongarch@lists.linux.dev,
-	linux-can@vger.kernel.org,
-	jeffbai@aosc.io,
-	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH 2/2] can: loongson_canfd: Add RXDMA support
-Date: Mon, 27 Apr 2026 15:18:00 +0800
-Message-ID: <ee7e4e0d968428761b0fc50e56560165b4020161.1777273055.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1777273055.git.zhoubinbin@loongson.cn>
-References: <cover.1777273055.git.zhoubinbin@loongson.cn>
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11023132.outbound.protection.outlook.com [52.101.83.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519B53B47F9;
+	Mon, 27 Apr 2026 11:05:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.132
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777287942; cv=fail; b=s3njxu+j3l2VhilRZADLJy13lRt2uSKG1TNe/0SQwIVDQN1NNINzYs4Fc67u1SuGk4Z1epR5SN3xx8Hm6315j4oOCDqKr8+CtyqPCPxp9OcvsP3mgTpy0ke5SpScOfxusNEKixWrY9B9GyXyQBd2AEDVfdHqsdxvOtGF1G7XyLA=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777287942; c=relaxed/simple;
+	bh=CUvjFOx0LK3hZdGPgle7HZnpKpCeAQ6Pa8CMXAToEKc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=L+HZVOq/yE3gDhlM+Rr7VONuGNAAhBi/YDz8vI7CAkJcFc0gQPiIM6kbj71dnPIYya6EtRF9qZgOAcefzRLORn0uKQoOpky+XzZsFx+J6/ZRw3Hwb29tHReVRuqcQuLdO0eZH4X0PQU+2jsrq4b6+OKW5yICi+vvSGLzF8Uz71w=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=solid-run.com; spf=pass smtp.mailfrom=solid-run.com; dkim=pass (2048-bit key) header.d=solid-run.com header.i=@solid-run.com header.b=ka1fyl7N; dkim=pass (2048-bit key) header.d=solid-run.com header.i=@solid-run.com header.b=ka1fyl7N; arc=fail smtp.client-ip=52.101.83.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=solid-run.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=solid-run.com
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=DyyWfbSZT3w+5CB8r9YMJbuKo9SRms6PywexmRws1h6QspzphFOfdLHn8GFv/Tw1IFawePrSyJSLJmMuBZBeU1/E8NBr2Fgt11iMAThk0NpD5xPdl2R2+lFQy4QPZgdKJl/Cn030ZTQDxjK6JsLQh2ZFWbPqCADV2PzxAuhf+kKmW4k9ik4SzChoefkgl73waGKKCke4UgUCWD+MJhVvXmzN7js4XLnin4e/EhfJs+Rj/xlp5zf2wVewbHWieNeqMArR4jsseKKabzTN2qKPs52puHpvn9xtQCYOs2SXRHO6mEmYXfVUmi07VxvbXuPxKgpbeYox0TeZpJQ3BzI8SQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CUvjFOx0LK3hZdGPgle7HZnpKpCeAQ6Pa8CMXAToEKc=;
+ b=iP6VNM46dBG4egOVYx9AMGVoM09XwthKEeiUcSeafOZPkSU7VLc/7LAO4Jnd/BYK4ON2cvL30RNuJfZX/0U/nJmhCWFd7BX//huF3ozRHBVjJYNIrZLm3yIonemRBvqNcsDDR7CdAVLe9lrG4vh4hVvmkmWaX/Xm9glWkaDuXtXgU4c24Q2KvGlXhHaXgdLe+nQTQ6wkaJML5jHmM6IupPuXE6M/Ii9q3vvwDlBtW5+t5QHP7gfuXF1rnfsYqDtB3QcxWdDzUpd9bXwkeE3gUQfFIJbz1g90YtSBQpM014W39jyY/awFcmXLcF79KPAntRBlmWcjFVtGtplw8E75/g==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 52.17.62.50) smtp.rcpttodomain=kernel.org smtp.mailfrom=solid-run.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=solid-run.com; dkim=pass (signature was verified)
+ header.d=solid-run.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=solid-run.com] dkim=[1,1,header.d=solid-run.com]
+ dmarc=[1,1,header.from=solid-run.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=solid-run.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CUvjFOx0LK3hZdGPgle7HZnpKpCeAQ6Pa8CMXAToEKc=;
+ b=ka1fyl7NsKkWoU3KaZwStyzJpVKjqTMCcwWjoa123JHgMp0V950TmwsLCRcidw47KNaycHc+gMR/dcNEWPfqSbkLAYpVdOwiK62Bk6w5652o4ZIsDxKBN3UHYjrWTxH4x0xq9LAG6R+vjh0tlIWcLy1so0Bu+MKkgSPNShjpR8JxeXmKf58lOE8J9lLmgDS0koUhEDDcayRy4Xf6CjrOU36btzvvivzdqLFvbmbrdK7wFweZnxR5cWi4GsaeoOJ9e7k+dRGGEQiHMX/kAqTKAOFwdWQoCpGLAgEy+M1V+Qz7N/UoE2oeuklnxy1v4LSg3K6WG7KyTtB89c2+4J0R8Q==
+Received: from CWLP123CA0002.GBRP123.PROD.OUTLOOK.COM (2603:10a6:401:56::14)
+ by VI0PR04MB11614.eurprd04.prod.outlook.com (2603:10a6:800:300::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Mon, 27 Apr
+ 2026 11:05:34 +0000
+Received: from AMS1EPF0000003F.eurprd04.prod.outlook.com
+ (2603:10a6:401:56:cafe::fb) by CWLP123CA0002.outlook.office365.com
+ (2603:10a6:401:56::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.26 via Frontend Transport; Mon,
+ 27 Apr 2026 11:05:34 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 52.17.62.50)
+ smtp.mailfrom=solid-run.com; dkim=pass (signature was verified)
+ header.d=solid-run.com;dmarc=pass action=none header.from=solid-run.com;
+Received-SPF: Fail (protection.outlook.com: domain of solid-run.com does not
+ designate 52.17.62.50 as permitted sender) receiver=protection.outlook.com;
+ client-ip=52.17.62.50; helo=eu-dlp.cloud-sec-av.com;
+Received: from eu-dlp.cloud-sec-av.com (52.17.62.50) by
+ AMS1EPF0000003F.mail.protection.outlook.com (10.167.16.36) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.18
+ via Frontend Transport; Mon, 27 Apr 2026 11:05:34 +0000
+Received: from emails-8907567-12-mt-prod-cp-eu-2.checkpointcloudsec.com (ip-10-20-6-232.eu-west-1.compute.internal [10.20.6.232])
+	by mta-outgoing-dlp-291-mt-prod-cp-eu-2.checkpointcloudsec.com (Postfix) with ESMTPS id C24318055A;
+	Mon, 27 Apr 2026 11:05:33 +0000 (UTC)
+X-Mailbox-Line: From b'josua@solid-run.com' Mon Apr 27 11:05:24 2026
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=I4AfPmZy7KZ1R6pz2plkcCSUgtMg17oD6WAgbg5MJ4PZYJ2AP0JOHFA4kb3JmZUbNazN8vcqMfasy0vBSLfQxJsD+QC6AykIKJ5MYiN3buS3nWHTDIRjDBKda878OVJwAoHKMi0jBChlUulVz4ahyHRxiE7/KBw+uDXUOkuAUvMcctdSeC5e4GO03PF2TsVKAqMLPJcVBUBsXqLlHYQp4lSGn6CTWkNumv4rZE4pVCdJq9niab1EOmtS75CpohZ02v50Ym/kQM1vRcom5ZGxo+sMVjS7E57ZfBeiQGwB3LL0uzHX9JCwGjLf8ojo5LOunAtvLXMnve8rP1Xv5O1fuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CUvjFOx0LK3hZdGPgle7HZnpKpCeAQ6Pa8CMXAToEKc=;
+ b=mw1uyPz7x+g834WbqYtboezA+IAFgF3/N+zlzwoa/MGBRMEM1jhY5uIjG8+rM+5gztsdQaUPL+g6OJc8WP6Cr/7vzTcc6BG4HaoPBvHMwnOzGWyHBnYpAtwJwxRDtVysFK82Lf+RfMiW0kh1p426mmWh35B3FChTaZgyNQ0Hx+fcvpI0F2IodxQHWCTGChMvKv3JouHcU1EJT9z38c/XGXiMMbG6z22p+bbxekZYotOCyGY7AMbWBJ92etgiiKwAl0NkS4yGpWBiDyHd/qRoiEAXTWjCViTRUC/HRvU0iGcTLfG81sX2B/9zCwdoMqqk7jtHe+78sgg76WkzlS0xIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=solid-run.com; dmarc=pass action=none
+ header.from=solid-run.com; dkim=pass header.d=solid-run.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=solid-run.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CUvjFOx0LK3hZdGPgle7HZnpKpCeAQ6Pa8CMXAToEKc=;
+ b=ka1fyl7NsKkWoU3KaZwStyzJpVKjqTMCcwWjoa123JHgMp0V950TmwsLCRcidw47KNaycHc+gMR/dcNEWPfqSbkLAYpVdOwiK62Bk6w5652o4ZIsDxKBN3UHYjrWTxH4x0xq9LAG6R+vjh0tlIWcLy1so0Bu+MKkgSPNShjpR8JxeXmKf58lOE8J9lLmgDS0koUhEDDcayRy4Xf6CjrOU36btzvvivzdqLFvbmbrdK7wFweZnxR5cWi4GsaeoOJ9e7k+dRGGEQiHMX/kAqTKAOFwdWQoCpGLAgEy+M1V+Qz7N/UoE2oeuklnxy1v4LSg3K6WG7KyTtB89c2+4J0R8Q==
+Received: from GVXPR04MB12057.eurprd04.prod.outlook.com
+ (2603:10a6:150:313::24) by MRWPR04MB12329.eurprd04.prod.outlook.com
+ (2603:10a6:501:86::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Mon, 27 Apr
+ 2026 11:05:21 +0000
+Received: from GVXPR04MB12057.eurprd04.prod.outlook.com
+ ([fe80::14f1:a127:2988:de5b]) by GVXPR04MB12057.eurprd04.prod.outlook.com
+ ([fe80::14f1:a127:2988:de5b%6]) with mapi id 15.20.9846.025; Mon, 27 Apr 2026
+ 11:05:21 +0000
+From: Josua Mayer <josua@solid-run.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC: Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol
+	<mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>, Neil Armstrong
+	<neil.armstrong@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v2 4/4] phy: phy-can-transceiver: Drop unused include
+Thread-Topic: [PATCH v2 4/4] phy: phy-can-transceiver: Drop unused include
+Thread-Index: AQHctkzuB17tl7ICBE+EGuZzGU0POLXy/t6A
+Date: Mon, 27 Apr 2026 11:05:21 +0000
+Message-ID: <5b40e1ab-29a5-40f2-a4e6-560f3057633c@solid-run.com>
+References: <20260317203001.2108568-1-andriy.shevchenko@linux.intel.com>
+ <20260317203001.2108568-5-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20260317203001.2108568-5-andriy.shevchenko@linux.intel.com>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=solid-run.com;
+x-ms-traffictypediagnostic:
+	GVXPR04MB12057:EE_|MRWPR04MB12329:EE_|AMS1EPF0000003F:EE_|VI0PR04MB11614:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6590ad00-cf7e-43ad-2f3d-08dea44ce777
+x-cloud-sec-av-info: solidrun,office365_emails,sent,inline
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|366016|1800799024|376014|56012099003|18002099003|22082099003|38070700021;
+X-Microsoft-Antispam-Message-Info-Original:
+ 62aOPXfCptzM7u6+FJ8LamFqflV9bgTE4RD03bnh92Sc/4jz9HRg4P5ktxw2q7gu1PJJz3AsNMcJK1xTad5KQ7VrtslZrQYyx6tu32dNLcRmucMOP6N7hPl4sFFJkLXJws2aFAHVhnc9B8jx7fTpBe2/rDq6WsezajFK1zlgMRzjHy2RiFU/Of5JsvIV53lzha4p+Y620O4qPveD75OHcbFo54J+G8dbmV3z0YD71JW5mDhBfGI0bUYXoLQFS5UyysBXArjd/iMRgWa8WT3JseT9WvTanzRdCntvzI1cPl/eH8KY+pV06Fb251eFdnt9IhG9cORHg6Z7N84I2cZ/wJI3azQLgXDH/+uDCdWIGE73kJ3AtEUKx1Ikf7SM+dLu7lpCPoqwkuzRB0vJX3kI9aIsE8R52240Qjd8jQxu5ZRmehgqc55fwLQ3DVVPfeFzDTB2/f9/7Zl+Qiual+LHcvMx6eySlmiNO3fqKlSkEqG+Gfz5hrv2pYRaWX2sEG6lhceWwD/Cw0/FXyRbu3twm+bkQoiu5aDmJlneQ5ox3Xq8EQIU1WI7pv+FhYYZLBAd2l+86ewGGMvKWEEIc/yhwSz6eNOHCYXHV6XjSv8igq1WbGZtgZclqdXmcQ9xFXgMKLX7PsjJNV2zMNTUXsZrHxSW02YNUAeL4xUBVteOnanHfkkDVB+EBIFHON7O9tv+sxavgOUVa8hQGeldyHOmkZyLH1/tb8v0fmoOskpYet0=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVXPR04MB12057.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(56012099003)(18002099003)(22082099003)(38070700021);DIR:OUT;SFP:1102;
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <522B8BD09D65D84985783F1612F2F22A@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxWeCvDe9p0pJ1AA--.27085S4
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/1tbiAgEKCGnu+qgB+QAAss
-X-Coremail-Antispam: 1Uk129KBj9fXoW3KFWkuFWrXw4kZw1fuFyDJwc_yoW8Jr43Go
-	WxWFsxKa1rWw18Jryjg3WfXr17Za4DZrnxArZakr1kWa90y3WUArZ8Wa1fJF1rta4FqF43
-	urZ5WF4fGayxtrW3l-sFpf9Il3svdjkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8wcxFpf
-	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-	UjIYCTnIWjp_UUUYC7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
-	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUAVWUZwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-	Y2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-	v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-	xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-	Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-	0EwIxGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
-	bVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-	I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-	k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7Cj
-	xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jzc_-UUUUU=
-X-Rspamd-Queue-Id: C017246E46B
+X-Exchange-RoutingPolicyChecked:
+ Xrh/slLKAwWp48trfdBgMnHmd5WyRYWSyMgAyx0XxyY9sOsqkYbtjqu52gZiOXpgddtui3/XUZ3pqzFrx32wZNsyxw7Ys5D8btYGG9na/N8JnVbvgMlXtLwJPTH+U8QwRyIcbs3rWl4gLr6lPHXkMOMgPz8ht09GABlSEdwMJncsBmzkGtMa8+/fw6019fGLKhVGYHlRQMf/Zfha5Igro14Yb7z5iNdyu33Z6tOxqu4gxwJgxZub8AIqwKdTLNJ4GpqRqrX8c6o0IozC4LTwMEj84xIwxQ+o/fuaPSQdVYDNjADcIlotdE6RG3MX03CGhWqME1SXfTokBKkiFBG9Pw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRWPR04MB12329
+X-CLOUD-SEC-AV-INT-Relay: sent<mta-outgoing-dlp-mt-prod-cp-eu-2-6.checkpointcloudsec.com>
+X-CLOUD-SEC-AV-UUID: 7fed17c31d7b4579a240674e980e7dbe:solidrun,office365_emails,sent,inline:e5f4c0cce52b3aa936fab29a235a2a66
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AMS1EPF0000003F.eurprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	0189a40c-a5e6-41b8-9649-08dea44cdfda
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|35042699022|36860700016|14060799003|1800799024|82310400026|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	8CWwRpPn9Zb21aIZ3ASJUsF6pnMDLACMK+j/F984kbMG6TN7DOPDMXZ9W7VP4qHT5dFVPKyk5FGvE0HSiAF/WaAedb16y3HvZIJPe0KxRmO3mylSSbnKeRGIvY9Mdv/JFzgpFHTSsNtza2LTl+79G7Pe+j2ffDkbSrV9+rNywOUpm7OFsQmYz4DlPrQDPTbrml16hPMG6IYIn1l9CwexSR763fDeWkUOmWem2LtfVxx8tFk1Z0Tp2xSmL3rOa461jjZ5FkOjrtuZe6O/VrOVarwyLsssiYJZSbNgFoeTOhZI1tKC7h/HPrlG8i1DT8j7GXycxEDFygy0+gVMWd/8O2XjbkWC/JwyuhyTc8FI250WqMZVigKAVuKxpt0Y9KTSdWlZSbj1Cl+S1Cw+XM9btBXIqQTFjEeCt58jKclEGcZQ2+vqDnn9HJsFBEF+W/6iNhP2232re3qPl/5Hl7T055uH1fQu6yXujCEO8/ICsAzwnZeNeLYs3yL/MeX0Kp+NJhOA1sGFMUoig+FsLHEH5FE6viRd4eEOY6sj+g2XKzs59C3P9TrGmQeBJgXzq+p92bQPkIB2JW/91IQ3/3gPHV52+VawDLQA7HnzTz+JSPjzVIYzek6w8vbmQbJO/7RMnXZT/6vLQM8vrWc5IEM+UW3P2GW9J+Vf0hW7hYAZdSHXiFbw4yWY6M9XATo0N2DLEZHqXB0F8C7rem7jXuopuQ==
+X-Forefront-Antispam-Report:
+	CIP:52.17.62.50;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:eu-dlp.cloud-sec-av.com;PTR:eu-dlp.cloud-sec-av.com;CAT:NONE;SFS:(13230040)(376014)(35042699022)(36860700016)(14060799003)(1800799024)(82310400026)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	lqaqU4lEdixcI5157XndqZ63zltEo2/mWqTvTVoiikHhQCYDgV4MtP5+cYXufHvrhJYfG27vuLY31fNmZ6PoOA0XFUpc9l4i9Bp+zEQBvbSFuhIGgCyxNtglc0KwUo6O7IjYihrNSJ+OLyLgGMi+CAazLVx78KMmMZjXHJ05Rvpy9FkcVtOLcFfYxKr9ISMsVUNE4rLE2L1sAlk7foO6JdIhmOzDXJ8TenHKMlJ6WJeIyqWakKtXwZgcNed9uPOXVrvPeQWSYNlwhFM6QIdCsQVA0k0+Rb+LsoLQjoST5eNkRPG6VVHsuViBOs2WsOYg0fVIlAoyuv1WGwt4T/KB48X6wzrs2QADoGNT127IzMp6F8dUVVBkYQYeicN8PWANnf02v+V76FmreRcSNsY7Y/GvXTC9rbVf8LDeVcMvVmghBZakUZ3TUP49QrQye+aN
+X-OriginatorOrg: solid-run.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2026 11:05:34.0152
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6590ad00-cf7e-43ad-2f3d-08dea44ce777
+X-MS-Exchange-CrossTenant-Id: a4a8aaf3-fd27-4e27-add2-604707ce5b82
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a4a8aaf3-fd27-4e27-add2-604707ce5b82;Ip=[52.17.62.50];Helo=[eu-dlp.cloud-sec-av.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS1EPF0000003F.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB11614
+X-Rspamd-Queue-Id: EF2404717FB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
+X-Spamd-Result: default: False [0.94 / 15.00];
+	MIME_BASE64_TEXT_BOGUS(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=3];
+	DMARC_POLICY_ALLOW(-0.50)[solid-run.com,reject];
+	R_DKIM_ALLOW(-0.20)[solid-run.com:s=selector1];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	MIME_BASE64_TEXT(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7403-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7406-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[loongson.cn];
-	FREEMAIL_TO(0.00)[gmail.com,loongson.cn,pengutronix.de,kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ti.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,solid-run.com:email,solid-run.com:dkim,solid-run.com:mid];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[zhoubinbin@loongson.cn,linux-can@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.980];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
+	DKIM_TRACE(0.00)[solid-run.com:+];
+	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,loongson.cn:mid,loongson.cn:email]
+	FROM_NEQ_ENVFROM(0.00)[josua@solid-run.com,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-can];
+	RCVD_COUNT_SEVEN(0.00)[9]
 
-Add optional DMA support for RX path using the Loongson APB CMC DMA
-engine. When a DMA channel is successfully requested, the driver:
-
-- Uses DMA cyclic transfers to write incoming CAN frames directly to
-  a coherent DMA buffer
-- Replaces RXBNEI (RX buffer not empty interrupt) with DMADI (DMA
-  done interrupt)
-- Dynamically switches between DMA and PIO modes based on channel
-  availability
-
-This significantly reduces CPU intervention under high RX load,
-especially beneficial for CAN FD at higher data rates.
-
-Co-developed-by: Bingxiong Li <libingxiong@loongson.cn>
-Signed-off-by: Bingxiong Li <libingxiong@loongson.cn>
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- drivers/net/can/loongson_canfd/Kconfig        |   2 +-
- .../net/can/loongson_canfd/loongson_canfd.c   | 179 ++++++++++++++++--
- 2 files changed, 160 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/net/can/loongson_canfd/Kconfig b/drivers/net/can/loongson_canfd/Kconfig
-index 5a2540bb5410..8fe44b804991 100644
---- a/drivers/net/can/loongson_canfd/Kconfig
-+++ b/drivers/net/can/loongson_canfd/Kconfig
-@@ -5,7 +5,7 @@
- #
- config CAN_LOONGSON_CANFD
- 	tristate "Loongson CAN-FD driver"
--	depends on HAS_IOMEM
-+	depends on HAS_IOMEM && LOONGSON2_APB_CMC_DMA
- 	select REGMAP_MMIO
- 	help
- 	  This is a canfd driver switch for the Loongson platform,
-diff --git a/drivers/net/can/loongson_canfd/loongson_canfd.c b/drivers/net/can/loongson_canfd/loongson_canfd.c
-index 20ac95dc528d..ba9570c34c94 100644
---- a/drivers/net/can/loongson_canfd/loongson_canfd.c
-+++ b/drivers/net/can/loongson_canfd/loongson_canfd.c
-@@ -6,10 +6,14 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/acpi_dma.h>
- #include <linux/bitfield.h>
- #include <linux/bits.h>
- #include <linux/can/dev.h>
- #include <linux/can/error.h>
-+#include <linux/dmaengine.h>
-+#include <linux/dma-direction.h>
-+#include <linux/dma-mapping.h>
- #include <linux/io.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
-@@ -26,13 +30,21 @@
- #define DEV_NAME			"loongson_canfd"
- #define LOONGSON_CANFD_TXBUF_NUM	8
- #define LOONGSON_CANFD_ID		0xBABE
-+#define RX_BUF_SIZE			SZ_1K
-+#define LOONGSON_CANFD_DMA_RXDATA_NUM	(RX_BUF_SIZE / DMA_SLAVE_BUSWIDTH_4_BYTES)
- 
- struct loongson_canfd_priv {
- 	struct can_priv		can;		/* must be first member! */
- 	struct napi_struct	napi;
- 	struct regmap		*regmap;
- 	struct resource		*res;
-+	struct dma_chan		*rx_ch;
-+	dma_addr_t		rx_dma_buf;	/* dma rx buffer bus address */
-+	unsigned int		*rx_buf;	/* dma rx buffer cpu address */
-+	u16			last_res;
- 	spinlock_t		tx_lock;	/* protect the sending queue */
-+	u32 (*get_rx_data)(struct loongson_canfd_priv *priv);
-+	bool (*get_rx_pending)(struct loongson_canfd_priv *priv);
- };
- 
- enum loongson_canfd_tx_bs {
-@@ -137,6 +149,54 @@ static int loongson_canfd_reset(struct net_device *ndev)
- 	return 0;
- }
- 
-+static u32 loongson_canfd_get_rxdma_data(struct loongson_canfd_priv *priv)
-+{
-+	u32 c = 0;
-+
-+	c = priv->rx_buf[LOONGSON_CANFD_DMA_RXDATA_NUM - priv->last_res--];
-+	if (priv->last_res == 0)
-+		priv->last_res = LOONGSON_CANFD_DMA_RXDATA_NUM;
-+
-+	return c;
-+}
-+
-+static bool loongson_canfd_rxdma_pending(struct loongson_canfd_priv *priv)
-+{
-+	enum dma_status status;
-+	struct dma_tx_state state;
-+
-+	status = dmaengine_tx_status(priv->rx_ch, priv->rx_ch->cookie, &state);
-+
-+	if (priv->last_res != (state.residue / DMA_SLAVE_BUSWIDTH_4_BYTES) &&
-+	    status == DMA_IN_PROGRESS)
-+		return true;
-+
-+	return false;
-+}
-+
-+static u32 loongson_canfd_get_poll_data(struct loongson_canfd_priv *priv)
-+{
-+	u32 data;
-+
-+	regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &data);
-+
-+	return data;
-+}
-+
-+static bool loongson_canfd_rxpoll_pending(struct loongson_canfd_priv *priv)
-+{
-+	u32 rx_sts;
-+
-+	regmap_read(priv->regmap, LOONGSON_CANFD_RX_STAT, &rx_sts);
-+
-+	return FIELD_GET(REG_RX_STAT_RXFRC, rx_sts) ? true : false;
-+}
-+
-+static void loongson_canfd_rxdma_remove(struct loongson_canfd_priv *priv, struct device *dev)
-+{
-+	dma_free_coherent(dev, RX_BUF_SIZE, priv->rx_buf, priv->rx_dma_buf);
-+}
-+
- static int loongson_canfd_set_btr(struct net_device *ndev, struct can_bittiming *bt, bool nominal)
- {
- 	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-@@ -308,7 +368,9 @@ static int loongson_canfd_chip_start(struct net_device *ndev)
- 	if (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)
- 		int_ena |= REG_INT_STAT_ALI | REG_INT_STAT_BEI;
- 
--	int_ena = REG_INT_STAT_TXBHCI | REG_INT_STAT_EWLI | REG_INT_STAT_FCSI | REG_INT_STAT_RBNEI;
-+	int_ena = REG_INT_STAT_TXBHCI | REG_INT_STAT_EWLI | REG_INT_STAT_FCSI;
-+	int_ena |= priv->rx_ch ? REG_INT_STAT_DMADI : REG_INT_STAT_RBNEI;
-+
- 	int_msk = ~int_ena; /* Mask all disabled interrupts */
- 
- 	/* It's after reset, so there is no need to clear anything */
-@@ -514,12 +576,12 @@ static void loongson_canfd_read_rx_frame(struct loongson_canfd_priv *priv, struc
- 
- 	/* Data */
- 	for (i = 0; i < len; i += 4) {
--		regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &data);
-+		data = priv->get_rx_data(priv);
- 		*(__le32 *)(cf->data + i) = cpu_to_le32(data);
- 	}
- 
- 	while (unlikely(i < wc * 4)) {
--		regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &data);
-+		data = priv->get_rx_data(priv);
- 		i += 4;
- 	}
- }
-@@ -532,8 +594,8 @@ static int loongson_canfd_rx(struct net_device *ndev)
- 	struct sk_buff *skb;
- 	u32 meta0, meta1;
- 
--	regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &meta0);
--	regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &meta1);
-+	meta0 = priv->get_rx_data(priv);
-+	meta1 = priv->get_rx_data(priv);
- 
- 	/* Number of characters received */
- 	if (!FIELD_GET(REG_FRAME_FORMAT_W_RWCNT, meta1))
-@@ -718,16 +780,16 @@ static int loongson_canfd_rx_napi(struct napi_struct *napi, int quota)
- 	struct net_device *ndev = napi->dev;
- 	struct loongson_canfd_priv *priv = netdev_priv(ndev);
- 	int work_done = 0, res = 1;
--	u32 sts, rx_frc, rx_sts;
-+	int int_ena = priv->rx_ch ? REG_INT_STAT_DMADI : REG_INT_STAT_RBNEI;
-+	u32 sts;
-+	bool rx_frc;
- 
--	regmap_read(priv->regmap, LOONGSON_CANFD_RX_STAT, &rx_sts);
--	rx_frc = FIELD_GET(REG_RX_STAT_RXFRC, rx_sts);
-+	rx_frc = priv->get_rx_pending(priv);
- 
- 	while (rx_frc && work_done < quota && res > 0) {
- 		res = loongson_canfd_rx(ndev);
- 		work_done++;
--		regmap_read(priv->regmap, LOONGSON_CANFD_RX_STAT, &rx_sts);
--		rx_frc = FIELD_GET(REG_RX_STAT_RXFRC, rx_sts);
-+		rx_frc = priv->get_rx_pending(priv);
- 	}
- 
- 	/* Check for RX FIFO Overflow */
-@@ -757,13 +819,11 @@ static int loongson_canfd_rx_napi(struct napi_struct *napi, int quota)
- 	if (!rx_frc && res != 0) {
- 		if (napi_complete_done(napi, work_done)) {
- 			/*
--			 * Clear and enable RBNEI. It is level-triggered, so
-+			 * Clear and enable RBNEI/DMADI. It is level-triggered, so
- 			 * there is no race condition.
- 			 */
--			regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT,
--				     REG_INT_STAT_RBNEI);
--			regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK,
--				     (REG_INT_STAT_RBNEI << 16));
-+			regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, int_ena);
-+			regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK, (int_ena << 16));
- 		}
- 	}
- 
-@@ -855,7 +915,7 @@ static irqreturn_t loongson_canfd_interrupt(int irq, void *dev_id)
- 	struct net_device *ndev = (struct net_device *)dev_id;
- 	struct loongson_canfd_priv *priv = netdev_priv(ndev);
- 	int irq_loops;
--	u32 isr;
-+	u32 isr, mask;
- 	u16 icr;
- 
- 	for (irq_loops = 0; irq_loops < 10000; irq_loops++) {
-@@ -864,14 +924,16 @@ static irqreturn_t loongson_canfd_interrupt(int irq, void *dev_id)
- 		if (!isr)
- 			return irq_loops ? IRQ_HANDLED : IRQ_NONE;
- 
-+		mask = priv->rx_ch ? REG_INT_STAT_DMADI : REG_INT_STAT_RBNEI;
-+
- 		/* Receive Buffer Not Empty Interrupt */
--		if (FIELD_GET(REG_INT_STAT_RBNEI, isr)) {
-+		if (isr & mask) {
- 			/*
- 			 * Mask RXBNEI the first, then clear interrupt and schedule NAPI.
- 			 * Even if another IRQ fires, RBNEI will always be 0 (masked).
- 			 */
--			regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK, REG_INT_STAT_RBNEI);
--			regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, REG_INT_STAT_RBNEI);
-+			regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK, mask);
-+			regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, mask);
- 			napi_schedule(&priv->napi);
- 		}
- 
-@@ -1054,11 +1116,56 @@ static const struct regmap_config loongson_cangfd_regmap = {
- 	.cache_type	= REGCACHE_MAPLE,
- };
- 
-+static int loongson_canfd_rxdma_init(struct loongson_canfd_priv *priv, struct device *dev)
-+{
-+	struct dma_slave_config config;
-+	struct dma_async_tx_descriptor *desc = NULL;
-+	int ret;
-+
-+	priv->rx_buf = dma_alloc_coherent(dev, RX_BUF_SIZE, &priv->rx_dma_buf, GFP_KERNEL);
-+	if (!priv->rx_buf)
-+		return -ENOMEM;
-+
-+	/* Configure DMA channel */
-+	memset(&config, 0, sizeof(config));
-+	config.src_addr = priv->res->start + LOONGSON_CANFD_RX_DATA;
-+	config.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+
-+	ret = dmaengine_slave_config(priv->rx_ch, &config);
-+	if (ret < 0) {
-+		dev_err(dev, "rx dma channel config failed\n");
-+		goto err_config;
-+	}
-+
-+	/* Prepare a DMA cyclic transaction */
-+	desc = dmaengine_prep_dma_cyclic(priv->rx_ch, priv->rx_dma_buf,
-+					 RX_BUF_SIZE, RX_BUF_SIZE,
-+					 DMA_DEV_TO_MEM, DMA_PREP_INTERRUPT);
-+	if (!desc) {
-+		dev_err(dev, "rx dma prep cyclic failed\n");
-+		ret = -EBUSY;
-+		goto err_config;
-+	}
-+
-+	/* Push current DMA transaction in the pending queue */
-+	dmaengine_submit(desc);
-+
-+	/* Issue pending DMA requests */
-+	dma_async_issue_pending(priv->rx_ch);
-+
-+	return 0;
-+
-+err_config:
-+	loongson_canfd_rxdma_remove(priv, dev);
-+	return ret;
-+}
-+
- static int loongson_canfd_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct loongson_canfd_priv *priv;
- 	struct net_device *ndev;
-+	struct dma_chan *rx_ch;
- 	struct regmap *regmap;
- 	struct resource *res;
- 	void __iomem *base;
-@@ -1079,14 +1186,24 @@ static int loongson_canfd_probe(struct platform_device *pdev)
- 	if (irq < 0)
- 		return irq;
- 
-+	rx_ch = dma_request_chan(dev, "rx");
-+	if (PTR_ERR(rx_ch) == -EPROBE_DEFER)
-+		return -EPROBE_DEFER;
-+
-+	if (IS_ERR(rx_ch)) {
-+		dev_warn(dev, "Fall back in poll mode for any non-deferral error.\n");
-+		rx_ch = NULL;
-+	}
-+
- 	/* Create a CAN device instance */
- 	ndev = alloc_candev(sizeof(*priv), LOONGSON_CANFD_TXBUF_NUM);
- 	if (!ndev)
--		return -ENOMEM;
-+		goto err_dma_rx;
- 
- 	priv = netdev_priv(ndev);
- 	spin_lock_init(&priv->tx_lock);
- 	priv->regmap = regmap;
-+	priv->rx_ch = rx_ch;
- 	priv->res = res;
- 
- 	priv->can.clock.freq = clk_rate;
-@@ -1111,6 +1228,19 @@ static int loongson_canfd_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_candev_free;
- 
-+	if (priv->rx_ch) {
-+		priv->get_rx_data = loongson_canfd_get_rxdma_data;
-+		priv->get_rx_pending = loongson_canfd_rxdma_pending;
-+		priv->last_res = LOONGSON_CANFD_DMA_RXDATA_NUM;
-+		ret = loongson_canfd_rxdma_init(priv, dev);
-+		if (ret) {
-+			dev_err(dev, "interrupt mode used for rx (no dma)\n");
-+			goto err_candev_free;
-+		}
-+	} else {
-+		priv->get_rx_data = loongson_canfd_get_poll_data;
-+		priv->get_rx_pending = loongson_canfd_rxpoll_pending;
-+	}
- 	netif_napi_add(ndev, &priv->napi, loongson_canfd_rx_napi);
- 
- 	ret = register_candev(ndev);
-@@ -1123,6 +1253,9 @@ static int loongson_canfd_probe(struct platform_device *pdev)
- 
- err_candev_free:
- 	free_candev(ndev);
-+err_dma_rx:
-+	if (rx_ch)
-+		dma_release_channel(rx_ch);
- 	return ret;
- }
- 
-@@ -1133,6 +1266,11 @@ static void loongson_canfd_remove(struct platform_device *pdev)
- 
- 	netdev_dbg(ndev, "loongson_canfd_remove");
- 
-+	if (priv->rx_ch) {
-+		loongson_canfd_rxdma_remove(priv, &pdev->dev);
-+		dma_release_channel(priv->rx_ch);
-+	}
-+
- 	unregister_candev(ndev);
- 	netif_napi_del(&priv->napi);
- 	free_candev(ndev);
-@@ -1154,6 +1292,7 @@ static struct platform_driver loongson_canfd_driver = {
- };
- module_platform_driver(loongson_canfd_driver);
- 
-+MODULE_SOFTDEP("pre: loongson2-apb-cmc-dma");
- MODULE_AUTHOR("Loongson Technology Corporation Limited");
- MODULE_DESCRIPTION("Loongson CAN-FD Controller driver");
- MODULE_LICENSE("GPL");
--- 
-2.52.0
-
+QW0gMTcuMDMuMjYgdW0gMjE6Mjcgc2NocmllYiBBbmR5IFNoZXZjaGVua286DQo+IFRoaXMgZmls
+ZSBkb2VzIG5vdCB1c2UgdGhlIHN5bWJvbHMgZnJvbSB0aGUgbGVnYWN5DQo+IDxsaW51eC9ncGlv
+Lmg+IGhlYWRlciwgc28gbGV0J3MgZHJvcCBpdC4NCj4NCj4gU2lnbmVkLW9mZi1ieTogQW5keSBT
+aGV2Y2hlbmtvIDxhbmRyaXkuc2hldmNoZW5rb0BsaW51eC5pbnRlbC5jb20+DQo+IC0tLQ0KPiAg
+ZHJpdmVycy9waHkvcGh5LWNhbi10cmFuc2NlaXZlci5jIHwgMyArLS0NCj4gIDEgZmlsZSBjaGFu
+Z2VkLCAxIGluc2VydGlvbigrKSwgMiBkZWxldGlvbnMoLSkNCj4NCj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvcGh5L3BoeS1jYW4tdHJhbnNjZWl2ZXIuYyBiL2RyaXZlcnMvcGh5L3BoeS1jYW4tdHJh
+bnNjZWl2ZXIuYw0KPiBpbmRleCAyMWIwNDA2ZDFhMDkuLjhlMjUwMDM5YzE4MyAxMDA2NDQNCj4g
+LS0tIGEvZHJpdmVycy9waHkvcGh5LWNhbi10cmFuc2NlaXZlci5jDQo+ICsrKyBiL2RyaXZlcnMv
+cGh5L3BoeS1jYW4tdHJhbnNjZWl2ZXIuYw0KPiBAQCAtNSwxMiArNSwxMSBAQA0KPiAgICogQ29w
+eXJpZ2h0IChDKSAyMDIxIFRleGFzIEluc3RydW1lbnRzIEluY29ycG9yYXRlZCAtIGh0dHBzOi8v
+d3d3LnRpLmNvbQ0KPiAgICoNCj4gICAqLw0KPiArI2luY2x1ZGUgPGxpbnV4L2dwaW8vY29uc3Vt
+ZXIuaD4NCj4gICNpbmNsdWRlIDxsaW51eC9waHkvcGh5Lmg+DQo+ICAjaW5jbHVkZSA8bGludXgv
+cGxhdGZvcm1fZGV2aWNlLmg+DQo+ICAjaW5jbHVkZSA8bGludXgvcHJvcGVydHkuaD4NCj4gICNp
+bmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCj4gLSNpbmNsdWRlIDxsaW51eC9ncGlvLmg+DQo+IC0j
+aW5jbHVkZSA8bGludXgvZ3Bpby9jb25zdW1lci5oPg0KPiAgI2luY2x1ZGUgPGxpbnV4L211eC9j
+b25zdW1lci5oPg0KPiAgDQo+ICBzdHJ1Y3QgY2FuX3RyYW5zY2VpdmVyX2RhdGEgew0KUmV2aWV3
+ZWQtYnk6IEpvc3VhIE1heWVyIDxqb3N1YUBzb2xpZC1ydW4uY29tPg==
 
