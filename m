@@ -1,61 +1,82 @@
-Return-Path: <linux-can+bounces-7409-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7410-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kHHBHmVZ72n5AQEAu9opvQ
-	(envelope-from <linux-can+bounces-7409-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 14:41:09 +0200
+	id 0LckA+xl72kIBAEAu9opvQ
+	(envelope-from <linux-can+bounces-7410-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 15:34:36 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B1CA472A32
-	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 14:41:08 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id A402F473826
+	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 15:34:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 72A993002D07
-	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 12:41:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 14AEE30071F3
+	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2026 13:34:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6543B1A6819;
-	Mon, 27 Apr 2026 12:41:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D16453B961F;
+	Mon, 27 Apr 2026 13:34:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pHqIRXXc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hUXA0xVf"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CA7F9C0;
-	Mon, 27 Apr 2026 12:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7436D1F192E;
+	Mon, 27 Apr 2026 13:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777293663; cv=none; b=dnE44Cyftne8auyb0zFIslvORKNkTopxEgjuNX5RXX3XzOU/8bOa3kik7E/G/QkDLAd+LvhmDzd9g2Zl4ekpVs8NZtQhuNp8HPK1u2XOn7rP8nBsNl/jtdMTQIYqxT4wvpDDNeFxvlBycwXxaGolUthYRbieE01WZQwfdpScMS8=
+	t=1777296873; cv=none; b=Rz1ArLFaei8CFPkd81JNYgA1u1ulLxwsaAg0xyjVZD0JYCvJQW/Ckedl5OnqZ8jEBA5C83jS9s3uuByUStkgYgJyEajsfSme9lkvAqumaV9M7Do14kZ/rZfTt4fqv/QPQpVbyMRyTKwx3dC3ZbRbjO602IMV60C+DnMGnyK8ciU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777293663; c=relaxed/simple;
-	bh=DsV3dh6/IS0SE6uwl1VVDKgGkUxcnVhoAm69d3w8Xxk=;
+	s=arc-20240116; t=1777296873; c=relaxed/simple;
+	bh=CxJ728BK4g6l5AEja2sNEowQIIAIo5d8EbB+gqZ212k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oirfQ67jtmwHQabMV1ikCqH7QiwQxYODUMn77bELKa45SaDm4kBrtUDBA+K9AELX8rF5W60/AKJAYPesLU0sK293GWUlZR4S8uo8jZJoaE0Y50Zpfq8eqoVpmNcr4uK/n3rsWFnbBvMwQYtbV3SlAmOGrU7z7EpTkm9G87upZMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pHqIRXXc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0501C19425;
-	Mon, 27 Apr 2026 12:41:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777293662;
-	bh=DsV3dh6/IS0SE6uwl1VVDKgGkUxcnVhoAm69d3w8Xxk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pHqIRXXcLWUtL3q4qp3xQuWOQ+cgsgUTq6LytQtYjum9uQTFX5NREYiAw6+XY/FvY
-	 0wm/OxgswuOHHvB4R8K85732F1q9xcP+SDPEMPkFJhoByJF3A0nnbHqWnw89ZdL2Qv
-	 W8R78VIJ/E56MP/8wvYxMPl6eTkTWUItuM602Pnol1MAmT94Wisq8/7zv530BexdyN
-	 kD6VjPhx3Lj52SHF8lguDuyxv/S2qT/6KW+qf7pyHFqtqYX/y7NzT35GVSWf5SrFKb
-	 6ezbrgC7xkkygLpilYJ5ZsoCgmugB+4WZt4hldcLFf469CwTsgcQ01HFV4jAsGC11N
-	 tXG3iohXIvhew==
-Date: Mon, 27 Apr 2026 13:40:58 +0100
-From: Lee Jones <lee@kernel.org>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] can: bcm: prevent thrtimer UAF in rx path by
- checking RX_NO_AUTOTIMER
-Message-ID: <20260427124058.GA8212@google.com>
-References: <20260422102239.948594-1-lee@kernel.org>
- <6cc6eec9-2e8a-4a39-955a-0eeefc93fe97@hartkopp.net>
- <20260424-magic-snobbish-rabbit-0865cf-mkl@pengutronix.de>
- <eef6917f-38c2-4bb4-a5d6-98f5a71adf65@hartkopp.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=E2A3uMegvDedjYOyGWKFgorc3M6tfYzrmm709YMH6Z6RqwYtl8VQJT2DMMLigDgR4L4dt02XEa7FE5xNNmfff/WbkH8t1n3MbkMwfGmI6oMDdzsAlKfAHmTE+haYa0Y31gw1avszhhsi846o4TuBTVbqBGj/uxTi9pF70UsyBdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hUXA0xVf; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777296872; x=1808832872;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CxJ728BK4g6l5AEja2sNEowQIIAIo5d8EbB+gqZ212k=;
+  b=hUXA0xVfOy7BiE+nfL+4ym/p4bNZy84C9f5pF7YPDky6rq8ESm2KsxgO
+   E7CGbSA0NC45A6l3XvKL5rDVTvGQnCOyNohNj3zGwNVsnxIDmjUUSxPLB
+   dP6HlKfc0fP9C/v8Lpaj73QwvcWJyq7Yg82OI2CBhs5UF5bYMyOgbCSD9
+   WBIfxddWJPcbtfYCjgd0LM2099LhwCTpCUpK4kA5rVJxj2k++b3Xr/5WJ
+   Zi/Z8yTETlU1ifMM9jl+L6yJe+y0DE5iTUDb0e/EDXmui3SUoOv8J/YJO
+   u8k6VbWtvIZtnJYpSE96fw5yBryhlW563QzQmCSebeK87spwu8VTJolWn
+   w==;
+X-CSE-ConnectionGUID: 7/Y+8j0fT62qYI+JenSqqw==
+X-CSE-MsgGUID: PJ24B5vwQ6WHfems3v3viQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11768"; a="100840561"
+X-IronPort-AV: E=Sophos;i="6.23,202,1770624000"; 
+   d="scan'208";a="100840561"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 06:34:31 -0700
+X-CSE-ConnectionGUID: LslyeJx8TyeRyzT+Q0/pcA==
+X-CSE-MsgGUID: 11RsWyCPTqWg7oiZUeZOsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,202,1770624000"; 
+   d="scan'208";a="271771646"
+Received: from fpallare-mobl4.ger.corp.intel.com (HELO localhost) ([10.245.244.2])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2026 06:34:29 -0700
+Date: Mon, 27 Apr 2026 16:34:26 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Josua Mayer <josua@solid-run.com>
+Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v2 0/4] phy: phy-can-transceiver: Ad-hoc cleanups and
+ refactoring
+Message-ID: <ae9l4n8wocbVegcJ@ashevche-desk.local>
+References: <20260317203001.2108568-1-andriy.shevchenko@linux.intel.com>
+ <ad6KwGIhpJn_2eVz@ashevche-desk.local>
+ <7bcb68c4-e4bd-4ad9-bb75-99e0845b204c@solid-run.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -64,82 +85,67 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <eef6917f-38c2-4bb4-a5d6-98f5a71adf65@hartkopp.net>
-X-Rspamd-Queue-Id: 6B1CA472A32
+In-Reply-To: <7bcb68c4-e4bd-4ad9-bb75-99e0845b204c@solid-run.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
+X-Rspamd-Queue-Id: A402F473826
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7409-lists,linux-can=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-7410-lists,linux-can=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
 	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lee@kernel.org,linux-can@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-can@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:dkim,ashevche-desk.local:mid]
 
-On Sat, 25 Apr 2026, Oliver Hartkopp wrote:
+On Mon, Apr 27, 2026 at 11:09:48AM +0000, Josua Mayer wrote:
+> Am 14.04.26 um 20:43 schrieb Andy Shevchenko:
+> > On Tue, Mar 17, 2026 at 09:27:26PM +0100, Andy Shevchenko wrote:
+> >> The driver does two things that need to be addressed:
+> >> - includes subject to remove gpio.h
+> >> - checks for error code from device property APIs when it can be done in
+> >>   a robust way
+> >>
+> >> This series addresses the above and adds a couple of additional refactoring.
+> > Any comments on this? Doesn't look like it being applied so far...
+> For unknown reason your patch-set did not arrive in my inbox.
+> Perhaps it went missing for others, too?
 
-> 
-> 
-> On 24.04.26 21:08, Marc Kleine-Budde wrote:
-> > On 22.04.2026 14:55:50, Oliver Hartkopp wrote:
-> > > 
-> > > 
-> > > On 22.04.26 12:22, Lee Jones wrote:
-> > > > Commit f1b4e32aca08 ("can: bcm: use call_rcu() instead of costly
-> > > > synchronize_rcu()") removed the synchronize_rcu() call from
-> > > > bcm_delete_rx_op() and introduced the RX_NO_AUTOTIMER flag to prevent
-> > > > timers from being rearmed during deletion.  However, it only applied
-> > > > this check to op->timer via bcm_rx_starttimer().
-> > > > 
-> > > > It missed the fact that op->thrtimer can also be rearmed by an
-> > > > in-flight bcm_rx_handler() (which runs as an RCU reader) via
-> > > > bcm_rx_update_and_send().  This allows op->thrtimer to be queued after
-> > > > bcm_remove_op() has already cancelled it, leading to a use-after-free
-> > > > when the timer fires on the deferred-freed struct bcm_op.
-> > > > 
-> > > > Address the omission by checking the RX_NO_AUTOTIMER flag
-> > > > in bcm_rx_update_and_send() before starting op->thrtimer, effectively
-> > > > preventing it from being rearmed concurrently with teardown.
-> > > > 
-> > > > Signed-off-by: Lee Jones <lee@kernel.org>
-> > > 
-> > > Many thanks for the investigation and the fix!
-> > > 
-> > > Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> > 
-> > Can we add a Fixes: tag?
+Are you in the MAINTAINERS for this part of the kernel?
+The CAN NETWORK DRIVERS and GENERIC PHY FRAMEWORK do not list your name.
 
-Fixes: f1b4e32aca08 ("can: bcm: use call_rcu() instead of costly synchronize_rcu()")
+If you think of mail delivery in general, it's delivered at least to the ML
+https://lore.kernel.org/all/20260317203001.2108568-1-andriy.shevchenko@linux.intel.com/
 
-Do you need me to resubmit or are you okay to apply manually / with b4?
+TBH I don't know what to answer to your question as I don't know your expectations and
+how it should be fulfilled taking into account my above question...
 
-> Yes, we should.
-> 
-> Thanks!
-> 
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-
-I'm a little confused by the SoB.  Does this mean you've applied it?
+But thanks for the reviewing! I will address the commit message in v3.
 
 -- 
-Lee Jones
+With Best Regards,
+Andy Shevchenko
+
+
 
