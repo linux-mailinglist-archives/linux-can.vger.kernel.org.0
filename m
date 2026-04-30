@@ -1,227 +1,229 @@
-Return-Path: <linux-can+bounces-7460-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7461-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AAvKIKxW82mLzgEAu9opvQ
-	(envelope-from <linux-can+bounces-7460-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 15:18:36 +0200
+	id iAbOIEV282mt4AEAu9opvQ
+	(envelope-from <linux-can+bounces-7461-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 17:33:25 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41B274A3520
-	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 15:18:36 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 842944A4D67
+	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 17:33:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3B6B73061715
-	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 13:15:17 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2C8CC30015AD
+	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 15:22:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C6414219ED;
-	Thu, 30 Apr 2026 13:15:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11AC6254B1F;
+	Thu, 30 Apr 2026 15:22:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b="ZcxvhIgY"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="aYxC8/ug"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-dy1-f226.google.com (mail-dy1-f226.google.com [74.125.82.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D9341324C
-	for <linux-can@vger.kernel.org>; Thu, 30 Apr 2026 13:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0B6F221721
+	for <linux-can@vger.kernel.org>; Thu, 30 Apr 2026 15:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777554913; cv=none; b=gHLpZBsK9zkOIxNlQfzkDu0LSIn+y4efEw3+6pPX33vb/YA3fbQynTnxbg3xF9CPWbgvULIbGAG5kZ8VVWM1IreGZflnrCFe8jlvW1b9jikTEBDx5SA1/yYIpsPVuI06EhJwpKu4G298eAwjWfNFuSNVLshoYRqNsYtFhIPPdd8=
+	t=1777562533; cv=none; b=mLYJZcE93tEyfhhdqG5TIA6es2KsGrGGlL/LTzTHA+3NwtXFfXuyMcDQqCAVsrTgHKKmxp3IXEIHah1h/kQG4oPS6hCRwV52wZha9WfxdIEnVZGpmmE1ryPVCWmed2n/sDn2a88SjUP4A+Ry80B7veiChSHx+jVPYo+Ziuzs9cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777554913; c=relaxed/simple;
-	bh=k6Ky8SekzqlEMWe2IfF4o9e521vL5c/R7nKtlYixpPs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c1yc1VvPetGT9ekRpUWRyUKbUn2slEMfhYGVhfbjMMRgC16fxInlCT2I0/lVXnfCFpV+K4k89+ABkL1HYqLD3hLs4Rl3BmKeL3+6UNZcIWSy39Nmk3QJW6Od6xe6+i83HxU/rEm6w+4FjVIw2sZgCQvcRgWBIqbYtbsPhqdcBT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b=ZcxvhIgY; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4891e86fabeso11509435e9.1
-        for <linux-can@vger.kernel.org>; Thu, 30 Apr 2026 06:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20251104.gappssmtp.com; s=20251104; t=1777554910; x=1778159710; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q14Nfv+UEqF4wGTpTXYwRmNvMzztXWMPU3JKrPL0wNU=;
-        b=ZcxvhIgYSB2FjP+0ja//gHRzj0S/DjUT2vV7ujd1DIAIMDat4t6ICYdT1a+tsUH42b
-         JVNnKNPGZCu6M3GPd5DH5VqgCKC/ofDpGehGjrbG+nKzDQQDHPkMrlFjdw0HYqpGAf6D
-         GtykEVIZKTFCt7Y6Lu+uEzP9bxlwp+3zJu1sI5jwJu9YmaPLq4ozuRnBtV+eqjLTABs/
-         rCdCeEa8ZTY2ZB9TZ2WgVvKJX/vRIcGD5IHnKPwXCqdYG1KiedfYzTBnjswAIo6zlLrd
-         ktLvWZ/vyddbrfcIGCpBKJldcrnCRmf0nr/uuIdEBqQxjHMyJa3zNWk8QlR9WAUryMRL
-         Qc/Q==
+	s=arc-20240116; t=1777562533; c=relaxed/simple;
+	bh=jfvurasXyO172rf8RueovQ21HocKi4qC6cmZUk6WC5A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Yu89xAN1FQm5ysvdwUkhhs9QGk+BDpzoQqLBiVQC7zuZreRiAFI7Y2b2WEZ3seW3L9d7fPLOSJZNQV8zeLTxN4eygJQljMbnPSNI73JNfPNQtr/1Ag9h18ayZgmUp51bLK46MmC4RVUTCOMyACQ1W+TSyXhtjqZqWWZQkcizxFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=aYxC8/ug; arc=none smtp.client-ip=74.125.82.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-dy1-f226.google.com with SMTP id 5a478bee46e88-2eadb000b8cso1985337eec.0
+        for <linux-can@vger.kernel.org>; Thu, 30 Apr 2026 08:22:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777554910; x=1778159710;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q14Nfv+UEqF4wGTpTXYwRmNvMzztXWMPU3JKrPL0wNU=;
-        b=ejrB09ePUV7WUXnHPXK3q1iVK9pvGYHslzZiCrT3J0iqzOXKrEEmdzINqKDNxx/416
-         s2uzeVR/9BvLROsVeBzEvfzPTw5UWLG4KopoTICN6c/lKhZDtGZImA4gbClfHOEnA5br
-         pcELthonbDxZT1H2L3I47go6JsYqUmnkjb1wWkaeksE/mjZOU00LcAnnvG6haEjlvmv9
-         S6wgq/6ID6Ftgwn6cNTs37lxZ62/UP/mTFoG4wL0st8Ngob49EVVfaaH0SxcFwvkEXj0
-         3kaGTi66xPVA5BS6mDFouRxUn5xVXUv3g2sbzbnMzVTeG5dK7TJQqWTXL09XDbIgGg/0
-         08eQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/5pIIjNSrYrlPl7F+EmKHprd6CrmS+UgdGHWIjAkspasousrI/REQINvmGwToJvg7CeaiITM43rII=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyc22PJbWkzP1R6YiEYzX+aSXPu9FLH/T7tII7W2jJfrP8fqJvh
-	+bqycuW6Mw0zm+EXkvwbF7soNZ7m+nqBnMvDM02MnDzKRBZESKerjm3HZrKRsRja3qY=
-X-Gm-Gg: AeBDieulcOZuc6wiTQuo+zFYJSVGfgZT6PdXu59p1vJ+wzNh0uYNLo62HAYqcxSiQzX
-	dTRFcs5v3+5ApcM2K9Xyszp8ywOIDpkjAnZSf+dDFHH8DNNeMNZ4qyD1qjPNb6LIILjwHRX9yap
-	8mZNa7Bo5Dk6b8Ra2TgHe8vPPwV6z91aJf7gJgZC8jzTN51sCnF8cSNuP/1J+fE1/quw871n0Dp
-	D+ms5ojArUAhu0w+p0FhMpuXPEYKqz/n5HAsBIfbFretq+f6t88lAo/aoAsHKz8KrUYD70Uim9u
-	GIROvCoVrrZzzgWIJEk7KUHm0LGH/wVbdLlnFRzK9FUuupDrya4+NIeMy6aECGC0c4B9Q5XjPCe
-	6aqsjhvYW12xo4NX+yQsOX8emwxCN5AKoulbKgo0zer2zuIpmYi6NJoDKA4+iEIkLmHzfXn/HIj
-	kHiqjGWEgcPY6cWMfs2H/3X3y4Q7SIyIHGuuUCm3purzcnc4QK0PlXjyLXUjBqiNe9jCtXlTfyY
-	Or7uvk3rjPLwWKOtvTUIawePQ==
-X-Received: by 2002:a05:600c:c0db:b0:489:284:44ab with SMTP id 5b1f17b1804b1-48a83f6b306mr35501805e9.12.1777554909754;
-        Thu, 30 Apr 2026 06:15:09 -0700 (PDT)
-Received: from localhost (p200300f65f114e0859f76ff87a50eb14.dip0.t-ipconnect.de. [2003:f6:5f11:4e08:59f7:6ff8:7a50:eb14])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-447b3d47ff1sm13921904f8f.6.2026.04.30.06.15.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 06:15:08 -0700 (PDT)
-Date: Thu, 30 Apr 2026 15:15:07 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
-To: Markus Schneider-Pargmann <msp@baylibre.com>
-Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Vincent Mailhol <mailhol@kernel.org>, Krzysztof Halasa <khc@pm.waw.pl>, 
-	Johannes Berg <johannes@sipsolutions.net>, Steffen Klassert <klassert@kernel.org>, 
-	David Dillow <dave@thedillows.org>, Ion Badulescu <ionut@badula.org>, 
-	Mark Einon <mark.einon@gmail.com>, Rasesh Mody <rmody@marvell.com>, GR-Linux-NIC-Dev@marvell.com, 
-	Manish Chopra <manishc@marvell.com>, Potnuri Bharat Teja <bharat@chelsio.com>, 
-	Denis Kirjanov <kirjanov@gmail.com>, Jijie Shao <shaojijie@huawei.com>, 
-	Jian Shen <shenjian15@huawei.com>, Cai Huoqing <cai.huoqing@linux.dev>, 
-	Fan Gong <gongfan1@huawei.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Tariq Toukan <tariqt@nvidia.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
-	Mark Bloch <mbloch@nvidia.com>, Ido Schimmel <idosch@nvidia.com>, 
-	Petr Machata <petrm@nvidia.com>, Yibo Dong <dong100@mucse.com>, Simon Horman <horms@kernel.org>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, nic_swsd@realtek.com, Jiri Pirko <jiri@resnulli.us>, 
-	Francois Romieu <romieu@fr.zoreil.com>, Daniele Venzano <venza@brownhat.org>, 
-	Samuel Chessman <chessman@tux.org>, Jiawen Wu <jiawenwu@trustnetic.com>, 
-	Mengyuan Lou <mengyuanlou@net-swift.com>, Kevin Curtis <kevin.curtis@farsite.co.uk>, 
-	Arend van Spriel <arend.vanspriel@broadcom.com>, Stanislav Yakovlev <stas.yakovlev@gmail.com>, 
-	Richard Cochran <richardcochran@gmail.com>, Kees Cook <kees@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Thomas Fourier <fourier.thomas@gmail.com>, Ingo Molnar <mingo@kernel.org>, 
-	Kory Maincent <kory.maincent@bootlin.com>, Zilin Guan <zilin@seu.edu.cn>, 
-	Marco Crivellari <marco.crivellari@suse.com>, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
-	Jacob Keller <jacob.e.keller@intel.com>, Philipp Stanner <phasta@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Yeounsu Moon <yyyynoom@gmail.com>, 
-	Denis Benato <benato.denis96@gmail.com>, Yonglong Liu <liuyonglong@huawei.com>, 
-	Andy Shevchenko <andriy.shevchenko@intel.com>, Yicong Hui <yiconghui@gmail.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, MD Danish Anwar <danishanwar@ti.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Sai Krishna <saikrishnag@marvell.com>, 
-	Ethan Nelson-Moore <enelsonmoore@gmail.com>, Larysa Zaremba <larysa.zaremba@intel.com>, 
-	Joe Damato <joe@dama.to>, Double Lo <double.lo@cypress.com>, 
-	Colin Ian King <colin.i.king@gmail.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-can@vger.kernel.org, linux-parisc@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
-	linux-rdma@vger.kernel.org, oss-drivers@corigine.com, linux-wireless@vger.kernel.org, 
-	brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com
-Subject: Re: [PATCH net-next] net: Consistently define pci_device_ids using
- named initializers
-Message-ID: <afNVhCLPqPf-OKK3@monoceros>
-References: <20260428171845.2288395-2-u.kleine-koenig@baylibre.com>
- <DI6D3JVJ6JG6.8V4XUVGJA2D4@baylibre.com>
+        d=1e100.net; s=20251104; t=1777562531; x=1778167331;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j6W7N3TF0u0m9VhuQZcYonFJHVZpaP1eZOWODDM2/uM=;
+        b=kBloijwPC7PAB6aUzXa6kW36AAIQHOZyzMvaeyYLbbRNIawwsMF7ViiiB0Xl3jibIw
+         f/SeNhjZDC4PFtQ9gSzM8FRtsfhGJV9qDW9cyR3dZR4huvTRYN+S+EJI2XGG47WtCWNh
+         GjhhijvE3KQXF8/qYPXBlguXkQF5yK7DbxFtVmin3hB02oPkq2ohekkF1CrDqwJI0ZrF
+         n7IayDLl8y7CJCwDU3GHm8YEMeA8HaBYDovR1ZYq0PhI4yNi+MBJOQ19P4kLGDvytsDi
+         gIaWcwd3Azzx40ejhtRSC5QlRW5F4DI/6vsVE2brcyXLS1w8ZqrnCSAWDdxz8wIm/jH4
+         5DzA==
+X-Forwarded-Encrypted: i=1; AFNElJ9Uko+auYQX3fPPkDrPxaybB5pifDTANzd4isGzYtEPQYhzPgcVGI6LpZirc7vw8jcP2yJIoENsXn8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyW5k6PKBlpBmGh7VFJtCUeSS4ZHSsuPO6SANCW99UkILRFcbJu
+	R/ONFG8VLufY78RQrdhZIUcKuRKgCiScvjnR1u+64t9hDHNpFsAC1oU+UQkmp+4LkBNy1HP6Qoj
+	0aqcGKEp1bL0vmmmrbry8JOLE2a1ofcn42tBwKdYYCyQrfNxk6jLMpw5MC45mf+LcDbd7GDKSSG
+	nlZOcfaL2BgDqa8dkWYLwJ8RxEb9YxRAJZe1KuJIl6Px6rexub2NhsgoOOYvPwbFP//OHMN/C3h
+	a6vFTNth5TBwiG6h6Pbcg==
+X-Gm-Gg: AeBDietMu9j5kDZ3l8BFU32RTGCGQB/xIU2XRgiJl8TSFh9IcS6pk5bxSjpF5yuJijd
+	iLcIXUfxKvVnO3dM1gv1e+KRbYz52/gw8giMp36wTjd2N7VaDBOgkUZV5nFYkB4opcDveoNNtQm
+	fNT4JTf54EOo/BU/hlgKGG1lhHbhFZ46kvTw1h4WE+iX/Rkw1QIZKMQuQy8S2+ZzTtNQiAoFGiR
+	nghPGxTf/l6g3+BLxDR76ua8I97cbaARXldYKq0JrxuJhFWSnXX3CIicjc+j4EfJ4G+B7zxUG22
+	hyJ+u4R6+tNs+9uQMNeitnStW2k6AC0jXNkr6Q0wc9rqFIcXV/3mkSQP4M8H77FzTEaYdz8y1Dr
+	LVzzvM4Ujfg7r58/hv2zuK/iRhNwlKJJulf1hzCUM3nc5wHUa3ub2Mam+X3A/rptImigkiIAsKF
+	xVUor5fPQvV3RRCA4n1Pc=
+X-Received: by 2002:a05:7301:608e:b0:2ce:3aa1:d39b with SMTP id 5a478bee46e88-2ed3d7bbb82mr1944487eec.20.1777562530679;
+        Thu, 30 Apr 2026 08:22:10 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com ([144.49.247.127])
+        by smtp-relay.gmail.com with ESMTPS id 5a478bee46e88-2ee3c34c20fsm12074eec.20.2026.04.30.08.22.10
+        for <linux-can@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 30 Apr 2026 08:22:10 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-42fc662818eso2287299fac.3
+        for <linux-can@vger.kernel.org>; Thu, 30 Apr 2026 08:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1777562529; x=1778167329; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j6W7N3TF0u0m9VhuQZcYonFJHVZpaP1eZOWODDM2/uM=;
+        b=aYxC8/ugCNwWk9fOgx+NNG/u2Z9dwoyL+eJju7w0yJ4FS4uObaFeDlQX6ktO2hskhy
+         KaqCflpcuni9OvjD6e5E4fpxWSNtlh6nVS+XnqA8E2tf8Ui/0AgWF7P3HRfMnoq6hBkM
+         3/RoiL+MD9G6mIGx2GKehYW923Ybm3giy8IO0=
+X-Forwarded-Encrypted: i=1; AFNElJ+H8GCQM1PSMYTOFr8RoWd+NPF7HpJkXM8iHs+7mnpWNm1WY3nPcVxj/KdrCW3s4+T50rJYcKBDY7o=@vger.kernel.org
+X-Received: by 2002:a05:7300:fd03:b0:2d9:7bc4:9578 with SMTP id 5a478bee46e88-2ed3e386a41mr1602804eec.28.1777562094264;
+        Thu, 30 Apr 2026 08:14:54 -0700 (PDT)
+X-Received: by 2002:a05:7300:fd03:b0:2d9:7bc4:9578 with SMTP id 5a478bee46e88-2ed3e386a41mr1602745eec.28.1777562093564;
+        Thu, 30 Apr 2026 08:14:53 -0700 (PDT)
+Received: from [192.168.178.26] (f215227.upc-f.chello.nl. [80.56.215.227])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ee38e71ccesm286774eec.10.2026.04.30.08.14.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Apr 2026 08:14:52 -0700 (PDT)
+Message-ID: <f817f781-43d5-40d0-9352-20769d9a6601@broadcom.com>
+Date: Thu, 30 Apr 2026 17:14:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6b5ffjhgb6zy7r2y"
-Content-Disposition: inline
-In-Reply-To: <DI6D3JVJ6JG6.8V4XUVGJA2D4@baylibre.com>
-X-Rspamd-Queue-Id: 41B274A3520
-X-Rspamd-Action: no action
-X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[baylibre-com.20251104.gappssmtp.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	MAILLIST(-0.15)[generic];
-	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7460-lists,linux-can=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[pengutronix.de,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,pm.waw.pl,sipsolutions.net,thedillows.org,badula.org,gmail.com,marvell.com,chelsio.com,huawei.com,linux.dev,intel.com,nvidia.com,mucse.com,realtek.com,resnulli.us,fr.zoreil.com,brownhat.org,tux.org,trustnetic.com,net-swift.com,farsite.co.uk,broadcom.com,bootlin.com,seu.edu.cn,suse.com,infradead.org,ti.com,dama.to,cypress.com,vger.kernel.org,lists.osuosl.org,corigine.com,lists.linux.dev];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[baylibre-com.20251104.gappssmtp.com:+];
-	RCPT_COUNT_GT_50(0.00)[81];
-	TAGGED_RCPT(0.00)[linux-can,netdev];
-	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,baylibre-com.20251104.gappssmtp.com:dkim]
-
-
---6b5ffjhgb6zy7r2y
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH net-next] net: Consistently define pci_device_ids using
  named initializers
-MIME-Version: 1.0
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig_=28The_Capable_Hub=29?=
+ <u.kleine-koenig@baylibre.com>,
+ Michael Grzeschik <m.grzeschik@pengutronix.de>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol
+ <mailhol@kernel.org>, Krzysztof Halasa <khc@pm.waw.pl>,
+ Johannes Berg <johannes@sipsolutions.net>
+Cc: Markus Schneider-Pargmann <msp@baylibre.com>,
+ Steffen Klassert <klassert@kernel.org>, David Dillow <dave@thedillows.org>,
+ Ion Badulescu <ionut@badula.org>, Mark Einon <mark.einon@gmail.com>,
+ Rasesh Mody <rmody@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
+ Ido Schimmel <idosch@nvidia.com>, Sudarsana Kalluru <skalluru@marvell.com>,
+ Manish Chopra <manishc@marvell.com>, Potnuri Bharat Teja
+ <bharat@chelsio.com>, Denis Kirjanov <kirjanov@gmail.com>,
+ Jijie Shao <shaojijie@huawei.com>, Jian Shen <shenjian15@huawei.com>,
+ Cai Huoqing <cai.huoqing@linux.dev>, Fan Gong <gongfan1@huawei.com>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ Tariq Toukan <tariqt@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>,
+ Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>,
+ Petr Machata <petrm@nvidia.com>, Yibo Dong <dong100@mucse.com>,
+ Simon Horman <horms@kernel.org>, Heiner Kallweit <hkallweit1@gmail.com>,
+ nic_swsd@realtek.com, Jiri Pirko <jiri@resnulli.us>,
+ Francois Romieu <romieu@fr.zoreil.com>, Daniele Venzano
+ <venza@brownhat.org>, Samuel Chessman <chessman@tux.org>,
+ Jiawen Wu <jiawenwu@trustnetic.com>, Mengyuan Lou
+ <mengyuanlou@net-swift.com>, Kevin Curtis <kevin.curtis@farsite.co.uk>,
+ Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+ Richard Cochran <richardcochran@gmail.com>, Kees Cook <kees@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Thomas Fourier
+ <fourier.thomas@gmail.com>, Ingo Molnar <mingo@kernel.org>,
+ Kory Maincent <kory.maincent@bootlin.com>, Zilin Guan <zilin@seu.edu.cn>,
+ Marco Crivellari <marco.crivellari@suse.com>,
+ Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+ Jacob Keller <jacob.e.keller@intel.com>, Philipp Stanner
+ <phasta@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Yeounsu Moon <yyyynoom@gmail.com>, Denis Benato <benato.denis96@gmail.com>,
+ Peiyang Wang <wangpeiyang1@huawei.com>, Yonglong Liu
+ <liuyonglong@huawei.com>, Andy Shevchenko <andriy.shevchenko@intel.com>,
+ Yicong Hui <yiconghui@gmail.com>, Randy Dunlap <rdunlap@infradead.org>,
+ MD Danish Anwar <danishanwar@ti.com>, Nathan Chancellor <nathan@kernel.org>,
+ Sai Krishna <saikrishnag@marvell.com>,
+ Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+ Larysa Zaremba <larysa.zaremba@intel.com>, Joe Damato <joe@dama.to>,
+ Double Lo <double.lo@cypress.com>, Chi-hsien Lin
+ <chi-hsien.lin@cypress.com>, Colin Ian King <colin.i.king@gmail.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-can@vger.kernel.org, linux-parisc@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
+ oss-drivers@corigine.com, linux-wireless@vger.kernel.org,
+ brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com
+References: <20260428171845.2288395-2-u.kleine-koenig@baylibre.com>
+Content-Language: en-US
+From: Arend van Spriel <arend.vanspriel@broadcom.com>
+In-Reply-To: <20260428171845.2288395-2-u.kleine-koenig@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+X-Rspamd-Queue-Id: 842944A4D67
+X-Rspamd-Action: no action
+X-Rspamd-Server: lfdr
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[broadcom.com,reject];
+	R_DKIM_ALLOW(-0.20)[broadcom.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
+	HAS_LIST_UNSUB(-0.01)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[baylibre.com,kernel.org,thedillows.org,badula.org,gmail.com,marvell.com,nvidia.com,chelsio.com,huawei.com,linux.dev,intel.com,mucse.com,realtek.com,resnulli.us,fr.zoreil.com,brownhat.org,tux.org,trustnetic.com,net-swift.com,farsite.co.uk,bootlin.com,seu.edu.cn,suse.com,google.com,infradead.org,ti.com,dama.to,cypress.com,vger.kernel.org,lists.osuosl.org,corigine.com,lists.linux.dev,broadcom.com];
+	DKIM_TRACE(0.00)[broadcom.com:+];
+	TAGGED_FROM(0.00)[bounces-7461-lists,linux-can=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,baylibre.com:email,broadcom.com:email,broadcom.com:dkim,broadcom.com:mid];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[arend.vanspriel@broadcom.com,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCPT_COUNT_GT_50(0.00)[84];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can,netdev];
+	RCVD_COUNT_SEVEN(0.00)[7]
 
-Hello Markus,
+On 28/04/2026 19:18, Uwe Kleine-König (The Capable Hub) wrote:
+> ... and PCI device helpers.
+> 
+> The various struct pci_device_id arrays were initialized mostly by one
+> the PCI_DEVICE macros and then list expressions. The latter isn't easily
+> readable if you're not into PCI. Using named initializers is more
+> explicit and thus easier to parse.
+> 
+> Also use PCI_DEVICE* helper macros to assign .vendor, .device,
+> .subvendor and .subdevice where appropriate and skip explicit
+> assignments of 0 (which the compiler takes care of).
+> 
+> The secret plan is to make struct pci_device_id::driver_data an
+> anonymous union (similar to
+> https://lore.kernel.org/all/cover.1776579304.git.u.kleine-koenig@baylibre.com/)
+> and that requires named initializers. But it's also a nice cleanup on
+> its own.
+> 
+> This change doesn't introduce changes to the compiled pci_device_id
+> arrays. Tested on x86 and arm64.
 
-On Thu, Apr 30, 2026 at 10:55:14AM +0200, Markus Schneider-Pargmann wrote:
-> On Tue Apr 28, 2026 at 7:18 PM CEST, Uwe Kleine-K=F6nig (The Capable Hub)=
- wrote:
-> > diff --git a/drivers/net/can/m_can/m_can_pci.c b/drivers/net/can/m_can/=
-m_can_pci.c
-> > index eb31ed1f9644..cb9335c1d3ea 100644
-> > --- a/drivers/net/can/m_can/m_can_pci.c
-> > +++ b/drivers/net/can/m_can/m_can_pci.c
-> > @@ -183,9 +183,9 @@ static SIMPLE_DEV_PM_OPS(m_can_pci_pm_ops,
-> >  			 m_can_pci_suspend, m_can_pci_resume);
-> > =20
-> >  static const struct pci_device_id m_can_pci_id_table[] =3D {
-> > -	{ PCI_VDEVICE(INTEL, 0x4bc1), M_CAN_CLOCK_FREQ_EHL, },
-> > -	{ PCI_VDEVICE(INTEL, 0x4bc2), M_CAN_CLOCK_FREQ_EHL, },
-> > -	{  }	/* Terminating Entry */
-> > +	{ PCI_VDEVICE(INTEL, 0x4bc1), .driver_data =3D M_CAN_CLOCK_FREQ_EHL, =
-},
-> > +	{ PCI_VDEVICE(INTEL, 0x4bc2), .driver_data =3D M_CAN_CLOCK_FREQ_EHL, =
-},
-> > +	{ }	/* terminating entry */
->=20
-> M_CAN_CLOCK_FREQ_EHL is basically hardcoded for all PCI devices since
-> 2020. I don't think we need this driver data at all and can just drop it
-> and use M_CAN_CLOCK_FREQ_EHL directly in the code for the frequency.
-> Once a real new PCI device gets added we can see if and what driver_data
-> is needed.
+for brcmfmac change...
 
-Sounds like a nice *separate* change, right?
+Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
 
-Best regards
-Uwe
+> Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
+> ---
+[...]
 
---6b5ffjhgb6zy7r2y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmnzVdgACgkQj4D7WH0S
-/k4x3Af/edtfz9YYPFE6xum2g4TegCtLIvKw++0KDUAoyqpgkttjiVhQP2pkII1I
-bwoXEDLgA701tfOm6K4xaBwmjr22fTEMmwqGBUUV9kbxJkZTOYaAvGL9vZUhumqW
-aON4lzwvfmfJ4n1Nk/YWjSE0QmjI9PG7aoUCczzIPsEamTrS3xLh7OpHvF2bshFv
-8t879m4kyInFizFXvDm3Pb+7WfqIwJHbJBKFtf3yy5ZlAf4JxFccVoOC3ygeZaz7
-2S+yew8q9RxoAdReZzT/aUjlxkf0z4CmHidC1JcBK8qT/tAsE7w86uaDZOy5/ZKz
-gpkzwoU/cOxmGkcr+S/smN1/kcOCJg==
-=Kvic
------END PGP SIGNATURE-----
-
---6b5ffjhgb6zy7r2y--
+>   .../broadcom/brcm80211/brcmfmac/pcie.c        |  17 +-
+>   drivers/net/wireless/intel/ipw2x00/ipw2200.c  |  52 +-
+>   69 files changed, 1308 insertions(+), 1101 deletions(-)
 
