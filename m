@@ -1,190 +1,269 @@
-Return-Path: <linux-can+bounces-7457-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7458-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8AXXD69G82kMzAEAu9opvQ
-	(envelope-from <linux-can+bounces-7457-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 14:10:23 +0200
+	id 4CwSBHRV82mLzgEAu9opvQ
+	(envelope-from <linux-can+bounces-7458-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 15:13:24 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA0C84A29B9
-	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 14:10:22 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74D1B4A33AF
+	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 15:13:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2B5383018D49
-	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 12:08:24 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 700933002D52
+	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2026 13:13:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADCC837C938;
-	Thu, 30 Apr 2026 12:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8E3A40FD93;
+	Thu, 30 Apr 2026 13:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b="FOu3yZCc"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6276C3FD129
-	for <linux-can@vger.kernel.org>; Thu, 30 Apr 2026 12:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4FB40F8E3
+	for <linux-can@vger.kernel.org>; Thu, 30 Apr 2026 13:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777550903; cv=none; b=nROmdDR/sMf8Hv/UAiAWvN45lpxF0p6k0NlRRTLxQP58OG7SOH/bOnIezJ2eXJbji4n9iaXiqKXqOxWVTTkZ3ZYtS1W9RR/R9WsDlCLT6yF/IWxoP5G4c/PkUyIFS7n/p2bl/NmM1bNBNLXgC0SgzGlR58Kxz03tmf9OpV0IvcI=
+	t=1777554800; cv=none; b=oC/s7TKv87VTIyb3j3Ix6KAdNIFm0VbyDu0zKqvq5199t8xHWgzC50nzLx6cD/ddA0yMUN/TjOSOhTcLjDsfuEyorF3PX9XJFy/tbH6nTsDjGVbO2f8eP+j4buWK0sKFn7X+FFbYlkwOs6jV91Ef2U+5KGSascOMbwCiEOnwyrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777550903; c=relaxed/simple;
-	bh=EZZ2E4Hk4P3ioWVMaervDcnw6ADW65oM1zGar71sbpY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K27I4Xq+de+5wZVTN+d0amYzHBer69UoqPAjWJ8wsX+WkqWofDzIWe7gG4sjKJcNIWBIyRQXo35Efm60FiW99KQzYb9rTzjaOgCKLU68oxBgFb7k/FUh/NuU0Oi5AtQWGr+wZ3TN2lkvUMT8okkzXaqJ4vAcZFv1pMw6wukHZXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-6948da50eb5so444196eaf.1
-        for <linux-can@vger.kernel.org>; Thu, 30 Apr 2026 05:08:22 -0700 (PDT)
+	s=arc-20240116; t=1777554800; c=relaxed/simple;
+	bh=RE498i0yz6ZiBeXODxWPnDudcSJ72IIOpFS8OHOnbxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BqW2m7GVKnQf11gzym11ZlEY8HWcK65DVSoKMmee+iSWQ9/IS3x03uk7a5Ms44Y7qljLBBK5Q2O0YEJ3+DFoNf5kgO+/6kFPIGAiwjJu/eeYwEdQfbK8wkr0YQT1gVbxhivf9bcYTkE6GDlP3RFCC93mpdD3fE6Pm943AE1ot78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b=FOu3yZCc; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4891c00e7aeso8197345e9.2
+        for <linux-can@vger.kernel.org>; Thu, 30 Apr 2026 06:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20251104.gappssmtp.com; s=20251104; t=1777554796; x=1778159596; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FAU+laBnEtUtqsKtQVHrzB08mfX6f6gr6ykNiU5Tq5Q=;
+        b=FOu3yZCcHrzK5P7pBQ0L6iq5/0AgbtI/jO9cZrMN9VmAKqVZu/qD2AdA7rWsomTwWf
+         OvzU6324yeN0tAtqsOH6d7bKMoUmzBF6p4O8nNOtJ/HpDTAlrygdpA7/PLCRIchlz8hl
+         PamU0Sm7DfPDu0n81FAQSty48whIi4LVFwM+UQmg5ibRTYewGBdkZh1MoxfC4TwQbM8x
+         2V2o7RPGYj9WuwD8h2bwv/jCgn5PIZnxLz47vS+tGtr2uvOg4Lxjsn9gLMbBf7uYqQDg
+         cgMq/+e+QFx9I2yKEdZprao4KcJ01PfC60J/+VeWzSiw5sQCYq1o5HLEzK8lCFoDYCoU
+         cY3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777550901; x=1778155701;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ksIL4rip+tLI1Yx6QhQXSN6krUTnsd9SRkVzjQXrZjA=;
-        b=Opa8QeSmTc9ED7+V0f0hIhQbT8xjqLURaedHVVANaMsYotV/QcQuT2Wo+5c07FmcWb
-         SGHKYwfh/rGbg9kpNcMO39Pyxp7/MPntrB3hmNeC7toqLs3FT59+xPEyU1NQiKwv9uYW
-         lFcQG0FU2WEDAf98t7gNLC82fx2LHfUUuy8kIdSG+db2IMCMR7hh1jt3GlQCojJ2D6m/
-         N7Z8ERNkjl0r9S33zXsb7oShmV36uQsbXQijGq39uktuA49LXkFr5RlWnI+Gsxi/L9IU
-         fhOpqV21+4D3McUBMTzsgkRVX4quMLd/iBWArKxjNwVOZlfXQ7O2d1vSeOi4dsv5U76E
-         DzHg==
-X-Forwarded-Encrypted: i=1; AFNElJ85IK+DLTNFyUGYESCECJIAxsNH8T3dCZh+TiUTfOcVNi41PMRb9qzBql+PRB/Ei4w2DsiQ+PkyMW8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywr/syF5HNQ5uAHpH21eTm8QHqM4FXnhZEvdN7A3h0eLyLMwSYc
-	kLINT4ff/G//gPNdro3OVA6h6btOJCML5ibtdDQecNMmQoydX3FyrFbuucg5wTLIzzI=
-X-Gm-Gg: AeBDieszES2FhhBYL996TyVkKyiT+ttZBbFuewFtHPRP66PW5nvbHWcpIUH6KQZuOav
-	cs7DtSVNQkBnmNbzVuMMPYkJtsSJ8ay/eOa7MuXpbHnhfTT06EWGoE191v/H0dxN412rlLfpjc4
-	U4fKhzlBC0g4CHbV0TfgoAnXdmVdVRAoivI33PGWH8nmSxfufe5wG5cpchI64DnigPUCvKKk0mK
-	GrFD9SduqN9i+ve7iIjkLGPhuoOPkrhYy4fcWcpp5HiVEXnnAMNQGWN0Yt4LjnMEyI6beBjp5mT
-	nNqjJQ98aIaM1BTc0fWyIxXl80/6WvA9uThIOBW5C801k/2cF3gUSW5+rHuhmQfT/l7iU98llQ0
-	NM5snURawOxOfxpI/fbfnqHGeb1mrtjdmW1nCuSgEMO3Ythpl+DOBZvOjSzLqi5cbM4OQNN2mtW
-	KNXgc6/3jj+nkcq4BPdwqd9TkhaOb9NldPk33EYu6pDigb/EISHhetfvGf8V6fAjaSNaUP5oYfH
-	XQ=
-X-Received: by 2002:a05:6820:1c9f:b0:694:a30c:24fc with SMTP id 006d021491bc7-6967bd030d1mr775901eaf.7.1777550901300;
-        Thu, 30 Apr 2026 05:08:21 -0700 (PDT)
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com. [209.85.167.169])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-43437231ca6sm1403215fac.11.2026.04.30.05.08.21
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Apr 2026 05:08:21 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-479d593a0c3so678046b6e.0
-        for <linux-can@vger.kernel.org>; Thu, 30 Apr 2026 05:08:21 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ/LMaIThBlatYYCaeTPiaKVQWjgpJSH4WbVn++zVJt0SM4m1b5Ktm6gf6dF5X+IMldQplyMfLiw7VM=@vger.kernel.org
-X-Received: by 2002:a67:e708:0:b0:610:347f:9f3b with SMTP id
- ada2fe7eead31-62afc506100mr613209137.3.1777550404889; Thu, 30 Apr 2026
- 05:00:04 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777554796; x=1778159596;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FAU+laBnEtUtqsKtQVHrzB08mfX6f6gr6ykNiU5Tq5Q=;
+        b=fw5g/vhmsaEiHFGGG78wJFLDcXMMr3ukb3oY67FNaRK095W9SpVAqH9ZMdeW/qfRty
+         Goy24eJLtovJYhxmjXkZ6vo59NST5n4WYhvQiaik0HR7Jybwz9sfy85t7ITvNhXhD3wd
+         +kPjInxHxexJqmL0snGVHkOw4L0qN/OakkXjsMW3g9RnrFbzHTTfV1LHLD5lAldMC4JJ
+         XlzqIrXaTWa8qavUh5PtEcyqZn7jRpF5ApeD0H61aAgWPtldb6BFhHQhmmkj+OYKx2bX
+         c1Bv61bjCLUvq8JTPSHpJiKZpAHTJK1iVygwc8aOrzPzhZoozHnzc4j2k3lLph6n4reL
+         zuIg==
+X-Forwarded-Encrypted: i=1; AFNElJ+CJFZYlbdbwZ0P70HrepTgfZtaIYdgD+DX0U0U+kmbT9yDgeyUKGIznIOm9/I3s/IcshxKdjIL+UE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJhvbq1bK70lzjZ6q0newws1yZi/4+MCyg19axrv1Ro95uU5kk
+	WbPvaKaHFobcNW6cQry8KBtsHcZ9xi8R/Z1BszsQ7zE1/yq3Np6TieEFVm3yojYZxvU=
+X-Gm-Gg: AeBDiet/n7s6yRWNmL1tvtlpQaiul23CQnmGkwSHj9pyF2aNdjx9euuw4YhTGry7Mi+
+	k5B5dDNP2GEvjMFJVP0pyhJr6DBDjsp2m2vSjOpxAYmp7ZmS2x2TdzxxpB1olATdbV6r3a5/Iie
+	fr3GDIgpDjwkl1M2NWIX8bayG4s0csqc7SdxHENabySNWN4WK8mnsvSnLIo+lPRO7+KhLduzvWE
+	TFxRYJARiCj/Zz3EdrlCOLz56/+xRkfzn2IFD/gT0DinIGj5Iy2bJNfaflhO6kG74PzOmECGuIv
+	QDwEhEP7+YHCGCS19z8hRn91VoqczBT2BspGnzeNSGz0IoXQum8l4E6iXIAK2CL5JNwPuFZoFY8
+	M2+FIuC1PwKBSh4ot2j2KEe5a32fsRi2ymvXtNWk43ftYoMmk1MzF9dc2xM5UXJTGBu+gyAXv2K
+	7Ye+ZEs3HLt7XlHUuNbnHZjxndpZClJM+ZfkA1ft+F5jJmbZij8It+pXqzi03HV9+0Q5zWnm/0w
+	AYHlZElXLhcrFc1PcYyd8+m8g==
+X-Received: by 2002:a05:600c:1382:b0:488:a977:8d6 with SMTP id 5b1f17b1804b1-48a84458db6mr47509015e9.19.1777554795369;
+        Thu, 30 Apr 2026 06:13:15 -0700 (PDT)
+Received: from localhost (p200300f65f114e0859f76ff87a50eb14.dip0.t-ipconnect.de. [2003:f6:5f11:4e08:59f7:6ff8:7a50:eb14])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-48a7b912ee3sm74461355e9.2.2026.04.30.06.13.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2026 06:13:14 -0700 (PDT)
+Date: Thu, 30 Apr 2026 15:13:13 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
+To: Jijie Shao <shaojijie@huawei.com>
+Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
+	Vincent Mailhol <mailhol@kernel.org>, Krzysztof Halasa <khc@pm.waw.pl>, 
+	Johannes Berg <johannes@sipsolutions.net>, Markus Schneider-Pargmann <msp@baylibre.com>, 
+	Steffen Klassert <klassert@kernel.org>, David Dillow <dave@thedillows.org>, 
+	Ion Badulescu <ionut@badula.org>, Mark Einon <mark.einon@gmail.com>, 
+	Rasesh Mody <rmody@marvell.com>, GR-Linux-NIC-Dev@marvell.com, 
+	Manish Chopra <manishc@marvell.com>, Potnuri Bharat Teja <bharat@chelsio.com>, 
+	Denis Kirjanov <kirjanov@gmail.com>, Jian Shen <shenjian15@huawei.com>, 
+	Cai Huoqing <cai.huoqing@linux.dev>, Fan Gong <gongfan1@huawei.com>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Tariq Toukan <tariqt@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>, Ido Schimmel <idosch@nvidia.com>, 
+	Petr Machata <petrm@nvidia.com>, Yibo Dong <dong100@mucse.com>, Simon Horman <horms@kernel.org>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, nic_swsd@realtek.com, Jiri Pirko <jiri@resnulli.us>, 
+	Francois Romieu <romieu@fr.zoreil.com>, Daniele Venzano <venza@brownhat.org>, 
+	Samuel Chessman <chessman@tux.org>, Jiawen Wu <jiawenwu@trustnetic.com>, 
+	Mengyuan Lou <mengyuanlou@net-swift.com>, Kevin Curtis <kevin.curtis@farsite.co.uk>, 
+	Arend van Spriel <arend.vanspriel@broadcom.com>, Stanislav Yakovlev <stas.yakovlev@gmail.com>, 
+	Richard Cochran <richardcochran@gmail.com>, Kees Cook <kees@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Thomas Fourier <fourier.thomas@gmail.com>, Ingo Molnar <mingo@kernel.org>, 
+	Kory Maincent <kory.maincent@bootlin.com>, Zilin Guan <zilin@seu.edu.cn>, 
+	Marco Crivellari <marco.crivellari@suse.com>, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
+	Jacob Keller <jacob.e.keller@intel.com>, Philipp Stanner <phasta@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Yeounsu Moon <yyyynoom@gmail.com>, 
+	Denis Benato <benato.denis96@gmail.com>, Yonglong Liu <liuyonglong@huawei.com>, 
+	Andy Shevchenko <andriy.shevchenko@intel.com>, Yicong Hui <yiconghui@gmail.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, MD Danish Anwar <danishanwar@ti.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Sai Krishna <saikrishnag@marvell.com>, 
+	Ethan Nelson-Moore <enelsonmoore@gmail.com>, Larysa Zaremba <larysa.zaremba@intel.com>, 
+	Joe Damato <joe@dama.to>, Double Lo <double.lo@cypress.com>, 
+	Colin Ian King <colin.i.king@gmail.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-can@vger.kernel.org, linux-parisc@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
+	linux-rdma@vger.kernel.org, oss-drivers@corigine.com, linux-wireless@vger.kernel.org, 
+	brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com
+Subject: Re: [PATCH net-next] net: Consistently define pci_device_ids using
+ named initializers
+Message-ID: <afNUNeIsN4MrjWN7@monoceros>
+References: <20260428171845.2288395-2-u.kleine-koenig@baylibre.com>
+ <814632c8-070b-4b21-adbb-5a01a62d52f2@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260430110652.558622-1-vladimir.oltean@nxp.com> <20260430110652.558622-18-vladimir.oltean@nxp.com>
-In-Reply-To: <20260430110652.558622-18-vladimir.oltean@nxp.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 30 Apr 2026 13:59:53 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWbeeRmLf6Ae0Fr0un=-z7z5ONc_hDdjebP=KVkXHPbhw@mail.gmail.com>
-X-Gm-Features: AVHnY4K0yYb6vTu9KdtDciwvAziqboYRX_ITZ386sa6ttixZ1EP_Mzy9gi4Pi0E
-Message-ID: <CAMuHMdWbeeRmLf6Ae0Fr0un=-z7z5ONc_hDdjebP=KVkXHPbhw@mail.gmail.com>
-Subject: Re: [PATCH v7 phy-next 17/27] phy: introduce phy_get_max_link_rate()
- helper for consumers
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org, 
-	freedreno@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org, spacemit@lists.linux.dev, 
-	UNGLinuxDriver@microchip.com, Markus Schneider-Pargmann <msp@baylibre.com>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Andy Yan <andy.yan@rock-chips.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Vincent Mailhol <mailhol@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: CA0C84A29B9
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="eswuwmcxtpmq7cnr"
+Content-Disposition: inline
+In-Reply-To: <814632c8-070b-4b21-adbb-5a01a62d52f2@huawei.com>
+X-Rspamd-Queue-Id: 74D1B4A33AF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-1.76 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[baylibre-com.20251104.gappssmtp.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[lists.infradead.org,kernel.org,linaro.org,lists.freedesktop.org,vger.kernel.org,lists.linux.dev,microchip.com,baylibre.com,intel.com,ideasonboard.com,kwiboo.se,gmail.com,linux.intel.com,suse.de,ffwll.ch,rock-chips.com,pengutronix.de,bootlin.com,tuxon.dev,glider.be];
-	TAGGED_FROM(0.00)[bounces-7457-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7458-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[44];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	DMARC_NA(0.00)[baylibre.com];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[pengutronix.de,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,pm.waw.pl,sipsolutions.net,baylibre.com,thedillows.org,badula.org,gmail.com,marvell.com,chelsio.com,huawei.com,linux.dev,intel.com,nvidia.com,mucse.com,realtek.com,resnulli.us,fr.zoreil.com,brownhat.org,tux.org,trustnetic.com,net-swift.com,farsite.co.uk,broadcom.com,bootlin.com,seu.edu.cn,suse.com,infradead.org,ti.com,dama.to,cypress.com,vger.kernel.org,lists.osuosl.org,corigine.com,lists.linux.dev];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.996];
-	TAGGED_RCPT(0.00)[linux-can,renesas];
-	R_DKIM_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[glider.be:email,nxp.com:email,linux-m68k.org:email,mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,baylibre.com:email]
+	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[baylibre-com.20251104.gappssmtp.com:+];
+	RCPT_COUNT_GT_50(0.00)[81];
+	TAGGED_RCPT(0.00)[linux-can,netdev];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,huawei.com:email,baylibre-com.20251104.gappssmtp.com:dkim]
 
-Hi Vladimir,
 
-On Thu, 30 Apr 2026 at 13:07, Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
-> Consumer drivers shouldn't dereference struct phy, not even to get to
-> its attributes.
->
-> We have phy_get_bus_width() as a precedent for getting the bus_width
-> attribute, so let's add phy_get_max_link_rate() and use it in DRM and
-> CAN drivers.
->
-> In CAN drivers, the transceiver is acquired through devm_phy_optional_get()
-> and NULL is given by the API as a non-error case, so the PHY API should
-> also tolerate NULL coming back to it. This means we can further simplify
-> the call sites that test for the NULL quality of the transceiver.
->
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Acked-by: Markus Schneider-Pargmann <msp@baylibre.com> # m_can
+--eswuwmcxtpmq7cnr
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH net-next] net: Consistently define pci_device_ids using
+ named initializers
+MIME-Version: 1.0
 
-Thanks for your patch!
+Hello,
 
->  drivers/net/can/rcar/rcar_canfd.c                   | 3 +--
+On Thu, Apr 30, 2026 at 02:53:29PM +0800, Jijie Shao wrote:
+> on 2026/4/29 1:18, Uwe Kleine-K=F6nig (The Capable Hub) wrote:
+> > ... and PCI device helpers.
+> >=20
+> > The various struct pci_device_id arrays were initialized mostly by one
+> > the PCI_DEVICE macros and then list expressions. The latter isn't easily
+> > readable if you're not into PCI. Using named initializers is more
+> > explicit and thus easier to parse.
+> >=20
+> > Also use PCI_DEVICE* helper macros to assign .vendor, .device,
+> > .subvendor and .subdevice where appropriate and skip explicit
+> > assignments of 0 (which the compiler takes care of).
+> >=20
+> > The secret plan is to make struct pci_device_id::driver_data an
+> > anonymous union (similar to
+> > https://lore.kernel.org/all/cover.1776579304.git.u.kleine-koenig@baylib=
+re.com/)
+> > and that requires named initializers. But it's also a nice cleanup on
+> > its own.
+> >=20
+> > This change doesn't introduce changes to the compiled pci_device_id
+> > arrays. Tested on x86 and arm64.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig (The Capable Hub) <u.kleine-koenig@ba=
+ylibre.com>
+>=20
+> ...
+>=20
+> > diff --git a/drivers/net/ethernet/hisilicon/hibmcge/hbg_main.c b/driver=
+s/net/ethernet/hisilicon/hibmcge/hbg_main.c
+> > index 068da2fd1fea..b3e01b2f8319 100644
+> > --- a/drivers/net/ethernet/hisilicon/hibmcge/hbg_main.c
+> > +++ b/drivers/net/ethernet/hisilicon/hibmcge/hbg_main.c
+> > @@ -489,7 +489,7 @@ static void hbg_shutdown(struct pci_dev *pdev)
+> >   }
+> >   static const struct pci_device_id hbg_pci_tbl[] =3D {
+> > -	{PCI_VDEVICE(HUAWEI, 0x3730), 0},
+> > +	{ PCI_VDEVICE(HUAWEI, 0x3730) },
+> >   	{ }
+> >   };
+>=20
+> Reviewed-by: Jijie Shao <shaojijie@huawei.com>
 
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be> # rcar_canfd
+Thanks.
 
-> --- a/include/linux/phy/phy.h
-> +++ b/include/linux/phy/phy.h
-> @@ -57,6 +57,7 @@ int phy_notify_disconnect(struct phy *phy, int port);
->  int phy_notify_state(struct phy *phy, union phy_notify state);
->  int phy_get_bus_width(struct phy *phy);
->  void phy_set_bus_width(struct phy *phy, int bus_width);
-> +u32 phy_get_max_link_rate(struct phy *phy);
+> > +	{
+> > +		PCI_VDEVICE(HUAWEI, HNAE3_DEV_ID_GE),
+> > +		.driver_data =3D 0,
+> > +	}, {
+> > +		PCI_VDEVICE(HUAWEI, HNAE3_DEV_ID_25GE),
+> > +		.driver_data =3D 0,
+>=20
+> Thanks for your work.
+>=20
+> If .driver_data =3D 0, is it possible to delete it to be consistent with =
+other parts, for example:
+>=20
+> { PCI_VDEVICE(HUAWEI, HNAE3_DEV_ID_GE) }
+>=20
+> > +	}, {
+> > +		PCI_VDEVICE(HUAWEI, HNAE3_DEV_ID_25GE_RDMA),
+> > +		.driver_data =3D HNAE3_DEV_SUPPORT_ROCE_DCB_BITS,
 
-This (and all the existing getters) should take a "const struct phy *".
+However keeping the explicit .driver_data =3D 0 to have a contrast to
+other `pci_device_id`s having a non-zero .driver_data in the same driver
+is also a good reason to keep the (technically redundant) assignment.
+For other drivers I dropped these assignments if this is possible for
+all array members.
 
->  #else
->  static inline struct phy *phy_get(struct device *dev, const char *string)
->  {
+Having said that I don't intend to rework the patch for this suggestion.
 
-Gr{oetje,eeting}s,
+Best regards
+Uwe
 
-                        Geert
+--eswuwmcxtpmq7cnr
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmnzVWYACgkQj4D7WH0S
+/k6Htwf7BvJ3rYQezsd5ccz+2MAtba8pHTB3I6pUsnO2mYagJg6HKmfMspgye4AX
+BO1wngPAitkKYC0Y1QVjeL8mZpJnkiTKh5ZpywnJ5LC1/Y46vbJl1a7z45/l4MF2
+zOsQls/uPpw8h/Dif+kH4laLc33EYUiN6uoPtEBvyJuZUfEXWMc6KHtzmIZnagla
+mZcae0icKZUF5MyFeux8zVGWeLTcdBYGrtWUJ2x68bnP62MozIOSPUXTFkPxWruD
+HFTrL81mQYbLfZ88SKlMyogAeA7UjBd5/MpVdnfzLm1viy3XHq/Y9eIDkr/WypiX
+51YxF/Ol5KsTDi2naPCCB1uZE9k0xQ==
+=gn92
+-----END PGP SIGNATURE-----
+
+--eswuwmcxtpmq7cnr--
 
