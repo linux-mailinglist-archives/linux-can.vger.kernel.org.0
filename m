@@ -1,92 +1,90 @@
-Return-Path: <linux-can+bounces-7468-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7469-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gMNjEtwb+GnCpwIAu9opvQ
-	(envelope-from <linux-can+bounces-7468-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 04 May 2026 06:09:00 +0200
+	id iA1BH48p+Gk3rAIAu9opvQ
+	(envelope-from <linux-can+bounces-7469-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 04 May 2026 07:07:27 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B0984B84BF
-	for <lists+linux-can@lfdr.de>; Mon, 04 May 2026 06:08:59 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DA5D4B8729
+	for <lists+linux-can@lfdr.de>; Mon, 04 May 2026 07:07:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C0142300F19C
-	for <lists+linux-can@lfdr.de>; Mon,  4 May 2026 04:08:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C1B36300F9D3
+	for <lists+linux-can@lfdr.de>; Mon,  4 May 2026 05:07:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E996239E9A;
-	Mon,  4 May 2026 04:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB1E265606;
+	Mon,  4 May 2026 05:07:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b="rIuZW8a4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LOhHPQfH"
 X-Original-To: linux-can@vger.kernel.org
 Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B6440DFD1
-	for <linux-can@vger.kernel.org>; Mon,  4 May 2026 04:08:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3CFC7260D
+	for <linux-can@vger.kernel.org>; Mon,  4 May 2026 05:07:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777867729; cv=none; b=Q6JO7+af3d9wK0EjLCofjHcAl2vyusV0ChmVfuwCIIk2BFGKGVRL5NWzedQ2tbiFPAZJayMeZj1DXiM3Kfs5zabcBUR45qLPKqNXmL66O95kehbG8VD4C9f/xAJwGBEr31my/rz9/OFPNmwIc3/Ac1aC2M1c5CopoTOyp8BUUFs=
+	t=1777871236; cv=none; b=Isna+YBOoQajqdIHr+H7OgPORnU9TtpRc4D6ladtxO1AwM/ddyb7qXQau95Mf6XU5nH+kjn4NwoyvMzontd6ThrtTha+ZRTQSaNswULZMhhG75x8HrGIEucDhcW4ope2dUcG4a8hAKicKrbvdrA4sFv7iFoPzyDTxibuICLUZ2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777867729; c=relaxed/simple;
-	bh=PinL4ABuvHZvmktbwsxLCvN1uTYFRvo5pGKLiAs7eXY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cZZ7iZjmecACRYg/24enkOrzRlOdjPAIWQw1hGY/kpFeyrHVdaS1nMfxqh2Kzsx84hp3uLLu7bxwsIOWRKP+9PHLIAJ1Xg2nB7AQZIyJN6+phaTdWQrE0e2dX6QSMEZUQNuKGW+k4zRaVjxjKTbCGdeiacYHPVj9F8rmUkCHNyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr; spf=pass smtp.mailfrom=snu.ac.kr; dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b=rIuZW8a4; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=snu.ac.kr
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c80227c9572so146338a12.2
-        for <linux-can@vger.kernel.org>; Sun, 03 May 2026 21:08:44 -0700 (PDT)
+	s=arc-20240116; t=1777871236; c=relaxed/simple;
+	bh=9G0wXhHQpQant01a2OElCu8EYM2sME7MpXQNF7ffsqk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Iz94wwTx9Zubs4CPQOqw1uOMZs3elhNtnF7ESlCnjG1kRGCxiGOhNCMDWzDZdxy40FpQIVWNAQHGDx3vnvoQVzw+yoI0czu7mB2tyHCb+jal1bOkQ8P6bXIM5AAMMd/Ig9UemSgmM4k5kmji/9QW5zP9bQGFowbcEFasIzri8JM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LOhHPQfH; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c8021c8c42fso173057a12.3
+        for <linux-can@vger.kernel.org>; Sun, 03 May 2026 22:07:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=snu.ac.kr; s=google; t=1777867724; x=1778472524; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X8tsf4b2nAsqwqcVa1KFYp7i08w/B4bBOL9vjlWUDhQ=;
-        b=rIuZW8a4o6KXLmd9Q0lCZfpY9QIo5fFULf9+JN338TTV/4sgRpGekig2lTUMpBNr/4
-         CpBlPZNfl5UgH5vMTehMH/w0uUuRbK0qjiRpqlICo5q2G7vUfzRA6dr7aBf3ldHzu/fG
-         hh1b3zgoN34xdj75PQHK4B1G0YNRFxDNmioL4=
+        d=gmail.com; s=20251104; t=1777871234; x=1778476034; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=liL6ORHjgNqfFwxXFopdobr8mpJfjv+P8vo1gUGM2m4=;
+        b=LOhHPQfH0rsI1NRzaqnm2w9jKhbgfNBC0gaKOGcMvqBCKIcsM055RqXIi+AKOibZg0
+         Uq7WonB9II32HvscXXFDbmgWGgVQRn/3SrZ5MZ0fzqtQqMFdLl6iPVbkYStxEj2ope3B
+         WwjXVDKcip83wnBygxY/fzF4WassUyq6ugV6E0xrXC7MIJC2Qs06QwFchtf6vm1plpuQ
+         3w+0MCZoX/ayqwsDw0R74uuU4D2iko5u1HPU7iYSjlg23w3OIZNvUJz6DBMpzPHH5mnt
+         vErXmeEGmiBWtnfrXUMDukuvePj9bdNvRjmBTqkUewN0t5Xc/+6X5gwysObuqzPNN6Ra
+         RCEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777867724; x=1778472524;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=X8tsf4b2nAsqwqcVa1KFYp7i08w/B4bBOL9vjlWUDhQ=;
-        b=ka8IOCFe6JWJ9jgmauKVLU1xyLUAp85OChOT7MbZdm9ttOzVIt0BIb6efVhBDQq1vr
-         GRtPMrdN99WkMja9rNxLc8cieCvDjJ/sQAken8XGkkgPoFBZWInfvuw3BYhJwU1uLFlJ
-         MlSveyxPnhGIjwCoDkyGQuk7tLc08k/4A6ACGppOf1p1cV8mTxjUFjmWeXWsvHT9zQ3X
-         QEKsJzHY8zuGLFMmqt1pLw90FD1z2adfvvdhvg2DNa8s/c0LZpuJsb0uV+OE9VlnIt3+
-         M0hodV6me8v4KkKVfyNJl8Rq3r98EtlyWted8+ljo7tGcU0Qh6jAWPi6xjKvHuHJqSi+
-         pCYA==
-X-Forwarded-Encrypted: i=1; AFNElJ+UUw+MHEcY/iJ6kdapVhSxeQDpU9bffcwrslmlYlKK9Tx389Tl5Mpg0r3xYHZLJnLWfeoaQrSTzEY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCjuv1PmFGBI0qnD4GZ75OVYwN8yui6KyN9Mw9NFDu6U8tOOK6
-	YS/612QMJem1TVLbHtWaOX7i86x8sod+8ALnfSvVjEdSxyLmB/Va+Zn6Q28Ld5mpl0E=
-X-Gm-Gg: AeBDieslC+NUhtsn9Iu19NPj/PC96n3yxm1AHRyy7zuM3uQAtharKJhI4CzaH01NA2a
-	SbwNfS3UnU0HWJCWgdzr09lXGiL698vEexifjE9VHppLz+Y32L2T4w6/pLbbKt/cCt0lXy/OSiz
-	AYSofI0VePovdU3jdnqiu/2cpspNgSRQm2xDhDEDNZEJJdWGZxPPQ0P5Qh0X0AqrPNM7tS4DtPs
-	CyUGXFy6Zf2PqucZPbtvtP/w/t/0SbuEdE1inIZlE7mI+g/PYqIWgLZ5vXxSR3hNde467bUlPgM
-	wbhDxqj5Okg9OjO0uLg6ATENoaOApB7z8VNqgWnKpBYB7RFRtBIdsw3HtoB3+dI4oQ5nS3dl8rA
-	04+sXB21jW2LzIFmrAa0Q0s2yq2NB7it0B1V2woEIdHa195n4e14MCRFE8yJThwyX+aKMo00wIZ
-	T6dphD4fMcmS7zEJNHS0VGOR39C9p8fINw1EuOlTiqZJoryInJCmCTKujcqYi39SGVVRLAFYGfM
-	kVGFCzlkUSR
-X-Received: by 2002:a17:902:ea09:b0:2b0:608d:d8a8 with SMTP id d9443c01a7336-2b9f256e5a6mr69413095ad.1.1777867724034;
-        Sun, 03 May 2026 21:08:44 -0700 (PDT)
-Received: from eulgyu-desktop.localdomain ([147.46.174.223])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b9caa8a0d9sm88711965ad.9.2026.05.03.21.08.41
+        d=1e100.net; s=20251104; t=1777871234; x=1778476034;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=liL6ORHjgNqfFwxXFopdobr8mpJfjv+P8vo1gUGM2m4=;
+        b=beBLYTwtksFXTQ2rbiwB8A7u/hs3tkc+2xMr5SLzCRqEZyCmk1GrUNUrEFQd3kEp9K
+         thHdpMSVAfGTBkE4sO6TSrsVsdc0q5P2na0qRWxocoU8PXXYuzhHwPlm7p5Z1Gsu3DFb
+         KcfZRTp4xknlwKi+wC0vZWAiKfDT42zJCSsjbQQ9s89hpeumvju8/wSTmEfyi/yr/SWC
+         5wzWndOLBO9U1YTK7r1+NFyDq/4jjcujsK3No2Ip0TrQ8R29IHG4eGRTu1llfjcCahYv
+         608biIsmNUHfGT4rFoGCMhLEwj0JZ0i1+haXUvxoztdN3nIOlLTrx3LjIHCFipEgUf2W
+         hcJg==
+X-Gm-Message-State: AOJu0YzOc9EwvafE6m8uOl/qWub/V0D7t9OSMeaQnF/6ZA4lsvZXkHCV
+	98upoThOAF+7glrUtSCsgDYZZBS2SMIh9kRlNM1o1txXbFbn7PA7GRMT
+X-Gm-Gg: AeBDietDuSeYaBCXj/I7h56HkIqyi6EXmg3+eSpGG/eTco2223MzJwhPHaCHKa+7PtV
+	glwKXQV70IWTd4IWmz0kI66h7Jni0C2tk5hG3OAB3jaA+hEHZL9xe9SSiq/SaVz+xm+dKaFaQ6n
+	Y6SKTrVrVhZEaZaB7E0KOdE3LQ4g3R+uhlOHVMqjAnNmpfX/Hjz/OjhnQ/e78Yx6F53aGDBgsnE
+	do/iVfZxuimdM3kwy2g5Ul/Nb1hZ3SPMI7KFJDBsEHxsRXSRWZTy5o6/bfw06ReXeqrcKJo5+Rk
+	eHXoSvCqn7MuMkU6oxJTPIwF6DnA06/IV+IcCA+dDeORYfSnong7z+hY6mzeO99dGAAs5Ia3XdM
+	rjlfKnZ3ECOorJ6UZmLXEYTxSY5lxrVDwcb2dLYrIT1vMBT8WEGNNcFwCE5HBkfViRk8naFc/ds
+	khDz5Excl8AeFNSeuz79n5+V3fUHwYuA5ydwA0KszsXzm/cuTixYyyRR6EJkPPbmhNPVczpPWWN
+	E6WTHw=
+X-Received: by 2002:a05:6a20:6a1e:b0:398:6ea8:21d2 with SMTP id adf61e73a8af0-3a7f1a9e180mr8446226637.19.1777871234210;
+        Sun, 03 May 2026 22:07:14 -0700 (PDT)
+Received: from phuc-desktop.. ([183.91.15.56])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83659d38ed3sm2879655b3a.52.2026.05.03.22.07.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 May 2026 21:08:43 -0700 (PDT)
-From: Eulgyu Kim <eulgyukim@snu.ac.kr>
-To: socketcan@hartkopp.net
-Cc: mkl@pengutronix.de,
-	linux-can@vger.kernel.org,
+        Sun, 03 May 2026 22:07:13 -0700 (PDT)
+From: phucduc.bui@gmail.com
+To: msp@baylibre.com,
+	mkl@pengutronix.de,
+	mailhol@kernel.org
+Cc: linux-can@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	byoungyoung@snu.ac.kr,
-	jjy600901@snu.ac.kr
-Subject: Re: [BUG] KASAN: slab-use-after-free Read in raw_rcv
-Date: Mon,  4 May 2026 13:08:39 +0900
-Message-ID: <20260504040839.20805-1-eulgyukim@snu.ac.kr>
+	bui duc phuc <phucduc.bui@gmail.com>
+Subject: [PATCH] can: m_can: Use of_property_present() for wakeup-source
+Date: Mon,  4 May 2026 12:07:02 +0700
+Message-ID: <20260504050702.34013-1-phucduc.bui@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <c744de46-14b3-4902-bf36-50492992007f@hartkopp.net>
-References: <c744de46-14b3-4902-bf36-50492992007f@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -94,153 +92,69 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 0B0984B84BF
+X-Rspamd-Queue-Id: 1DA5D4B8729
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[snu.ac.kr,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[snu.ac.kr:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[snu.ac.kr:+];
-	TAGGED_FROM(0.00)[bounces-7468-lists,linux-can=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7469-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FROM_NO_DN(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[eulgyukim@snu.ac.kr,linux-can@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_COUNT_FIVE(0.00)[5];
-	NEURAL_HAM(-0.00)[-0.999];
-	TO_DN_NONE(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[phucducbui@gmail.com,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.995];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-> >
-> > Can you confirm that the below patch fixes the issue?
-> >
-> > Best regards,
-> > Oliver
-> >
-> > diff --git a/net/can/raw.c b/net/can/raw.c
-> > index a26942e78e68..48d1bf297c2c 100644
-> > --- a/net/can/raw.c
-> > +++ b/net/can/raw.c
-> > @@ -697,49 +697,68 @@ static int raw_setsockopt(struct socket *sock, int
-> > level, int optname,
-> >               return -EINVAL;
-> >
-> >           if (copy_from_sockptr(&flag, optval, optlen))
-> >               return -EFAULT;
-> >
-> > +        rtnl_lock();
-> > +        lock_sock(sk);
-> >           ro->loopback = !!flag;
-> > +        release_sock(sk);
-> > +        rtnl_unlock();
-> >           break;
-> >
-> >       case CAN_RAW_RECV_OWN_MSGS:
-> >           if (optlen != sizeof(flag))
-> >               return -EINVAL;
-> >
-> >           if (copy_from_sockptr(&flag, optval, optlen))
-> >               return -EFAULT;
-> >
-> > +        rtnl_lock();
-> > +        lock_sock(sk);
-> >           ro->recv_own_msgs = !!flag;
-> > +        release_sock(sk);
-> > +        rtnl_unlock();
-> >           break;
-> >
-> >       case CAN_RAW_FD_FRAMES:
-> >           if (optlen != sizeof(flag))
-> >               return -EINVAL;
-> >
-> >           if (copy_from_sockptr(&flag, optval, optlen))
-> >               return -EFAULT;
-> >
-> > +        rtnl_lock();
-> > +        lock_sock(sk);
-> >           /* Enabling CAN XL includes CAN FD */
-> > -        if (ro->xl_frames && !flag)
-> > +        if (ro->xl_frames && !flag) {
-> > +            release_sock(sk);
-> > +            rtnl_unlock();
-> >               return -EINVAL;
-> > +        }
-> >
-> >           ro->fd_frames = !!flag;
-> > +        release_sock(sk);
-> > +        rtnl_unlock();
-> >           break;
-> >
-> >       case CAN_RAW_XL_FRAMES:
-> >           if (optlen != sizeof(flag))
-> >               return -EINVAL;
-> >
-> >           if (copy_from_sockptr(&flag, optval, optlen))
-> >               return -EFAULT;
-> >
-> > +        rtnl_lock();
-> > +        lock_sock(sk);
-> >           ro->xl_frames = !!flag;
-> >
-> >           /* Enabling CAN XL includes CAN FD */
-> >           if (ro->xl_frames)
-> >               ro->fd_frames = ro->xl_frames;
-> > +        release_sock(sk);
-> > +        rtnl_unlock();
-> >           break;
-> >
-> >       case CAN_RAW_XL_VCID_OPTS:
-> >           if (optlen != sizeof(ro->raw_vcid_opts))
-> >               return -EINVAL;
-> > @@ -758,11 +777,15 @@ static int raw_setsockopt(struct socket *sock, int
-> > level, int optname,
-> >               return -EINVAL;
-> >
-> >           if (copy_from_sockptr(&flag, optval, optlen))
-> >               return -EFAULT;
-> >
-> > +        rtnl_lock();
-> > +        lock_sock(sk);
-> >           ro->join_filters = !!flag;
-> > +        release_sock(sk);
-> > +        rtnl_unlock();
-> >           break;
-> >
-> >       default:
-> >           return -ENOPROTOOPT;
-> >       }
-> >
-> >
+From: bui duc phuc <phucduc.bui@gmail.com>
 
-Hello,
+The 'wakeup-source' property is declared as a phandle-array in both YAML
+bindings and Device Tree source files. However, the driver currently
+uses of_property_read_bool() to check for its existence.
 
-thanks for your reply.
+According to the function's documentation, usage on non-boolean property
+types is deprecated. Switch to of_property_present() to comply with the
+recommended API for checking the presence of a property.
 
-We have tested the patch, and our reproducer did not trigger any issue.
+Signed-off-by: bui duc phuc <phucduc.bui@gmail.com>
+---
+ drivers/net/can/m_can/m_can.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As this issue was identified via fuzzing and we have limited background,
-we find it challenging to provide further verification.
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index eb856547ae7d..16f80607e150 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -2464,7 +2464,7 @@ struct m_can_classdev *m_can_class_allocate_dev(struct device *dev,
+ 		return ERR_PTR(ret);
+ 	}
+ 
+-	if (dev->of_node && of_property_read_bool(dev->of_node, "wakeup-source"))
++	if (dev->of_node && of_property_present(dev->of_node, "wakeup-source"))
+ 		device_set_wakeup_capable(dev, true);
+ 
+ 	/* Get TX FIFO size
+-- 
+2.43.0
 
-At least for our specific test case, the issue seems to be resolved.
-
-We hope this testing feedback is helpful.
-
-Thank you.
-
-Best Regards,
-Eulgyu Kim
 
