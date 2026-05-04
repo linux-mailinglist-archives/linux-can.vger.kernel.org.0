@@ -1,557 +1,246 @@
-Return-Path: <linux-can+bounces-7467-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7468-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 1CxiE2aU92kLjQIAu9opvQ
-	(envelope-from <linux-can+bounces-7467-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sun, 03 May 2026 20:31:02 +0200
+	id gMNjEtwb+GnCpwIAu9opvQ
+	(envelope-from <linux-can+bounces-7468-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 04 May 2026 06:09:00 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFB524B6FF7
-	for <lists+linux-can@lfdr.de>; Sun, 03 May 2026 20:31:01 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B0984B84BF
+	for <lists+linux-can@lfdr.de>; Mon, 04 May 2026 06:08:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2E7A330048FA
-	for <lists+linux-can@lfdr.de>; Sun,  3 May 2026 18:31:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C0142300F19C
+	for <lists+linux-can@lfdr.de>; Mon,  4 May 2026 04:08:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEE1D35959;
-	Sun,  3 May 2026 18:30:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E996239E9A;
+	Mon,  4 May 2026 04:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="hNPzrqyz";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="N465097v"
+	dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b="rIuZW8a4"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA55BA34;
-	Sun,  3 May 2026 18:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777833057; cv=pass; b=AhGrh0fldNHDAwe2REo4uCZrUIOOQALX2NdYzMAJpyvFRbyEElOXQhozi37jXV8iLtFLqRrJuU1C3MYuIcHP/yayPcenu44lVrUAqxa+/h/1daqPpzzXGufbJKbphMsiyip7KRT3fKuaR17bKTEc+VNL+ELNoJf7NVBdnb4S8x0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777833057; c=relaxed/simple;
-	bh=R2BrHqnCCJYHZHt+XFDOzbsaDA1mh71Q8nJtlRDP5MQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=TbH/BAbND1K3ffkYq1Fm31jUJAoI8SlQv3++8DRMtCPbIR/ixBgT4G7ksRdOPde2NxSsKKh3+6BfjwVUQ3B4fQ889BIWjbDLXVmA+Ig+4E8+4XfObXlv5xtIM/NDTBGAqVIo5jZNniYsmx/ui4C+ty5/Nai0cGwfG/iVnoOBZ5Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=hNPzrqyz; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=N465097v; arc=pass smtp.client-ip=85.215.255.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1777832691; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Q5Uu52hWJyyQUcqhASSy3HbsjjeFQULz4I4tvQ0A1tSFKGcb8vonuWh3ngSqYHhvkG
-    ZSuyPAIn4lgcxRP0TvGb5MUNx8u03qA1RLmp02LXcvDqoy0w101FEF/2qD4KGic3p+cF
-    GBPL2RmpsrCgARkqqaAaPGNnPY+SbokgjmZFCjJ2VINe/A5FpzW2pIDRngvx7Hqka0Xm
-    LOTDoN2YO/qtwT4X2rX2aPlAmo1vEdgZ/p0L2zny6ekeDH+8Da8B+DWdbar7j1W7oMHI
-    XBTI9ehwqGtlH7kAzeVhfOtY0AoAs3WaB4dqtGYMm7q/MWJm4tvztUQlqbUFx48vm7nL
-    ecpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1777832691;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=A+vahthACnrdy6m+e3P+vhNMxSnJIYWX5spFvMrh2Gk=;
-    b=i+r8l5CyBAWKrxwYHk6MeT1jNdbt6dyRNRrrma1+qCZ7HGVgosHtU6TXK5FUNnY5d1
-    ImTUGPR7rRU4pqixONLlvbBEv8ElgZaD/Nl1HVXhPy54igXGjmYcVeptzFGrfKWus+e+
-    NRH4O4GWBZJynk1cMdvfjLIWk+GeI4Hu0vOvTL9Lk6f+7GCr21pzEg3FbIugjCI3Us0+
-    PAGiu5HS2eZ1VXQo/eA53e5i6GsT4FlacN6j3DJclj9MkoQKzcmx1EPKQo2L9tWt41/O
-    KYlIOVyMwK0gM9uf/qA+Gv5ekWY6sZ3GCw1j7xfwv0+TBEGxipRCTZe11eh35/7fNzdB
-    8G9Q==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1777832691;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=A+vahthACnrdy6m+e3P+vhNMxSnJIYWX5spFvMrh2Gk=;
-    b=hNPzrqyzPqqdgpsOxUZjRBy619l2Gx6aFoEElKXYWwqK12K6EN5pX1QpjaewIXnayL
-    e3/PHtlY5vK1p895DF3UrFHbuJBeaBR/z9ZI/eO0G9awr9/9zMbo67XEucM6VLQkmrwR
-    Y75F6ZQPedhs393lRJR42QDx+gYti/dDKhU/B1PLgSBE5fwmKDurvuYJKHK4vwnZcZw0
-    XxN3SHe6t9wrLShBX+0sdhv5TZwl5itHRR69h6vmKZw0KTeJlgNevY2moloKbpjkFdCN
-    tMqufBfIe/YCH22KB4Kf4/W6pf/vJjTwPCSXCREFlqSEknDvj+KoVEvlSnlrCnSZYB0p
-    cjDQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1777832691;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=A+vahthACnrdy6m+e3P+vhNMxSnJIYWX5spFvMrh2Gk=;
-    b=N465097vVFmepMpK5CMfwfbXqgA3kfrtSKXUv7nH3JgGmDDwLFZHbn+0V5j9wkOi8r
-    ZptrKC38ZECeAui8DSCg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7s1YTqptmo87qzm6sElmZEI+VN6rw=="
-Received: from [IPV6:2a00:6020:4a38:6800:3499:34c0:1f42:76da]
-    by smtp.strato.de (RZmta 55.0.1 AUTH)
-    with ESMTPSA id Kba96d243IOpI4x
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sun, 3 May 2026 20:24:51 +0200 (CEST)
-Message-ID: <e19949f7-a974-4898-9b0d-7d798e08c38e@hartkopp.net>
-Date: Sun, 3 May 2026 20:24:50 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B6440DFD1
+	for <linux-can@vger.kernel.org>; Mon,  4 May 2026 04:08:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777867729; cv=none; b=Q6JO7+af3d9wK0EjLCofjHcAl2vyusV0ChmVfuwCIIk2BFGKGVRL5NWzedQ2tbiFPAZJayMeZj1DXiM3Kfs5zabcBUR45qLPKqNXmL66O95kehbG8VD4C9f/xAJwGBEr31my/rz9/OFPNmwIc3/Ac1aC2M1c5CopoTOyp8BUUFs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777867729; c=relaxed/simple;
+	bh=PinL4ABuvHZvmktbwsxLCvN1uTYFRvo5pGKLiAs7eXY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cZZ7iZjmecACRYg/24enkOrzRlOdjPAIWQw1hGY/kpFeyrHVdaS1nMfxqh2Kzsx84hp3uLLu7bxwsIOWRKP+9PHLIAJ1Xg2nB7AQZIyJN6+phaTdWQrE0e2dX6QSMEZUQNuKGW+k4zRaVjxjKTbCGdeiacYHPVj9F8rmUkCHNyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr; spf=pass smtp.mailfrom=snu.ac.kr; dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b=rIuZW8a4; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=snu.ac.kr
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c80227c9572so146338a12.2
+        for <linux-can@vger.kernel.org>; Sun, 03 May 2026 21:08:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=snu.ac.kr; s=google; t=1777867724; x=1778472524; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X8tsf4b2nAsqwqcVa1KFYp7i08w/B4bBOL9vjlWUDhQ=;
+        b=rIuZW8a4o6KXLmd9Q0lCZfpY9QIo5fFULf9+JN338TTV/4sgRpGekig2lTUMpBNr/4
+         CpBlPZNfl5UgH5vMTehMH/w0uUuRbK0qjiRpqlICo5q2G7vUfzRA6dr7aBf3ldHzu/fG
+         hh1b3zgoN34xdj75PQHK4B1G0YNRFxDNmioL4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777867724; x=1778472524;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=X8tsf4b2nAsqwqcVa1KFYp7i08w/B4bBOL9vjlWUDhQ=;
+        b=ka8IOCFe6JWJ9jgmauKVLU1xyLUAp85OChOT7MbZdm9ttOzVIt0BIb6efVhBDQq1vr
+         GRtPMrdN99WkMja9rNxLc8cieCvDjJ/sQAken8XGkkgPoFBZWInfvuw3BYhJwU1uLFlJ
+         MlSveyxPnhGIjwCoDkyGQuk7tLc08k/4A6ACGppOf1p1cV8mTxjUFjmWeXWsvHT9zQ3X
+         QEKsJzHY8zuGLFMmqt1pLw90FD1z2adfvvdhvg2DNa8s/c0LZpuJsb0uV+OE9VlnIt3+
+         M0hodV6me8v4KkKVfyNJl8Rq3r98EtlyWted8+ljo7tGcU0Qh6jAWPi6xjKvHuHJqSi+
+         pCYA==
+X-Forwarded-Encrypted: i=1; AFNElJ+UUw+MHEcY/iJ6kdapVhSxeQDpU9bffcwrslmlYlKK9Tx389Tl5Mpg0r3xYHZLJnLWfeoaQrSTzEY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCjuv1PmFGBI0qnD4GZ75OVYwN8yui6KyN9Mw9NFDu6U8tOOK6
+	YS/612QMJem1TVLbHtWaOX7i86x8sod+8ALnfSvVjEdSxyLmB/Va+Zn6Q28Ld5mpl0E=
+X-Gm-Gg: AeBDieslC+NUhtsn9Iu19NPj/PC96n3yxm1AHRyy7zuM3uQAtharKJhI4CzaH01NA2a
+	SbwNfS3UnU0HWJCWgdzr09lXGiL698vEexifjE9VHppLz+Y32L2T4w6/pLbbKt/cCt0lXy/OSiz
+	AYSofI0VePovdU3jdnqiu/2cpspNgSRQm2xDhDEDNZEJJdWGZxPPQ0P5Qh0X0AqrPNM7tS4DtPs
+	CyUGXFy6Zf2PqucZPbtvtP/w/t/0SbuEdE1inIZlE7mI+g/PYqIWgLZ5vXxSR3hNde467bUlPgM
+	wbhDxqj5Okg9OjO0uLg6ATENoaOApB7z8VNqgWnKpBYB7RFRtBIdsw3HtoB3+dI4oQ5nS3dl8rA
+	04+sXB21jW2LzIFmrAa0Q0s2yq2NB7it0B1V2woEIdHa195n4e14MCRFE8yJThwyX+aKMo00wIZ
+	T6dphD4fMcmS7zEJNHS0VGOR39C9p8fINw1EuOlTiqZJoryInJCmCTKujcqYi39SGVVRLAFYGfM
+	kVGFCzlkUSR
+X-Received: by 2002:a17:902:ea09:b0:2b0:608d:d8a8 with SMTP id d9443c01a7336-2b9f256e5a6mr69413095ad.1.1777867724034;
+        Sun, 03 May 2026 21:08:44 -0700 (PDT)
+Received: from eulgyu-desktop.localdomain ([147.46.174.223])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b9caa8a0d9sm88711965ad.9.2026.05.03.21.08.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 May 2026 21:08:43 -0700 (PDT)
+From: Eulgyu Kim <eulgyukim@snu.ac.kr>
+To: socketcan@hartkopp.net
+Cc: mkl@pengutronix.de,
+	linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	byoungyoung@snu.ac.kr,
+	jjy600901@snu.ac.kr
+Subject: Re: [BUG] KASAN: slab-use-after-free Read in raw_rcv
+Date: Mon,  4 May 2026 13:08:39 +0900
+Message-ID: <20260504040839.20805-1-eulgyukim@snu.ac.kr>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <c744de46-14b3-4902-bf36-50492992007f@hartkopp.net>
+References: <c744de46-14b3-4902-bf36-50492992007f@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] KASAN: slab-use-after-free Read in raw_rcv
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-To: Eulgyu Kim <eulgyukim@snu.ac.kr>, mkl@pengutronix.de,
- Vincent Mailhol <mailhol@kernel.org>
-Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
- byoungyoung@snu.ac.kr, jjy600901@snu.ac.kr
-References: <20260503112200.22727-1-eulgyukim@snu.ac.kr>
- <c744de46-14b3-4902-bf36-50492992007f@hartkopp.net>
-Content-Language: en-US
-In-Reply-To: <c744de46-14b3-4902-bf36-50492992007f@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: AFB524B6FF7
+X-Rspamd-Queue-Id: 0B0984B84BF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
-	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[snu.ac.kr,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[snu.ac.kr:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7467-lists,linux-can=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[hartkopp.net:+];
+	DKIM_TRACE(0.00)[snu.ac.kr:+];
+	TAGGED_FROM(0.00)[bounces-7468-lists,linux-can=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,hartkopp.net:dkim,hartkopp.net:mid]
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[eulgyukim@snu.ac.kr,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.999];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 
-Maybe it makes sense to put the entire raw_setsockopt() in a locked 
-context as we have it in isotp_setsockopt() and 
-isotp_setsockopt_locked() from commit 2b17c400aeb4 ("can: isotp: prevent 
-race between isotp_bind() and isotp_setsockopt()")
+> >
+> > Can you confirm that the below patch fixes the issue?
+> >
+> > Best regards,
+> > Oliver
+> >
+> > diff --git a/net/can/raw.c b/net/can/raw.c
+> > index a26942e78e68..48d1bf297c2c 100644
+> > --- a/net/can/raw.c
+> > +++ b/net/can/raw.c
+> > @@ -697,49 +697,68 @@ static int raw_setsockopt(struct socket *sock, int
+> > level, int optname,
+> >               return -EINVAL;
+> >
+> >           if (copy_from_sockptr(&flag, optval, optlen))
+> >               return -EFAULT;
+> >
+> > +        rtnl_lock();
+> > +        lock_sock(sk);
+> >           ro->loopback = !!flag;
+> > +        release_sock(sk);
+> > +        rtnl_unlock();
+> >           break;
+> >
+> >       case CAN_RAW_RECV_OWN_MSGS:
+> >           if (optlen != sizeof(flag))
+> >               return -EINVAL;
+> >
+> >           if (copy_from_sockptr(&flag, optval, optlen))
+> >               return -EFAULT;
+> >
+> > +        rtnl_lock();
+> > +        lock_sock(sk);
+> >           ro->recv_own_msgs = !!flag;
+> > +        release_sock(sk);
+> > +        rtnl_unlock();
+> >           break;
+> >
+> >       case CAN_RAW_FD_FRAMES:
+> >           if (optlen != sizeof(flag))
+> >               return -EINVAL;
+> >
+> >           if (copy_from_sockptr(&flag, optval, optlen))
+> >               return -EFAULT;
+> >
+> > +        rtnl_lock();
+> > +        lock_sock(sk);
+> >           /* Enabling CAN XL includes CAN FD */
+> > -        if (ro->xl_frames && !flag)
+> > +        if (ro->xl_frames && !flag) {
+> > +            release_sock(sk);
+> > +            rtnl_unlock();
+> >               return -EINVAL;
+> > +        }
+> >
+> >           ro->fd_frames = !!flag;
+> > +        release_sock(sk);
+> > +        rtnl_unlock();
+> >           break;
+> >
+> >       case CAN_RAW_XL_FRAMES:
+> >           if (optlen != sizeof(flag))
+> >               return -EINVAL;
+> >
+> >           if (copy_from_sockptr(&flag, optval, optlen))
+> >               return -EFAULT;
+> >
+> > +        rtnl_lock();
+> > +        lock_sock(sk);
+> >           ro->xl_frames = !!flag;
+> >
+> >           /* Enabling CAN XL includes CAN FD */
+> >           if (ro->xl_frames)
+> >               ro->fd_frames = ro->xl_frames;
+> > +        release_sock(sk);
+> > +        rtnl_unlock();
+> >           break;
+> >
+> >       case CAN_RAW_XL_VCID_OPTS:
+> >           if (optlen != sizeof(ro->raw_vcid_opts))
+> >               return -EINVAL;
+> > @@ -758,11 +777,15 @@ static int raw_setsockopt(struct socket *sock, int
+> > level, int optname,
+> >               return -EINVAL;
+> >
+> >           if (copy_from_sockptr(&flag, optval, optlen))
+> >               return -EFAULT;
+> >
+> > +        rtnl_lock();
+> > +        lock_sock(sk);
+> >           ro->join_filters = !!flag;
+> > +        release_sock(sk);
+> > +        rtnl_unlock();
+> >           break;
+> >
+> >       default:
+> >           return -ENOPROTOOPT;
+> >       }
+> >
+> >
 
-It is a similar situation.
+Hello,
 
-On 03.05.26 20:04, Oliver Hartkopp wrote:
-> Hello Eulgyu Kim,
-> 
-> many thanks for your report! Good catch!
-> 
-> With commit 890e5198a6e5 ("can: raw: use bitfields to store flags in 
-> struct raw_sock") the flags are now set in a bitfield which allows this 
-> kind of race condition.
-> 
-> Therefore adding a locking analogue to other sockopt settings and 
-> analogue to raw_bind() becomes necessary.
-> 
-> Can you confirm that the below patch fixes the issue?
-> 
-> Best regards,
-> Oliver
-> 
-> diff --git a/net/can/raw.c b/net/can/raw.c
-> index a26942e78e68..48d1bf297c2c 100644
-> --- a/net/can/raw.c
-> +++ b/net/can/raw.c
-> @@ -697,49 +697,68 @@ static int raw_setsockopt(struct socket *sock, int 
-> level, int optname,
->               return -EINVAL;
-> 
->           if (copy_from_sockptr(&flag, optval, optlen))
->               return -EFAULT;
-> 
-> +        rtnl_lock();
-> +        lock_sock(sk);
->           ro->loopback = !!flag;
-> +        release_sock(sk);
-> +        rtnl_unlock();
->           break;
-> 
->       case CAN_RAW_RECV_OWN_MSGS:
->           if (optlen != sizeof(flag))
->               return -EINVAL;
-> 
->           if (copy_from_sockptr(&flag, optval, optlen))
->               return -EFAULT;
-> 
-> +        rtnl_lock();
-> +        lock_sock(sk);
->           ro->recv_own_msgs = !!flag;
-> +        release_sock(sk);
-> +        rtnl_unlock();
->           break;
-> 
->       case CAN_RAW_FD_FRAMES:
->           if (optlen != sizeof(flag))
->               return -EINVAL;
-> 
->           if (copy_from_sockptr(&flag, optval, optlen))
->               return -EFAULT;
-> 
-> +        rtnl_lock();
-> +        lock_sock(sk);
->           /* Enabling CAN XL includes CAN FD */
-> -        if (ro->xl_frames && !flag)
-> +        if (ro->xl_frames && !flag) {
-> +            release_sock(sk);
-> +            rtnl_unlock();
->               return -EINVAL;
-> +        }
-> 
->           ro->fd_frames = !!flag;
-> +        release_sock(sk);
-> +        rtnl_unlock();
->           break;
-> 
->       case CAN_RAW_XL_FRAMES:
->           if (optlen != sizeof(flag))
->               return -EINVAL;
-> 
->           if (copy_from_sockptr(&flag, optval, optlen))
->               return -EFAULT;
-> 
-> +        rtnl_lock();
-> +        lock_sock(sk);
->           ro->xl_frames = !!flag;
-> 
->           /* Enabling CAN XL includes CAN FD */
->           if (ro->xl_frames)
->               ro->fd_frames = ro->xl_frames;
-> +        release_sock(sk);
-> +        rtnl_unlock();
->           break;
-> 
->       case CAN_RAW_XL_VCID_OPTS:
->           if (optlen != sizeof(ro->raw_vcid_opts))
->               return -EINVAL;
-> @@ -758,11 +777,15 @@ static int raw_setsockopt(struct socket *sock, int 
-> level, int optname,
->               return -EINVAL;
-> 
->           if (copy_from_sockptr(&flag, optval, optlen))
->               return -EFAULT;
-> 
-> +        rtnl_lock();
-> +        lock_sock(sk);
->           ro->join_filters = !!flag;
-> +        release_sock(sk);
-> +        rtnl_unlock();
->           break;
-> 
->       default:
->           return -ENOPROTOOPT;
->       }
-> 
-> 
-> 
-> On 03.05.26 13:22, Eulgyu Kim wrote:
->> Hello,
->>
->> We encountered a "KASAN: slab-use-after-free Read in raw_rcv"
->> on kernel version v7.1.0-rc1.
->>
->> Following is our raw guess of the harmful sequence:
->> 1. `raw_bind()` registers a receiver with `can_rx_register(..., 
->> raw_rcv, sk, ...)`.
->> 2. After the registration succeeds, `raw_bind()` sets `ro->bound = 1`.
->> 3. Concurrently, setsockopt(CAN_RAW_JOIN_FILTERS) writes ro->join_filters
->> without lock_sock(). Since ro->bound and ro->join_filters share the same
->> bitfield storage word, this unlocked bitfield write can lose raw_bind()'s
->> update and write the storage word back with bound == 0.
->> 4. `close()` enters `raw_release()`, sees `ro->bound == 0`,
->> and therefore skips `raw_disable_allfilters()`.
->> 5. The CAN receiver registered in step 1 remains on the receive list with
->> receiver->data == sk.
->> 6. `raw_release()` drops the last socket reference and frees the 
->> `struct raw_sock`.
->> 7. A later matching CAN frame reaches the stale receiver and calls
->> raw_rcv(skb, sk), which dereferences the freed socket, causing the UAF.
->>
->> We have included the following items below:
->> - C reproducer (~80 lines)
->> - KASAN crash log
->>
->> The kernel config used is the same as the syzbot configuration,
->> and it took less than 10 seconds to trigger the KASAN report
->> in our QEMU environment.
->>
->> We hope this report helps address the issue. Please let us know
->> if any further information is needed.
->>
->> Thank you.
->>
->> Best Regards,
->> Eulgyu Kim
->>
->>
->>
->> C reproducer:
->> ==================================================================
->> #define _GNU_SOURCE
->>
->> #include <linux/can.h>
->> #include <linux/can/raw.h>
->> #include <net/if.h>
->> #include <pthread.h>
->> #include <sched.h>
->> #include <stdio.h>
->> #include <stdlib.h>
->> #include <sys/socket.h>
->> #include <unistd.h>
->>
->> #ifndef CAN_RAW_JOIN_FILTERS
->> #define CAN_RAW_JOIN_FILTERS 6
->> #endif
->>
->> static struct sockaddr_can vcan0 = {
->>     .can_family = AF_CAN,
->> };
->>
->> static void *sender(void *arg)
->> {
->>     struct can_frame frame = {
->>         .can_dlc = 3,
->>         .data = { [2] = 0x10 },
->>     };
->>     int fd = socket(PF_CAN, SOCK_RAW, CAN_RAW);
->>
->>     for (;;)
->>         sendto(fd, &frame, sizeof(frame), 0, (struct sockaddr 
->> *)&vcan0, sizeof(vcan0));
->> }
->>
->> static void *bind_fd(void *arg)
->> {
->>     bind((int)(long)arg, (struct sockaddr *)&vcan0, sizeof(vcan0));
->> }
->>
->> static void *racer(void *arg)
->> {
->>     for (;;) {
->>         pthread_t th;
->>         int fd = socket(PF_CAN, SOCK_RAW, CAN_RAW);
->>         int one = 1;
->>
->>         pthread_create(&th, NULL, bind_fd, (void *)(long)fd);
->>         sched_yield();
->>         setsockopt(fd, SOL_CAN_RAW, CAN_RAW_JOIN_FILTERS, &one, 
->> sizeof(one));
->>         close(fd);
->>         pthread_join(th, NULL);
->>     }
->> }
->>
->> int main(void)
->> {
->>     pthread_t th;
->>
->>     system("modprobe vcan >/dev/null 2>&1");
->>     system("ip link add dev vcan0 type vcan >/dev/null 2>&1");
->>     system("ip link set dev vcan0 up >/dev/null 2>&1");
->>
->>     vcan0.can_ifindex = if_nametoindex("vcan0");
->>     if (!vcan0.can_ifindex) {
->>         fprintf(stderr, "failed to set up vcan0\n");
->>         return 1;
->>     }
->>
->>     pthread_create(&th, NULL, sender, NULL);
->>     for (int i = 0; i < 8; i++)
->>         pthread_create(&th, NULL, racer, NULL);
->>
->>     pthread_join(th, NULL);
->>     return 0;
->> }
->>
->> ==================================================================
->>
->>
->>
->> KASAN crash log:
->> ==================================================================
->> BUG: KASAN: slab-use-after-free in raw_rcv+0x9e6/0xd40 net/can/raw.c:139
->> Read of size 1 at addr ff110001181f659c by task main/9522
->> CPU: 2 UID: 0 PID: 9522 Comm: main Not tainted 7.1.0-rc1-gf1a5e78a55eb 
->> #8 PREEMPT(full)
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 
->> 04/01/2014
->> Call Trace:
->>   <IRQ>
->>   dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
->>   print_address_description+0x55/0x1e0 mm/kasan/report.c:378
->>   print_report+0x64/0x70 mm/kasan/report.c:482
->>   kasan_report+0x118/0x150 mm/kasan/report.c:595
->>   raw_rcv+0x9e6/0xd40 net/can/raw.c:139
->>   deliver net/can/af_can.c:575 [inline]
->>   can_rcv_filter+0x126/0x7a0 net/can/af_can.c:602
->>   can_receive+0x2c6/0x440 net/can/af_can.c:674
->>   can_rcv+0x1f9/0x330 net/can/af_can.c:699
->>   __netif_receive_skb_one_core net/core/dev.c:6202 [inline]
->>   __netif_receive_skb net/core/dev.c:6315 [inline]
->>   process_backlog+0xc67/0x1960 net/core/dev.c:6666
->>   __napi_poll+0xae/0x340 net/core/dev.c:7730
->>   napi_poll net/core/dev.c:7793 [inline]
->>   net_rx_action+0x5d7/0xf50 net/core/dev.c:7950
->>   handle_softirqs+0x22b/0x850 kernel/softirq.c:622
->>   do_softirq+0x76/0xd0 kernel/softirq.c:523
->>   </IRQ>
->>   <TASK>
->>   __local_bh_enable_ip+0xf8/0x130 kernel/softirq.c:450
->>   local_bh_enable include/linux/bottom_half.h:33 [inline]
->>   netif_rx+0x83/0x90 net/core/dev.c:5775
->>   can_send+0x978/0xd00 net/can/af_can.c:289
->>   raw_sendmsg+0xbd7/0xfe0 net/can/raw.c:1008
->>   sock_sendmsg_nosec net/socket.c:787 [inline]
->>   __sock_sendmsg net/socket.c:802 [inline]
->>   __sys_sendto+0x5dc/0x680 net/socket.c:2265
->>   __do_sys_sendto net/socket.c:2272 [inline]
->>   __se_sys_sendto net/socket.c:2268 [inline]
->>   __x64_sys_sendto+0xde/0x100 net/socket.c:2268
->>   do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->>   do_syscall_64+0x16e/0xf80 arch/x86/entry/syscall_64.c:94
->>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
->> RIP: 0033:0x44ee46
->> Code: 9d 02 00 44 8b 4c 24 2c 4c 8b 44 24 20 41 89 c4 44 8b 54 24 28 
->> 48 8b 54 24 18 b8 2c 00 00 00 48 8b 74 24 10 8b 7c 24 08 0f 05 <48> 3d 
->> 00 f0 ff ff 77 3a 44 89 e7 48 89 44 24 08 e8 35 9d 02 00 48
->> RSP: 002b:00007fc8252d7150 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
->> RAX: ffffffffffffffda RBX: 00007fc8252d7640 RCX: 000000000044ee46
->> RDX: 0000000000000010 RSI: 00007fc8252d71b0 RDI: 0000000000000003
->> RBP: 00007fc8252d71d0 R08: 00000000004e2110 R09: 0000000000000018
->> R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
->> R13: 0000000000000000 R14: 0000000000415170 R15: 00007fc824ad7000
->>   </TASK>
->> Allocated by task 9523:
->>   kasan_save_stack mm/kasan/common.c:57 [inline]
->>   kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
->>   poison_kmalloc_redzone mm/kasan/common.c:398 [inline]
->>   __kasan_kmalloc+0x93/0xb0 mm/kasan/common.c:415
->>   kasan_kmalloc include/linux/kasan.h:263 [inline]
->>   __do_kmalloc_node mm/slub.c:5295 [inline]
->>   __kmalloc_noprof+0x361/0x770 mm/slub.c:5307
->>   kmalloc_noprof include/linux/slab.h:954 [inline]
->>   sk_prot_alloc+0xe7/0x220 net/core/sock.c:2247
->>   sk_alloc+0x3a/0x390 net/core/sock.c:2303
->>   can_create+0x1ca/0x5d0 net/can/af_can.c:158
->>   __sock_create+0x4b3/0x9d0 net/socket.c:1664
->>   sock_create net/socket.c:1722 [inline]
->>   __sys_socket_create net/socket.c:1759 [inline]
->>   __sys_socket+0xd7/0x1b0 net/socket.c:1806
->>   __do_sys_socket net/socket.c:1820 [inline]
->>   __se_sys_socket net/socket.c:1818 [inline]
->>   __x64_sys_socket+0x7a/0x90 net/socket.c:1818
->>   do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->>   do_syscall_64+0x16e/0xf80 arch/x86/entry/syscall_64.c:94
->>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
->> Freed by task 27894:
->>   kasan_save_stack mm/kasan/common.c:57 [inline]
->>   kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
->>   kasan_save_free_info+0x46/0x50 mm/kasan/generic.c:584
->>   poison_slab_object mm/kasan/common.c:253 [inline]
->>   __kasan_slab_free+0x5c/0x80 mm/kasan/common.c:285
->>   kasan_slab_free include/linux/kasan.h:235 [inline]
->>   slab_free_hook mm/slub.c:2689 [inline]
->>   slab_free mm/slub.c:6246 [inline]
->>   kfree+0x1c7/0x650 mm/slub.c:6561
->>   sk_prot_free net/core/sock.c:2286 [inline]
->>   __sk_destruct+0x748/0x9d0 net/core/sock.c:2386
->>   sock_put include/net/sock.h:2010 [inline]
->>   raw_release+0x84c/0x9f0 net/can/raw.c:458
->>   __sock_release net/socket.c:722 [inline]
->>   sock_close+0xc3/0x240 net/socket.c:1514
->>   __fput+0x44c/0xa60 fs/file_table.c:510
->>   task_work_run+0x1d4/0x260 kernel/task_work.c:233
->>   resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
->>   __exit_to_user_mode_loop kernel/entry/common.c:67 [inline]
->>   exit_to_user_mode_loop+0xef/0x4e0 kernel/entry/common.c:98
->>   __exit_to_user_mode_prepare include/linux/irq-entry-common.h:207 
->> [inline]
->>   syscall_exit_to_user_mode_prepare include/linux/irq-entry- 
->> common.h:238 [inline]
->>   syscall_exit_to_user_mode include/linux/entry-common.h:318 [inline]
->>   do_syscall_64+0x34d/0xf80 arch/x86/entry/syscall_64.c:100
->>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
->> The buggy address belongs to the object at ff110001181f6000
->>   which belongs to the cache kmalloc-2k of size 2048
->> The buggy address is located 1436 bytes inside of
->>   freed 2048-byte region [ff110001181f6000, ff110001181f6800)
->> The buggy address belongs to the physical page:
->> page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 
->> pfn:0x1181f0
->> head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
->> flags: 0x17ff00000000040(head|node=0|zone=2|lastcpupid=0x7ff)
->> page_type: f5(slab)
->> raw: 017ff00000000040 ff11000100038f00 dead000000000100 dead000000000122
->> raw: 0000000000000000 0000000800080008 00000000f5000000 0000000000000000
->> head: 017ff00000000040 ff11000100038f00 dead000000000100 dead000000000122
->> head: 0000000000000000 0000000800080008 00000000f5000000 0000000000000000
->> head: 017ff00000000003 fffffffffffffe01 00000000ffffffff 00000000ffffffff
->> head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000008
->> page dumped because: kasan: bad access detected
->> page_owner tracks the page as allocated
->> page last allocated via order 3, migratetype Unmovable, gfp_mask 
->> 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP| 
->> __GFP_NOMEMALLOC), pid 9526, tgid 9511 (main), ts 138366918843, 
->> free_ts 137562029882
->>   set_page_owner include/linux/page_owner.h:32 [inline]
->>   post_alloc_hook+0x23d/0x2a0 mm/page_alloc.c:1858
->>   prep_new_page mm/page_alloc.c:1866 [inline]
->>   get_page_from_freelist+0x24be/0x2540 mm/page_alloc.c:3946
->>   __alloc_frozen_pages_noprof+0x181/0x370 mm/page_alloc.c:5226
->>   alloc_slab_page mm/slub.c:3278 [inline]
->>   allocate_slab+0x77/0x680 mm/slub.c:3467
->>   new_slab mm/slub.c:3525 [inline]
->>   refill_objects+0x342/0x3d0 mm/slub.c:7251
->>   refill_sheaf mm/slub.c:2816 [inline]
->>   __pcs_replace_empty_main+0x323/0x730 mm/slub.c:4651
->>   alloc_from_pcs mm/slub.c:4749 [inline]
->>   slab_alloc_node mm/slub.c:4883 [inline]
->>   __do_kmalloc_node mm/slub.c:5294 [inline]
->>   __kmalloc_noprof+0x473/0x770 mm/slub.c:5307
->>   kmalloc_noprof include/linux/slab.h:954 [inline]
->>   sk_prot_alloc+0xe7/0x220 net/core/sock.c:2247
->>   sk_alloc+0x3a/0x390 net/core/sock.c:2303
->>   can_create+0x1ca/0x5d0 net/can/af_can.c:158
->>   __sock_create+0x4b3/0x9d0 net/socket.c:1664
->>   sock_create net/socket.c:1722 [inline]
->>   __sys_socket_create net/socket.c:1759 [inline]
->>   __sys_socket+0xd7/0x1b0 net/socket.c:1806
->>   __do_sys_socket net/socket.c:1820 [inline]
->>   __se_sys_socket net/socket.c:1818 [inline]
->>   __x64_sys_socket+0x7a/0x90 net/socket.c:1818
->>   do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->>   do_syscall_64+0x16e/0xf80 arch/x86/entry/syscall_64.c:94
->>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
->> page last free pid 54 tgid 54 stack trace:
->>   reset_page_owner include/linux/page_owner.h:25 [inline]
->>   __free_pages_prepare mm/page_alloc.c:1402 [inline]
->>   __free_frozen_pages+0xbdb/0xd50 mm/page_alloc.c:2943
->>   vfree+0x1d1/0x2f0 mm/vmalloc.c:3472
->>   delayed_vfree_work+0x55/0x80 mm/vmalloc.c:3392
->>   process_one_work kernel/workqueue.c:3302 [inline]
->>   process_scheduled_works+0xb4b/0x1840 kernel/workqueue.c:3385
->>   worker_thread+0xa54/0xfc0 kernel/workqueue.c:3466
->>   kthread+0x389/0x480 kernel/kthread.c:436
->>   ret_from_fork+0x509/0xb70 arch/x86/kernel/process.c:158
->>   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
->> Memory state around the buggy address:
->>   ff110001181f6480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>   ff110001181f6500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>> ff110001181f6580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>                              ^
->>   ff110001181f6600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>   ff110001181f6680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->> ==================================================================
-> 
-> 
+thanks for your reply.
 
+We have tested the patch, and our reproducer did not trigger any issue.
+
+As this issue was identified via fuzzing and we have limited background,
+we find it challenging to provide further verification.
+
+At least for our specific test case, the issue seems to be resolved.
+
+We hope this testing feedback is helpful.
+
+Thank you.
+
+Best Regards,
+Eulgyu Kim
 
