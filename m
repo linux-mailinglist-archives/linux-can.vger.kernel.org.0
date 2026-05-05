@@ -1,132 +1,174 @@
-Return-Path: <linux-can+bounces-7527-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7528-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WNhCD5wC+ml1HAMAu9opvQ
-	(envelope-from <linux-can+bounces-7527-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 05 May 2026 16:45:48 +0200
+	id ePVeJEQb+mkJJgMAu9opvQ
+	(envelope-from <linux-can+bounces-7528-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 05 May 2026 18:31:00 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 965204CFAAD
-	for <lists+linux-can@lfdr.de>; Tue, 05 May 2026 16:45:47 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ADAD4D14F7
+	for <lists+linux-can@lfdr.de>; Tue, 05 May 2026 18:31:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7C56C3064AD1
-	for <lists+linux-can@lfdr.de>; Tue,  5 May 2026 14:42:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DA7B830078A0
+	for <lists+linux-can@lfdr.de>; Tue,  5 May 2026 16:26:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1491444D014;
-	Tue,  5 May 2026 14:42:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE1548AE1A;
+	Tue,  5 May 2026 16:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uwz9RBpu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P3c57A43"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A808544BCAC;
-	Tue,  5 May 2026 14:42:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B0F3EE1C4;
+	Tue,  5 May 2026 16:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777992151; cv=none; b=GFgdZnqVK/UrOouVWG43w1XbZms4U9BWCMTYYO2vdEweLf8KdJyePJ7J7ntEOWX2d7PP/HGQgofIvuBhbJ+57Gjc0SXUC7gA0ZlDjWbv9fwosJAQYXaj9wtsPBUeSpzoqlXPvOMFxonHWCRjzWk2nshRmruYuERWaamfI4x72J4=
+	t=1777998391; cv=none; b=b2XqrhMSx9cgqNL5aIJy/EEMCa4y7XwGuepE7hurErLXRA/YP+qllxrFRA6frgYh6ik4XxdbRKMG3XxjzkJ5CpIYcU/98fjbb+v02TWZrWiYpLGc2cW3qHOoHeERPPSI7gFQjYbtQab9wwxkU+/yVJgo2bijO+gucVg7GiOaj/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777992151; c=relaxed/simple;
-	bh=yaRmq/h8X6rxfU9pBhHHqPzmyAEwgac80kFaDayrP3Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Av5rEOfleSOzd7gsE86DAgUfO/7/CnBywaz+jHQyfumGDXpDHueI1PqfEI4fa/lxkAJbJVk1fvc6Ry6x74ivagVhXP/J54qZ/+9NcWWn22LzCdautNsMtCw8RlJRCuNlu7l97tTEXzRyv1R8vFZ8fgUwzv9ddvykr+DEyte4Ahs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uwz9RBpu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD35C2BCC7;
-	Tue,  5 May 2026 14:42:30 +0000 (UTC)
+	s=arc-20240116; t=1777998391; c=relaxed/simple;
+	bh=d9oRhAaRGwydDiDuK7BhCRvRWDp8pOBlU9+d0qcoLXY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=YjO8IVpMtSzCXGDC2g79qdmSNbTcXozg1SPKqgVjg/MPfo+j/eJYcAoIiSrMv0yC2XUaaLSE6CFwkfpe0i40Hb0Ukrk+jajW6M67+pxCmfcbur3xRzWfG3w1C/EKjxUMVnc8yjw1nBI3bv2L42x3uN9ljDkWbOiEsxuHHHZEPM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P3c57A43; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D7D5C2BCB4;
+	Tue,  5 May 2026 16:26:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777992151;
-	bh=yaRmq/h8X6rxfU9pBhHHqPzmyAEwgac80kFaDayrP3Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uwz9RBpu7ny+vU4tU+ph2mG3CFfxFcgpDXdFVMsUqbLPlMhEdfP5fOxr4vdy8NoG9
-	 Gi/QD47408eDoAkPApcO3SvEwkJ63uRZItaVMLzILVs8haiEyhD7H0HNSikLgReix0
-	 C87+G2egdnRs5rCl8rlYE5akDT4LIi02osh8i5JbCjiZD/jV+uAz9g7CXW9ioOCzfX
-	 1uo2372+oPkdNrOYs/0kLfKZXA6ynb/26cmxOct5JWbavjbjqewfEdObups5l01hBw
-	 UTSUVRCGeBJA82qDw6BiipttO94GBnJs42ADms3A1w1+hsWAKhA7L9tmlEYnDAn3fj
-	 1Vu9NAkc1XAmw==
-Date: Tue, 5 May 2026 15:42:27 +0100
-From: Lee Jones <lee@kernel.org>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] can: bcm: prevent thrtimer UAF in rx path by
- checking RX_NO_AUTOTIMER
-Message-ID: <20260505144227.GB2661693@google.com>
-References: <20260422102239.948594-1-lee@kernel.org>
- <6cc6eec9-2e8a-4a39-955a-0eeefc93fe97@hartkopp.net>
- <20260424-magic-snobbish-rabbit-0865cf-mkl@pengutronix.de>
- <eef6917f-38c2-4bb4-a5d6-98f5a71adf65@hartkopp.net>
- <20260427124058.GA8212@google.com>
- <dd5315a7-87e9-4754-9e88-34c0623aca99@hartkopp.net>
- <20260427-zealous-booby-from-avalon-c9753c-mkl@pengutronix.de>
+	s=k20201202; t=1777998391;
+	bh=d9oRhAaRGwydDiDuK7BhCRvRWDp8pOBlU9+d0qcoLXY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=P3c57A43Ly9U95oakv1tzSfsBDMAQvbGX3L5fDur0PPxN8g/BkGWOrF0IQ1vnb8kn
+	 q5FpFULXXt5CFm8Sy/qdB+pGfZ+595OPQ/+H2h/dpiAmaAvc14vlTx4Z7a774smhAG
+	 mRi8mWrUgi+n3TQ7klBwMiCHYz3eCKtTXeoo5Vugwd9W8wFUQWC/qxp4tUJmAVvLgS
+	 jHSgvFYD9WkXPVvCXJZvfwe/RjozMVbFHi4OoCu3mLeSQZDLHCSt79QQSlDeG2UmtL
+	 GPSyoqLckepvJjFkRnrQa3yfyKh+iIz18B0bEQzeLYkJERNnopW8hE0+mQWVZV5SLC
+	 bwYA1sJR8mQqw==
+Date: Tue, 5 May 2026 11:26:29 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	spacemit@lists.linux.dev, UNGLinuxDriver@microchip.com,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Manikandan K Pillai <mpillai@cadence.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Rob Herring <robh@kernel.org>, Tom Joseph <tjoseph@cadence.com>
+Subject: Re: [PATCH v8 phy-next 01/31] PCI: cadence: Preserve all error codes
+ in cdns_plat_pcie_probe()
+Message-ID: <20260505162629.GA734488@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260427-zealous-booby-from-avalon-c9753c-mkl@pengutronix.de>
-X-Rspamd-Queue-Id: 965204CFAAD
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260505100523.1922388-2-vladimir.oltean@nxp.com>
+X-Rspamd-Queue-Id: 2ADAD4D14F7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7527-lists,linux-can=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7528-lists,linux-can=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[32];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lee@kernel.org,linux-can@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[helgaas@kernel.org,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,hartkopp.net:email]
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:email,sashiko.dev:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,cadence.com:email]
 
-On Mon, 27 Apr 2026, Marc Kleine-Budde wrote:
+[+cc Tom, author of bd22885aa188 in case there's something subtle here]
 
-> On 27.04.2026 19:15:29, Oliver Hartkopp wrote:
-> > > > Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> > >
-> > > I'm a little confused by the SoB.  Does this mean you've applied it?
-> > >
-> >
-> > No. Marc will apply the patch.
-> >
-> > My SoB is probably not needed in this context.
+On Tue, May 05, 2026 at 01:04:53PM +0300, Vladimir Oltean wrote:
+> The blamed commit functionally changed the error path of
+> cdns_pcie_host_probe(), now cdns_plat_pcie_probe().
 > 
-> ACK
+> When the old code path executed "goto err_get_sync", the PCIe controller
+> probe function propagated the pm_runtime_get_sync() error code. The new
+> code doesn't, and returns 0.
 > 
-> > But Marc was sometimes asking
-> > for it when I commented and discussed patches in the past.
+> Similarly for the "goto err_init" previously triggered by
+> cdns_pcie_host_init() errors, and now triggered by
+> cdns_pcie_host_setup() and cdns_pcie_ep_setup() errors. These are not
+> propagated and will result in probing success, which is incorrect.
 > 
-> The rule is: if you post a patch, your S-o-b has to be the last S-o-b in
-> the line.
-> 
-> > I also thought Marc would add the Fixes tag on his own.
-> 
-> If you add it in the thread, b-4 will pick it up automatically and this
-> less work for me :)
+> Fixes: bd22885aa188 ("PCI: cadence: Refactor driver to use as a core library")
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: "Krzysztof Wilczyński" <kwilczynski@kernel.org>
+> Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+> Cc: Manikandan K Pillai <mpillai@cadence.com>
+> Cc: Manivannan Sadhasivam <mani@kernel.org>
+> Cc: Rob Herring <robh@kernel.org>
 
-Any luck with this one Marc.
+I guess this driver is orphaned.
 
-This should be send to the -rcs ASAP please.
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
--- 
-Lee Jones
+> v7->v8: patch is new, issue was flagged by Sashiko
+> https://sashiko.dev/#/patchset/20260430110652.558622-1-vladimir.oltean@nxp.com
+> ---
+>  drivers/pci/controller/cadence/pcie-cadence-plat.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/cadence/pcie-cadence-plat.c b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+> index b067a3296dd3..8b12a46b5601 100644
+> --- a/drivers/pci/controller/cadence/pcie-cadence-plat.c
+> +++ b/drivers/pci/controller/cadence/pcie-cadence-plat.c
+> @@ -126,7 +126,7 @@ static int cdns_plat_pcie_probe(struct platform_device *pdev)
+>  	while (phy_count--)
+>  		device_link_del(cdns_plat_pcie->pcie->link[phy_count]);
+>  
+> -	return 0;
+> +	return ret;
+
+This affects cases where pm_runtime_get_sync(),
+cdns_pcie_host_setup(), or cdns_pcie_ep_setup() return failure.
+
+Seems right to me to fail the probe when these fail.
+
+Not all users of pm_runtime_get_sync() check for failure, but I think
+all the other controller drivers that do check return failures from
+the .probe().
+
+>  }
+>  
+>  static void cdns_plat_pcie_shutdown(struct platform_device *pdev)
+> -- 
+> 2.34.1
+> 
 
