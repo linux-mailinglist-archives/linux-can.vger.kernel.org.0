@@ -1,323 +1,222 @@
-Return-Path: <linux-can+bounces-7538-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7539-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4C9QBGtU+2n+ZQMAu9opvQ
-	(envelope-from <linux-can+bounces-7538-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 06 May 2026 16:47:07 +0200
+	id uPKZKahp+2miawMAu9opvQ
+	(envelope-from <linux-can+bounces-7539-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 06 May 2026 18:17:44 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A9674DC879
-	for <lists+linux-can@lfdr.de>; Wed, 06 May 2026 16:47:06 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE63C4DDF98
+	for <lists+linux-can@lfdr.de>; Wed, 06 May 2026 18:17:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 641B9303FFE3
-	for <lists+linux-can@lfdr.de>; Wed,  6 May 2026 14:32:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DED7730080B6
+	for <lists+linux-can@lfdr.de>; Wed,  6 May 2026 16:14:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9ECC47CC67;
-	Wed,  6 May 2026 14:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197B14949E3;
+	Wed,  6 May 2026 16:14:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HG7Kq/4s"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="KhKz4oqT"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010043.outbound.protection.outlook.com [52.101.84.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F813F0ABA;
-	Wed,  6 May 2026 14:32:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778077939; cv=none; b=L/aSe1tyTN8o37NguAZ8KjAJQq83L6k+1BUW3Y2UYBo+prO4k0mhG19F6RTzyFEY9GBNWYwsd10+eQlnoU/jHZ4u/m9bkIak6xDmIpK6Yg44+LOQMLo9sswEKlyPp5c5YjKcPeXSD7e8Om996TW1oCtuBn8K+yAkS2xggY5+XM0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778077939; c=relaxed/simple;
-	bh=AqWk/gJ5hqvNp1Kqlei525mUSD0PPb1ErEKjbefLrZQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H1GqrRuSAnJ498iYSIvBiBzzVDOM/HhlUzgjjck/DEfA9of8xcrYrM6fLed123AL56qflmiaPWi+lTKO30JeQ194YOqAubT83VV55Gd9ype96Mzt47YO32RIffdvca9Qub0ZGe8gfQJSI8BAN4Mewt2cHr0YDLU2mPIurr65OVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HG7Kq/4s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04608C2BCB0;
-	Wed,  6 May 2026 14:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778077939;
-	bh=AqWk/gJ5hqvNp1Kqlei525mUSD0PPb1ErEKjbefLrZQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HG7Kq/4sbv3k644MoiN65Tkll1t2azZNRjO+ntFHMkOA0OnoZ/Y3RHJ0gH+7yFJQn
-	 bBcSX7FQTkgY+ZDL/WzPV6VPkrthYNo5Gp53UnBkE52VdIuhH2zPJK+U3ztO0Pw5LZ
-	 7cSx3hARFb0AFj0Il/TRkfOGJVi85KvtQ6q1MERgxeB1o7qXI+gexK3M1hiunhMV7g
-	 36H+kO3WfeAVJuNlv6D98zTzkAAd79pEJJsAtbxCswSruDLTGsEvCSX0YCAQozQGPX
-	 9gLSVxWC5UCVE8x5xAz9JpKTl33xGxz4ieE0Je7YbYgshZPH9zdGOecxJVgSA6simL
-	 nEiLtZzYWujnQ==
-From: Greg Ungerer <gerg@kernel.org>
-To: linux-m68k@lists.linux-m68k.org
-Cc: linux-kernel@vger.kernel.org,
-	arnd@kernel.org,
-	Greg Ungerer <gerg@linux-m68k.org>,
-	dmaengine@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	olteanv@gmail.com,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2123647ECE2;
+	Wed,  6 May 2026 16:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778084083; cv=fail; b=T9Cj17ZxXucDacVOgvjPLiezvlZjtRES/kMOqtaIuuYwajixjhCAWo7jqUUL3etuS8kQdALS3pKE6ZV6m9QiLKAL46u38+RUwjQkYxzUhQ7M0SVPx7mwVgA1frJD8ir16D5oKOw6kMZ9Pkhwy57G+XQI8E+4JaRhtEMgeO2Bpng=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778084083; c=relaxed/simple;
+	bh=WJIEImC+1Je3usUyKw5wSEGhr2+w+jUzR7Cwjmguxks=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=fZCGLH7Aq7ks6srRZYiv7x8jTjZmI4Fy8WkWolI2c5zz8bsrY38ZDcjMolVhwo9pI12ag99iyp2ZnD7shZdeIM67dyU85YHieleNx5s0HlIdLuMOu+8Vrk9HccG5S3z2jYk4I0bIPFvErZRV7OktgxmnyAWG5UueDKY6V1vow2s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=KhKz4oqT; arc=fail smtp.client-ip=52.101.84.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JN9CkfIxiGlnTuWhXuHo2v6Zczt2GpnOjSEw8jfn2kvyklI6xIpXLlJKUzIzkXsuEh83a5PY1/x0NUber3Nq1y1hWVXpGNTuECer1krR2t69DqaFaT45zMsX1WjwRiHJBEq6aEs9zs5uB1tbLorhSFIymacVpsXcN7152HrAYaq6AmSG2n/YEw7oV9HZ6/TzZjX3zzorUMBRn5BdhBJKI9nOaPpQjyP/RVwEEphlXr5XmU4nlVgDr+3xmMYIreAuYOEIh7MfKdidOxu+gXzAdOqSLSh36E3FmbkZkZuRGgr4RagcxuMmz/JDiA2v3G1nM3q7VDOGlGJ7yEtqExd/tQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pRaX83Y2+naYAgFERuHydt7fXvIyBWMsdjRxS4TM6EE=;
+ b=e6oI2kHAhwJsI+VUoMZGpvdv7EsaniFLhhQgihGrzPSDBQxo6pugMeTZsZJBUEDY696XCuTQML2U+Hnv+bg4NRTbuRRh2I2P9XeH1EdJpQwKc4aY5riBua2I7N4/R4SJA31y8vrmBqrDSa8arF5GUsoqaVxY5E0cuccDt1/OTzDCnJNkgGk1pkF4+Mx8Y35uhUjDfo/W2RVcLddAQwYsQOavLDtJXYYJbGxqaRcsBwPiEb1kX50FqQvf1kvtfYHUMOUbgow4a9/CrYtAa1WJOaESjCUFPODFGHUeYuV7bL9V6atp4hbc7a7IEtxVfBgcu0f7xWu3BKPfooXlwUMU/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pRaX83Y2+naYAgFERuHydt7fXvIyBWMsdjRxS4TM6EE=;
+ b=KhKz4oqTb3XMcZe+uAt+Z8uOxFLBNnlf1QqOvCrNibyw7ezTlikSH/5Xpixgh7c2nnwpRsFmKqfV0HJUl0mroTo1aIL5rT1QYvIBc5Od4/9pEuZHxsvWDEBMZVx5tnO+YU4+dpeQKlYbRtDzzgQbmqSg36Padl344zMPndF2DDXe567aPWcfcCLbBQ5uaBzcuFhKrP2/4xczBDJQ1x1A2ZGQckXQ1bXpJtm5sM/AoLZpvYzNRsnP8ygTlBVl9QGircBFvHeiDKE/RvPbsukDrntMGG2qX4uZUX6kKe3B+nxGkp6fG+PcJXQ0v/Uzj28qhULPUNzKSXjenkCYEFdROg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8)
+ by DUZPR04MB9848.eurprd04.prod.outlook.com (2603:10a6:10:4dd::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.15; Wed, 6 May
+ 2026 16:14:31 +0000
+Received: from PA4PR04MB9366.eurprd04.prod.outlook.com
+ ([fe80::75e4:8143:ddbc:6588]) by PA4PR04MB9366.eurprd04.prod.outlook.com
+ ([fe80::75e4:8143:ddbc:6588%6]) with mapi id 15.20.9870.023; Wed, 6 May 2026
+ 16:14:31 +0000
+Date: Wed, 6 May 2026 12:14:25 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Greg Ungerer <gerg@kernel.org>
+Cc: linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+	arnd@kernel.org, Greg Ungerer <gerg@linux-m68k.org>,
+	dmaengine@vger.kernel.org, linux-can@vger.kernel.org,
+	linux-spi@vger.kernel.org, olteanv@gmail.com,
 	adureghello@baylibre.com
-Subject: [RFC 4/4] m68k: coldfire: fix non-standard readX()/writeX() functions
-Date: Thu,  7 May 2026 00:26:48 +1000
-Message-ID: <20260506142644.3234270-8-gerg@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260506142644.3234270-2-gerg@kernel.org>
+Subject: Re: [RFC 4/4] m68k: coldfire: fix non-standard readX()/writeX()
+ functions
+Message-ID: <afto4fL0CVVNtHDQ@lizhi-Precision-Tower-5810>
 References: <20260506142644.3234270-2-gerg@kernel.org>
+ <20260506142644.3234270-8-gerg@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260506142644.3234270-8-gerg@kernel.org>
+X-ClientProxiedBy: SA9P223CA0022.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:806:26::27) To PA4PR04MB9366.eurprd04.prod.outlook.com
+ (2603:10a6:102:2a9::8)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4A9674DC879
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR04MB9366:EE_|DUZPR04MB9848:EE_
+X-MS-Office365-Filtering-Correlation-Id: f7f81151-4fc8-4218-b53d-08deab8a8df1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|19092799006|1800799024|366016|7416014|376014|38350700014|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	LPdN9kBnP+0LLDdNHXv0gxLjwP2FsSomTSPJHMECA4wojcwz/O22gultwvWQ3/O28+QYSr7VJohNcy2xsxMcyZ5Wb6VEl6YpM5T2AJEnNh/rpWz5ZMR6UZfmGFPdutiB9228A360EIeTnPyhDAzPuFT5VlnGe1MAdbzHjbDAmm8uZcLaW4qKfm5l+N9LvSlQohGhPqTWJ6y/aLUTEr3RY2rqsGIVAO8pyzaIWivN8qDYIUQXfJzCPy0qi/fbLPHjuFhfxh7AqLQkixWh9A+7uFJrNR1Q56iG3rm+7GSxhlxALXg05n6ym4/z3nthWNokS0QOqHUF4mck/fu1oYR+AHqCr/frbzB8o4WG956NeUxhvTboGYfC5H9+juCP6qp0/JJagVIFiHEl1q1UH8lWIQuK1dU7suztIJBYS/sXCHYxP/F+Z6pdiry3jtMsUUK1qcnUrLJvadttsVQ3R8KcxUE+vJ9EnKjbAdsq6vaw2eqSbFpM92Zz4G7nNyDUlJBdh/WSTNRNEBuITvZ6+hEV+mffTpGEuJmTciJ/0YvyDFJ4xcgZf8gSaGfQKhiBbK+fw+y0JdsnK1oXQEML9aIwjN+FjsAewCgJqTR3rjF87bVho113C1QW110lEpa6k7Yk65p23vbt1kolb/LKb79X3GNUW1ChylifnCoPlgKSbxM/mc+lqaE1yrYQbEaR82R5ZtvcQG5qG1tFbdxEO7OK2PphA/suUTsTWok0XY0CAtww8y9imD78jj22U85B0shg
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9366.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(19092799006)(1800799024)(366016)(7416014)(376014)(38350700014)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?116iICr6z1Z3Ci13kfktK3pb1iDefHT/kBJOt9ls3ffmyUXXGNMHEItpNWmx?=
+ =?us-ascii?Q?qb29y2nDOfjykubre8+0mgumK7qNSe0UKeskbkpq98JAZlXDdIQZlsUS9WFH?=
+ =?us-ascii?Q?CE0NHcbt7nE/LgVwxg8mj95PPsz3GBbnXJjisgqKq7wXCXGR/BNHFBm0p1RT?=
+ =?us-ascii?Q?tS0iCsM9dh1wmt2BjLxMaoOQDlb+U6svBxPU95kTSBpC7NljMAkWkxNq5eui?=
+ =?us-ascii?Q?OG6zI4VKEX1PlrdmStGfUPW2teS31+F9K1PymRyl6wQlMjl6UGfO5zQTsSxg?=
+ =?us-ascii?Q?KmBnlQ6UYo5rH+Um4kA9DItXM8TR0WaNQY6bf6Un6NL/3a4C4NoVs0fX9Gfi?=
+ =?us-ascii?Q?nMq5VQpMGmsr8UgDQYcUT/Z+x+PaR7pOjQlX/V2XKQHHVwdWdatD3VRYVgTR?=
+ =?us-ascii?Q?3EGbR8+nadnYwv729JDExpfeC/V/YH9O9f/ioGsdsEVfZgTn/lreiZRahFo8?=
+ =?us-ascii?Q?AJ7/7O6Ned2B4y6cT0/Ae4hNpKvGcGhG+hj+IRQhxtDn/vHU+J30MxOWIveS?=
+ =?us-ascii?Q?ImeGAUkPDrQmpW+Q0kcXuPFhz1rc+9n0Np+YvLxPtDWaLRYthXBxMxiNhGEP?=
+ =?us-ascii?Q?vQIKZpcWePm1va8bkNVnimIHpeTR5XgCsHTeJZj9Kb6gcDE3qVLGNv6dfi4n?=
+ =?us-ascii?Q?7PFN3b72ToPTH7J7EpLonbPIcNv+57Unl/tIMXSni5Y4JrlAsZc0UOZjnLP0?=
+ =?us-ascii?Q?wmF9IZTCP+swrgJb5uGarSmuTITkXUI6BwC/S0u4tLskhokThY7mwjxF47T0?=
+ =?us-ascii?Q?Nv/66oJVjdd+I8J0VmkQSb+htVAgq15E2i8oFDOww76PQeg/j6byWwmuY0G4?=
+ =?us-ascii?Q?RlLftuuknTXvr9Muhb8LpkbXfJEKKzOZtqiH0zrZrcF4TT9wTETnPkBebw8U?=
+ =?us-ascii?Q?e+8JuMrYYxIj1Ry6ZFMcREQED+VuekjS82Q4QTwlnYzB3HbBtuXIiYY5Fxyc?=
+ =?us-ascii?Q?ISu5ZV/eAyIch3VM/K3PdIafB5yQ3g9BtA4SlEwT0X5EZNr8bu0O/5Nfdk4I?=
+ =?us-ascii?Q?IC6JiYzv/bCtmZeY/D0qiJmzbiPoXvczYVHr1fMYsahfOkB83pYZ1//Z3g6M?=
+ =?us-ascii?Q?/fh72jDhxtvEtuoqxNOy1tHf7WCQUj65Za5asVfNWMAcsYJMrJLR15UeSis7?=
+ =?us-ascii?Q?P+cx80Xi4HxImcjTy/wdoHOCYBX9szMCn8GcXmhDTPW+cGiezW8zh3DzzHbg?=
+ =?us-ascii?Q?8ANrtohONDplwGgrlxQrxM4HN00b6QMzj1x+YlJJZBxThkpEWKD4FLlFAoeR?=
+ =?us-ascii?Q?S/gCJPAdd04gUrV+ub9j6QNwcCOVnc9bNeBtmN2GSH7H32qYa4vD/k4E+VCV?=
+ =?us-ascii?Q?MNrw6wS9awxggDrsSFO3/jPfluhgJS/gQU3L+bwJr6ucEvUqk8JDNn4iavBs?=
+ =?us-ascii?Q?VFLcipJR6KhHYQbN4DMq8CFlmq79u71Gidzd8quExi9gRZBcmZ6VP085TA4S?=
+ =?us-ascii?Q?Da+mOtglWYCdQ4Uhr5h8TAgVL9lXC9liUrChQKCrpMHpWzyX6jNG7urkoirg?=
+ =?us-ascii?Q?12/bWePoiEC180pxW+ar0pQrK3jproOtqqrDOAb1I70tt6JjEyJ+YvwkDMTv?=
+ =?us-ascii?Q?bnHD+qRT3e/4FmLoxBP5y/oFsr90rs6vEu3fRnZPMa+TPWMatDMlbTl8dTff?=
+ =?us-ascii?Q?Ah0BxyRI/1fwQYGyFjWiQcLIPF9B/32jRyqNkHnM5uU60Mkz8zyNnP3W6CP8?=
+ =?us-ascii?Q?mRiHzyGIuB1icO7Aj+yzY2YzB3PnpdonRDsshRq3dhrt5Mfd?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7f81151-4fc8-4218-b53d-08deab8a8df1
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2026 16:14:31.0441
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: s2SuuVUQxbDi80Qx84QunaGp3MQLJlPoelqRibK79N+KXRxb6Ub21GJFDBD+L7FVL5LPGgPw7YDUtxV4s7ahFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DUZPR04MB9848
+X-Rspamd-Queue-Id: AE63C4DDF98
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,linux-m68k.org,gmail.com,baylibre.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-7538-lists,linux-can=lfdr.de];
+	FREEMAIL_CC(0.00)[lists.linux-m68k.org,vger.kernel.org,kernel.org,linux-m68k.org,gmail.com,baylibre.com];
+	TAGGED_FROM(0.00)[bounces-7539-lists,linux-can=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[nxp.com:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[Frank.li@nxp.com,linux-can@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gerg@kernel.org,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[]
+	RCPT_COUNT_SEVEN(0.00)[10];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 
-From: Greg Ungerer <gerg@linux-m68k.org>
+On Thu, May 07, 2026 at 12:26:48AM +1000, Greg Ungerer wrote:
+> From: Greg Ungerer <gerg@linux-m68k.org>
+>
+> Remove the local ColdFire definitions of readb()/readw()/readl() and
+> writeb()/writew()/writel() and use the asm-generic versions of them.
+>
+> The implementation of the readX()/writeX() family of IO access functions
+> is non-standard on ColdFire platforms. They either return big-endian (that
+> is native endian) data, or on platforms with PCI bus support check the
+> supplied address and return either big or little endian data based on that
+> check. This is non-standard, they are expected to always return
+> little-endian byte ordered data. Unfortunately this behavior also means
+> that ioreadX()/iowroteX() and their big-endian counter parts
+> ioreadXbe()/iowriteXbe() are currently broken because they are implemented
+> using the readX()/writeX() functions.
+>
+> The change to use the asm-generic versions of readX()/writeX() itself is
+> quite strait forward, just remove the ColdFire local versions of them.  But
+> this of course has implications for any remaining drivers that use any of
+> these IO access functions. A number of drivers can be independently fixed,
+> before this final fix to readX()/writeX() for ColdFire. A small number of
+> drivers cannot easily be independently fixed and remain in a working
+> state. Those drivers are fixed here as well:
+>
+> drivers/dma/mcf-edma-main.c
+>   Supports big-endian access by setting the big-endian flag of
+>   the drivers struct fsl_edma_engine. But locally should be using
+>   ioread32be() and iowrite32be() instead of ioread32() and iowrite32().
+>
+> drivers/net/can/flexcan/flexcan-core.c
+>   Setting the driver quirks flag for big-endian access will force
+>   driver to use correct access functions.
+>
+> drivers/spi/spi-fsl-dspi.c
+>   Setting the regmap format_endian flags to use native endian will
+>   force driver to use appropriate big or little endian access on
+>   whatever platform it is built for.
+>
+> These drivers have only been compile tested.
+>
+> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+> ---
+>  arch/m68k/include/asm/io_no.h          | 68 +++-----------------------
+>  drivers/dma/mcf-edma-main.c            | 14 +++---
 
-Remove the local ColdFire definitions of readb()/readw()/readl() and
-writeb()/writew()/writel() and use the asm-generic versions of them.
+Suppose it is correct, but I have not such platform to test it. it should
+be correct if disassembly code is the same at access register.
 
-The implementation of the readX()/writeX() family of IO access functions
-is non-standard on ColdFire platforms. They either return big-endian (that
-is native endian) data, or on platforms with PCI bus support check the
-supplied address and return either big or little endian data based on that
-check. This is non-standard, they are expected to always return
-little-endian byte ordered data. Unfortunately this behavior also means
-that ioreadX()/iowroteX() and their big-endian counter parts
-ioreadXbe()/iowriteXbe() are currently broken because they are implemented
-using the readX()/writeX() functions.
+Frank
 
-The change to use the asm-generic versions of readX()/writeX() itself is
-quite strait forward, just remove the ColdFire local versions of them.  But
-this of course has implications for any remaining drivers that use any of
-these IO access functions. A number of drivers can be independently fixed,
-before this final fix to readX()/writeX() for ColdFire. A small number of
-drivers cannot easily be independently fixed and remain in a working
-state. Those drivers are fixed here as well:
-
-drivers/dma/mcf-edma-main.c
-  Supports big-endian access by setting the big-endian flag of
-  the drivers struct fsl_edma_engine. But locally should be using
-  ioread32be() and iowrite32be() instead of ioread32() and iowrite32().
-
-drivers/net/can/flexcan/flexcan-core.c
-  Setting the driver quirks flag for big-endian access will force
-  driver to use correct access functions.
-
-drivers/spi/spi-fsl-dspi.c
-  Setting the regmap format_endian flags to use native endian will
-  force driver to use appropriate big or little endian access on
-  whatever platform it is built for.
-
-These drivers have only been compile tested.
-
-Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
----
- arch/m68k/include/asm/io_no.h          | 68 +++-----------------------
- drivers/dma/mcf-edma-main.c            | 14 +++---
- drivers/net/can/flexcan/flexcan-core.c |  1 +
- drivers/spi/spi-fsl-dspi.c             |  2 +
- 4 files changed, 16 insertions(+), 69 deletions(-)
-
-diff --git a/arch/m68k/include/asm/io_no.h b/arch/m68k/include/asm/io_no.h
-index 4f0f34b06e37..2f12f4ed0da5 100644
---- a/arch/m68k/include/asm/io_no.h
-+++ b/arch/m68k/include/asm/io_no.h
-@@ -3,15 +3,10 @@
- #define _M68KNOMMU_IO_H
- 
- /*
-- * Convert a physical memory address into a IO memory address.
-- * For us this is trivially a type cast.
-- */
--#define iomem(a)	((void __iomem *) (a))
--
--/*
-- * The non-MMU m68k and ColdFire IO and memory mapped hardware access
-- * functions have always worked in CPU native endian. We need to define
-- * that behavior here first before we include asm-generic/io.h.
-+ * Historically the raw native endian IO access macros for non-MMU m68k and
-+ * ColdFire have accepted any integral value as the address argument.
-+ * The asm-generic versions of these expect "void __iomem *" for the address,
-+ * so define local permissive versions here.
-  */
- #define __raw_readb(addr) \
-     ({ u8 __v = (*(__force volatile u8 *) (addr)); __v; })
-@@ -45,66 +40,15 @@
-  * applies just the same of there is no MMU but something like a PCI bus
-  * is present.
-  */
--static int __cf_internalio(unsigned long addr)
-+static inline int __cf_internalio(unsigned long addr)
- {
- 	return (addr >= IOMEMBASE) && (addr <= IOMEMBASE + IOMEMSIZE - 1);
- }
- 
--static int cf_internalio(const volatile void __iomem *addr)
-+static inline int cf_internalio(const volatile void __iomem *addr)
- {
- 	return __cf_internalio((unsigned long) addr);
- }
--
--/*
-- * We need to treat built-in peripherals and bus based address ranges
-- * differently. Local built-in peripherals (and the ColdFire SoC parts
-- * have quite a lot of them) are always native endian - which is big
-- * endian on m68k/ColdFire. Bus based address ranges, like the PCI bus,
-- * are accessed little endian - so we need to byte swap those.
-- */
--#define readw readw
--static inline u16 readw(const volatile void __iomem *addr)
--{
--	if (cf_internalio(addr))
--		return __raw_readw(addr);
--	return swab16(__raw_readw(addr));
--}
--
--#define readl readl
--static inline u32 readl(const volatile void __iomem *addr)
--{
--	if (cf_internalio(addr))
--		return __raw_readl(addr);
--	return swab32(__raw_readl(addr));
--}
--
--#define writew writew
--static inline void writew(u16 value, volatile void __iomem *addr)
--{
--	if (cf_internalio(addr))
--		__raw_writew(value, addr);
--	else
--		__raw_writew(swab16(value), addr);
--}
--
--#define writel writel
--static inline void writel(u32 value, volatile void __iomem *addr)
--{
--	if (cf_internalio(addr))
--		__raw_writel(value, addr);
--	else
--		__raw_writel(swab32(value), addr);
--}
--
--#else
--
--#define readb __raw_readb
--#define readw __raw_readw
--#define readl __raw_readl
--#define writeb __raw_writeb
--#define writew __raw_writew
--#define writel __raw_writel
--
- #endif /* IOMEMBASE */
- 
- #if defined(CONFIG_COLDFIRE)
-diff --git a/drivers/dma/mcf-edma-main.c b/drivers/dma/mcf-edma-main.c
-index 9e1c6400c77b..4ed0ce644e37 100644
---- a/drivers/dma/mcf-edma-main.c
-+++ b/drivers/dma/mcf-edma-main.c
-@@ -21,9 +21,9 @@ static irqreturn_t mcf_edma_tx_handler(int irq, void *dev_id)
- 	unsigned int ch;
- 	u64 intmap;
- 
--	intmap = ioread32(regs->inth);
-+	intmap = ioread32be(regs->inth);
- 	intmap <<= 32;
--	intmap |= ioread32(regs->intl);
-+	intmap |= ioread32be(regs->intl);
- 	if (!intmap)
- 		return IRQ_NONE;
- 
-@@ -43,7 +43,7 @@ static irqreturn_t mcf_edma_err_handler(int irq, void *dev_id)
- 	struct edma_regs *regs = &mcf_edma->regs;
- 	unsigned int err, ch;
- 
--	err = ioread32(regs->errl);
-+	err = ioread32be(regs->errl);
- 	if (!err)
- 		return IRQ_NONE;
- 
-@@ -55,7 +55,7 @@ static irqreturn_t mcf_edma_err_handler(int irq, void *dev_id)
- 		}
- 	}
- 
--	err = ioread32(regs->errh);
-+	err = ioread32be(regs->errh);
- 	if (!err)
- 		return IRQ_NONE;
- 
-@@ -203,8 +203,8 @@ static int mcf_edma_probe(struct platform_device *pdev)
- 		edma_write_tcdreg(mcf_chan, cpu_to_le32(0), csr);
- 	}
- 
--	iowrite32(~0, regs->inth);
--	iowrite32(~0, regs->intl);
-+	iowrite32be(~0, regs->inth);
-+	iowrite32be(~0, regs->intl);
- 
- 	ret = mcf_edma->drvdata->setup_irq(pdev, mcf_edma);
- 	if (ret)
-@@ -248,7 +248,7 @@ static int mcf_edma_probe(struct platform_device *pdev)
- 	}
- 
- 	/* Enable round robin arbitration */
--	iowrite32(EDMA_CR_ERGA | EDMA_CR_ERCA, regs->cr);
-+	iowrite32be(EDMA_CR_ERGA | EDMA_CR_ERCA, regs->cr);
- 
- 	return 0;
- }
-diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
-index f5d22c61503f..a682f02d2c43 100644
---- a/drivers/net/can/flexcan/flexcan-core.c
-+++ b/drivers/net/can/flexcan/flexcan-core.c
-@@ -296,6 +296,7 @@ static_assert(sizeof(struct flexcan_regs) ==  0x4 * 18 + 0xfb8);
- static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
- 		FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
-+		FLEXCAN_QUIRK_DEFAULT_BIG_ENDIAN |
- 		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
- 		FLEXCAN_QUIRK_SUPPORT_RX_FIFO,
- };
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 9f2a7b8163b1..964ca6baf32f 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -203,6 +203,8 @@ static const struct regmap_config dspi_regmap_config[] = {
- 		.volatile_table	= &dspi_volatile_table,
- 		.rd_table	= &dspi_access_table,
- 		.wr_table	= &dspi_access_table,
-+		.reg_format_endian = REGMAP_ENDIAN_NATIVE,
-+		.val_format_endian = REGMAP_ENDIAN_NATIVE,
- 	},
- 	[S32G_DSPI_REGMAP] = {
- 		.reg_bits	= 32,
--- 
-2.54.0
-
+>
 
