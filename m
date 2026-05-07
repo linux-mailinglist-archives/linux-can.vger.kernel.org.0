@@ -1,163 +1,120 @@
-Return-Path: <linux-can+bounces-7542-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7543-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KTQ5K9eS+2mrcwMAu9opvQ
-	(envelope-from <linux-can+bounces-7542-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 06 May 2026 21:13:27 +0200
+	id pEN0GP3b+2k9FwAAu9opvQ
+	(envelope-from <linux-can+bounces-7543-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 07 May 2026 02:25:33 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 089E14DF9EE
-	for <lists+linux-can@lfdr.de>; Wed, 06 May 2026 21:13:26 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id E14724E1AF5
+	for <lists+linux-can@lfdr.de>; Thu, 07 May 2026 02:25:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0BF0E3007C86
-	for <lists+linux-can@lfdr.de>; Wed,  6 May 2026 19:13:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id ADFB3300A319
+	for <lists+linux-can@lfdr.de>; Thu,  7 May 2026 00:25:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A9030DD1C;
-	Wed,  6 May 2026 19:13:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2588C85C4A;
+	Thu,  7 May 2026 00:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FZ02v9Yx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LGP1OeeB"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547D121ABD7;
-	Wed,  6 May 2026 19:13:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0112A4A07;
+	Thu,  7 May 2026 00:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778094804; cv=none; b=YwUeHP5soQhU98cA+cxtRZn/00DfS+5KmH1aVKQm4wIe1tQCny0SEXmfZRfbQ0GOrQhjM+xDzLavqOBXmVlBFp4mtGgqX0vuuzs9zwC3VB9nWVm/MUK4umb5dWHMKUK8tt02+lChWUqN8Uwilxzr4IQrWkHReGcnQGjRNCHKKeE=
+	t=1778113528; cv=none; b=B0kTPmSZY81y6p8rNkMVXvPJmqBvU6VM31izrFH7zyvHcgfxz5dYt8aAVnLV2KNycPtvIu4vYnWJNcC536ovLkqzUxU2pe48rChMxoxn8eF1nA694H4io/DMPgvrhtamqeIRlexoR/aKz5pqdYZWaqk/yFI3qt6hKlEc9b6r5I8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778094804; c=relaxed/simple;
-	bh=MwzrSQ4fiAmN5nCFQCemXjP5zzuycMBMfVig9YY1FLY=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=NKVa0RJpYeYuKUrfhFl2fbGrF8NAniwbpSb+648nwyGlWKlcnivHVI6+7ggyLKvCKm9ujfyjJuLRfan6MBb489erLG0MbVSd6xzUsfNjCHpr52nSSQbfM7kXHJ8qjxBKkv2dPh6i2CsBdr0bPtcmh0gKsStFVX7EDFFI+3qqAFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FZ02v9Yx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E98C2BCB8;
-	Wed,  6 May 2026 19:13:23 +0000 (UTC)
+	s=arc-20240116; t=1778113528; c=relaxed/simple;
+	bh=RtSJVkZEpOYr4SVwJMf3beHk57TF98Ft48y2/lsGKDA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GYI50ZRXVAwkMV+h5DIm2hQCjyrUT7Jlf/WrRYpM+LW7PWXEGgQ/dp94p2giUnyujiYQpn1o+jekfyuprCwcNRPWjhZfpuhLNi/A3Er4I+2V2WuJ4BqN4bF0+XdxPTzDpzrOFZdiMbRH8u6ILNqQpU28V3oBkZcn6SLBD1YxOH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LGP1OeeB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEBB8C2BCB0;
+	Thu,  7 May 2026 00:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778094804;
-	bh=MwzrSQ4fiAmN5nCFQCemXjP5zzuycMBMfVig9YY1FLY=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=FZ02v9YxnFq6tkTW2U2IYKgfy1R5OeW2RxUXfrE5CORSM44w3lmwYWSRbc9zTmtbC
-	 9w+9FABbQMs73fZuz9PGA1PF4kB6Z0EnlVZUIUGOd+wYQORgSrNRN4wKPCsj3ZCTSY
-	 Vletv8j66HKNScuONplbkmag4upfxN0+t5fXn2B1Ku78puhMiZrEiXT/DQ+EGGVfC5
-	 LoTV13pjwzQhUj4BMip0tH2tIXS8MQr/licueoPuX9lSHSiA6KQv5JCwr8b1oVQ7yi
-	 DdmUPsX7vuSaK7W9+XlwZ3BpaaTjScr8jwy5rkxUBL0JQ9QcI873tghURnekyhl4WT
-	 JmKDL+EzGpkVg==
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfauth.phl.internal (Postfix) with ESMTP id B2865F4006B;
-	Wed,  6 May 2026 15:13:22 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-04.internal (MEProxy); Wed, 06 May 2026 15:13:22 -0400
-X-ME-Sender: <xms:0pL7aSXPA8QHNQbds6W5BUsHcdxhIHmw-NHMJYY2GkR68z0qE5G7Sw>
-    <xme:0pL7aZZEZckVx0og8towP9gINkoFRvIccL_qhqB0hOatU8r3FLZkK34eY0hKE1ouM
-    fwZ0Jw-gy0uGTuOaugXnJ7PhKuygRq4w68ZIRVuFLNrKEtWWpsR8k8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddutdehgedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrfgrth
-    htvghrnhepjeejffetteefteekieejudeguedvgfeffeeitdduieekgeegfeekhfduhfel
-    hfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedtvdeg
-    qddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrdguvg
-    dpnhgspghrtghpthhtohepledpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprggu
-    uhhrvghghhgvlhhlohessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepohhlthgvrg
-    hnvhesghhmrghilhdrtghomhdprhgtphhtthhopehgvghrgheskhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtohepghgvrhhgsehlihhnuhigqdhmieekkhdrohhrghdprhgtphhtthhope
-    hlihhnuhigqdhmieekkheslhhishhtshdrlhhinhhugidqmheikehkrdhorhhgpdhrtghp
-    thhtohepughmrggvnhhgihhnvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopehlihhnuhigqdgtrghnsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    eplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:0pL7aYgU40u_E267iFRC27ZHEl0roArdH9mPSMUcT3gkwqS8N7dJMw>
-    <xmx:0pL7aXBlhAotVrZFHrdE6GWeSDVXfgQGR3DslpyIThc1JnlGgenU1Q>
-    <xmx:0pL7aa45gqQbrCje9y2vZPHLRAXayJ7R0JUFs-8aM0231oG8RsT-aw>
-    <xmx:0pL7acHzHt7XSIMXTOeqamF765eGiHjToQWiZ5zqkI4f1k4RM9AK5A>
-    <xmx:0pL7aVDxk__UOgD53mk0418hw-fLbXikrmm-QP75gByQBb2p_AhysOC_>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 8FABC1060065; Wed,  6 May 2026 15:13:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=k20201202; t=1778113527;
+	bh=RtSJVkZEpOYr4SVwJMf3beHk57TF98Ft48y2/lsGKDA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=LGP1OeeBT3ZaDJOe0c+cTtwSfJG01Hg7QOiJluZ04pLuAuY9n1647Hgr/gdizAjt8
+	 vaPwBh+pXrE7F+8cUxkrlzaaeVEaM8wokIYCEAg9fxWbV0VPFDGCvUmlxQWtA/vOx2
+	 p5pfsONac2yx6WijCbIODX0Z90UCl8hgd6Q7uXrbIhgohqXMsLi9RPJXl95KY5z59v
+	 BQuMv6li3xF0enJaNFtn9dwnII7cvjPpMYw5LMjGhBB8cRSBbTWdZxJAV/qd1+VhZk
+	 AytNMczcqLsGILEJhitcvnh/4qjmtbB1MhnIr+5ZfN8TWBORO6djXxKX3auMwu1jua
+	 5G2iZB0gyGELQ==
+Date: Wed, 6 May 2026 17:25:25 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>, Marc Kleine-Budde
+ <mkl@pengutronix.de>, Robin van der Gracht <robin@protonic.nl>, Oleksij
+ Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de, Jeremy Kerr
+ <jk@codeconstruct.com.au>, Matt Johnston <matt@codeconstruct.com.au>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@meta.com
+Subject: Re: [PATCH net-next 4/5] llc: convert to getsockopt_iter
+Message-ID: <20260506172525.27323c23@kernel.org>
+In-Reply-To: <20260505-getsock_two-v1-4-4cb0738950e0@debian.org>
+References: <20260505-getsock_two-v1-0-4cb0738950e0@debian.org>
+	<20260505-getsock_two-v1-4-4cb0738950e0@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Am-_gogYW4uZ
-Date: Wed, 06 May 2026 21:12:42 +0200
-From: "Arnd Bergmann" <arnd@kernel.org>
-To: "Greg Ungerer" <gerg@kernel.org>, linux-m68k@lists.linux-m68k.org
-Cc: linux-kernel@vger.kernel.org, "Greg Ungerer" <gerg@linux-m68k.org>,
- dmaengine@vger.kernel.org, linux-can@vger.kernel.org,
- linux-spi@vger.kernel.org, "Vladimir Oltean" <olteanv@gmail.com>,
- "Angelo Dureghello" <adureghello@baylibre.com>
-Message-Id: <40aefc39-bd98-460d-8aa7-5dd79f562e0d@app.fastmail.com>
-In-Reply-To: <20260506142644.3234270-8-gerg@kernel.org>
-References: <20260506142644.3234270-2-gerg@kernel.org>
- <20260506142644.3234270-8-gerg@kernel.org>
-Subject: Re: [RFC 4/4] m68k: coldfire: fix non-standard readX()/writeX() functions
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 089E14DF9EE
-X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: E14724E1AF5
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.15 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,linux-m68k.org,gmail.com,baylibre.com];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7543-lists,linux-can=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7542-lists,linux-can=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[arnd@kernel.org,linux-can@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-can];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	TAGGED_RCPT(0.00)[linux-can];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Action: no action
 
-On Wed, May 6, 2026, at 16:26, Greg Ungerer wrote:
+On Tue, 05 May 2026 04:12:41 -0700 Breno Leitao wrote:
+> Convert LLC socket's getsockopt implementation to use the new
+> getsockopt_iter callback with sockopt_t.
+> 
+> Key changes:
+> - Replace (char __user *optval, int __user *optlen) with sockopt_t *opt
+> - Use opt->optlen for buffer length (input) and returned size (output)
+> - Use copy_to_iter() instead of put_user()/copy_to_user()
+> - Add linux/uio.h for copy_to_iter()
 
-> drivers/dma/mcf-edma-main.c
->   Supports big-endian access by setting the big-endian flag of
->   the drivers struct fsl_edma_engine. But locally should be using
->   ioread32be() and iowrite32be() instead of ioread32() and iowrite32().
+kdoc needs to be adjusted here.
 
-I'm still a bit confused about how this works at the moment,
-since the drivers/dma/fsl-edma-common.h file already contains
-checks for the edma->big_endian flag, which is set in
-mcf_edma_probe(). The version after your patch makes sense
-to me, but it looks like the existing code cannot work.
-
-> drivers/spi/spi-fsl-dspi.c
->   Setting the regmap format_endian flags to use native endian will
->   force driver to use appropriate big or little endian access on
->   whatever platform it is built for.
->
-> These drivers have only been compile tested.
-
-I would suggest marking these as explicit BIG_ENDIAN rather than
-NATIVE_ENDIAN. The effect should be the same since coldfire CPUs
-cannot run little-endian code, but the way that hardware usually
-works is that the endianess is fixed at the bus level to one way
-or the other. NATIVE_ENDIAN to me implies that the registers
-have configurable endianess that is switched along with the CPU
-mode.
-
-       Arnd
+When you repost could you split the CAN stuff out and send it 
+to Marc and co. ? We don't normally take CAN patches directly.
+-- 
+pw-bot: cr
 
