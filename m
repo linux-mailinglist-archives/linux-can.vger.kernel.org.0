@@ -1,135 +1,229 @@
-Return-Path: <linux-can+bounces-7562-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7563-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0OEdA4+j/Gn2SAAAu9opvQ
-	(envelope-from <linux-can+bounces-7562-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 07 May 2026 16:37:03 +0200
+	id iAi1Mtem/GniSQAAu9opvQ
+	(envelope-from <linux-can+bounces-7563-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 07 May 2026 16:51:03 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ADD74EA4E4
-	for <lists+linux-can@lfdr.de>; Thu, 07 May 2026 16:37:02 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F4C04EA8FE
+	for <lists+linux-can@lfdr.de>; Thu, 07 May 2026 16:51:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C634A302F23E
-	for <lists+linux-can@lfdr.de>; Thu,  7 May 2026 14:33:48 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B443B300AC8C
+	for <lists+linux-can@lfdr.de>; Thu,  7 May 2026 14:49:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06D07402B84;
-	Thu,  7 May 2026 14:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oeFNGBs/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFBA237F00F;
+	Thu,  7 May 2026 14:49:17 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D705D3F9F39;
-	Thu,  7 May 2026 14:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98FA312834
+	for <linux-can@vger.kernel.org>; Thu,  7 May 2026 14:49:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778164425; cv=none; b=brYe4LiWd/U2F1ItpqCZPB/Z7CfgkhZwDMUcEeHI7a3d4yPMLZ5KS63B/28fcQVgFwaa60lufE6tjBBOrArlz0f8OvJwktttnKF3eG37Z1c52x1PReUScV6y3h/+GYlf8m4Ocw9i0phXM5iBaIbvFR7bOgPR0MtGn5Jx9qtbmxM=
+	t=1778165357; cv=none; b=qBPgG+KBKfLgzFFm7Z9OhOYi6WEGU3AFniFOSHXR5yIr+a31MIdh62EA8ygugOKzXQ7fvli2pGODkJa+RfwEduCwRd9tWMpiP40AaAhjFPgMFvatkaEFnzjxPXcTpYgavRU9hfsjYoznvuQS27l4t6hd05hpdXtQRaGlDb4KRrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778164425; c=relaxed/simple;
-	bh=4h47Z6ML2wUmiSm067qKXqglBqLvg1eK31qkZ+Ft+/M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GLraz6HGOtkUgUaTZi8trw/E0xoKRAKk9TDyk+Sw+ZL6UyFJ/Z6Q6VCkSWcddDLZgcl2S55EA66D/NBAF1dvdHIak8UZl7V/iddvdUjgB1OW2QnxWZoqPCcBuGFbmfO9Ve48Ahbjd26gcoZEFiTdn8vX4+4FmshehzK7pfMRrTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oeFNGBs/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D63C2BCB2;
-	Thu,  7 May 2026 14:33:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778164425;
-	bh=4h47Z6ML2wUmiSm067qKXqglBqLvg1eK31qkZ+Ft+/M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oeFNGBs/orp6cCxb0HHNCkON/3uF18AuQK/w23afJiRNnQJzTEE17mH6NRRk85PRX
-	 oHoNL3bBGEfL+N5fYKeYhLAwFBaQAHPCFXQKKu31lWD2wDNrw7ERx/aDzERBNWMWHB
-	 fhQKUZMB7yVgM/TnM3Rt5aXhpkHV0IKy2UkGwrjxO8UzFR69gPbSXz8QTDpfvMJdbz
-	 oJpk1/7htDYqWB5AaftvhKtVeqUu/q1GkdelKIhRb35Wi1o3nFGB2HDaTTwQJ7br6S
-	 bRl5+TzDt83ChPkxn/6Wsmw3enejW/i0+IAKZLYKBjIIWZXbUKmVXy+CD6E+zcD8vc
-	 z547l1n/896iQ==
-Message-ID: <7bc9e2c2-3646-43bc-8405-c4367d99d8bc@kernel.org>
-Date: Fri, 8 May 2026 00:33:40 +1000
+	s=arc-20240116; t=1778165357; c=relaxed/simple;
+	bh=0UEQFqnl250j7u4bGJcBxutylZ1Mf5pF7DjU6CUdE8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PlPRrboPYMSSAYYakRJqsV8o+Bzdw2ea/rM9gkep6Rx/JG3vTinOuLehR31JWnUDzZJG5yuMLTv32VzeQsaNOPzgvYRLugArLauraHyskHLr0bC9ees71cnyTwJXuOZZV5HjWjEJpLkCMUXv9W9dGpeySwsDy5nk+9OgL6fkVfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1wL01i-0001Vq-3i; Thu, 07 May 2026 16:48:34 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1wL01Z-000wEM-1k;
+	Thu, 07 May 2026 16:48:26 +0200
+Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 264265306B3;
+	Thu, 07 May 2026 14:48:25 +0000 (UTC)
+Date: Thu, 7 May 2026 16:48:24 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
+Cc: Michael Grzeschik <mgr@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Vincent Mailhol <mailhol@kernel.org>, 
+	Krzysztof Halasa <khc@pm.waw.pl>, Johannes Berg <johannes@sipsolutions.net>, 
+	Steffen Klassert <klassert@kernel.org>, David Dillow <dave@thedillows.org>, 
+	Ion Badulescu <ionut@badula.org>, Mark Einon <mark.einon@gmail.com>, 
+	Rasesh Mody <rmody@marvell.com>, GR-Linux-NIC-Dev@marvell.com, 
+	Manish Chopra <manishc@marvell.com>, Potnuri Bharat Teja <bharat@chelsio.com>, 
+	Denis Kirjanov <kirjanov@gmail.com>, Jijie Shao <shaojijie@huawei.com>, 
+	Jian Shen <shenjian15@huawei.com>, Cai Huoqing <cai.huoqing@linux.dev>, 
+	Fan Gong <gongfan1@huawei.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Tariq Toukan <tariqt@nvidia.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
+	Mark Bloch <mbloch@nvidia.com>, Ido Schimmel <idosch@nvidia.com>, 
+	Petr Machata <petrm@nvidia.com>, Yibo Dong <dong100@mucse.com>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, nic_swsd@realtek.com, Jiri Pirko <jiri@resnulli.us>, 
+	Francois Romieu <romieu@fr.zoreil.com>, Daniele Venzano <venza@brownhat.org>, 
+	Samuel Chessman <chessman@tux.org>, Jiawen Wu <jiawenwu@trustnetic.com>, 
+	Mengyuan Lou <mengyuanlou@net-swift.com>, Kevin Curtis <kevin.curtis@farsite.co.uk>, 
+	Arend van Spriel <arend.vanspriel@broadcom.com>, Stanislav Yakovlev <stas.yakovlev@gmail.com>, 
+	Richard Cochran <richardcochran@gmail.com>, Kees Cook <kees@kernel.org>, 
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Jacob Keller <jacob.e.keller@intel.com>, Thomas Fourier <fourier.thomas@gmail.com>, 
+	Ingo Molnar <mingo@kernel.org>, Kory Maincent <kory.maincent@bootlin.com>, 
+	Zilin Guan <zilin@seu.edu.cn>, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
+	Marco Crivellari <marco.crivellari@suse.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	David Arinzon <darinzon@amazon.com>, Yeounsu Moon <yyyynoom@gmail.com>, 
+	Denis Benato <benato.denis96@gmail.com>, Yonglong Liu <liuyonglong@huawei.com>, 
+	Andy Shevchenko <andriy.shevchenko@intel.com>, Randy Dunlap <rdunlap@infradead.org>, 
+	Yicong Hui <yiconghui@gmail.com>, MD Danish Anwar <danishanwar@ti.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Ethan Nelson-Moore <enelsonmoore@gmail.com>, 
+	Larysa Zaremba <larysa.zaremba@intel.com>, Ian Lin <ian.lin@infineon.com>, 
+	Colin Ian King <colin.i.king@gmail.com>, Double Lo <double.lo@cypress.com>, 
+	Markus Schneider-Pargmann <msp@baylibre.com>, Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-can@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org, oss-drivers@corigine.com, 
+	linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com
+Subject: Re: [PATCH net-next v2 1/2] net: Consistently define pci_device_ids
+ using named initializers
+Message-ID: <20260507-dangerous-manipulative-guan-bfd474-mkl@pengutronix.de>
+X-AI: stop_reason: "refusal"
+References: <cover.1778149923.git.u.kleine-koenig@baylibre.com>
+ <76da4f44d48bdde84580963862bf9616bee5c9e9.1778149923.git.u.kleine-koenig@baylibre.com>
+ <20260507-healthy-gainful-fox-500552-mkl@pengutronix.de>
+ <afyfa4E4rNbkMYTk@monoceros>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 4/4] m68k: coldfire: fix non-standard readX()/writeX()
- functions
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
- arnd@kernel.org, Greg Ungerer <gerg@linux-m68k.org>,
- dmaengine@vger.kernel.org, linux-can@vger.kernel.org,
- linux-spi@vger.kernel.org, olteanv@gmail.com, adureghello@baylibre.com
-References: <20260506142644.3234270-2-gerg@kernel.org>
- <20260506142644.3234270-8-gerg@kernel.org>
- <20260507-masterful-pegasus-of-science-c408e0-mkl@pengutronix.de>
-Content-Language: en-US
-From: Greg Ungerer <gerg@kernel.org>
-In-Reply-To: <20260507-masterful-pegasus-of-science-c408e0-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 2ADD74EA4E4
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3r5cznssyoe7scuq"
+Content-Disposition: inline
+In-Reply-To: <afyfa4E4rNbkMYTk@monoceros>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Rspamd-Queue-Id: 7F4C04EA8FE
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.06 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[lists.linux-m68k.org,vger.kernel.org,kernel.org,linux-m68k.org,gmail.com,baylibre.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-7562-lists,linux-can=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,lunn.ch,davemloft.net,google.com,redhat.com,pm.waw.pl,sipsolutions.net,thedillows.org,badula.org,gmail.com,marvell.com,chelsio.com,huawei.com,linux.dev,intel.com,nvidia.com,mucse.com,realtek.com,resnulli.us,fr.zoreil.com,brownhat.org,tux.org,trustnetic.com,net-swift.com,farsite.co.uk,broadcom.com,bootlin.com,seu.edu.cn,suse.com,amazon.com,infradead.org,ti.com,infineon.com,cypress.com,baylibre.com,vger.kernel.org,lists.osuosl.org,corigine.com,lists.linux.dev];
+	TAGGED_FROM(0.00)[bounces-7563-lists,linux-can=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gerg@kernel.org,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[pengutronix.de];
+	MISSING_XM_UA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,pengutronix.de:email]
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCPT_COUNT_GT_50(0.00)[81];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.995];
+	TAGGED_RCPT(0.00)[linux-can,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,pengutronix.de:email,pengutronix.de:mid,pengutronix.de:url]
 X-Rspamd-Action: no action
 
 
-On 7/5/26 23:30, Marc Kleine-Budde wrote:
-> On 07.05.2026 00:26:48, Greg Ungerer wrote:
->> diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
->> index f5d22c61503f..a682f02d2c43 100644
->> --- a/drivers/net/can/flexcan/flexcan-core.c
->> +++ b/drivers/net/can/flexcan/flexcan-core.c
->> @@ -296,6 +296,7 @@ static_assert(sizeof(struct flexcan_regs) ==  0x4 * 18 + 0xfb8);
->>   static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
->>   	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
-> 
-> Nitpick:
-> Can you move it here, so that the quirks stay sorted?
+--3r5cznssyoe7scuq
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH net-next v2 1/2] net: Consistently define pci_device_ids
+ using named initializers
+MIME-Version: 1.0
 
-Yep, sure thing.
+On 07.05.2026 16:23:43, Uwe Kleine-K=C3=B6nig (The Capable Hub) wrote:
+> Hello Marc,
+>
+> On Thu, May 07, 2026 at 12:55:45PM +0200, Marc Kleine-Budde wrote:
+> > > +	}, {
+> > >  		/* ASEM Dual CAN raw -new model */
+> > > -		ASEM_RAW_CAN_VENDOR_ID, ASEM_RAW_CAN_DEVICE_ID,
+> > > -		ASEM_RAW_CAN_SUB_VENDOR_ID, ASEM_RAW_CAN_SUB_DEVICE_ID_BIS,
+> > > -		0, 0,
+> > > -		(kernel_ulong_t)&plx_pci_card_info_asem_dual_can
+> > > +		PCI_DEVICE_SUB(ASEM_RAW_CAN_VENDOR_ID, ASEM_RAW_CAN_DEVICE_ID,
+> > > +			       ASEM_RAW_CAN_SUB_VENDOR_ID, ASEM_RAW_CAN_SUB_DEVICE_ID_BIS=
+),
+> > > +		.driver_data =3D (kernel_ulong_t)&plx_pci_card_info_asem_dual_can,
+> > >  	},
+> > > -	{ 0,}
+> > > +	{ }
+> >
+> > Nitpick: can you convert the terminating entry to follow the same style
+> > as the rest of the driver:
+> >
+> > diff --git a/drivers/net/can/sja1000/plx_pci.c b/drivers/net/can/sja100=
+0/plx_pci.c
+> > index a03553b80a5d..d69ff0ccfd94 100644
+> > --- a/drivers/net/can/sja1000/plx_pci.c
+> > +++ b/drivers/net/can/sja1000/plx_pci.c
+> > @@ -353,8 +353,8 @@ static const struct pci_device_id plx_pci_tbl[] =3D=
+ {
+> >                  PCI_DEVICE_SUB(ASEM_RAW_CAN_VENDOR_ID, ASEM_RAW_CAN_DE=
+VICE_ID,
+> >                                 ASEM_RAW_CAN_SUB_VENDOR_ID, ASEM_RAW_CA=
+N_SUB_DEVICE_ID_BIS),
+> >                  .driver_data =3D (kernel_ulong_t)&plx_pci_card_info_as=
+em_dual_can,
+> > -        },
+> > -        { }
+> > +        }, {
+> > +        }
+> >  };
+> >  MODULE_DEVICE_TABLE(pci, plx_pci_tbl);
+>
+> After the conversation in the v1 thread it was unclear to me if you
+> stand by your opinion, so I kept the format as it was. I interpret your
+> repetition of the nitpick as request to rework the can drivers for the
+> next revision (if that happens).
 
+Doh - Yes, right, we discussed this already. Keep it as is and add my:
 
-> 		FLEXCAN_QUIRK_DEFAULT_BIG_ENDIAN |
-> 
->>   		FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
->> +		FLEXCAN_QUIRK_DEFAULT_BIG_ENDIAN |
->>   		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
->>   		FLEXCAN_QUIRK_SUPPORT_RX_FIFO,
->>   };
-> 
-> With that change:
-> 
-> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for drivers/net/can/flexcan
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for drivers/net/can
 
-Thanks
-Greg
+regards,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
+--3r5cznssyoe7scuq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCafymNgAKCRDMOmT6rpmt
+0nq+AQDxBatA6k3wbRiLlE0iYqFi1UszWzbE6VspAxP9GaL27AEAvpxnHmYAF7Ba
+NGRZfHI9sLbcPJXvBj/FLuPCtchoBwQ=
+=GAHD
+-----END PGP SIGNATURE-----
+
+--3r5cznssyoe7scuq--
 
