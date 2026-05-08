@@ -1,121 +1,149 @@
-Return-Path: <linux-can+bounces-7581-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7582-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CKYDEmNh/mnCpwAAu9opvQ
-	(envelope-from <linux-can+bounces-7581-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sat, 09 May 2026 00:19:15 +0200
+	id uMUaNUpl/mmoqAAAu9opvQ
+	(envelope-from <linux-can+bounces-7582-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sat, 09 May 2026 00:35:54 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E64B34FC476
-	for <lists+linux-can@lfdr.de>; Sat, 09 May 2026 00:19:14 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79CD94FC65B
+	for <lists+linux-can@lfdr.de>; Sat, 09 May 2026 00:35:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2C130303E490
-	for <lists+linux-can@lfdr.de>; Fri,  8 May 2026 22:14:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 29877302AE23
+	for <lists+linux-can@lfdr.de>; Fri,  8 May 2026 22:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A3253939A9;
-	Fri,  8 May 2026 22:12:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F3763932FC;
+	Fri,  8 May 2026 22:34:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CnlO75o9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JnJD8Wpu"
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF33936403B;
-	Fri,  8 May 2026 22:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7218828C2BF;
+	Fri,  8 May 2026 22:34:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778278359; cv=none; b=bph2/98lEkH7MTis7bViJwCtsd+MT4ZeRz4gdlkncUx7qO2TGB6uq82KllavY6baxY/ZR5uXYNzEOFGpNWKqTVGm5/rPpC5ADgm0Zy5vlYUc1/4FNq7ElJmQnkzIsegQNRJkgYm/1VFvmeAtRdMZWomr/S/6Le+D7UKSR2MSweg=
+	t=1778279696; cv=none; b=AVJNo7UPD/TUUAQ54fziw7bYMdsfors6uEvHfGNyqhzWbzjYN7+lVXML9G+r9J7ZQRr3YGbm0udAqA1FMC76egUNviIk1gpGdtXORQz7wZO51hYSgDLcGgnqaAGs2tXVRl5O4XGEt5/GttOfm1hBowWrs83mf/Vt0j3ii5WGJQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778278359; c=relaxed/simple;
-	bh=EXFu3dbPq+W4HjNloEeAKnwcJiIEWBNLUBj9vuURyfI=;
+	s=arc-20240116; t=1778279696; c=relaxed/simple;
+	bh=/FqJRBmfOok3Fl/V8liHSdXMD9qTqHxPKI6+SAyQksw=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W1ziW0CNrSN+x7vhoDQN0jlq9D30AMlX4NblMjzH6v18jDJ+vTIWfXkRk8HHGtWYaXQCXxksdk0b0ySH6u7omppHzl/MvklnIWiJBSaMo2ooF39ENoLFMtJN5iPA8wY2xTUDhnlagWyv+GUtFCshpBKG9NKxKOBs5DErhqCcXYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CnlO75o9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 903C1C2BCB0;
-	Fri,  8 May 2026 22:12:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=FG+5USePfJOf2rNhGp8rZEIoYozGow4AtXAgXsSsR+cJrRBXF7Q7xJMbjaZ0J7XCQlpNl2QU3sKwEZt85aIEPG+XERZPt247QvYscoXHOpPb8rA1KJWLJtuXCVgngZ5v4SruE0CmB2TJIcf0YrQQYhKYde4NgyP8+2Ipceu07Us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JnJD8Wpu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF80FC2BCB0;
+	Fri,  8 May 2026 22:34:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778278358;
-	bh=EXFu3dbPq+W4HjNloEeAKnwcJiIEWBNLUBj9vuURyfI=;
+	s=k20201202; t=1778279696;
+	bh=/FqJRBmfOok3Fl/V8liHSdXMD9qTqHxPKI6+SAyQksw=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=CnlO75o9EKo2lfd0L5d5WAEyAgYxUb+JcqBT2DLKUZslcrBS1Z2chmutOVtCGiXBE
-	 g6Bk/wLinZBJt1VI3jn3p76vT5/MQxoVUCUaY0wqP5vbPSBcXPQvGUd8rm1AwpNg33
-	 W+Kbk+HOhz81vkQZsFt1U5QVBZ5qfnS8l7gsWB9Z4ot1fkFFPQzyKRvwTfSGDd+hAu
-	 XKWXjO+pu9JDmrhdEsHmygwe3GliwZGXhxFNU++0U/P1rcllnRQmKXxT/tCAAmhc5Q
-	 M8a/OhbEZOgmRp0nWL72ydShelw3XzeGx+ifhlkgXkbRJf1BMwhSguCZiO70/A93af
-	 b/9XEgob0eYrw==
-Date: Fri, 8 May 2026 15:12:37 -0700
+	b=JnJD8WpuGcqHBCKs0Ts4elbdxBbuG1BwAgscLJuNVRziMOm4SDnzTqN3kx1yP6/X+
+	 GAdeAqIhI9nFlzVHTLX/S1mwIbo19SrwK0wfDhJeidejvlNcoYDlK1SrT/oiL3UYj0
+	 GIekbaJ56hBFjeEkBXBs+ZV1/MchvLrAP41b6RvmgIFAwNZnLqYwRd6dO+6HhbJbJd
+	 kxC8LBO1S3SVunqjOv2Wtp8A5+8SXmiVHrPTOd/+4hirtqSKiT2/3p3ywrNsL4bTOE
+	 TJfm7z3NUrn0fQCLaudtHO7mA8dPHCWP88gD1VhxYK4rvad70qNKJD/NatwmvbNDwF
+	 jyVcPI/fAlqow==
+Date: Fri, 8 May 2026 15:34:52 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, linux-can@vger.kernel.org,
- kernel@pengutronix.de, Lee Jones <lee@kernel.org>, Oliver Hartkopp
- <socketcan@hartkopp.net>
-Subject: Re: [PATCH net 2/6] can: bcm: prevent thrtimer UAF in rx path by
- checking RX_NO_AUTOTIMER
-Message-ID: <20260508151237.7d0a9105@kernel.org>
-In-Reply-To: <20260507112321.439968-3-mkl@pengutronix.de>
-References: <20260507112321.439968-1-mkl@pengutronix.de>
-	<20260507112321.439968-3-mkl@pengutronix.de>
+To: "Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= (The Capable Hub)"
+ <u.kleine-koenig@baylibre.com>
+Cc: Michael Grzeschik <mgr@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Marc Kleine-Budde
+ <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>, Krzysztof
+ Halasa <khc@pm.waw.pl>, Johannes Berg <johannes@sipsolutions.net>, Steffen
+ Klassert <klassert@kernel.org>, David Dillow <dave@thedillows.org>, Ion
+ Badulescu <ionut@badula.org>, Mark Einon <mark.einon@gmail.com>, Rasesh
+ Mody <rmody@marvell.com>, GR-Linux-NIC-Dev@marvell.com, Manish Chopra
+ <manishc@marvell.com>, Potnuri Bharat Teja <bharat@chelsio.com>, Denis
+ Kirjanov <kirjanov@gmail.com>, Jijie Shao <shaojijie@huawei.com>, Jian Shen
+ <shenjian15@huawei.com>, Cai Huoqing <cai.huoqing@linux.dev>, Fan Gong
+ <gongfan1@huawei.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek
+ Kitszel <przemyslaw.kitszel@intel.com>, Tariq Toukan <tariqt@nvidia.com>,
+ Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Mark
+ Bloch <mbloch@nvidia.com>, Ido Schimmel <idosch@nvidia.com>, Petr Machata
+ <petrm@nvidia.com>, Yibo Dong <dong100@mucse.com>, Heiner Kallweit
+ <hkallweit1@gmail.com>, nic_swsd@realtek.com, Jiri Pirko
+ <jiri@resnulli.us>, Francois Romieu <romieu@fr.zoreil.com>, Daniele Venzano
+ <venza@brownhat.org>, Samuel Chessman <chessman@tux.org>, Jiawen Wu
+ <jiawenwu@trustnetic.com>, Mengyuan Lou <mengyuanlou@net-swift.com>, Kevin
+ Curtis <kevin.curtis@farsite.co.uk>, Arend van Spriel
+ <arend.vanspriel@broadcom.com>, Stanislav Yakovlev
+ <stas.yakovlev@gmail.com>, Richard Cochran <richardcochran@gmail.com>, Kees
+ Cook <kees@kernel.org>, Aleksandr Loktionov
+ <aleksandr.loktionov@intel.com>, Thomas Gleixner <tglx@kernel.org>, Jacob
+ Keller <jacob.e.keller@intel.com>, Thomas Fourier
+ <fourier.thomas@gmail.com>, Ingo Molnar <mingo@kernel.org>, Kory Maincent
+ <kory.maincent@bootlin.com>, Zilin Guan <zilin@seu.edu.cn>, Vadim Fedorenko
+ <vadim.fedorenko@linux.dev>, Marco Crivellari <marco.crivellari@suse.com>,
+ Bjorn Helgaas <bhelgaas@google.com>, David Arinzon <darinzon@amazon.com>,
+ Yeounsu Moon <yyyynoom@gmail.com>, Denis Benato <benato.denis96@gmail.com>,
+ Yonglong Liu <liuyonglong@huawei.com>, Andy Shevchenko
+ <andriy.shevchenko@intel.com>, Randy Dunlap <rdunlap@infradead.org>, Yicong
+ Hui <yiconghui@gmail.com>, MD Danish Anwar <danishanwar@ti.com>, Nathan
+ Chancellor <nathan@kernel.org>, Ethan Nelson-Moore
+ <enelsonmoore@gmail.com>, Larysa Zaremba <larysa.zaremba@intel.com>, Ian
+ Lin <ian.lin@infineon.com>, Colin Ian King <colin.i.king@gmail.com>, Double
+ Lo <double.lo@cypress.com>, Markus Schneider-Pargmann <msp@baylibre.com>,
+ Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+ linux-parisc@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+ linux-rdma@vger.kernel.org, oss-drivers@corigine.com,
+ linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
+ brcm80211-dev-list.pdl@broadcom.com
+Subject: Re: [PATCH net-next v2 0/2] Rework pci_device_id initialisation
+Message-ID: <20260508153452.6a1a9044@kernel.org>
+In-Reply-To: <cover.1778149923.git.u.kleine-koenig@baylibre.com>
+References: <cover.1778149923.git.u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: E64B34FC476
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 79CD94FC65B
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[kernel.org,lunn.ch,davemloft.net,google.com,redhat.com,pengutronix.de,pm.waw.pl,sipsolutions.net,thedillows.org,badula.org,gmail.com,marvell.com,chelsio.com,huawei.com,linux.dev,intel.com,nvidia.com,mucse.com,realtek.com,resnulli.us,fr.zoreil.com,brownhat.org,tux.org,trustnetic.com,net-swift.com,farsite.co.uk,broadcom.com,bootlin.com,seu.edu.cn,suse.com,amazon.com,infradead.org,ti.com,infineon.com,cypress.com,baylibre.com,vger.kernel.org,lists.osuosl.org,corigine.com,lists.linux.dev];
+	TAGGED_FROM(0.00)[bounces-7582-lists,linux-can=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_FROM(0.00)[bounces-7581-lists,linux-can=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_GT_50(0.00)[81];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-can,netdev];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Thu,  7 May 2026 10:22:24 +0200 Marc Kleine-Budde wrote:
-> Commit f1b4e32aca08 ("can: bcm: use call_rcu() instead of costly
-> synchronize_rcu()") removed the synchronize_rcu() call from
-> bcm_delete_rx_op() and introduced the RX_NO_AUTOTIMER flag to prevent
-> timers from being rearmed during deletion.  However, it only applied
-> this check to op->timer via bcm_rx_starttimer().
+On Thu,  7 May 2026 12:50:18 +0200 Uwe Kleine-K=C3=B6nig (The Capable Hub)
+wrote:
+>   net: Consistently define pci_device_ids using named initializers
+>   net: nfp: Drop PCI class entries with .class_mask =3D 0
 
-All AIs point out this is insufficient:
-
-    reader (bcm_rx_handler, RCU) | writer (bcm_delete_rx_op)
-    -----------------------------+-------------------------------
-    test op->flags (no AUTOTIMER)|
-                                 | op->flags |= RX_NO_AUTOTIMER
-                                 | bcm_remove_op()
-                                 |   hrtimer_cancel(&op->thrtimer)
-                                 |     /* not armed: no-op */
-                                 | call_rcu(bcm_free_op_rcu)
-    hrtimer_start(&op->thrtimer) |
-    return from RCU section      |
-                                 | grace period elapses
-                                 | bcm_free_op_rcu() -> kfree(op)
-    thrtimer fires               |
-      bcm_rx_thr_handler(op)     | <-- UAF
+There's a transient build failure between these two patches,
+you should probably reorder them?
+--=20
+pw-bot: cr
 
