@@ -1,54 +1,54 @@
-Return-Path: <linux-can+bounces-7579-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7565-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gKNhL2yL/WnWfgAAu9opvQ
-	(envelope-from <linux-can+bounces-7579-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 08 May 2026 09:06:20 +0200
+	id UBbkBZ2K/WnWfgAAu9opvQ
+	(envelope-from <linux-can+bounces-7565-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 08 May 2026 09:02:53 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5D704F2D0B
-	for <lists+linux-can@lfdr.de>; Fri, 08 May 2026 09:06:19 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F7154F2BD6
+	for <lists+linux-can@lfdr.de>; Fri, 08 May 2026 09:02:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4D83C3013D54
-	for <lists+linux-can@lfdr.de>; Fri,  8 May 2026 07:03:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E261B3047747
+	for <lists+linux-can@lfdr.de>; Fri,  8 May 2026 07:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 725FE382363;
-	Fri,  8 May 2026 07:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 519A437B03C;
+	Fri,  8 May 2026 07:01:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="EtmTmwAc"
+	dkim=pass (2048-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="FAtMXN+b"
 X-Original-To: linux-can@vger.kernel.org
-Received: from MM0P280CU009.outbound.protection.outlook.com (mail-swedensouthazon11021092.outbound.protection.outlook.com [52.101.76.92])
+Received: from MM0P280CU009.outbound.protection.outlook.com (mail-swedensouthazon11021132.outbound.protection.outlook.com [52.101.76.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F97F382289;
-	Fri,  8 May 2026 07:02:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.76.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F167E3783B1;
+	Fri,  8 May 2026 07:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.76.132
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778223730; cv=fail; b=dSsAcN6AVZUMF5NCRCc71P4QngN1eKndCJM1Zi4bjQZC5femZgyQcBQuuoWrlpiKlMp+0ywWTocgTzLlkzRt7eDIGuEBnK+DvSdX4dWEbJ/Te+YQpk3W58Y7XIfi40iUSBXBZNSv+UNFa5AnaRf8ybSkxTKh2s+gTtkBbEkw4vc=
+	t=1778223705; cv=fail; b=QQS64yD1kvWkSuogBgEyIItsqhKnrj9ROb/kB+Po1NdcXG1LplSA6aSuYNaQLeTR/RUliuIcxRIlLYzpmKjF7NAztXU2DwTcx92eFZbuVe7DpDSluKtS284lCFJ5RN3mMr0sh+njn3IIqlRDThgrJZGQbs1VkRGEiNXfkPoNQBI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778223730; c=relaxed/simple;
-	bh=5zkipCXGag4FuLHwvRv64hDYJvgKefjNobgEY0BNYgE=;
+	s=arc-20240116; t=1778223705; c=relaxed/simple;
+	bh=3LFE8CzyrZ/p20GVqI5aJ5/Wr/1VHCvebowKEoxQHcQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dhj7mwcFh+Fv6oQysAb5eQtIurLsrRfqqmYZejFaYhEUr4jK1abUwkNYdFvnSneWZyiB4RhmknevtcGiBBl3xGnGeJmJdVwQuR1Lt60apXOIt5KVPZyXbN3e6YodzU0tDlmrT0cDM16GaPs/e3o/9hag+Vrffa1PkgLhbGZY4Ow=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=permerror header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=pass (2048-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=EtmTmwAc; arc=fail smtp.client-ip=52.101.76.92
+	 Content-Type:MIME-Version; b=F7Yddi7x2+pvOMEp3GQF3VRFkyxtNfW3f+engXbWvRkCOnbb/8gbd7JEE64ioww1iOFT36cIqI+BFIuyaxyDuQJA6TpEDZs1V7ZyJp0iSie91grm0lxAQK/oM3cISv3JNg1J4sQ0a4mgLJPrHN3Aplc3WxoFep5dTfq2EtbwUa0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=permerror header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=pass (2048-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=FAtMXN+b; arc=fail smtp.client-ip=52.101.76.132
 Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=gaisler.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=twQ0HAAsih38YS/UYW/s3ZWZLwDkSb4UI0xMks6CCbfXlrG2bLtdReCKV4B6x30f9vlzlVrtQ3psvIilTxiZqlw7MKfle5HvxNkCHHzQr4i6ngP15Ag8RkIJ03Zy/UjxxxCkCRkNB0nNOX1m86SFP/o0pWw+bbbuOtTzSaTPRl3x/CvxRuWbmBbbO+h5d9NcrxY0t9IgRTA4FZywHoG2KAyyG4MPJ4Od4xEZbBETzPK8GRj/R4vzN0IjfCjbH3zbA6y+xK0e8nNmmZOH4m2F5KGq3qxHWXMs/rqrd0ipMiaqenwiubxfUKF64KW0U9MqRheWwflkc7VEhbkXTX4s8A==
+ b=vD8FubzRU4wNmuk7tuaAGZgWMpgJ1HrXhDgBnYPqv09VpfZuhN45ZMD6w9vyBc5Zx6BKVuDiEB6o/C/FTfevMZUJKpYzNw46jWijc7F55jyLVgfQRks7/xANqCtyifgIV8wyT0GHm5D8Pcd1kYB6ECfD+FYfHVeQ8+IB6MANddmtZgUPHCrMeBDEfubUlb9+WYSRA0OisC6ihdHwUMFzNi3VPgueFl+DOvXHaIE+2cqVaYQe502i5UiPtN0Khc84G+E5DGf0WL47teI8G9V4k1yx6nscCvXTUW4pX9SUV0aFo3jmx9H83ciTznQxF3ywbizEQZLUuF/hNhi8ne7uMA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qojfoq0VJ4RAW1ZLCCwvXPc9MEm2rqjzxKLfmBdADos=;
- b=XKuP52B6HJEfXKAG9UummqfP0J4I8L7s8p0IpS5Mq3FUQFM7SJ2LLdY9XYxWfqahfOBSJFnp0XVwGRXVAqp0MRbGdkpmpxmWzVhMA28fofQdbD8sap9hxteizWHkplkXJ01rh99w7U96Q0oamm27JCAUJJahO1tvf+7R1WyVH4BtDal77v55qPookxK70bEBZiHmi/zX8GZjYtCJX1cm6xsLnapM2tihrEnYciO+rrqEExnWmce2r+qZ7GBy/mZIqoExckykbbq7Lu/Ci0e2pjzbHNPdzsU/VRAqQzG2awkWBGgMbTbyYFXvmEk1X0IX/gXzJ2NpwHSezPECMXoxIw==
+ bh=+qCN5JrFpyFQZI/qdZzwdP2aAE4CcSJdh5LU7VVuuqk=;
+ b=HDf9cCgRA5gGw/0ZcGQGvC8I2jmjJ+nZNl9lF0L3RsEu+WCd5mqKbO95TAfLMtn5say28PA7Xj547pOOnh3FFgyH6fOqChByn5212iBatrsehV2h7UnkZgw7+fXAZ1U8z41viO1ywz/b7N/4AzXFp05QHSqoKimdOKbbO9TywTA7LBAw0ElfsaYEjweAD9oldojGsckocPdxoBsyQlsICM2W3Tsc/+GOMQuz7QCE/2hU4FrDYuCeB2QccChZP4VlRvHdTkxwa3iYGRQvTTS1zwJKAaTcclp8JyyVM/rWAuoMYpibnUI4teGRLtPEznGVQDfKkVLR6AqiyvLAmN4NHA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=gaisler.com; dmarc=pass action=none header.from=gaisler.com;
  dkim=pass header.d=gaisler.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qojfoq0VJ4RAW1ZLCCwvXPc9MEm2rqjzxKLfmBdADos=;
- b=EtmTmwAcX53o/I7xzB4MFHeieL0vXTQPMUf7pPSALThcmB1ceF+lRRP7RxJpCVRzzriHNloXYQ9pDqAmGV6jwb4sgTvwGOmWGzjGAUl8+tih35CGqxrkR2VP+sqzWtrosf5DNxrK8oEo01Ywd7iMhgZZmbn+/jkiB4x3/Mr/lLjc5HmUL/3EYcyHbbLWO9yZddH7WKz36O5O6o8+9f5MLJK+ZXaqvzEjDwmKmPX18j/rWPHGByGcrHSXoDO3ce95RPbN1YiLexzQRLlRysVdndUHa+6c6qRTgMS1akODNgVmqXfS4t+p5aBf6JqSITGzLkaMVolP7psQKkkBPf4oIQ==
+ bh=+qCN5JrFpyFQZI/qdZzwdP2aAE4CcSJdh5LU7VVuuqk=;
+ b=FAtMXN+bp0M3AMDLoZh8yWgjJm0dt1QrkFx6vPRx5ChdfrV0G2qQQalDFxeOOQ5XJC5Q1Ni6znpTZjXRAnN9YVpyb6bqDxSn4sKPRPFX1LxwwbJZBKcwbhxrwA+XZdBKjWYQyreLcHfhqdTcfOO6fSS6mIuF15AiTjKAb8eEVBF8bthD+iDFlilEhxP/RswxCqs0pko6cKQ3FQX1zBuhV9s5SBY9VSWOQCXgQlzE8ID3aXrcGmK4iVuIO8AZ+loGbrPyE/vnAuOiCwUvt1oDHsIHqNoOpOk++Tk6HFkldfQDPooTo/LxcCvfGCh3M7PsUFgtD9cPfxEZbCOWGYkjgg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=gaisler.com;
 Received: from GV3P280MB1530.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:188::6)
@@ -59,7 +59,7 @@ Received: from GV3P280MB1530.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:188::6)
 Received: from GV3P280MB1530.SWEP280.PROD.OUTLOOK.COM
  ([fe80::a74c:fd98:dc12:8d1e]) by GV3P280MB1530.SWEP280.PROD.OUTLOOK.COM
  ([fe80::a74c:fd98:dc12:8d1e%6]) with mapi id 15.20.9891.016; Fri, 8 May 2026
- 07:01:33 +0000
+ 07:01:34 +0000
 From: Arun Muthusamy <arun.muthusamy@gaisler.com>
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -69,10 +69,11 @@ To: robh@kernel.org,
 Cc: devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-can@vger.kernel.org,
+	Daniel Hellstrom <daniel@gaisler.com>,
 	Arun Muthusamy <arun.muthusamy@gaisler.com>
-Subject: [PATCH v7 03/15] MAINTAINERS: Add maintainers for GRCAN CAN network driver
-Date: Fri,  8 May 2026 09:01:09 +0200
-Message-ID: <20260508070121.6918-4-arun.muthusamy@gaisler.com>
+Subject: [PATCH v7 04/15] can: grcan: Add clock handling
+Date: Fri,  8 May 2026 09:01:10 +0200
+Message-ID: <20260508070121.6918-5-arun.muthusamy@gaisler.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260508070121.6918-1-arun.muthusamy@gaisler.com>
 References: <20260508070121.6918-1-arun.muthusamy@gaisler.com>
@@ -89,118 +90,141 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: GV3P280MB1530:EE_|GVYP280MB0889:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7f67d5a9-316e-4073-afba-08deaccfa3a5
+X-MS-Office365-Filtering-Correlation-Id: 13a7807a-3ab2-48c2-4caa-08deaccfa3de
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|376014|366016|52116014|38350700014|22082099003|56012099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	6E0dya4ZaH1/ap1+s8dgkvl8u6TVYJtRvXIy+eWSrj+wqhH72Mj2bCbHD1OuwBH1itXuhxto6zHn+LO4TqF4EnlTe6wuszwlbQbEa0SFj0iS490OdGfRS9Ekhd9PlnZtyWqK/IJzgOiUNJ3vYrArzqkRpnYn25qJ2uxhV2170iAL9sduIB4uS8d7Ui6BXVDNgTeudBp+Bi7q7UumEQbog1OaL5VbgdoCdrYjDgdcg2iHzeFhY+2BfpMxDgSlWqYtGwXZQsUiDiptcIP/ZvoaraIxCTQCZtBxpOyiXuGy+wDFSPVqQQToPEpxqnhYUNGhfLlwvHaY+uzz1xq1ZMQ2d5qvfsXIII27WGPLFzG8MVqwjCPwlvdhpCwkV5JeN5N1nOh2l82y2U2swEyh1K1GLasaM0r34F7B0HFeE9OH+KjE+g9GVPHs4+buYb3o7UsZTxi8a1upXBLvI3x7MfnvR+noRSLPvaVls/yfvd32S0zRGQz+tmkNyPS35nSImoMoOwTOr8NI4M5zI/pPc7DqrfR6E75pUKYSIkEbuK0jhBDRKOqYIEYB4ZOA53YDvc5DdhvGgrcPBxjwC0bfK12Bg7kNHpFrYU1QSLalB4YzgP122xQh1xj7BXZ3SslBbGcvZGkr9JzLhhEhvwE8jp+r2hqe26TkiLrB4lRlRCoPzDwjwTQdgTDXOssCosr6CSbRAKiDgqUTjspXFEEVM7V5QV7NbFIaaFcT1MdV020DhsDHsNxJBrnILfItoQb6PVCX
+	OFjsL+jsuUSO2PrSEuVfCJIL9NUW41WxtA7r5O+pRJ/mBJT20AZTsIbUjfL0S1CQTg2ls49v+qH+d7Vd53Va03Jg4IJr6Q4f/z97XAMPcBXmr8OwiJFkmu8eexYbZSaHYIhHBZvi8iTZyeqrsqqmcJxSgCh0jVqVHSirJLyhKSBgM21XxvmaWXJ2VY/8LvPAHHd9ihJEUId/zmA49A1OqUsdvY9kiEg+Kc+/YaZC+WfxHtNTqy0dwD0bTfso9ndZZ44Nvu8ZoaVY64AqDM5Kv2/DaQ76fKmDlwPYr2JAse4ONXBlmPt1Ax1ztOc0dvmqbxpnrmHuDKMDvO7paIyWXlt7kY6QPhU2Y9JOtbaT/O3Q10Ltfc1IHAfxIyTWTSTnlAa4rCUijv/v/8JXfKyf8xuZlMetiCHhrPbgcQtxg06D0ozBeLGTLOeQcyBlm+ooa1T/YHZMpcWKrZjmzRovrFImJQ5DK9Gt+8IvlW0vBPvFY2vnl+Q2++F13I9EIYRYtCIFNDZVsi3MZGwxV//GDA6JRjFu9kT1Nc5Ol6dkzLXV88o7sU3f51ptQ+eKO3fGzRrY40NW85m882DxXlKBWu6ADAcLUo7Dsqi4p0rJG1tX+EcNLtlSoAtPLPJGah2RmDTCdr7uVAf6bw+bJjGItczI/ue7/UzBdpkQq6+yWU4xwZHrPOYJ3NtdkFie/AQ+a4NxmZBQjJ7DvRc5gGTDTjrsVEsG4aO69XsOqq2Gcqd4qef8xQll03itdo8C9kvB
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV3P280MB1530.SWEP280.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(52116014)(38350700014)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?nuvyuF/LwzkQcjO8EQ/VmIPUXiGPWzZTUPYxxgYaQcTY0G+c8KCVB615oVtR?=
- =?us-ascii?Q?Im0+dbfyUKBESPRvfDo+78qSzpEQhVMG7PMziYoMtMJUPJbagTmwtNw1EReN?=
- =?us-ascii?Q?449DabrR5JMRLXKsDYXJNMDSofZAy82lCiOJwYGbMi3x5nVmMeQXO4skSV4V?=
- =?us-ascii?Q?nBnklIamQeUa/GtARInvvoBjZHtrdW++a/SzA9QMaBdFUZyvQWeHOZuhLoQC?=
- =?us-ascii?Q?/eryvd47Qs+0oOd1+LVVFXTyuyyMCWYDtaYHXYtugiXYDYeA6IWKFZolRjYu?=
- =?us-ascii?Q?lCYSGODJxXQT7XQ9rPx3wpwPB8aivPcQUVytACZyQ9gJSAZPtOYBWSfyPDtC?=
- =?us-ascii?Q?IBNDD8y1f2rbF+l9tVJxeWL5CAtJQSBxgEuUyw3zIR7XZW8EQDdGFpS3RZxy?=
- =?us-ascii?Q?Ect6ZmuehLLfubsO6L+OHWr51hPaTLqVhCqTK/QlduGVwNK0riD/u4LufXa/?=
- =?us-ascii?Q?puZCyvI1oaS25troyW9kvqcC5U6BEUoE9xzRePwxn/EVk8Bvg6JOqPbu7JAU?=
- =?us-ascii?Q?lgS/PyfeiBLrUpV7Gg1CHHySCFLThcVcfr5lsdNqy3ayphRCuVar15E41ABQ?=
- =?us-ascii?Q?5wo92j8hh9wn4zC7cjdUoHCz0vzJC5+CfAC36Klt7m0bsx0rndiVTthz+PDb?=
- =?us-ascii?Q?41Jm6f0yPfI1VwiUJF3ySM3SO9toTMgJ+C6IORDsWtLDlunv0TvhVesfmT9C?=
- =?us-ascii?Q?0tQJ+rxLZ8NoleMaOJnqLS8/8N7fn6zujOdVq+P5/+hO33s7QQMVgdvjpw+W?=
- =?us-ascii?Q?3Zmeq1ZIxZIYdEPeYFUZSKsxXZd8UqUZ80+4Fs7syTRaLAeegC/d1W1mZJih?=
- =?us-ascii?Q?rV0Y1QRxvuXpkvTtW8yHiWf44grtKmW5AU9tgH7Shyw6ddnYoLF/vL67oF7O?=
- =?us-ascii?Q?9XxIjBYBBk725PncPMcZUWJ0HZRtVSIflEVeeYyTweATXFIRULDXiJYhco8G?=
- =?us-ascii?Q?9BoVqdfp5NuDTEkeXTSpDQNtw+hfCz+y3n6nqPmkW2wSWJJBE2VEKguUSLq3?=
- =?us-ascii?Q?HQJFv5MJchKmnYRIyUyo2lfeX0qv7e00HfZSF+bRUuRZNg4o8LhyIYPkf0zz?=
- =?us-ascii?Q?xmc3yU5sIp0UcLD51Thh6GEhAAEpcombfIiRrzGginV2MLTvXCzJgKOuIYME?=
- =?us-ascii?Q?VCSpxdVB5X4nbnxbdsIHysdrxCQ4dQlfy4whgBJ8JZld6fLgjvQJvEYrbc0b?=
- =?us-ascii?Q?xurjptrZZ/Xkqt5/vRUbnXThbCMW856D1+5eJrDdWsl4Bz1Gx8Ek/aPuVNVE?=
- =?us-ascii?Q?BsKlBlzVcrs7s4XAgTFRCRaZNymk+4QidbXkXZWi+Ii9d8vZAz8AFjqka8Jp?=
- =?us-ascii?Q?7suCTXLKo5TJgIteeLih/Vo7woVbr0Zg9C7ASX2LYpaRv1TKpXtjFFywHhey?=
- =?us-ascii?Q?43l4JuugVGlRd/+N57aFyfARqJvc6eBDHRwCBbudIV2vUKRiL75W3p9c5FWt?=
- =?us-ascii?Q?++MG8NvISTLuaiqsR/IrfPsqDj/UtZDvo2aOuOFF7syID8VVreeTVGFvIyET?=
- =?us-ascii?Q?QO4KGaYEdKTVsnYWoeX5+GP3OB68Uci95zHjbN1ecNhJUEbszEs9XCZBE2j3?=
- =?us-ascii?Q?VNoFqdAW0rMAvtQ2JqZ6s8/Os77dzhpOj9iHh7OwCiepai8quH62IBXJLJnb?=
- =?us-ascii?Q?J8Oyx92mVTIU7jv8WsupWxB68ftQ0G+LQdpB6mCz8ZAV4xye96MSL7N1O3JC?=
- =?us-ascii?Q?FnO2xTknn+EpgKxaAzsh0NPZqQDNFlPagL2dDgXOmUMZwvcsYtb0t2LS+Rzg?=
- =?us-ascii?Q?lo0saHrFRK5e3rQ56evnM39VCKbFLYk=3D?=
+	=?us-ascii?Q?kYqeBxcQEN7uX9dPVH+tJ1jKetDOxG9XAXgarjWVEiRNTnXtO26Z54g1oxM7?=
+ =?us-ascii?Q?jLk0tew/IjJNl7dQBNDHLPl5zbetPyvevB7CCQElSdfnZjoVSa0UYE2ss2cA?=
+ =?us-ascii?Q?exUMskDhSML4/onKP5sNlvXkGU+3SgjF2R63Khrj3bmLHgxftoaDymhACo9S?=
+ =?us-ascii?Q?eqIH33zRBnDo/aBV61BzFOCzr6JxXgmEOwYm9YX4T7rYqLQwYa8TZ9rFxqPR?=
+ =?us-ascii?Q?6/zi8dS1FT/Jqnl53o56Afb4+QCBiLkQShe0i2B1/ZFkY4KpndEmpMlKKS+k?=
+ =?us-ascii?Q?q3ydWNY/s4GB8/sGvycU4czEyOEYfRaLky+vljv1rDtLQ+tyKDNGQhTG9PnH?=
+ =?us-ascii?Q?63q9PFG+T0cozpq7pvFDaryB4Jx+UUS6LBzooTxhpU3i083yWzxE/PDPAQj5?=
+ =?us-ascii?Q?k8VWb7EV0YTiB71w2BWfTh3LEv/mKRVrIJ1EHCGNxFzV81ni4oOKRn1FDWkE?=
+ =?us-ascii?Q?pGa5I5KOzQZYjRlXgDcPiNaHe8Mdkld3AsmAIksODpnSxc5lXQqv9SrYi9/Q?=
+ =?us-ascii?Q?D+Nm1YppnqwzPRcdWAt+VBPyXZ6pnoD0AnWYr4PlPxS8j/ZlcEq4j4eT+Lwu?=
+ =?us-ascii?Q?kI/OGLshmYI5AIcXIiJR3oa/XP2PIw4mbzbsNvKF6WpTwG2oyksn6I34VZVW?=
+ =?us-ascii?Q?edFFh4kjWDXfRgTEivTwTZ0LL4mlPiRY3dnLp3y+YKj3PeClb1v4kWQ95smZ?=
+ =?us-ascii?Q?8gX30yiYjOuP6XfZiBCx3MHHtAsVcz9IFxPSSQyOfa+C7os6wAvErY9dtI2R?=
+ =?us-ascii?Q?FvQtNapZZanYrohGhtSwaM4GCuYlPwuDG0rpPFxvCgpFpdnStCSYZ7krzvAI?=
+ =?us-ascii?Q?0RLz0kObn4/Kh/srmxSSVfdlHsu5+YS/90XzWElIuKV+mXf/mG8m8WDJgTs0?=
+ =?us-ascii?Q?v1WjluHcXPJpUpCWGt1Z6Ir8LR4tQfryKxkrzBUu5SNzo9MaopNBJ2PC0nVM?=
+ =?us-ascii?Q?qgCOgcDOx5uH1S5kepg4UNcMLu36C4t08uQy36fOKa7B/NQlt0FVUIulfmPa?=
+ =?us-ascii?Q?4PRPenXcu6znhij5Dr262g0jL1fc+7NbrdpJFLFZdDR5FUk3hZu3TiF9dXZc?=
+ =?us-ascii?Q?xBhJTSuJkCpz24w3zQ3R017MuUq0dczy+mqHlAqLveEoyWa647sCXRWtUUvP?=
+ =?us-ascii?Q?EW9CVtBNcNPRHhLwl234n9kynvWi0QuqKTRBBUMsLhQ+ZPG9sEabYSBg1IUy?=
+ =?us-ascii?Q?Mf6yc2xdRcJoxddHORtjmDZpcKw9evPkv5h3hyHfquyt2+91h3YVrYTgALnU?=
+ =?us-ascii?Q?ibOLk3/PUvsy+FrPX2ydXG0Ri1P3Z+dXiNbw7EBd1H/nglF1eMzWs8CMjJmS?=
+ =?us-ascii?Q?/rD6bXMLGSj8+VnNBz311cBVgjfbqRstPHzPeklvF700sQG0whW0G7WrhJqO?=
+ =?us-ascii?Q?xZWxie9eizQqLk7Bvt8KhqmDxwi/qSrYJ2VTqz9Xczi8MVhjWm3mA7pQAmip?=
+ =?us-ascii?Q?obdIv+gANdPqebVGTS4brYXNuKAsKh3Jec24k9QZ61VV+vlaExo4+yXqYZbS?=
+ =?us-ascii?Q?RkvB8gaSqIT3wTdkFzCFKQFCjh5mZxUfq6nBvODpSaZH1G9zsT+C6jVO1e1s?=
+ =?us-ascii?Q?DezTkgt3dWOgbo+g0Hzm+flOOg8N87mLhS0NICzvncbN5CclOcthZglxPhi8?=
+ =?us-ascii?Q?JGzoNDXsr71MFDj/KPrJ6fRrSy0GjXDKLDZ4Pd+K2gO4aifjMTVgOjQbOUYB?=
+ =?us-ascii?Q?c2SbUNF8Tju6nmsPnv1kRccBjxxefv9F3RNpnh3sa/rI+KEB5xETKWjiZq3c?=
+ =?us-ascii?Q?lxff4Lotwru10xdX4xz1iylXkqh15zg=3D?=
 X-OriginatorOrg: gaisler.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f67d5a9-316e-4073-afba-08deaccfa3a5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13a7807a-3ab2-48c2-4caa-08deaccfa3de
 X-MS-Exchange-CrossTenant-AuthSource: GV3P280MB1530.SWEP280.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2026 07:01:33.8095
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2026 07:01:34.1811
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 91fa4a59-2167-458a-8318-e45d80469d7e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bBAUOXC5lJIYbf9HWPT6P5pt0kfIr6BIOfKNluq1gZa+9SfECLsdbsZkoRV5okhEq1tqwXVZeZHc88uvJ1PDyfV+4IkwAnhrsivFm0LKxRQ=
+X-MS-Exchange-CrossTenant-UserPrincipalName: tkX+pQsjW3v4gIKbptHHQB7jjX5G2yioe2Xntrj3yHxor8rEM9rAUwyl34h5QRXT4aZeFgp5xJdywQyOJl313pUfMRuU2Hnhz68jnt7m7+s=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVYP280MB0889
-X-Rspamd-Queue-Id: C5D704F2D0B
+X-Rspamd-Queue-Id: 7F7154F2BD6
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
+X-Spamd-Result: default: False [1.34 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gaisler.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[gaisler.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-7579-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7565-lists,linux-can=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[gaisler.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[arun.muthusamy@gaisler.com,linux-can@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-can,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gaisler.com:email,gaisler.com:mid,gaisler.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,gaisler.com:email,gaisler.com:mid,gaisler.com:dkim]
 X-Rspamd-Action: no action
 
-Add Arun Muthusamy and Andreas Larsson as maintainers for
-the GRCAN CAN network driver, This entry ensures clear
-communication channels for maintaining the Documentation
-and driver code associated with GRCAN.
+From: Daniel Hellstrom <daniel@gaisler.com>
 
+Add clock handling and add error messages for missing 'freq' DT property.
+
+Signed-off-by: Daniel Hellstrom <daniel@gaisler.com>
 Signed-off-by: Arun Muthusamy <arun.muthusamy@gaisler.com>
 ---
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/net/can/grcan.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7a2ffd9d37d5..60b5d6212207 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10972,6 +10972,14 @@ F:	drivers/gpio/gpiolib-cdev.c
- F:	include/uapi/linux/gpio.h
- F:	tools/gpio/
+diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
+index ce12fa6df56d..a5f750d7e2d8 100644
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -34,7 +34,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/of.h>
+ #include <linux/of_irq.h>
+-
++#include <linux/clk.h>
+ #include <linux/dma-mapping.h>
  
-+GRCAN CAN NETWORK DRIVER
-+M:	Andreas Larsson <andreas@gaisler.com>
-+M:	Arun Muthusamy <arun.muthusamy@gaisler.com>
-+L:	linux-can@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/net/can/gaisler,grcan.yaml
-+F:	drivers/net/can/grcan.c
+ #define DRV_NAME	"grcan"
+@@ -1643,6 +1643,7 @@ static int grcan_probe(struct platform_device *ofdev)
+ {
+ 	struct device_node *np = ofdev->dev.of_node;
+ 	struct device_node *sysid_parent;
++	struct clk *clk;
+ 	u32 sysid, ambafreq;
+ 	int irq, err;
+ 	void __iomem *base;
+@@ -1662,8 +1663,19 @@ static int grcan_probe(struct platform_device *ofdev)
+ 
+ 	err = of_property_read_u32(np, "freq", &ambafreq);
+ 	if (err) {
+-		dev_err(&ofdev->dev, "unable to fetch \"freq\" property\n");
+-		goto exit_error;
++		clk = devm_clk_get(&ofdev->dev, NULL);
++		if (IS_ERR(clk)) {
++			dev_err_probe(&ofdev->dev, PTR_ERR(clk),
++				      "Failed both to get \"freq\" property and clock for fallback\n");
++			err = PTR_ERR(clk);
++			goto exit_error;
++		}
 +
- GRETH 10/100/1G Ethernet MAC device driver
- M:	Andreas Larsson <andreas@gaisler.com>
- L:	netdev@vger.kernel.org
++		ambafreq = clk_get_rate(clk);
++		if (!ambafreq) {
++			dev_err(&ofdev->dev, "Invalid or Uninitialized clock\n");
++			return -EINVAL;
++		}
+ 	}
+ 
+ 	base = devm_platform_ioremap_resource(ofdev, 0);
 -- 
 2.51.0
 
