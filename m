@@ -1,204 +1,164 @@
-Return-Path: <linux-can+bounces-7593-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7594-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kCQTEFKiAWpKgwEAu9opvQ
-	(envelope-from <linux-can+bounces-7593-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 11:33:06 +0200
+	id 2ItDKxivAWrXiAEAu9opvQ
+	(envelope-from <linux-can+bounces-7594-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 12:27:36 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4875350AF4C
-	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 11:33:04 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ECB050BDD8
+	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 12:27:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BCD9330A48CD
-	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 09:22:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5504530037EB
+	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 10:27:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD283BE647;
-	Mon, 11 May 2026 09:21:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A236B3BD241;
+	Mon, 11 May 2026 10:27:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b="vYxxJc85"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j0C5tr3z"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43793BADAA
-	for <linux-can@vger.kernel.org>; Mon, 11 May 2026 09:21:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778491304; cv=none; b=qSKxqKmm+wKW7jPDxqzMuWFEI5leXm/BEOPpT/N4B3jevrv+P9TDIyyDy8UQmcQ4WDMM1PD6L55RE8y3bmFXlIukJFjXFOOh/ApN5dZywqx8rVVDVHopQwTpjrW4kO04njYRUcRs2SRysCDEPvczEXjimmq4Ud0HgjSStaGnCKs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778491304; c=relaxed/simple;
-	bh=yTA3EfMFNqWtw4mwbSh1QoSBedE1rcjpYMGPIfcrLnU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WqRXAeZFNOk1lGMyuFJYtw6mAQW/YBltxOvUUcd1OuFFdRrZbyY+hMqlulK+kV6HJE0SEYAQJ0838eIPvd+xMDhbUZI3RMOvurm6JFGTTHHTII7w56bNTezScV46p6J+2hizHynW1BiSovs2XB5nKblorP1wRpipSYBBadyoDt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b=vYxxJc85; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48e56c1bf5dso24505765e9.3
-        for <linux-can@vger.kernel.org>; Mon, 11 May 2026 02:21:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7112B22FE0E
+	for <linux-can@vger.kernel.org>; Mon, 11 May 2026 10:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778495253; cv=pass; b=QC5T1fmEEPoU0QdhSbMp4QlzxbRZttfflk3L+Z77KD39wsUn/qO4e4LlRwJ76jdEbwS0U1BS8uWQWrht5l5S98J5dQrdKWL4nVinUu2F3jR45AKpw1oOKAOmySNgDQOOu38oVmN1kVgSGS3Y5bQHnTbxmOL594ephTKllLmXQqQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778495253; c=relaxed/simple;
+	bh=6e1dCH/YTu6LMJOvFGE0lRfUBeCMINIq9HjnZFBGbqI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JO2l+cCVfmmrXyZtJtqwL3Q2t2jtz1nnpvoOH6UclN8657s6vgyIZ1rGiG196dMLIoXdeiJweADLbdquwp4XZk3Xc+g/+phSROQF+Gk7KS0phR4reP40OpA3EWAhhuF9tMhZC73V/fMUDlSMtFto5Cpy63hcSfGMaKhFii2ZdaU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j0C5tr3z; arc=pass smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-365cae89bf5so1735074a91.3
+        for <linux-can@vger.kernel.org>; Mon, 11 May 2026 03:27:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778495252; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ADmL+0ULCZLNcMhhz9TuusXJ1I29QMyxst6oD2NuFU5FIu6V0rxKH2YfagFJbm2+kp
+         kvMQUo2mlulWtizvj7NOSDKjUwypzanMUj/wyl6HhG09OsgV2z5S5eluWtFZGLw4WfJK
+         2k8iN6HkEq8AavQ20CaTarArOdsT8+tansK482aI2hV33fvGeUoeyaHJKV+5xH/1Fuv/
+         Qtt6Pcq9JVAo+8AL5NRMgazgFHcdsXY/aJJvH47hP7Dw4Na/59v9YxyC3/KUS9pCbjmI
+         6KLAPSk62h395let6ayJU63K7DvuR6rwZ0N5zYfJQc7vjB8VHD0xSytFeZBEAkKEwpKl
+         QAFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=rOjR5zbznVQFI6e4YboZd1K49D265gDKYhkZsTPiHvo=;
+        fh=PZWsMiY3OpJXEEi1hekPsn7oT7JumRsSUsAhw+o0EkE=;
+        b=kp7OeE0a6m2aWFwcxJM5191vCGh/4d+64L2PzHDsB0g46inXqAgbpMTBEXd5kIHVBS
+         3F2rF7RbMjFjhUQPD5TFmnhsmNQciVqd5x+etaiH0qGuPZ7GwmA5m8Yxjkn6M+Bp4NkD
+         HSOCLDpsrj4k3uO16MJPJ2AsoqlA4pA5cQzV5yV6sXD5o2oWaMJdftj4HRWSOx7VG131
+         CrEyUz/l0FXA6WQhhNeAcqzgZfjEY56g2pBS+CkBAaSwHEe/r2HLTviTJH/pRwG2oqoV
+         xIM0BAKFDDF6RCReVgvjh2wGBGUW6FNEw/9m6X94AB9Ge6jfiOIO75r8+/5MtBE/+l/J
+         wQ5Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20251104.gappssmtp.com; s=20251104; t=1778491301; x=1779096101; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yTA3EfMFNqWtw4mwbSh1QoSBedE1rcjpYMGPIfcrLnU=;
-        b=vYxxJc85V/35JiUXFNYmo0LerbGRF5e+QTMsSTky/PLHoHIXcQfhHeEmbjWBQLjGGj
-         srHQ7Hor7sJDV69koBiim96BM6DEtzFk1x5lmFs8xXLmiTM4A8tZN+sCE6j/fpqZRfbG
-         BbqT8abivpaCYn1MOxRPGCJL3tKCnvHEX9I37FvzdHLKlR9csX5LywataW+c1TMTuA37
-         0nToyUBRw/8kCdFEAMVvNrZXBoy68PJAgBxSciwUkAMeXTVYngR6zURWuVjgiRl+vLyp
-         1AzXruTSGaRmUI3xjY7I86b5FES6SMPdVhgTGpuqMDLMBswvmBeu1b65y5xgDhNb1Z16
-         rOKw==
+        d=gmail.com; s=20251104; t=1778495252; x=1779100052; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rOjR5zbznVQFI6e4YboZd1K49D265gDKYhkZsTPiHvo=;
+        b=j0C5tr3zHwiWX/aDa1WNZ+hloKT288vmCV5bj9uKa8Kg8D3VOJvF3QOPH7tsoyJfCN
+         2H/BfD+/daIYEFgsSPNZZmzFNGqHSm3T1cGzFlmhNhAVbXgDfF7sFbPenEZZLoRcFnul
+         9LxEqydfP1Y3QOjJ6kXeIBDMNg3cC2TRSzLCfgSkxz9CS+iJB4RDbUkOO+l03HrKbZ3n
+         ssR6tRvKFJZ751izEXIDxebQes96MeuzoATqUT2m0RlKG8FeeYowNV+iT6O71AwppFsN
+         up3TmJ+2WVoB+UkDnWUnsHwW02AuRlFTjQUvqwg4rQpMxheEdyJpw5VQymPLZlVPVFFC
+         vp6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778491301; x=1779096101;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yTA3EfMFNqWtw4mwbSh1QoSBedE1rcjpYMGPIfcrLnU=;
-        b=O7ZEXz+FS2+/Vt71D2jEGoeFP4QIooQdg5QeimNzPeguKLFQmkRYWpqLyaSRiIRaCy
-         rsP0L0k5rVs27q8eJGpPZgvL4KpxNkVuLGBGP+f9ytY4WHz+QO5nDnL1LgDOB2+jE2D6
-         gcUIDykMo+OC7LHbP4sPpN1n7E4gDOllS1r0ey2zpKVk0spyFrlQyIlINv+3KLyiIM8O
-         0rAMUYHU/qTu2i14DrLeRON2AkvxFPlet3DMK7iYdaSGIex8fwHX32RS4iVbrssSTK9k
-         hTGOZ1UJQ38peX4TILvsedhsy0BxJdxFAI/3Eckccp2eVpFbbi33L7KFaiLpb+lyyl6L
-         qmzg==
-X-Forwarded-Encrypted: i=1; AFNElJ+8b3yF1JT1MrZU3hQGat4vwxdcgwlNTqzk3x68vax4A4fA6xE1u6PwOeLabYERpbi24jhgssTrOXg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz087Cu0XQr61Aqe6YEIWf+bHhJKrYQhk4VHYUZV8EwGf8ODI41
-	Jd7Xcc9vgdIDY21GwswAoKZSZFgX1eKgNrIpR9c2PPxOVcyu9gi4rxjCePRHTYRdUXk=
-X-Gm-Gg: Acq92OErdDU3Ld2O5UC238XWUvkk7cR45tj+RbfoowKE9nl7AOj9aLXrZJxU3E6Ou1N
-	Va4Qj/aQEoZy70PYk/cqyaNTtOHFNpH0pepASb8WenED2HucX9HpJ3NExNebmA9ZZLnQiGSLQs3
-	StT5bHQS7vt4YgLi9KfzB9VsYNvoLqWzRvIO23rxTVZv/Q/uPz9jQpehQ1IbSd9TMSq946K8lLx
-	Ik9yJhSA+F3VtUtgiws4ShpeBHMOn9wnQQg30EHehDVLVYb4w2ZQwfaoiDCNnoDjOdxOEl1DYd2
-	sHSSalywc6SYfLt1BD9LaJfFgBs74Ma2YtsU7chq9aEpZEZ0RQxnwR1IFa3kAXQlttEyEqw+ee4
-	Fe8i+/WGN1Qz3qlt86zGtLN1CXEtmTfWZZWrx9DzxWQGO6CNUVAelJogzN9xfvuULs9x0LZhmqV
-	YbccjhkrFlBM/ix8d1qFSXK1nDZ2BlYvxzi5ET/rt1NAlRr0Tvju9TXdiLONNL/cLaoQk8xs2R3
-	6O6xJDzmz/cCgQ=
-X-Received: by 2002:a05:600c:b8d:b0:489:1fa5:997f with SMTP id 5b1f17b1804b1-48e70691673mr134646165e9.9.1778491301044;
-        Mon, 11 May 2026 02:21:41 -0700 (PDT)
-Received: from localhost (p200300f65f114e0841c796eda31a14b3.dip0.t-ipconnect.de. [2003:f6:5f11:4e08:41c7:96ed:a31a:14b3])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-48e7041c4e8sm167443115e9.14.2026.05.11.02.21.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 02:21:40 -0700 (PDT)
-Date: Mon, 11 May 2026 11:21:39 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
-To: Michael Grzeschik <mgr@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Vincent Mailhol <mailhol@kernel.org>, Johannes Berg <johannes@sipsolutions.net>
-Cc: Steffen Klassert <klassert@kernel.org>, 
-	David Dillow <dave@thedillows.org>, Ion Badulescu <ionut@badula.org>, 
-	Mark Einon <mark.einon@gmail.com>, Rasesh Mody <rmody@marvell.com>, GR-Linux-NIC-Dev@marvell.com, 
-	Manish Chopra <manishc@marvell.com>, Potnuri Bharat Teja <bharat@chelsio.com>, 
-	Denis Kirjanov <kirjanov@gmail.com>, Jijie Shao <shaojijie@huawei.com>, 
-	Jian Shen <shenjian15@huawei.com>, Cai Huoqing <cai.huoqing@linux.dev>, 
-	Fan Gong <gongfan1@huawei.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Tariq Toukan <tariqt@nvidia.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
-	Mark Bloch <mbloch@nvidia.com>, Ido Schimmel <idosch@nvidia.com>, 
-	Petr Machata <petrm@nvidia.com>, Yibo Dong <dong100@mucse.com>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, nic_swsd@realtek.com, Jiri Pirko <jiri@resnulli.us>, 
-	Francois Romieu <romieu@fr.zoreil.com>, Daniele Venzano <venza@brownhat.org>, 
-	Samuel Chessman <chessman@tux.org>, Jiawen Wu <jiawenwu@trustnetic.com>, 
-	Mengyuan Lou <mengyuanlou@net-swift.com>, Kevin Curtis <kevin.curtis@farsite.co.uk>, 
-	Arend van Spriel <arend.vanspriel@broadcom.com>, Stanislav Yakovlev <stas.yakovlev@gmail.com>, 
-	Richard Cochran <richardcochran@gmail.com>, Kees Cook <kees@kernel.org>, 
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Jacob Keller <jacob.e.keller@intel.com>, Thomas Fourier <fourier.thomas@gmail.com>, 
-	Ingo Molnar <mingo@kernel.org>, Kory Maincent <kory.maincent@bootlin.com>, 
-	Zilin Guan <zilin@seu.edu.cn>, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
-	Marco Crivellari <marco.crivellari@suse.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	David Arinzon <darinzon@amazon.com>, Yeounsu Moon <yyyynoom@gmail.com>, 
-	Denis Benato <benato.denis96@gmail.com>, Yonglong Liu <liuyonglong@huawei.com>, 
-	Andy Shevchenko <andriy.shevchenko@intel.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Yicong Hui <yiconghui@gmail.com>, MD Danish Anwar <danishanwar@ti.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Ethan Nelson-Moore <enelsonmoore@gmail.com>, 
-	Larysa Zaremba <larysa.zaremba@intel.com>, Ian Lin <ian.lin@infineon.com>, 
-	Colin Ian King <colin.i.king@gmail.com>, Double Lo <double.lo@cypress.com>, 
-	Markus Schneider-Pargmann <msp@baylibre.com>, Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-can@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org, oss-drivers@corigine.com, 
-	linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com
-Subject: Re: [PATCH net-next v3 2/2] net: Consistently define pci_device_ids
- using named initializers
-Message-ID: <agGfbyxlKC8WcEdm@monoceros>
-References: <20260511090023.1634387-4-u.kleine-koenig@baylibre.com>
- <20260511090023.1634387-6-u.kleine-koenig@baylibre.com>
+        d=1e100.net; s=20251104; t=1778495252; x=1779100052;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=rOjR5zbznVQFI6e4YboZd1K49D265gDKYhkZsTPiHvo=;
+        b=nEbMwlRfV6yko1iz4p/wofHPill3y8F7BsvY9dKasOgXpOW4j4Y+GMeexwdnwgUVOA
+         F9CzST7jT+ZqzqzShmgFtONOhJ5KcqsNOkjlxRC0ciay1O0OJbS4wg1PmoEPt87d+dQ5
+         sJ+Pf+HS4+jBVM+RehuExvuRdq6LN6p7j2itCpUS/uo1LLDs9KE/v/Q6HZg+vilgcFSg
+         dOoeRn2I9OyiRLPzWragwlCpLWn3Lvr+vykcq/WHxYTqqUm0V7kr9hcihJha95tsWa24
+         h39o/4dQeeYQU9jbWf0Y9XPawZmmYwm+HUHV4OcaHKai0OARRfdZQ1KplVuEyhVh3sAj
+         OICg==
+X-Forwarded-Encrypted: i=1; AFNElJ+/B3DczW3iYdeMOgFyeJH9i7pg9RnXb4XRxOlT/sBMgPO0oERi2WyTG3RysTTmsPPX+s4zljRkVU4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNIMARHA8KSyW1f+0+do4gEgdTvHFOr2Ca3HaPu8IUMtuHqZM3
+	yCbHCL4VkcbWdGJpBjQ50XGE4NTTugOtROb8JZpAW7FJuvB/BidAaCIWbZsPehVTMUxb79GDKYM
+	3Vy/MjEgsS9Vc9Y4/DeatAeOPtuFKL4I=
+X-Gm-Gg: Acq92OEClJPNZOXz+Wvkd2oAj6GBGDDmAYexD1ZCVnb2nkbSQnXNfdsQe15ZfLmV5iY
+	6KnnapGQTbkQRmc6twEFsQnsNPfutjwm/8iL8d1ZkjDEE+XGvBPiJTokDzLheKO5/z9iOB3t7LM
+	nei9NB6eFrMIuX19mh6UqnQB7VlYAYryXuIaIfGUSApP34xFzXPSoByI+79IexDv+9z9DuoixB8
+	GlS7Ji3VK7dFQthfhAJ9s8z0Nm0EwnDps9AcyjYy5K742kb55AeEkUen1w8W+FhCqXFxkP8nkvj
+	nOuaUKclh0XeFS39azhm5pKzJJII6Pk0DYDmoTMhXpG4lhti
+X-Received: by 2002:a17:90b:2248:b0:35f:b572:ece3 with SMTP id
+ 98e67ed59e1d1-365ab3e6de6mr24593427a91.6.1778495251831; Mon, 11 May 2026
+ 03:27:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="26wz6vcj2wzkdd5i"
-Content-Disposition: inline
-In-Reply-To: <20260511090023.1634387-6-u.kleine-koenig@baylibre.com>
-X-Rspamd-Queue-Id: 4875350AF4C
+References: <20260504050702.34013-1-phucduc.bui@gmail.com> <DIFOSTNQW7OL.2MDUYPI8UXMBK@baylibre.com>
+In-Reply-To: <DIFOSTNQW7OL.2MDUYPI8UXMBK@baylibre.com>
+From: Bui Duc Phuc <phucduc.bui@gmail.com>
+Date: Mon, 11 May 2026 17:27:18 +0700
+X-Gm-Features: AVHnY4LHS-AZqmhw37kk0XA_N9FsecsRQTo4fOD-5_1WLrkqBJssh1lG_wIheAA
+Message-ID: <CAABR9nFKz6f6idK4TG8MoYKAayqKDw3SySU45vTeryY79Z2yow@mail.gmail.com>
+Subject: Re: [PATCH] can: m_can: Use of_property_present() for wakeup-source
+To: Markus Schneider-Pargmann <msp@baylibre.com>
+Cc: mkl@pengutronix.de, mailhol@kernel.org, linux-can@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 2ECB050BDD8
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[baylibre-com.20251104.gappssmtp.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7593-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,thedillows.org,badula.org,gmail.com,marvell.com,chelsio.com,huawei.com,linux.dev,intel.com,nvidia.com,mucse.com,realtek.com,resnulli.us,fr.zoreil.com,brownhat.org,tux.org,trustnetic.com,net-swift.com,farsite.co.uk,broadcom.com,bootlin.com,seu.edu.cn,suse.com,google.com,amazon.com,infradead.org,ti.com,infineon.com,cypress.com,baylibre.com,vger.kernel.org,lists.osuosl.org,corigine.com,lists.linux.dev];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-7594-lists,linux-can=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[baylibre-com.20251104.gappssmtp.com:+];
-	RCPT_COUNT_GT_50(0.00)[80];
-	TAGGED_RCPT(0.00)[linux-can,netdev];
 	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre-com.20251104.gappssmtp.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[phucducbui@gmail.com,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-can];
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,baylibre.com:email]
 X-Rspamd-Action: no action
 
+Hi Markus,
 
---26wz6vcj2wzkdd5i
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH net-next v3 2/2] net: Consistently define pci_device_ids
- using named initializers
-MIME-Version: 1.0
+On Mon, May 11, 2026 at 2:59=E2=80=AFPM Markus Schneider-Pargmann
+<msp@baylibre.com> wrote:
+>
+> I think this is a fix for
+>   04d5826b074e ("can: m_can: Map WoL to device_set_wakeup_enable")
+>
+> Can you please add a Fixes:?
+>
+> Otherwise:
+>
+> Acked-by: Markus Schneider-Pargmann <msp@baylibre.com>
 
-On Mon, May 11, 2026 at 11:00:24AM +0200, Uwe Kleine-K=F6nig (The Capable H=
-ub) wrote:
-> Forwarded: id:76da4f44d48bdde84580963862bf9616bee5c9e9.1778149923.git.u.k=
-leine-koenig@baylibre.com (v2)
+Thanks for the review.
+I will add the Fixes tag in v2.
 
-This is my internal marker for tracking mainline submissions. If someone
-applies this revision please drop this line.
-
-Best regards
-Uwe
-
---26wz6vcj2wzkdd5i
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmoBn6EACgkQj4D7WH0S
-/k4q9wgAnNsetoJQuSPdcsRqTfhJ3nvDxBsfxvsce6Raf4aiAs6sa5jJlBrTa5h3
-nEaIsI15hqOx2W/FeLUG3/e0pnGua3DO4qsTmtY+G74jweYDfLDdXlEHlt9zNS6x
-lDrxCXGPT97KmN2CifwJILefl8Lv7jTwROdpFGiVt85DXbiZtFIL/frdeU6leU+1
-FdE6JY7j/Qx1jjdXNf0bWzAYX8PJ8ocHv+b0BcV8ctfX7hsV/vxsLmUU0goDLYiO
-u683/fMBDCwmEtoIHKOODM7mPIJAndSocuWgR2Fn2xqlVyooDPuS9d0p0wTjl2qT
-eA7SLNWIZbT2fhIZM4FV8lAwHsMj+w==
-=qcwQ
------END PGP SIGNATURE-----
-
---26wz6vcj2wzkdd5i--
+Best Regards,
+Phuc
 
