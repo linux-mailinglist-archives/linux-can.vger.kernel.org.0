@@ -1,164 +1,456 @@
-Return-Path: <linux-can+bounces-7594-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7595-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2ItDKxivAWrXiAEAu9opvQ
-	(envelope-from <linux-can+bounces-7594-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 12:27:36 +0200
+	id IFJjIGbEAWqSjgEAu9opvQ
+	(envelope-from <linux-can+bounces-7595-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 13:58:30 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ECB050BDD8
-	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 12:27:35 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87AA450D37F
+	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 13:58:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5504530037EB
-	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 10:27:34 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8E9673008CAD
+	for <lists+linux-can@lfdr.de>; Mon, 11 May 2026 11:58:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A236B3BD241;
-	Mon, 11 May 2026 10:27:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4335137754C;
+	Mon, 11 May 2026 11:58:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j0C5tr3z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jvjdQJFh"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7112B22FE0E
-	for <linux-can@vger.kernel.org>; Mon, 11 May 2026 10:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778495253; cv=pass; b=QC5T1fmEEPoU0QdhSbMp4QlzxbRZttfflk3L+Z77KD39wsUn/qO4e4LlRwJ76jdEbwS0U1BS8uWQWrht5l5S98J5dQrdKWL4nVinUu2F3jR45AKpw1oOKAOmySNgDQOOu38oVmN1kVgSGS3Y5bQHnTbxmOL594ephTKllLmXQqQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778495253; c=relaxed/simple;
-	bh=6e1dCH/YTu6LMJOvFGE0lRfUBeCMINIq9HjnZFBGbqI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JO2l+cCVfmmrXyZtJtqwL3Q2t2jtz1nnpvoOH6UclN8657s6vgyIZ1rGiG196dMLIoXdeiJweADLbdquwp4XZk3Xc+g/+phSROQF+Gk7KS0phR4reP40OpA3EWAhhuF9tMhZC73V/fMUDlSMtFto5Cpy63hcSfGMaKhFii2ZdaU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j0C5tr3z; arc=pass smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-365cae89bf5so1735074a91.3
-        for <linux-can@vger.kernel.org>; Mon, 11 May 2026 03:27:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778495252; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ADmL+0ULCZLNcMhhz9TuusXJ1I29QMyxst6oD2NuFU5FIu6V0rxKH2YfagFJbm2+kp
-         kvMQUo2mlulWtizvj7NOSDKjUwypzanMUj/wyl6HhG09OsgV2z5S5eluWtFZGLw4WfJK
-         2k8iN6HkEq8AavQ20CaTarArOdsT8+tansK482aI2hV33fvGeUoeyaHJKV+5xH/1Fuv/
-         Qtt6Pcq9JVAo+8AL5NRMgazgFHcdsXY/aJJvH47hP7Dw4Na/59v9YxyC3/KUS9pCbjmI
-         6KLAPSk62h395let6ayJU63K7DvuR6rwZ0N5zYfJQc7vjB8VHD0xSytFeZBEAkKEwpKl
-         QAFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rOjR5zbznVQFI6e4YboZd1K49D265gDKYhkZsTPiHvo=;
-        fh=PZWsMiY3OpJXEEi1hekPsn7oT7JumRsSUsAhw+o0EkE=;
-        b=kp7OeE0a6m2aWFwcxJM5191vCGh/4d+64L2PzHDsB0g46inXqAgbpMTBEXd5kIHVBS
-         3F2rF7RbMjFjhUQPD5TFmnhsmNQciVqd5x+etaiH0qGuPZ7GwmA5m8Yxjkn6M+Bp4NkD
-         HSOCLDpsrj4k3uO16MJPJ2AsoqlA4pA5cQzV5yV6sXD5o2oWaMJdftj4HRWSOx7VG131
-         CrEyUz/l0FXA6WQhhNeAcqzgZfjEY56g2pBS+CkBAaSwHEe/r2HLTviTJH/pRwG2oqoV
-         xIM0BAKFDDF6RCReVgvjh2wGBGUW6FNEw/9m6X94AB9Ge6jfiOIO75r8+/5MtBE/+l/J
-         wQ5Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778495252; x=1779100052; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rOjR5zbznVQFI6e4YboZd1K49D265gDKYhkZsTPiHvo=;
-        b=j0C5tr3zHwiWX/aDa1WNZ+hloKT288vmCV5bj9uKa8Kg8D3VOJvF3QOPH7tsoyJfCN
-         2H/BfD+/daIYEFgsSPNZZmzFNGqHSm3T1cGzFlmhNhAVbXgDfF7sFbPenEZZLoRcFnul
-         9LxEqydfP1Y3QOjJ6kXeIBDMNg3cC2TRSzLCfgSkxz9CS+iJB4RDbUkOO+l03HrKbZ3n
-         ssR6tRvKFJZ751izEXIDxebQes96MeuzoATqUT2m0RlKG8FeeYowNV+iT6O71AwppFsN
-         up3TmJ+2WVoB+UkDnWUnsHwW02AuRlFTjQUvqwg4rQpMxheEdyJpw5VQymPLZlVPVFFC
-         vp6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778495252; x=1779100052;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=rOjR5zbznVQFI6e4YboZd1K49D265gDKYhkZsTPiHvo=;
-        b=nEbMwlRfV6yko1iz4p/wofHPill3y8F7BsvY9dKasOgXpOW4j4Y+GMeexwdnwgUVOA
-         F9CzST7jT+ZqzqzShmgFtONOhJ5KcqsNOkjlxRC0ciay1O0OJbS4wg1PmoEPt87d+dQ5
-         sJ+Pf+HS4+jBVM+RehuExvuRdq6LN6p7j2itCpUS/uo1LLDs9KE/v/Q6HZg+vilgcFSg
-         dOoeRn2I9OyiRLPzWragwlCpLWn3Lvr+vykcq/WHxYTqqUm0V7kr9hcihJha95tsWa24
-         h39o/4dQeeYQU9jbWf0Y9XPawZmmYwm+HUHV4OcaHKai0OARRfdZQ1KplVuEyhVh3sAj
-         OICg==
-X-Forwarded-Encrypted: i=1; AFNElJ+/B3DczW3iYdeMOgFyeJH9i7pg9RnXb4XRxOlT/sBMgPO0oERi2WyTG3RysTTmsPPX+s4zljRkVU4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNIMARHA8KSyW1f+0+do4gEgdTvHFOr2Ca3HaPu8IUMtuHqZM3
-	yCbHCL4VkcbWdGJpBjQ50XGE4NTTugOtROb8JZpAW7FJuvB/BidAaCIWbZsPehVTMUxb79GDKYM
-	3Vy/MjEgsS9Vc9Y4/DeatAeOPtuFKL4I=
-X-Gm-Gg: Acq92OEClJPNZOXz+Wvkd2oAj6GBGDDmAYexD1ZCVnb2nkbSQnXNfdsQe15ZfLmV5iY
-	6KnnapGQTbkQRmc6twEFsQnsNPfutjwm/8iL8d1ZkjDEE+XGvBPiJTokDzLheKO5/z9iOB3t7LM
-	nei9NB6eFrMIuX19mh6UqnQB7VlYAYryXuIaIfGUSApP34xFzXPSoByI+79IexDv+9z9DuoixB8
-	GlS7Ji3VK7dFQthfhAJ9s8z0Nm0EwnDps9AcyjYy5K742kb55AeEkUen1w8W+FhCqXFxkP8nkvj
-	nOuaUKclh0XeFS39azhm5pKzJJII6Pk0DYDmoTMhXpG4lhti
-X-Received: by 2002:a17:90b:2248:b0:35f:b572:ece3 with SMTP id
- 98e67ed59e1d1-365ab3e6de6mr24593427a91.6.1778495251831; Mon, 11 May 2026
- 03:27:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184C71E834E;
+	Mon, 11 May 2026 11:58:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778500686; cv=none; b=slMQseFraC212RSeLdIM9p9fvZvxJQ/FtPi+kCKuxANSc9dsZsr96SKRIPWiiCOeUPjmeYCyImHorwrZffh5NML5xmccrSAjmPJgHG04P6bO2R2EZKm4n2843Dgeiat/Gd/u+ywtKCWPuomcH/9vCOuYPEIy15N7D8K8L+2BKyM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778500686; c=relaxed/simple;
+	bh=KF1t/bRGs16yza3DBTgFCMGGOZGbS2ZRe4/jmsnl72o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FEE5iAV2SSMvZPOr5ybz+dZwffGpWCLRwkujJSnHj/O7LgeHZTejvl9D2oOPDHrDh+UqpNhoWfL2vS5gM5R/EmkkQ6lqjcTxMayz5+cNPs8s93R6ZXiQEQ5vMhmCdq9UQ5bfGEa5KCAbLMlQ8N05miZbgnd9SMohrzeixg+mQj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jvjdQJFh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD16EC2BCF7;
+	Mon, 11 May 2026 11:57:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778500686;
+	bh=KF1t/bRGs16yza3DBTgFCMGGOZGbS2ZRe4/jmsnl72o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jvjdQJFhfyjs3E/5QNKeFp1jTRAOxDNvz4Mh8U1RxGbjks/gpXVIlmydk3WFacZhD
+	 l3f9a2vKk3bOmeWc34go+yHhoRM3iBRq3LZ8M7XZ59udEW1MqdS7mKupb4h1wVV4Do
+	 KkvCSR3C+uHG3tH2YS5uwHfM+9OpvFxe4qYtM2DSiMg7qYdP1QRCHem+lUwMYjOqmr
+	 X5gNyzzBOvSy7yuBJdyKREHmHjj5av7KbAFq6bfRiAEx+MwwD+2sRATPB1Q8jc1b4u
+	 FTEA9GZv56qYWosTkb/DEeuVpP3AGfbpItzeaDDDn/7i4IwntV9jTHGbBse/kGCO8p
+	 EO/cNlRqVgdlg==
+Date: Mon, 11 May 2026 13:57:49 +0200
+From: Michael Grzeschik <mgr@kernel.org>
+To: Uwe =?iso-8859-15?Q?Kleine-K=F6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Steffen Klassert <klassert@kernel.org>,
+	David Dillow <dave@thedillows.org>,
+	Ion Badulescu <ionut@badula.org>, Mark Einon <mark.einon@gmail.com>,
+	Rasesh Mody <rmody@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
+	Manish Chopra <manishc@marvell.com>,
+	Potnuri Bharat Teja <bharat@chelsio.com>,
+	Denis Kirjanov <kirjanov@gmail.com>,
+	Jijie Shao <shaojijie@huawei.com>,
+	Jian Shen <shenjian15@huawei.com>,
+	Cai Huoqing <cai.huoqing@linux.dev>, Fan Gong <gongfan1@huawei.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>,
+	Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
+	Yibo Dong <dong100@mucse.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>, nic_swsd@realtek.com,
+	Jiri Pirko <jiri@resnulli.us>,
+	Francois Romieu <romieu@fr.zoreil.com>,
+	Daniele Venzano <venza@brownhat.org>,
+	Samuel Chessman <chessman@tux.org>,
+	Jiawen Wu <jiawenwu@trustnetic.com>,
+	Mengyuan Lou <mengyuanlou@net-swift.com>,
+	Kevin Curtis <kevin.curtis@farsite.co.uk>,
+	Arend van Spriel <arend.vanspriel@broadcom.com>,
+	Stanislav Yakovlev <stas.yakovlev@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Kees Cook <kees@kernel.org>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Thomas Fourier <fourier.thomas@gmail.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Zilin Guan <zilin@seu.edu.cn>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	David Arinzon <darinzon@amazon.com>,
+	Yeounsu Moon <yyyynoom@gmail.com>,
+	Denis Benato <benato.denis96@gmail.com>,
+	Yonglong Liu <liuyonglong@huawei.com>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Yicong Hui <yiconghui@gmail.com>,
+	MD Danish Anwar <danishanwar@ti.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Larysa Zaremba <larysa.zaremba@intel.com>,
+	Ian Lin <ian.lin@infineon.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Double Lo <double.lo@cypress.com>,
+	Markus Schneider-Pargmann <msp@baylibre.com>,
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+	linux-parisc@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	linux-rdma@vger.kernel.org, oss-drivers@corigine.com,
+	linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
+	brcm80211-dev-list.pdl@broadcom.com
+Subject: Re: [PATCH net-next v3 2/2] net: Consistently define pci_device_ids
+ using named initializers
+Message-ID: <agHEPQ5tLFKW0uum@pengutronix.de>
+References: <20260511090023.1634387-4-u.kleine-koenig@baylibre.com>
+ <20260511090023.1634387-6-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260504050702.34013-1-phucduc.bui@gmail.com> <DIFOSTNQW7OL.2MDUYPI8UXMBK@baylibre.com>
-In-Reply-To: <DIFOSTNQW7OL.2MDUYPI8UXMBK@baylibre.com>
-From: Bui Duc Phuc <phucduc.bui@gmail.com>
-Date: Mon, 11 May 2026 17:27:18 +0700
-X-Gm-Features: AVHnY4LHS-AZqmhw37kk0XA_N9FsecsRQTo4fOD-5_1WLrkqBJssh1lG_wIheAA
-Message-ID: <CAABR9nFKz6f6idK4TG8MoYKAayqKDw3SySU45vTeryY79Z2yow@mail.gmail.com>
-Subject: Re: [PATCH] can: m_can: Use of_property_present() for wakeup-source
-To: Markus Schneider-Pargmann <msp@baylibre.com>
-Cc: mkl@pengutronix.de, mailhol@kernel.org, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 2ECB050BDD8
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260511090023.1634387-6-u.kleine-koenig@baylibre.com>
+X-Rspamd-Queue-Id: 87AA450D37F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-7594-lists,linux-can=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,pengutronix.de,sipsolutions.net,thedillows.org,badula.org,gmail.com,marvell.com,chelsio.com,huawei.com,linux.dev,intel.com,nvidia.com,mucse.com,realtek.com,resnulli.us,fr.zoreil.com,brownhat.org,tux.org,trustnetic.com,net-swift.com,farsite.co.uk,broadcom.com,bootlin.com,seu.edu.cn,suse.com,amazon.com,infradead.org,ti.com,infineon.com,cypress.com,baylibre.com,vger.kernel.org,lists.osuosl.org,corigine.com,lists.linux.dev];
+	TAGGED_FROM(0.00)[bounces-7595-lists,linux-can=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[80];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mgr@kernel.org,linux-can@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[phucducbui@gmail.com,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-can];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,baylibre.com:email]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can,netdev];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:email,intel.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Hi Markus,
+On Mon, May 11, 2026 at 11:00:24AM +0200, Uwe Kleine-König (The Capable Hub) wrote:
+> ... and PCI device helpers.
+> 
+> The various struct pci_device_id arrays were initialized mostly by one
+> the PCI_DEVICE macros and then list expressions. The latter isn't easily
+> readable if you're not into PCI. Using named initializers is more
+> explicit and thus easier to parse.
+> 
+> Also use PCI_DEVICE* helper macros to assign .vendor, .device,
+> .subvendor and .subdevice where appropriate and skip explicit
+> assignments of 0 (which the compiler takes care of).
+> 
+> The secret plan is to make struct pci_device_id::driver_data an
+> anonymous union (similar to
+> https://lore.kernel.org/all/cover.1776579304.git.u.kleine-koenig@baylibre.com/)
+> and that requires named initializers. But it's also a nice cleanup on
+> its own.
+> 
+> This change doesn't introduce changes to the compiled pci_device_id
+> arrays. Tested on x86 and arm64.
+> 
+> Reviewed-by: Jijie Shao <shaojijie@huawei.com>
+> Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+> Reviewed-by: Petr Machata <petrm@nvidia.com> # for mlxsw
+> Acked-by: Jacob Keller <jacob.e.keller@intel.com>
+> Acked-by: Johannes Berg <johannes@sipsolutions.net>
+> Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
+> Forwarded: id:76da4f44d48bdde84580963862bf9616bee5c9e9.1778149923.git.u.kleine-koenig@baylibre.com (v2)
+> ---
+>  drivers/net/arcnet/com20020-pci.c             | 242 +++------
 
-On Mon, May 11, 2026 at 2:59=E2=80=AFPM Markus Schneider-Pargmann
-<msp@baylibre.com> wrote:
->
-> I think this is a fix for
->   04d5826b074e ("can: m_can: Map WoL to device_set_wakeup_enable")
->
-> Can you please add a Fixes:?
->
-> Otherwise:
->
-> Acked-by: Markus Schneider-Pargmann <msp@baylibre.com>
+[...]
 
-Thanks for the review.
-I will add the Fixes tag in v2.
+> diff --git a/drivers/net/arcnet/com20020-pci.c b/drivers/net/arcnet/com20020-pci.c
+> index dbadda08dce2..6474c7be2992 100644
+> --- a/drivers/net/arcnet/com20020-pci.c
+> +++ b/drivers/net/arcnet/com20020-pci.c
+> @@ -459,168 +459,88 @@ static struct com20020_pci_card_info card_info_eae_fb2 = {
+>  
+>  static const struct pci_device_id com20020pci_id_table[] = {
+>  	{
+> -		0x1571, 0xa001,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		0,
+> +		PCI_DEVICE(0x1571, 0xa001),
+> +		.driver_data = 0,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa002),
+> +		.driver_data = 0,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa003),
+> +		.driver_data = 0,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa004),
+> +		.driver_data = 0,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa005),
+> +		.driver_data = 0,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa006),
+> +		.driver_data = 0,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa007),
+> +		.driver_data = 0,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa008),
+> +		.driver_data = 0,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa009),
+> +		.driver_data = (kernel_ulong_t)&card_info_5mbit,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa00a),
+> +		.driver_data = (kernel_ulong_t)&card_info_5mbit,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa00b),
+> +		.driver_data = (kernel_ulong_t)&card_info_5mbit,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa00c),
+> +		.driver_data = (kernel_ulong_t)&card_info_5mbit,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa00d),
+> +		.driver_data = (kernel_ulong_t)&card_info_5mbit,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa00e),
+> +		.driver_data = (kernel_ulong_t)&card_info_5mbit,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa201),
+> +		.driver_data = (kernel_ulong_t)&card_info_10mbit,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa202),
+> +		.driver_data = (kernel_ulong_t)&card_info_10mbit,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa203),
+> +		.driver_data = (kernel_ulong_t)&card_info_10mbit,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa204),
+> +		.driver_data = (kernel_ulong_t)&card_info_10mbit,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa205),
+> +		.driver_data = (kernel_ulong_t)&card_info_10mbit,
+> +	}, {
+> +		PCI_DEVICE(0x1571, 0xa206),
+> +		.driver_data = (kernel_ulong_t)&card_info_10mbit,
+> +	}, {
+> +		PCI_DEVICE_SUB(0x10B5, 0x9030, 0x10B5, 0x2978),
+> +		.driver_data = (kernel_ulong_t)&card_info_sohard,
+> +	}, {
+> +		PCI_DEVICE_SUB(0x10B5, 0x9050, 0x10B5, 0x2273),
+> +		.driver_data = (kernel_ulong_t)&card_info_sohard,
+> +	}, {
+> +		PCI_DEVICE_SUB(0x10B5, 0x9050, 0x10B5, 0x3263),
+> +		.driver_data = (kernel_ulong_t)&card_info_eae_arc1,
+> +	}, {
+> +		PCI_DEVICE_SUB(0x10B5, 0x9050, 0x10B5, 0x3292),
+> +		.driver_data = (kernel_ulong_t)&card_info_eae_ma1,
+> +	}, {
+> +		PCI_DEVICE_SUB(0x10B5, 0x9050, 0x10B5, 0x3294),
+> +		.driver_data = (kernel_ulong_t)&card_info_eae_fb2,
+> +	}, {
+> +		PCI_DEVICE(0x14BA, 0x6000),
+> +		.driver_data = (kernel_ulong_t)&card_info_10mbit,
+> +	}, {
+> +		PCI_DEVICE(0x10B5, 0x2200),
+> +		.driver_data = (kernel_ulong_t)&card_info_10mbit,
+>  	},
+> -	{
+> -		0x1571, 0xa002,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		0,
+> -	},
+> -	{
+> -		0x1571, 0xa003,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		0
+> -	},
+> -	{
+> -		0x1571, 0xa004,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		0,
+> -	},
+> -	{
+> -		0x1571, 0xa005,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		0
+> -	},
+> -	{
+> -		0x1571, 0xa006,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		0
+> -	},
+> -	{
+> -		0x1571, 0xa007,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		0
+> -	},
+> -	{
+> -		0x1571, 0xa008,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		0
+> -	},
+> -	{
+> -		0x1571, 0xa009,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_5mbit
+> -	},
+> -	{
+> -		0x1571, 0xa00a,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_5mbit
+> -	},
+> -	{
+> -		0x1571, 0xa00b,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_5mbit
+> -	},
+> -	{
+> -		0x1571, 0xa00c,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_5mbit
+> -	},
+> -	{
+> -		0x1571, 0xa00d,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_5mbit
+> -	},
+> -	{
+> -		0x1571, 0xa00e,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_5mbit
+> -	},
+> -	{
+> -		0x1571, 0xa201,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_10mbit
+> -	},
+> -	{
+> -		0x1571, 0xa202,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_10mbit
+> -	},
+> -	{
+> -		0x1571, 0xa203,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_10mbit
+> -	},
+> -	{
+> -		0x1571, 0xa204,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_10mbit
+> -	},
+> -	{
+> -		0x1571, 0xa205,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_10mbit
+> -	},
+> -	{
+> -		0x1571, 0xa206,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_10mbit
+> -	},
+> -	{
+> -		0x10B5, 0x9030,
+> -		0x10B5, 0x2978,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_sohard
+> -	},
+> -	{
+> -		0x10B5, 0x9050,
+> -		0x10B5, 0x2273,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_sohard
+> -	},
+> -	{
+> -		0x10B5, 0x9050,
+> -		0x10B5, 0x3263,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_eae_arc1
+> -	},
+> -	{
+> -		0x10B5, 0x9050,
+> -		0x10B5, 0x3292,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_eae_ma1
+> -	},
+> -	{
+> -		0x10B5, 0x9050,
+> -		0x10B5, 0x3294,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_eae_fb2
+> -	},
+> -	{
+> -		0x14BA, 0x6000,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_10mbit
+> -	},
+> -	{
+> -		0x10B5, 0x2200,
+> -		PCI_ANY_ID, PCI_ANY_ID,
+> -		0, 0,
+> -		(kernel_ulong_t)&card_info_10mbit
+> -	},
+> -	{ 0, }
+> +	{ }
+>  };
+>  
+>  MODULE_DEVICE_TABLE(pci, com20020pci_id_table);
 
-Best Regards,
-Phuc
+For the com20020 arcnet driver:
+
+Reviewed-by: Michael Grzeschik <mgr@kernel.org>
 
