@@ -1,53 +1,74 @@
-Return-Path: <linux-can+bounces-7610-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7611-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qOy0LsL0A2rKBAIAu9opvQ
-	(envelope-from <linux-can+bounces-7610-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 13 May 2026 05:49:22 +0200
+	id yMaMKl0YBGpLDgIAu9opvQ
+	(envelope-from <linux-can+bounces-7611-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 13 May 2026 08:21:17 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3209552CFA6
-	for <lists+linux-can@lfdr.de>; Wed, 13 May 2026 05:49:22 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 008C052E0B0
+	for <lists+linux-can@lfdr.de>; Wed, 13 May 2026 08:21:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F281D30DDD1C
-	for <lists+linux-can@lfdr.de>; Wed, 13 May 2026 03:46:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E7F2A30B390D
+	for <lists+linux-can@lfdr.de>; Wed, 13 May 2026 06:19:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B3773998B2;
-	Wed, 13 May 2026 03:46:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 632C13D3D02;
+	Wed, 13 May 2026 06:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KNzv9alJ"
+	dkim=pass (1024-bit key) header.d=sina.cn header.i=@sina.cn header.b="wjw8yAQm"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail114-241.sinamail.sina.com.cn (mail114-241.sinamail.sina.com.cn [218.30.114.241])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B4F399348;
-	Wed, 13 May 2026 03:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A67F3D3499
+	for <linux-can@vger.kernel.org>; Wed, 13 May 2026 06:19:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=218.30.114.241
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778644000; cv=none; b=Moe+7QO2SPd7+Q/kXFUEtkmDKMctW/Nwt46NYuDELkh/7lmBpNViROl03FOSvFRR4QDLc3kA5BAHlicElo8KLcEhHXECJur6eFrXHEyHjtXze7p29ghP9sfxYynse+JfkXbMEkaDvAv49gG2RpjwhAceARUxrtyWs1GabkeilOk=
+	t=1778653160; cv=none; b=I6llTU6fhBLHnU0YmYbpRs1IgSIfZhPPO4woUo+f6VNKKREFStS4LywC85t3h5js54oyY/i81gxgQmkWhFfY+CLa6pAsqML8g5hX/VLqZ37auQrbqBHTyrfDpmDRTG8d2w2rxXB9QL7j/L26OEPS9zLqvJeG0CdzTibppJ9dwC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778644000; c=relaxed/simple;
-	bh=gyb8pfCwFcLBe2rptRiE3sjarGUMInC36meBQ9ZTM4w=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=hIsMJjCqlhQSwXLxfD8cpho0P8gUsVEqXkXQihweeCSbHeHnStcsvJfVpj+xU0FD3uF0DxhVIZNWX0Vl49mKx7nNHGD5DfRfFvkgkfluR/eHBVEvdh5MgMInr7rpIsZdgMeMS+nj84jiyGcP+2ib57GcKUDSai97ImsSuPF0lD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KNzv9alJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C71C2BCC7;
-	Wed, 13 May 2026 03:46:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778643999;
-	bh=gyb8pfCwFcLBe2rptRiE3sjarGUMInC36meBQ9ZTM4w=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=KNzv9alJGXZ6074TaCv2GYS4ngVHJYVPI/dUxnPvzStHLbJcuabjlUFQwP+tzgm8G
-	 ZtzCXaJY3VEiR4FI/cux8ct2DnyBo4xgtYUtwtQcfNznThE1vIqPSfiVrvgZlvu/lF
-	 t9DNyJVcgYV9JAZr+oPCeTVpkZ9oxEm8piGVBQrgKaVzK1knG75N3GfojN1tzGtGYx
-	 e1ZCDggEkcV2wc8nxqqNMwx/PO4W09sGPNEK7eTtjYApF65gQyVfylvCQw5BoOP+wD
-	 awa11v0/GBU6+oA7XeqHZFLGUDuYZFtN7/2ADm0bvjMN0xY5JKV8eRoHU0330d2NXf
-	 c2snDgAszC5BQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9F363822D60;
-	Wed, 13 May 2026 03:45:46 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1778653160; c=relaxed/simple;
+	bh=PHaGKgtvzC6KHwX0lmmeI2qFFzCI2UodpxK+IBGcxnM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ks6bafHAYG/XgoY9sdQYq08rLzh+39RRozIijAj15++Kj52gSQZb/s6gXGKoFfJQiha06RdUjTclVfxbt/y8VRQOBRXf9drbC06P0BCmW4d0LJfLjLNPXy5Qtqs9dJO0sUbiJzE4MnlmGYD2n9Vclk0xCXtEsx+Xnrk9w8Od60U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.cn; spf=pass smtp.mailfrom=sina.cn; dkim=pass (1024-bit key) header.d=sina.cn header.i=@sina.cn header.b=wjw8yAQm; arc=none smtp.client-ip=218.30.114.241
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.cn
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sina.cn; s=201208; t=1778653155;
+	bh=ZPfd4QVU32sg85rtvgJTvaqyRqM7XRlftnMouVyTzP4=;
+	h=From:Subject:Date:Message-Id;
+	b=wjw8yAQm1kBOhHKxZ3m+E5DLvy27dfC9Z8zC2osojBxPqvxeQyqZCHbLGH/qpquzx
+	 SuTCmH7WDzdNxEwwz/llt5TR/UQHVHiWpkaZrmlrlNyxkGRZJHx06VM+3IpvQQ1pkw
+	 7oq/IYnle2T6DkntRF8lN00EG5Dach8WrMjrlWnk=
+X-SMAIL-HELO: NTT-kernel-dev
+Received: from unknown (HELO NTT-kernel-dev)([60.247.85.88])
+	by sina.cn (10.185.250.23) with ESMTP
+	id 6A0417B4000014C5; Wed, 13 May 2026 14:18:34 +0800 (CST)
+X-Sender: jianqkang@sina.cn
+X-Auth-ID: jianqkang@sina.cn
+Authentication-Results: sina.cn;
+	 spf=none smtp.mailfrom=jianqkang@sina.cn;
+	 dkim=none header.i=none;
+	 dmarc=none action=none header.from=jianqkang@sina.cn
+X-SMAIL-MID: 3135098913013
+X-SMAIL-UIID: CD07E9044C1644B3847C377BF3937D6D-20260513-141834-1
+From: Jianqiang kang <jianqkang@sina.cn>
+To: gregkh@linuxfoundation.org,
+	stable@vger.kernel.org,
+	sam@bynar.io
+Cc: patches@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	socketcan@hartkopp.net,
+	mkl@pengutronix.de,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH 6.1.y] can: raw: fix ro->uniq use-after-free in raw_rcv()
+Date: Wed, 13 May 2026 14:18:28 +0800
+Message-Id: <20260513061828.3671533-1-jianqkang@sina.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -55,102 +76,103 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/2] Rework pci_device_id initialisation
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177864394529.3173643.6436794072017399758.git-patchwork-notify@kernel.org>
-Date: Wed, 13 May 2026 03:45:45 +0000
-References: <20260511090023.1634387-4-u.kleine-koenig@baylibre.com>
-In-Reply-To: <20260511090023.1634387-4-u.kleine-koenig@baylibre.com>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=28The_Capable_Hub=29_=3Cu=2Ekleine-koenig?=@codeaurora.org,
-	=?utf-8?q?=40baylibre=2Ecom=3E?=@codeaurora.org
-Cc: mgr@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mkl@pengutronix.de,
- mailhol@kernel.org, johannes@sipsolutions.net, klassert@kernel.org,
- dave@thedillows.org, ionut@badula.org, mark.einon@gmail.com,
- rmody@marvell.com, GR-Linux-NIC-Dev@marvell.com, manishc@marvell.com,
- bharat@chelsio.com, kirjanov@gmail.com, shaojijie@huawei.com,
- shenjian15@huawei.com, cai.huoqing@linux.dev, gongfan1@huawei.com,
- anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com, tariqt@nvidia.com,
- saeedm@nvidia.com, leon@kernel.org, mbloch@nvidia.com, idosch@nvidia.com,
- petrm@nvidia.com, dong100@mucse.com, hkallweit1@gmail.com,
- nic_swsd@realtek.com, jiri@resnulli.us, romieu@fr.zoreil.com,
- venza@brownhat.org, chessman@tux.org, jiawenwu@trustnetic.com,
- mengyuanlou@net-swift.com, kevin.curtis@farsite.co.uk,
- arend.vanspriel@broadcom.com, stas.yakovlev@gmail.com,
- richardcochran@gmail.com, kees@kernel.org, aleksandr.loktionov@intel.com,
- tglx@kernel.org, jacob.e.keller@intel.com, fourier.thomas@gmail.com,
- mingo@kernel.org, kory.maincent@bootlin.com, zilin@seu.edu.cn,
- vadim.fedorenko@linux.dev, marco.crivellari@suse.com, bhelgaas@google.com,
- darinzon@amazon.com, yyyynoom@gmail.com, benato.denis96@gmail.com,
- liuyonglong@huawei.com, andriy.shevchenko@intel.com, rdunlap@infradead.org,
- yiconghui@gmail.com, danishanwar@ti.com, nathan@kernel.org,
- enelsonmoore@gmail.com, larysa.zaremba@intel.com, ian.lin@infineon.com,
- colin.i.king@gmail.com, double.lo@cypress.com, msp@baylibre.com,
- horms@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-can@vger.kernel.org, linux-parisc@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
- oss-drivers@corigine.com, linux-wireless@vger.kernel.org,
- brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com
-X-Rspamd-Queue-Id: 3209552CFA6
+X-Rspamd-Queue-Id: 008C052E0B0
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[signature check failed: fail, {[1] = sig:subspace.kernel.org:reject}];
-	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[sina.cn,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[sina.cn:s=201208];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:-];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
-	R_DKIM_REJECT(0.00)[kernel.org:s=k20201202];
-	FREEMAIL_CC(0.00)[kernel.org,lunn.ch,davemloft.net,google.com,redhat.com,pengutronix.de,sipsolutions.net,thedillows.org,badula.org,gmail.com,marvell.com,chelsio.com,huawei.com,linux.dev,intel.com,nvidia.com,mucse.com,realtek.com,resnulli.us,fr.zoreil.com,brownhat.org,tux.org,trustnetic.com,net-swift.com,farsite.co.uk,broadcom.com,bootlin.com,seu.edu.cn,suse.com,amazon.com,infradead.org,ti.com,infineon.com,cypress.com,baylibre.com,vger.kernel.org,lists.osuosl.org,corigine.com,lists.linux.dev];
-	FROM_NEQ_ENVFROM(0.00)[patchwork-bot@kernel.org,linux-can@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-7610-lists,linux-can=lfdr.de,netdevbpf];
-	NEURAL_SPAM(0.00)[0.791];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	TAGGED_FROM(0.00)[bounces-7611-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_NO_DN(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[82];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can,netdev];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jianqkang@sina.cn,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[sina.cn:+];
 	TO_DN_NONE(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-can];
+	NEURAL_HAM(-0.00)[-1.000];
+	FREEMAIL_FROM(0.00)[sina.cn];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[hartkopp.net:email,bynar.io:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,msgid.link:url,pengutronix.de:email]
 X-Rspamd-Action: no action
 
-Hello:
+From: Samuel Page <sam@bynar.io>
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+[ Upstream commit a535a9217ca3f2fccedaafb2fddb4c48f27d36dc ]
 
-On Mon, 11 May 2026 11:00:22 +0200 you wrote:
-> Hello,
-> 
-> the previous iteration of this series (v2) is available at
-> https://lore.kernel.org/netdev/cover.1778149923.git.u.kleine-koenig@baylibre.com
-> 
-> Changes since v2:
-> 
-> [...]
+raw_release() unregisters raw CAN receive filters via can_rx_unregister(),
+but receiver deletion is deferred with call_rcu(). This leaves a window
+where raw_rcv() may still be running in an RCU read-side critical section
+after raw_release() frees ro->uniq, leading to a use-after-free of the
+percpu uniq storage.
 
-Here is the summary with links:
-  - [net-next,v3,1/2] net: nfp: Drop PCI class entries with .class_mask = 0
-    https://git.kernel.org/netdev/net-next/c/0f5b8332b0b2
-  - [net-next,v3,2/2] net: Consistently define pci_device_ids using named initializers
-    https://git.kernel.org/netdev/net-next/c/733334d6bdaf
+Move free_percpu(ro->uniq) out of raw_release() and into a raw-specific
+socket destructor. can_rx_unregister() takes an extra reference to the
+socket and only drops it from the RCU callback, so freeing uniq from
+sk_destruct ensures the percpu area is not released until the relevant
+callbacks have drained.
 
-You are awesome, thank you!
+Fixes: 514ac99c64b2 ("can: fix multiple delivery of a single CAN frame for overlapping CAN filters")
+Cc: stable@vger.kernel.org # v4.1+
+Assisted-by: Bynario AI
+Signed-off-by: Samuel Page <sam@bynar.io>
+Link: https://patch.msgid.link/26ec626d-cae7-4418-9782-7198864d070c@bynar.io
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+[mkl: applied manually]
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Jianqiang kang <jianqkang@sina.cn>
+---
+ net/can/raw.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/net/can/raw.c b/net/can/raw.c
+index 488320738e31..bcd6061f43d8 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -336,6 +336,14 @@ static int raw_notifier(struct notifier_block *nb, unsigned long msg,
+ 	return NOTIFY_DONE;
+ }
+ 
++static void raw_sock_destruct(struct sock *sk)
++{
++	struct raw_sock *ro = raw_sk(sk);
++
++	free_percpu(ro->uniq);
++	can_sock_destruct(sk);
++}
++
+ static int raw_init(struct sock *sk)
+ {
+ 	struct raw_sock *ro = raw_sk(sk);
+@@ -362,6 +370,8 @@ static int raw_init(struct sock *sk)
+ 	if (unlikely(!ro->uniq))
+ 		return -ENOMEM;
+ 
++	sk->sk_destruct = raw_sock_destruct;
++
+ 	/* set notifier */
+ 	spin_lock(&raw_notifier_lock);
+ 	list_add_tail(&ro->notifier, &raw_notifier_list);
+@@ -409,7 +419,6 @@ static int raw_release(struct socket *sock)
+ 	ro->bound = 0;
+ 	ro->dev = NULL;
+ 	ro->count = 0;
+-	free_percpu(ro->uniq);
+ 
+ 	sock_orphan(sk);
+ 	sock->sk = NULL;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
 
