@@ -1,171 +1,131 @@
-Return-Path: <linux-can+bounces-7627-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7628-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qKaSBZyeBWr4YwIAu9opvQ
-	(envelope-from <linux-can+bounces-7627-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 14 May 2026 12:06:20 +0200
+	id 0G4CI7z1BWpVdwIAu9opvQ
+	(envelope-from <linux-can+bounces-7628-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 14 May 2026 18:18:04 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02A2A54020E
-	for <lists+linux-can@lfdr.de>; Thu, 14 May 2026 12:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 84DB55448BA
+	for <lists+linux-can@lfdr.de>; Thu, 14 May 2026 18:18:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DFF0130086B3
-	for <lists+linux-can@lfdr.de>; Thu, 14 May 2026 10:06:15 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 772DF3001FA1
+	for <lists+linux-can@lfdr.de>; Thu, 14 May 2026 16:17:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E247A38B142;
-	Thu, 14 May 2026 10:06:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17483314B96;
+	Thu, 14 May 2026 16:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wfu6b5wa"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A7126C385
-	for <linux-can@vger.kernel.org>; Thu, 14 May 2026 10:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E852A223707;
+	Thu, 14 May 2026 16:17:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778753173; cv=none; b=rK23ynbsUidFEgj2bw1SrykJB9Mmv439RbRKhkF2LLIwHKse9tYHmDURWf7nN3wRrfuRHJ44rutGzb5Mfvb8pUoJHPGgruK8dQh+LREC4Pwmz9P8xiO5VxuGMu7czoRyWoBc59DrJb5z7UeuFrXQ/cUiGH4M7++dpE6auGtvZp4=
+	t=1778775479; cv=none; b=kXHrwJl3CGE0TrVJnz5iczgWRZ3qicmXS8IkId3rYLvkzJv1iC5U1fOFM3LWfpOqhNoShrTS/+FGkV3l7qlP+7r5Kymzz76Lu20aAbRTGarseGUNRLRvNQ5rgciF7iGuIWlXrunnF22naKiu3sPyve0NaU3uWGIsFwCNIF7fU40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778753173; c=relaxed/simple;
-	bh=hzb/rpTvchz4n++Rxj/M8+alBs7miaN+3wFDitOYegQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MbWokBcdFdCXZI6uc9Ugi1/4QhA+3dPkYBlgAEdSTQu3Ko6hSeXrjH+5XCy8Rv7rUOshAKJZCGYAFOMQF9Cnzapjl2VCuCy76la0/+Ber9vJMG4kml4u8MrTsatKmnZj1/Tq1SbZliypKrSF3MjftUbvM/wwMEq1GnqKn3UQu/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=fail smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1wNSx1-0007S9-Sa; Thu, 14 May 2026 12:05:55 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1wNSwy-000kMx-0L;
-	Thu, 14 May 2026 12:05:52 +0200
-Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id B94D45363CF;
-	Thu, 14 May 2026 10:05:51 +0000 (UTC)
-Date: Thu, 14 May 2026 12:05:51 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Anurag Dutta <a-dutta@ti.com>
-Cc: u-kumar1@ti.com, vigneshr@ti.com, gehariprasath@ti.com, 
-	rcsekar@samsung.com, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, msp@baylibre.com
-Subject: Re: [PATCH] can: m_can: Implement workaround for errata i2278 and
- i2279
-Message-ID: <20260514-tiny-koel-of-order-65ade7-mkl@pengutronix.de>
-X-AI: stop_reason: "refusal"
-References: <20260514065511.3573223-1-a-dutta@ti.com>
+	s=arc-20240116; t=1778775479; c=relaxed/simple;
+	bh=TLFuTPlEnspC4JO4RferxyIFfsNZM2YPrOrM7JZIa1s=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=FYKexC43w7jxUXOT2qJnbiYJxL804tiWpNc4enaZcmHbFmmUxt2BYNTP6rCMJNEqfKYTpUScaCx/RczmKQGRdmNeeGw0g9pJnwNmS5GKr6OsFniRRnK47f31aUKLoCVDOKvUqHEVvHd5567tIjZSuFZ8DL/VE0tB5yesO3XuTYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wfu6b5wa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A0FC2BCB3;
+	Thu, 14 May 2026 16:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778775478;
+	bh=TLFuTPlEnspC4JO4RferxyIFfsNZM2YPrOrM7JZIa1s=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Wfu6b5wacOfbZ9MxpwH1DxxBTeGz1/rZ3W/JOP2cYiBMZpvG26bmYfKGerZ0II+W0
+	 Mj0wC1imKC2W5I7mDFLwHM2TmfFKlJkJqatdPsc4c7G7j141hLD64jvNCwCA5IF8id
+	 3CxKwsJJK/ALkd+CPcHtSi4+Os4ouMEOw5saZDOdRlGDVRQqAa5/1nJO0s1rHlc1Jz
+	 9lKEJaAPVvLWnkwN0pwvUU8zhg6DyYmmkHDelqRV55mP6BB6UojAc/OTomPJqAdcZf
+	 k/exmQe5JRoB+VWEluoLc7ZfXpiBAsbslR6HPCptkz7osjmLN0KiHbagSR/gWeaAIJ
+	 6N8Wi1FiX3LyQ==
+From: Vinod Koul <vkoul@kernel.org>
+To: Peng Fan <peng.fan@nxp.com>, linux-can@vger.kernel.org, 
+ linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol@kernel.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Josua Mayer <josua@solid-run.com>, Ulf Hansson <ulfh@kernel.org>
+In-Reply-To: <20260513220336.369628-1-andriy.shevchenko@linux.intel.com>
+References: <20260513220336.369628-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v5 0/6] phy: phy-can-transceiver: Ad-hoc cleanups and
+ refactoring
+Message-Id: <177877547531.1092446.6935849511482361375.b4-ty@kernel.org>
+Date: Thu, 14 May 2026 21:47:55 +0530
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="updzfu6jqbf2tt6x"
-Content-Disposition: inline
-In-Reply-To: <20260514065511.3573223-1-a-dutta@ti.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Rspamd-Queue-Id: 02A2A54020E
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
+X-Rspamd-Queue-Id: 84DB55448BA
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.06 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	FREEMAIL_CC(0.00)[ti.com,samsung.com,wanadoo.fr,lunn.ch,davemloft.net,google.com,kernel.org,redhat.com,vger.kernel.org,baylibre.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	TAGGED_FROM(0.00)[bounces-7628-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7627-lists,linux-can=lfdr.de];
-	DMARC_NA(0.00)[pengutronix.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	TAGGED_RCPT(0.00)[linux-can,netdev];
-	R_DKIM_NA(0.00)[];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[vkoul@kernel.org,linux-can@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:url,pengutronix.de:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
 
---updzfu6jqbf2tt6x
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] can: m_can: Implement workaround for errata i2278 and
- i2279
-MIME-Version: 1.0
+On Thu, 14 May 2026 00:01:25 +0200, Andy Shevchenko wrote:
+> The driver does two things that need to be addressed:
+> - includes subject to remove gpio.h
+> - checks for error code from device property APIs when it can be done in
+>   a robust way
+> 
+> This series addresses the above and adds a couple of additional refactoring.
+> 
+> [...]
 
-On 14.05.2026 12:25:11, Anurag Dutta wrote:
-> Message transmit order is not guaranteed when dedicated TX buffers
-> configured with the same Message ID are submitted simultaneously via
-> TXBAR write. This is described in J7 errata i2278 and i2279.
->
-> As a workaround, introduce m_can_tx_peripheral_submit() to submit
-> buffers one at a time using ffs() to find the next pending buffer.
-> The TX complete interrupt(IR_TC) triggers submission of the next
-> buffer, ensuring strict FIFO ordering.
->
-> Link: https://www.ti.com/lit/pdf/sprz530
+Applied, thanks!
 
-This errata is for the "J721S2/TDA4VE/TDA4AL/TDA4VL/AM68A Processor
-Silicon Revision 1.0". The code path you modify is only active for the
-is_peripheral case.
+[1/6] phy: phy-can-transceiver: Check driver match and driver data against NULL
+      commit: ebee9004cc0200b2b708ebf7ac625d35c71c049f
+[2/6] phy: phy-can-transceiver: use device_get_match_data()
+      commit: 23db9fd578ca3b446ceaa5c9a0157f0838f4df4e
+[3/6] phy: phy-can-transceiver: Move OF ID table closer to their user
+      commit: 62455f6be1256084cfff8690df416f418b6f0dd2
+[4/6] phy: phy-can-transceiver: Don't check for specific errors when parsing properties
+      commit: 79a5274fb39904f8a60bdd7bf7753ee1ba700210
+[5/6] phy: phy-can-transceiver: Decouple assignment and definition in probe
+      commit: 05c72fbff4ac18e9bbb0e4b3884dad1f833807f4
+[6/6] phy: phy-can-transceiver: Drop unused include
+      commit: 52ae64602394bc9a8e7b67f5e4e70c56e31699a7
 
-is_peripheral is only set for the tcan4x5x SPI CAN controller, and not
-set for memory mapped M_CAN cores as found on the above mentioned TI
-processor:
+Best regards,
+-- 
+~Vinod
 
-| $ git grep peripheral\ =3D drivers/net/can/m_can
-| drivers/net/can/m_can/m_can_platform.c:149:      mcan_class->is_periphera=
-l =3D false;
-| drivers/net/can/m_can/tcan4x5x-core.c:460:       mcan_class->is_periphera=
-l =3D true;
 
-The latest Bosch m_can documentation doesn't mention this problem,
-neither the TCAN4550 docs. Can this be an integration problem of the SoC
-on TI's side?
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---updzfu6jqbf2tt6x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCagWefAAKCRDMOmT6rpmt
-0oi2AQDNVRJ+6UHrBF7e3KeiZEmQTfJgSLhbi/bNlnbPpLAvYgD8CzNkA9KGLrJP
-XZMZ59ykSbydVLGQgTHeUyMfe0IxXwg=
-=Lqkc
------END PGP SIGNATURE-----
-
---updzfu6jqbf2tt6x--
 
