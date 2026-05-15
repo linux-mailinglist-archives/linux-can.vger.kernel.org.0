@@ -1,189 +1,207 @@
-Return-Path: <linux-can+bounces-7636-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7637-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sFGYGoMeB2rnrgIAu9opvQ
-	(envelope-from <linux-can+bounces-7636-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 15:24:19 +0200
+	id CIqbMdIpB2ppsQIAu9opvQ
+	(envelope-from <linux-can+bounces-7637-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 16:12:34 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0C9655065D
-	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 15:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31474551184
+	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 16:12:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 79E45301FF89
-	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 13:15:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 72E88309147E
+	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 14:04:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB8DC33B6FC;
-	Fri, 15 May 2026 13:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5490221771B;
+	Fri, 15 May 2026 14:04:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b="UGqt/vKA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qrgqacc3"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDFF231A3B
-	for <linux-can@vger.kernel.org>; Fri, 15 May 2026 13:15:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505C348AE3E
+	for <linux-can@vger.kernel.org>; Fri, 15 May 2026 14:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778850943; cv=none; b=TDaxqq05YEQLDvVj2vHq0An68kQsWW05XjDC/hPnyVA0BiobDPmjSrI/7DdSAbuAdTHkaDPwGcYUrtQF1FpNI/KFeU8ulSj220ldYeddLtXfJelQoKNjiNtSZcH6YMz4SJld1GXCihNwRT3jvoC/C/8QfnUr9pT4EcowVqOStm8=
+	t=1778853871; cv=none; b=tMoVSEPDfisnQjM6Pda+nUDYgkxS4j4phAX5HYCygvmU7uJfVaD1g4GokxR8M4FdcByKbo7lBJowHuDZyZtzSqKIap8xL4YP6vX9YUD5FAfnoECi/SRYegvOh28LIc4vSz2darKeMYxIRSG5xReDWiiDBM0ZcYkoSOQS8qy5o68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778850943; c=relaxed/simple;
-	bh=AWTUitl93lD73gnMfvcUDhXeOQbp/DOjxwsI34zrqmU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=toFXzs/RrF7rPO0a57cdiS9ST/tTxyX61F4G/1dnX1aBr7C2ulflpAw8xuJBSObkZ4cL9oRgNFL17EL+cKG+xg7UdHC8rr2QZ9G0z+j9ypjGkeQGug+4lNa3eqjdyh9DmQuCYKWBX1eC3hCKJjnUo8LRL1r0pKqrGTI7sN+ENLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b=UGqt/vKA; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-488af9fdaa7so50561035e9.1
-        for <linux-can@vger.kernel.org>; Fri, 15 May 2026 06:15:41 -0700 (PDT)
+	s=arc-20240116; t=1778853871; c=relaxed/simple;
+	bh=GG46pSh5d0vn9yBp53h1hxap4udjkrgURZeJc5+2YyE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rtu+kNEC39Z6UKanntFR2YYEh2xovVLi/R6TwlVZWyBqE3l1EHNUCl0ZUlrzYuxYUSpcdp9zz7iktzWOXzb/c5d87uDDoPRA55GjbuPCamFpAoQ9yAOhqtBrqI6oIQ46ndIN+UHkJFDEEIxaAdFeVh4cK9C57CM6gI+Ht3X7p8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qrgqacc3; arc=none smtp.client-ip=74.125.82.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2c15849aa2cso12513230eec.0
+        for <linux-can@vger.kernel.org>; Fri, 15 May 2026 07:04:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20251104.gappssmtp.com; s=20251104; t=1778850940; x=1779455740; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=91oT2C7HzmvRl53jPBN9VogksJHgfQpyopVk/xhZKRM=;
-        b=UGqt/vKA+OPUedHeLdWolCmwycH5HnmBx0TVhyKSHzw7Lnwk/Ro9XLQg0Ex+eVvxru
-         iRVsziLefhhRhqi/bmc+y9zAGbkXOnGb7IShanRyuveCke8Cgs85UECOyTWZT2w2JhTK
-         QWr2Hfl3HQH+NUG+MPqB6yT14bezW+0ThfZpp1+wp1kzCYFong9lXbyjivse0bMUIh1y
-         jEfP4RNK4Xz0LuqhdsnjdypRegQmqEeRCPCCGtUgBJ4EPuq7WFg5zf6By5KJkFvAgGte
-         rR8DZxfZMyEtnEOlF4ClUaWyqPX+WdisTLfkIURGBfnryaSr/zxtBpjFlWSXQ850Rfff
-         n+UA==
+        d=gmail.com; s=20251104; t=1778853866; x=1779458666; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=1xq8W0xM16bA8z+e9ItjmHiUZEnug/7oVf/JqPTdq4Q=;
+        b=qrgqacc3bN3q4/aMGMXmyVsjVbYFnMF9yaTqR6tKQj5sKos+LG9K/Oj951Ijhy33lp
+         Ouy2EjLVatPBLFLFDFfiuXJRllLrfHu40dvyogEkuH+BBvq7/7FqQhSdKe693raoDdmD
+         LsP7sP4ILMGFejpioDq6dE0rBH5tHSQL/TgCzbmhLAQ5DNSCdAzmlec+nf91zE9aRW16
+         EwzisdEzHwLx2Vo+81XlG9ZkghK/ASdD6SoOL6mpOCwYH3/2Ha+07fgHqVxQbdPOMN0B
+         9Dat3cUb6sS4DkY6BG7ssnWcExPZHSGUVvJkbY46BYTBMX9vP7NzKYPKPpyDCWik6PPV
+         3lSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778850940; x=1779455740;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=91oT2C7HzmvRl53jPBN9VogksJHgfQpyopVk/xhZKRM=;
-        b=Q46e4YmzIwAUkswrmIWcsCgT843zBn82e7UMUb9bHqA2tEtM3a0euQv58KPG+TQS5e
-         vk6E85cXNqX9nKBySrYEsNymQnBRH7hEWYVUuy1fcTDeDFxkp7Ns11eVk7YGi4mWrJQr
-         F9u/uWZgBkdTXbVPgNGnOJHaRw9yK8w09I66UzIrA+aOhUDro7DgGVStGT0PapSizFs6
-         zwFBCRhjDgFIXnR08I3VE4c6N0kGumWwF6cSjzZjFIy4NhQPL4YAJcAWYiFeoVS7q/qa
-         zEmiLvQvIpqhT/GpyMI0pGZTkIOVkgOwif8vruUCDypFdJ+/Mj05/IXv30UyVXldYoHv
-         TGrw==
-X-Gm-Message-State: AOJu0YzqgVUjyELuMcR2/tHhuw8glZqw5eF0rhdiMXcqhncHUbK6eScK
-	T7b7A+TBUlowfsi44c7aDHZVNxTxmhXyutv++mds2rH2KZjbVriP02YUbDHaKbNi2BRSdjw3dQJ
-	4n6ZC
-X-Gm-Gg: Acq92OFUMY9IEerZ2edDHgwmQQH7Fo0zyvHBX4sX3nJjrdakjnZL4HbpuYU+8avrxvg
-	/dowmxCWVeBSu1wgV9E3sAfBHsAngrYfGxcIskqxk1O/9ftG8tMUTH4ctFu35b6oIz6bUEgR5L+
-	lL4eTmImj7q9KJdCR2rqsj3Q4IwdblxCv8Jzg3OUlWzdmKPClKBFyDRYpNd661ltGp3PPLLphHQ
-	oYaHNqdMZOTrc80wVj0ESrHkEvoWCkdCAKWXo4bteOzL0kxGLUCzheiHvdbcsLPgkoiUsRsFz15
-	NR3Rhh4maTguJqwvVWsG94RQbTHamJun/JMScBK73qUuRvwcYHXdKQEM6pViZCJORpDHCMStoXI
-	hcNO/w6ZMcV9xOSraXg2zgQOvQJO1UD45BzGnvjUwvGrEG8JpZ83Fz8BzJJgEVM8Nolb/glyclP
-	3gN4sBF2nAm5WL4kR9PCEdX9b0TRzyMgo=
-X-Received: by 2002:a05:600d:8:b0:48a:93f8:dd02 with SMTP id 5b1f17b1804b1-48fe61f291cmr54533725e9.14.1778850939915;
-        Fri, 15 May 2026 06:15:39 -0700 (PDT)
-Received: from localhost ([2001:4090:a246:83ca:1917:a47e:1872:2063])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48febe83ba2sm13027605e9.35.2026.05.15.06.15.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 06:15:39 -0700 (PDT)
-From: "Markus Schneider-Pargmann (The Capable Hub)" <msp@baylibre.com>
-Date: Fri, 15 May 2026 15:15:32 +0200
-Subject: [PATCH v2] can: m_can: pci: Remove driver_data
+        d=1e100.net; s=20251104; t=1778853866; x=1779458666;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1xq8W0xM16bA8z+e9ItjmHiUZEnug/7oVf/JqPTdq4Q=;
+        b=s2sqNXWY7Ik0fndBHJsxzLt4Ie3ff39CIrjJpa6Nqmf+oe512dpLkk3tm1Jh0vg7Bj
+         Xe2qXGJXeoYPA4+MFt2oRujRhRQpydUAT1l0kEcMnTwzIxZYWi/dFQUvxNc5lXx7iUxv
+         WrtFoP4X3TGR9LDiE7lzlV7L7m+Zz38SO5X0OA1VdxT/3EMqIgMnTtHOSBhFmimXSCS2
+         TifoxNzSHCvhlVYxkhJUkH6T9/yBl6So5ORsK+CGNOVHPzPOOaCDw+hXc1qsFlvqQoDw
+         1GDdMl6q2Hcb5ptKDCDI6PIWj5ibJSOytqveUNj6jyIJIK9UZHP7OULKHe6niMvVQIYZ
+         LtvA==
+X-Forwarded-Encrypted: i=1; AFNElJ/8MkVy3+219XIPHCeROZ4kYOIBOoKdLoD00aCpuJ2hokYBGd2dQP4hs3xP0BfOkEzBklHJLkQgczg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrhkyBFlGdQVZ72eF2M5GD1GeP7AtCnxh7AcJiJhN0DoMDmY9L
+	0mpckapU0BtoJU0PSs9eNK4K5BOux+ii+8JLqGR3AQ8h8DsdIEAxr25K
+X-Gm-Gg: Acq92OG9bxsnTkKdYeVRfRapR1RK5Nlgf5Mcj6DPMn7D9MCtPbLOP46wSDPexhOYblN
+	auZn4g/j00T0JmuiQftCmOSO2uBhyJOpU2bviW2YZWZwoCclJ4LuvgXmkaEocet+TPSwB0wkgnz
+	Ofl+KKooKMVNgJj7OOTydq10qayg9L2HHZZ0dJ2Ve2/qIQGe7sYs5hLig/jIj6XzJm9HpcRCU1W
+	zBqnVN1iMqDBaR5wmsVzf581XXVZfAf1D2Nx3LhKh2114UJUY/PYQVwvzvxCpzgiEHZqH6e8IwT
+	C2+mmk03d4FEds04tcP0lPnYGxVbyOGT45G7iOi39FEWnuZ51fjFaBBLBRQHaWRChWxy603rpCG
+	HQugie4QmhhLlupwbIiT6ZS+M47idDOTvcXmwkRGYiXiUroiBuri7PsIDBFgY7vV65hUUXiqCCb
+	Gu8AJ7/EZ5xFNJEyDLafe/C0sQYuaViojc3U0lQkYQ2Jnhop5FHbhYulOsxfGZQnJ4UW8ndhjy
+X-Received: by 2002:a05:7301:6448:b0:2da:a813:a5fd with SMTP id 5a478bee46e88-3039867fa16mr2160782eec.22.1778853864553;
+        Fri, 15 May 2026 07:04:24 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302977a9474sm7099623eec.25.2026.05.15.07.04.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 May 2026 07:04:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <17828a1b-86c7-4ad6-a93b-3f91c6b2c24f@roeck-us.net>
+Date: Fri, 15 May 2026 07:04:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260515-topic-mcan-pci-driverdata-v7-1-v2-1-e33e014ff328@baylibre.com>
-X-B4-Tracking: v=1; b=H4sIAHQcB2oC/42NQQ6CMBBFr0Jm7RiGCKgr72FYtJ1BJhFKWtJIC
- He3cgI3P3l/8d4GUYJKhHuxQZCkUf2UoToV4AYzvQSVM0NVVk1ZE+HiZ3U4OjPh7BQ5aJLAZjG
- YWiTk2vbu0rd8LQWyZA7S6+cIPLvMg8bFh/XoJfq9f6sT5bnZlhpyxCT8sGZ9qw1ydn6Ebt/3L
- 4fq0cTPAAAA
-X-Change-ID: 20260511-topic-mcan-pci-driverdata-v7-1-d5bfc4f7d80e
-To: Marc Kleine-Budde <mkl@pengutronix.de>, 
- Vincent Mailhol <mailhol@kernel.org>
-Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
- "Markus Schneider-Pargmann (The Capable Hub)" <msp@baylibre.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2104; i=msp@baylibre.com;
- h=from:subject:message-id; bh=AWTUitl93lD73gnMfvcUDhXeOQbp/DOjxwsI34zrqmU=;
- b=owGbwMvMwCXWejAsc4KoVzDjabUkhix2mdLEWrkVZep7P3T+OREnfW67p+Lzlrd6xoernOJ6X
- eKMNkzoKGVhEONikBVTZOlMDE37L7/zWPKiZZth5rAygQxh4OIUgInsfsrIcHtHTf2MwKur7R4b
- sCoKrRY9z6ckvyg9QmHh01tp81M+fmFk2CZse/ytuf1MC2f1f33fjc13H2aalPy5O80h9mO11qV
- f3AA=
-X-Developer-Key: i=msp@baylibre.com; a=openpgp;
- fpr=BADD88DB889FDC3E8A3D5FE612FA6A01E0A45B41
-X-Rspamd-Queue-Id: E0C9655065D
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/1] mfd: Add Host Interface (HIF) support for Nuvoton
+ NCT6694
+To: Andrew Lunn <andrew@lunn.ch>, a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org,
+ andi.shyti@kernel.org, lee@kernel.org, mkl@pengutronix.de,
+ mailhol@kernel.org, alexandre.belloni@bootlin.com, wim@linux-watchdog.org,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20260515085746.114361-1-a0282524688@gmail.com>
+ <20260515085746.114361-2-a0282524688@gmail.com>
+ <ef9449dc-ef2a-415e-8acc-a15f349bac24@lunn.ch>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <ef9449dc-ef2a-415e-8acc-a15f349bac24@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 31474551184
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[baylibre-com.20251104.gappssmtp.com:s=20251104];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-7636-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7637-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	DKIM_TRACE(0.00)[baylibre-com.20251104.gappssmtp.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[lunn.ch,gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[roeck-us.net];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[msp@baylibre.com,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[linux@roeck-us.net,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-can];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[roeck-us.net:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-driver_data is set to M_CAN_CLOCK_FREQ_EHL for all models. This change
-was already five years ago, I don't expect any follow up models that
-need to set a different frequency through the driver_data at this point.
+On 5/15/26 05:41, Andrew Lunn wrote:
+>>   MAINTAINERS                         |   1 +
+>>   drivers/gpio/gpio-nct6694.c         |   7 -
+>>   drivers/hwmon/nct6694-hwmon.c       |  21 -
+>>   drivers/i2c/busses/i2c-nct6694.c    |   7 -
+>>   drivers/mfd/Kconfig                 |  47 +-
+>>   drivers/mfd/Makefile                |   3 +-
+>>   drivers/mfd/nct6694-hif.c           | 663 ++++++++++++++++++++++++++++
+>>   drivers/mfd/nct6694.c               | 111 +++--
+>>   drivers/net/can/usb/nct6694_canfd.c |   6 -
+> 
+> The networking change here is very small, so my influence as a
+> networking Maintainer should be considered small.
+> 
+> However, i would say this patch is too big, does too many different
+> things at once, making it harder to review. Please could you break it
+> up into lots of small patches, each with good commit messages, and
+> being obviously correct.
+> 
+Add my influence as hardware monitoring maintainer. I very much agree.
 
-Hardcode the M_CAN_CLOCK_FREQ_EHL. Once there are new models we can
-evaluate what data needs to be in driver_data.
-
-Acked-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
-Signed-off-by: Markus Schneider-Pargmann (The Capable Hub) <msp@baylibre.com>
----
-Changes in v2:
-- Remove commas that are not needed here
-- Add Uwe's Acked-by
-- Link to v1: https://lore.kernel.org/r/20260511-topic-mcan-pci-driverdata-v7-1-v1-1-9b7161c1d1ed@baylibre.com
----
- drivers/net/can/m_can/m_can_pci.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/can/m_can/m_can_pci.c b/drivers/net/can/m_can/m_can_pci.c
-index eb31ed1f964491ab41c7811be317706a09951390..d11a7c88fc32fddca5e02f0e489b8bb7cf0f3020 100644
---- a/drivers/net/can/m_can/m_can_pci.c
-+++ b/drivers/net/can/m_can/m_can_pci.c
-@@ -126,7 +126,7 @@ static int m_can_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	mcan_class->net->irq = pci_irq_vector(pci, 0);
- 	mcan_class->pm_clock_support = 1;
- 	mcan_class->pm_wake_source = 0;
--	mcan_class->can.clock.freq = id->driver_data;
-+	mcan_class->can.clock.freq = M_CAN_CLOCK_FREQ_EHL;
- 	mcan_class->irq_edge_triggered = true;
- 	mcan_class->ops = &m_can_pci_ops;
- 
-@@ -183,8 +183,8 @@ static SIMPLE_DEV_PM_OPS(m_can_pci_pm_ops,
- 			 m_can_pci_suspend, m_can_pci_resume);
- 
- static const struct pci_device_id m_can_pci_id_table[] = {
--	{ PCI_VDEVICE(INTEL, 0x4bc1), M_CAN_CLOCK_FREQ_EHL, },
--	{ PCI_VDEVICE(INTEL, 0x4bc2), M_CAN_CLOCK_FREQ_EHL, },
-+	{ PCI_VDEVICE(INTEL, 0x4bc1) },
-+	{ PCI_VDEVICE(INTEL, 0x4bc2) },
- 	{  }	/* Terminating Entry */
- };
- MODULE_DEVICE_TABLE(pci, m_can_pci_id_table);
-
----
-base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
-change-id: 20260511-topic-mcan-pci-driverdata-v7-1-d5bfc4f7d80e
-
-Best regards,
--- 
-Markus Schneider-Pargmann <msp@baylibre.com>
+Guenter
 
 
