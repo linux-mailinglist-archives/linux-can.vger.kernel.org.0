@@ -1,243 +1,189 @@
-Return-Path: <linux-can+bounces-7635-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7636-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2O+pM68ZB2rnrgIAu9opvQ
-	(envelope-from <linux-can+bounces-7635-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 15:03:43 +0200
+	id sFGYGoMeB2rnrgIAu9opvQ
+	(envelope-from <linux-can+bounces-7636-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 15:24:19 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49E785501E7
-	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 15:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E0C9655065D
+	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 15:24:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A94513061507
-	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 12:41:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 79E45301FF89
+	for <lists+linux-can@lfdr.de>; Fri, 15 May 2026 13:15:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C472D44B66A;
-	Fri, 15 May 2026 12:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB8DC33B6FC;
+	Fri, 15 May 2026 13:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="MI4hhL7x"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b="UGqt/vKA"
 X-Original-To: linux-can@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE623F4129;
-	Fri, 15 May 2026 12:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDFF231A3B
+	for <linux-can@vger.kernel.org>; Fri, 15 May 2026 13:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778848912; cv=none; b=LuCTYLYKKcCnVvlWZnQQ+X9bMQt1lZ/TU+dGnZNYrE0/ihkbOVMZ6Q1KQGlQqAJBCBf8lz5bMa5geDnF8FaSDxPe9us22HnI1ezllWUOJ99lKBSMPjH1jBREWvOxTGG7lZaNdvhSA2lcI3Pb3tIJn1a3lJ9tlGfyJFO8bjBvfFY=
+	t=1778850943; cv=none; b=TDaxqq05YEQLDvVj2vHq0An68kQsWW05XjDC/hPnyVA0BiobDPmjSrI/7DdSAbuAdTHkaDPwGcYUrtQF1FpNI/KFeU8ulSj220ldYeddLtXfJelQoKNjiNtSZcH6YMz4SJld1GXCihNwRT3jvoC/C/8QfnUr9pT4EcowVqOStm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778848912; c=relaxed/simple;
-	bh=byBYAVDjaoKlALuDppBYnRFz/zySWNjJSefSLftspx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LkxqRe0cjhU6ypSE8pjo48R7cilIAGihRAojNDJmrKoKtCk5+Zj6YVYBryPwhOCNJjfFkHTlVcTzAJ0xdOZpc1wvgzg3yjhpD21h9eHV9pju2lCLvSYWKBVFNtLctykHcQof43F1EvT3H+ztZXn8s1pFcu4R6b1LN3oA7E/mxo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=MI4hhL7x; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=GmifB1ZCgimZhhcProIdhFi1yPDkpQoTGWkF/PVYbRI=; b=MI4hhL7xpbSSCovw03l08oGGxy
-	4aCxc3/gYL4DWmKHvrrF6Q3sDAUEp7GH6jVoTWzQ3ZvC9YjK2wKVKwr3Y+PWbjqIVs18fBbYSq/MB
-	4I3TwbQ9aH4rXl93K/R7NUuvTjl5CJ7QexImPqsTiO4gx5Ec1kNF8qITUUStvsZVitTE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wNrrC-0033vB-IM; Fri, 15 May 2026 14:41:34 +0200
-Date: Fri, 15 May 2026 14:41:34 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org,
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org,
-	mkl@pengutronix.de, mailhol@kernel.org,
-	alexandre.belloni@bootlin.com, wim@linux-watchdog.org,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-Message-ID: <ef9449dc-ef2a-415e-8acc-a15f349bac24@lunn.ch>
-References: <20260515085746.114361-1-a0282524688@gmail.com>
- <20260515085746.114361-2-a0282524688@gmail.com>
+	s=arc-20240116; t=1778850943; c=relaxed/simple;
+	bh=AWTUitl93lD73gnMfvcUDhXeOQbp/DOjxwsI34zrqmU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=toFXzs/RrF7rPO0a57cdiS9ST/tTxyX61F4G/1dnX1aBr7C2ulflpAw8xuJBSObkZ4cL9oRgNFL17EL+cKG+xg7UdHC8rr2QZ9G0z+j9ypjGkeQGug+4lNa3eqjdyh9DmQuCYKWBX1eC3hCKJjnUo8LRL1r0pKqrGTI7sN+ENLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b=UGqt/vKA; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-488af9fdaa7so50561035e9.1
+        for <linux-can@vger.kernel.org>; Fri, 15 May 2026 06:15:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20251104.gappssmtp.com; s=20251104; t=1778850940; x=1779455740; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=91oT2C7HzmvRl53jPBN9VogksJHgfQpyopVk/xhZKRM=;
+        b=UGqt/vKA+OPUedHeLdWolCmwycH5HnmBx0TVhyKSHzw7Lnwk/Ro9XLQg0Ex+eVvxru
+         iRVsziLefhhRhqi/bmc+y9zAGbkXOnGb7IShanRyuveCke8Cgs85UECOyTWZT2w2JhTK
+         QWr2Hfl3HQH+NUG+MPqB6yT14bezW+0ThfZpp1+wp1kzCYFong9lXbyjivse0bMUIh1y
+         jEfP4RNK4Xz0LuqhdsnjdypRegQmqEeRCPCCGtUgBJ4EPuq7WFg5zf6By5KJkFvAgGte
+         rR8DZxfZMyEtnEOlF4ClUaWyqPX+WdisTLfkIURGBfnryaSr/zxtBpjFlWSXQ850Rfff
+         n+UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778850940; x=1779455740;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=91oT2C7HzmvRl53jPBN9VogksJHgfQpyopVk/xhZKRM=;
+        b=Q46e4YmzIwAUkswrmIWcsCgT843zBn82e7UMUb9bHqA2tEtM3a0euQv58KPG+TQS5e
+         vk6E85cXNqX9nKBySrYEsNymQnBRH7hEWYVUuy1fcTDeDFxkp7Ns11eVk7YGi4mWrJQr
+         F9u/uWZgBkdTXbVPgNGnOJHaRw9yK8w09I66UzIrA+aOhUDro7DgGVStGT0PapSizFs6
+         zwFBCRhjDgFIXnR08I3VE4c6N0kGumWwF6cSjzZjFIy4NhQPL4YAJcAWYiFeoVS7q/qa
+         zEmiLvQvIpqhT/GpyMI0pGZTkIOVkgOwif8vruUCDypFdJ+/Mj05/IXv30UyVXldYoHv
+         TGrw==
+X-Gm-Message-State: AOJu0YzqgVUjyELuMcR2/tHhuw8glZqw5eF0rhdiMXcqhncHUbK6eScK
+	T7b7A+TBUlowfsi44c7aDHZVNxTxmhXyutv++mds2rH2KZjbVriP02YUbDHaKbNi2BRSdjw3dQJ
+	4n6ZC
+X-Gm-Gg: Acq92OFUMY9IEerZ2edDHgwmQQH7Fo0zyvHBX4sX3nJjrdakjnZL4HbpuYU+8avrxvg
+	/dowmxCWVeBSu1wgV9E3sAfBHsAngrYfGxcIskqxk1O/9ftG8tMUTH4ctFu35b6oIz6bUEgR5L+
+	lL4eTmImj7q9KJdCR2rqsj3Q4IwdblxCv8Jzg3OUlWzdmKPClKBFyDRYpNd661ltGp3PPLLphHQ
+	oYaHNqdMZOTrc80wVj0ESrHkEvoWCkdCAKWXo4bteOzL0kxGLUCzheiHvdbcsLPgkoiUsRsFz15
+	NR3Rhh4maTguJqwvVWsG94RQbTHamJun/JMScBK73qUuRvwcYHXdKQEM6pViZCJORpDHCMStoXI
+	hcNO/w6ZMcV9xOSraXg2zgQOvQJO1UD45BzGnvjUwvGrEG8JpZ83Fz8BzJJgEVM8Nolb/glyclP
+	3gN4sBF2nAm5WL4kR9PCEdX9b0TRzyMgo=
+X-Received: by 2002:a05:600d:8:b0:48a:93f8:dd02 with SMTP id 5b1f17b1804b1-48fe61f291cmr54533725e9.14.1778850939915;
+        Fri, 15 May 2026 06:15:39 -0700 (PDT)
+Received: from localhost ([2001:4090:a246:83ca:1917:a47e:1872:2063])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48febe83ba2sm13027605e9.35.2026.05.15.06.15.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2026 06:15:39 -0700 (PDT)
+From: "Markus Schneider-Pargmann (The Capable Hub)" <msp@baylibre.com>
+Date: Fri, 15 May 2026 15:15:32 +0200
+Subject: [PATCH v2] can: m_can: pci: Remove driver_data
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260515085746.114361-2-a0282524688@gmail.com>
-X-Rspamd-Queue-Id: 49E785501E7
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260515-topic-mcan-pci-driverdata-v7-1-v2-1-e33e014ff328@baylibre.com>
+X-B4-Tracking: v=1; b=H4sIAHQcB2oC/42NQQ6CMBBFr0Jm7RiGCKgr72FYtJ1BJhFKWtJIC
+ He3cgI3P3l/8d4GUYJKhHuxQZCkUf2UoToV4AYzvQSVM0NVVk1ZE+HiZ3U4OjPh7BQ5aJLAZjG
+ YWiTk2vbu0rd8LQWyZA7S6+cIPLvMg8bFh/XoJfq9f6sT5bnZlhpyxCT8sGZ9qw1ydn6Ebt/3L
+ 4fq0cTPAAAA
+X-Change-ID: 20260511-topic-mcan-pci-driverdata-v7-1-d5bfc4f7d80e
+To: Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Vincent Mailhol <mailhol@kernel.org>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+ "Markus Schneider-Pargmann (The Capable Hub)" <msp@baylibre.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2104; i=msp@baylibre.com;
+ h=from:subject:message-id; bh=AWTUitl93lD73gnMfvcUDhXeOQbp/DOjxwsI34zrqmU=;
+ b=owGbwMvMwCXWejAsc4KoVzDjabUkhix2mdLEWrkVZep7P3T+OREnfW67p+Lzlrd6xoernOJ6X
+ eKMNkzoKGVhEONikBVTZOlMDE37L7/zWPKiZZth5rAygQxh4OIUgInsfsrIcHtHTf2MwKur7R4b
+ sCoKrRY9z6ckvyg9QmHh01tp81M+fmFk2CZse/ytuf1MC2f1f33fjc13H2aalPy5O80h9mO11qV
+ f3AA=
+X-Developer-Key: i=msp@baylibre.com; a=openpgp;
+ fpr=BADD88DB889FDC3E8A3D5FE612FA6A01E0A45B41
+X-Rspamd-Queue-Id: E0C9655065D
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
-	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[baylibre-com.20251104.gappssmtp.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7635-lists,linux-can=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-7636-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[lunn.ch:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-can@vger.kernel.org];
+	DMARC_NA(0.00)[baylibre.com];
+	DKIM_TRACE(0.00)[baylibre-com.20251104.gappssmtp.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[msp@baylibre.com,linux-can@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-can];
 	MID_RHS_MATCH_FROM(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[20]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6]
 X-Rspamd-Action: no action
 
->  MAINTAINERS                         |   1 +
->  drivers/gpio/gpio-nct6694.c         |   7 -
->  drivers/hwmon/nct6694-hwmon.c       |  21 -
->  drivers/i2c/busses/i2c-nct6694.c    |   7 -
->  drivers/mfd/Kconfig                 |  47 +-
->  drivers/mfd/Makefile                |   3 +-
->  drivers/mfd/nct6694-hif.c           | 663 ++++++++++++++++++++++++++++
->  drivers/mfd/nct6694.c               | 111 +++--
->  drivers/net/can/usb/nct6694_canfd.c |   6 -
+driver_data is set to M_CAN_CLOCK_FREQ_EHL for all models. This change
+was already five years ago, I don't expect any follow up models that
+need to set a different frequency through the driver_data at this point.
 
-The networking change here is very small, so my influence as a
-networking Maintainer should be considered small.
+Hardcode the M_CAN_CLOCK_FREQ_EHL. Once there are new models we can
+evaluate what data needs to be in driver_data.
 
-However, i would say this patch is too big, does too many different
-things at once, making it harder to review. Please could you break it
-up into lots of small patches, each with good commit messages, and
-being obviously correct.
+Acked-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
+Signed-off-by: Markus Schneider-Pargmann (The Capable Hub) <msp@baylibre.com>
+---
+Changes in v2:
+- Remove commas that are not needed here
+- Add Uwe's Acked-by
+- Link to v1: https://lore.kernel.org/r/20260511-topic-mcan-pci-driverdata-v7-1-v1-1-9b7161c1d1ed@baylibre.com
+---
+ drivers/net/can/m_can/m_can_pci.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> +F:	drivers/mfd/nct6694-hif.c
+diff --git a/drivers/net/can/m_can/m_can_pci.c b/drivers/net/can/m_can/m_can_pci.c
+index eb31ed1f964491ab41c7811be317706a09951390..d11a7c88fc32fddca5e02f0e489b8bb7cf0f3020 100644
+--- a/drivers/net/can/m_can/m_can_pci.c
++++ b/drivers/net/can/m_can/m_can_pci.c
+@@ -126,7 +126,7 @@ static int m_can_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 	mcan_class->net->irq = pci_irq_vector(pci, 0);
+ 	mcan_class->pm_clock_support = 1;
+ 	mcan_class->pm_wake_source = 0;
+-	mcan_class->can.clock.freq = id->driver_data;
++	mcan_class->can.clock.freq = M_CAN_CLOCK_FREQ_EHL;
+ 	mcan_class->irq_edge_triggered = true;
+ 	mcan_class->ops = &m_can_pci_ops;
+ 
+@@ -183,8 +183,8 @@ static SIMPLE_DEV_PM_OPS(m_can_pci_pm_ops,
+ 			 m_can_pci_suspend, m_can_pci_resume);
+ 
+ static const struct pci_device_id m_can_pci_id_table[] = {
+-	{ PCI_VDEVICE(INTEL, 0x4bc1), M_CAN_CLOCK_FREQ_EHL, },
+-	{ PCI_VDEVICE(INTEL, 0x4bc2), M_CAN_CLOCK_FREQ_EHL, },
++	{ PCI_VDEVICE(INTEL, 0x4bc1) },
++	{ PCI_VDEVICE(INTEL, 0x4bc2) },
+ 	{  }	/* Terminating Entry */
+ };
+ MODULE_DEVICE_TABLE(pci, m_can_pci_id_table);
 
-Maybe move all the usb code into nct6694-usb.c ?
+---
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+change-id: 20260511-topic-mcan-pci-driverdata-v7-1-d5bfc4f7d80e
 
-> - * USB command module type for NCT6694 GPIO controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * GPIO controller over the USB interface.
-> - */
-> -#define NCT6694_GPIO_MOD	0xFF
-> -
->  #define NCT6694_GPIO_VER	0x90
->  #define NCT6694_GPIO_VALID	0x110
->  #define NCT6694_GPI_DATA	0x120
+Best regards,
+-- 
+Markus Schneider-Pargmann <msp@baylibre.com>
 
-Moving code from one place to another can be a patch. Just moving code
-is quick and easy to review, and it gets it out of more complex
-patches which are harder to review.
-
-> +static int nct6694_response_err_handling(struct nct6694 *nct6694, unsigned char err_status)
-> +{
-> +	switch (err_status) {
-> +	case NCT6694_NO_ERROR:
-> +		return 0;
-> +	case NCT6694_NOT_SUPPORT_ERROR:
-> +		dev_err(nct6694->dev, "Command is not supported!\n");
-> +		break;
-
-Maybe EOPNOTSUPP?
-
-> +	case NCT6694_NO_RESPONSE_ERROR:
-> +		dev_warn(nct6694->dev, "Command received no response!\n");
-> +		break;
-> +	case NCT6694_TIMEOUT_ERROR:
-> +		dev_warn(nct6694->dev, "Command timed out!\n");
-> +		break;
-
-Maybe ETIMEDOUT?
-
-
-> +	case NCT6694_PENDING:
-> +		dev_err(nct6694->dev, "Command is pending!\n");
-> +		break;
-
-EBUSY?
-
-Having different error codes can make it easier to debug when things
-so wrong. But you also have dev_err(), so it is less important.
-
-> -static int nct6694_response_err_handling(struct nct6694 *nct6694, unsigned char err_status)
-> +static int nct6694_usb_err_handling(struct nct6694 *nct6694,
-> +				    unsigned char err_status)
-
-These renames can happen in one patch. Again, it is quick and easy to
-review.
-
->  
-> -	guard(mutex)(&nct6694->access_lock);
-> +	guard(mutex)(&udata->access_lock);
-
-This change is not obviously correct. Can moving the lock be made of
-patch of its own, with an explanation of why?
-
-> -	nct6694->usb_msg = devm_kzalloc(dev, sizeof(union nct6694_usb_msg), GFP_KERNEL);
-> -	if (!nct6694->usb_msg)
-> +	udata = devm_kzalloc(dev, sizeof(*udata), GFP_KERNEL);
-> +	if (!udata)
->  		return -ENOMEM;
->  
-> -	nct6694->int_buffer = devm_kzalloc(dev, sizeof(*nct6694->int_buffer), GFP_KERNEL);
-> -	if (!nct6694->int_buffer)
-> +	udata->usb_msg = devm_kzalloc(dev, sizeof(*udata->usb_msg), GFP_KERNEL);
-> +	if (!udata->usb_msg)
->  		return -ENOMEM;
->  
-> -	nct6694->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-> -	if (!nct6694->int_in_urb)
-> +	udata->int_buffer = devm_kzalloc(dev, sizeof(*udata->int_buffer), GFP_KERNEL);
-> +	if (!udata->int_buffer)
->  		return -ENOMEM;
->  
-> +	udata->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-> +	if (!udata->int_in_urb)
-> +		return -ENOMEM;
-
-
-In this hunk, diff(1) has done a poor job and made it harder to
-review. If i understand the code correctly, udata contains USB
-specific data? Maybe call it usdata? That also has the same length as
-ntc6694, which has some minor advantages. What you might find is that
-if you have a patch adding only the allocation of usbdata, and then a
-patch moving things into usbdata, diff(1) does a better job, and the
-code is more obviously correct.
-
-> @@ -305,16 +344,15 @@ static int nct6694_usb_probe(struct usb_interface *iface,
->  	}
->  
->  	nct6694->dev = dev;
-> -	nct6694->udev = udev;
-> +
-> +	spin_lock_init(&nct6694->irq_lock);
->  
->  	ida_init(&nct6694->gpio_ida);
->  	ida_init(&nct6694->i2c_ida);
->  	ida_init(&nct6694->canfd_ida);
->  	ida_init(&nct6694->wdt_ida);
->  
-> -	spin_lock_init(&nct6694->irq_lock);
-> -
-
-Why has the spin_lock_init() moved? Having lots of small patches would
-make that stand out, and when you reviewed your own patches, you might
-decided to change it back, because it does not appear to be needed.
-
-Given the size of this patch, i'm finding it hard to see the overall
-structure. Generally, when you have one device with two different
-access mechanisms, you end up with three files, two implementing
-access, and the third with the common code. With one big patch, i
-don't see this common code.
-
-	Andrew
 
