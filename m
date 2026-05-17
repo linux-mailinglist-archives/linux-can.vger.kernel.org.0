@@ -1,230 +1,188 @@
-Return-Path: <linux-can+bounces-7648-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7649-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oHNlHV8aCmpawwQAu9opvQ
-	(envelope-from <linux-can+bounces-7648-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 21:43:27 +0200
+	id qAV6ClQgCmrkwwQAu9opvQ
+	(envelope-from <linux-can+bounces-7649-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 22:08:52 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6AB05639AB
-	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 21:43:26 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 849C1563B0B
+	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 22:08:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3FFE7300B76C
-	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 19:43:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 52E823016ED5
+	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 20:08:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55AAF3D3480;
-	Sun, 17 May 2026 19:43:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C8B30C632;
+	Sun, 17 May 2026 20:08:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b="O1oKSyVv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="skn4WbDv"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E82073CF66A
-	for <linux-can@vger.kernel.org>; Sun, 17 May 2026 19:43:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779047004; cv=pass; b=qlR//rVRGpe3lMmR1U6DHisq7G0L8TmcgLd8IvEtrSRqQcAYpSb9GbMxLt7x9Wth32Dsw12XeiC4w/eyy8ogzSbFWu2C/op7Nh00EVam7wISpq8jJmceC9IuSEvz+ECCPGAC5UoaD4uDYO8ZE+QWb0HvEPVSIZbOTbBB1oRiJbE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779047004; c=relaxed/simple;
-	bh=qohdw6c5XY/Mph5vnXjfspO9h70+dVSKRCgfLeBy8yM=;
-	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OPy8434HklgKV5Iws1Xo1LNe4gEdD5ywmy3omvSXm4xGzh5s6Xg0VFLCtduAmQOYb96MMp0Wo1X7/UVAdqKzig4f4yZL+enqszwhAUrYJBqGh1EnABygzsUOCUdiwdt3x7YvqQLMtClqYXUwukorhLp6B6PNQnabWF4Il8ArDAI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20251104.gappssmtp.com header.i=@baylibre-com.20251104.gappssmtp.com header.b=O1oKSyVv; arc=pass smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-bd4f8260e4eso342013566b.1
-        for <linux-can@vger.kernel.org>; Sun, 17 May 2026 12:43:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779047000; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QGAWgGEOwJNvrNZWIulTxZWb1s1gvWlHWgzO7NZk5pYdYIDZX1YO5FrVc5ze3HU5+l
-         yeheJ+OKeOqqgtomRgZ/uTNOOlCNL2XBQhG9mWIz4PHNjEDATCWU3bkq1UhOQwHv29EM
-         U5o2F1/GqiSrhW/HRsiRvw2rjZFkEz5OYMbDARDjWGrxC3zBqbmovqn+zzrSpy5iGPp3
-         Kdvq+kKbKBjuteVtidyhTn1qCGTIMZsNoPpxI+OKeQLYdwdblC4QwqisNaCqme5O5lvD
-         esofny4LA1i3i0h51s2AS9sOzTErM7QlszG7AniP1dxvKuGtFhJj2JVeKsady59MLaye
-         5VHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
-         :from:dkim-signature;
-        bh=j6Mto1oYp8fxMNax/4CSsHkuQNzcdJnt+Yi59gbd/34=;
-        fh=XQ82CPumvppkqaAT5lg/+QgicQKO/TLs5MSNapotWSk=;
-        b=C3+LtUeBJ9OY2aFIDSOi2aZZZjWJUgYqnfvDIM4G+Hy2zBiRVnjDblyCIeAsrbpiNh
-         hShDstA4A/kp23Y+oF9Rx2VQ0vV4GnkKy6LB5KMP9z/9EwjEufqzvtRHXdo3+yErmk7G
-         93bmt9AiaZYgdwfEUHQCMpFW0/GLbjSQPvORcThRkd2bu8VtALw9e8O8TodkH7OtmoGf
-         itPykK4RTb+e9P5VWs6JA8HROQ12rvOsUjaJQUr5HiYASB//qeS/FbJIlLzQJjxhEiYt
-         /KegUPHQ1ZqO7IcPRX7EBLGm5K5/cnN/MduwNyL5BBcb1tlnWQs7hUbNv9kDBuazAUJR
-         Njkw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20251104.gappssmtp.com; s=20251104; t=1779047000; x=1779651800; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j6Mto1oYp8fxMNax/4CSsHkuQNzcdJnt+Yi59gbd/34=;
-        b=O1oKSyVvQI4s7vPrStCGQYiyPmyqNHQroE6uKzZDznpIG8Uw2DwXDmcYIj6LiDShMe
-         o5RtRmwOAgxfQZLTb2mooQeDL+pX+WzD+G5aKl3PkQ9fCBaxwKcJhh7+W03gZ1TiGUAA
-         mxlrVCj/iPTIu1aitA9noatwI0DlC6/yDBBGczPO3mmEyk79uQ3t0i7fZYnxkez3+2HN
-         YTnoWBNfB/1DgnqJr2+aoNDgBd3NSw2WBKYcodMADb4sfNYH7aEPX+rv+lhXG0hDnyHF
-         rwU6u3+Hhrj0bp+DWf+II0IGh8/Vtz+2GlR7WYYMeoR5+ne9fc3cEIYrBNXWwy/5IMRu
-         G8bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779047000; x=1779651800;
-        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j6Mto1oYp8fxMNax/4CSsHkuQNzcdJnt+Yi59gbd/34=;
-        b=lf+R28J6Hb7hYhyangG3BaJGLSqNdMA29A2qBLULeLEs2FjgQugBbGeUpHf5CSviB0
-         54sWZbmLq3JHpT6ApoDzQO7TdcJxyyVyu1jyCpkBmpQ+KIsdNFIPCcTzBQCeqNGpBjt3
-         hRFJv7DKGgNJzxazoeXDH83pLCaoBXK6z4+iCz3/0lNvwxFioITNiVEG5XhyNpFiJuPE
-         OIgRhnwfkHX8CV6sY66HBDIEBKC/8zmStg3GBXc8YaPWszRERAq3eNmoZLHAMiDvu7bH
-         O4Web+vNkDWWkUdVO9A4CPD5qJNUKMlrSwPDfZx8s8LRPD+HAOU1ZHHisK3fc5XGbha3
-         R1cQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9qPeXJYP4XHKg9Xbaw0e7Em9UMOGyAecCZ9EgpDKgT+3NGJnNOw8qTjvSN8WCiXHqb23E4WW7WIaI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4xV2dleROlLjs7F/2ormJSryna3eNoIO1GSuIC4yzZ9w57FH4
-	K3RYnX6IiWxE8VBC5O0v8VLwBWaLaUaKx7vQn+S0qAgAbd+nIAP0M7yxCT4c+b9KqQf0XXiDV95
-	cV33bqCGfpNOf9kPDme8VafkoarqfsOHgHvLJIWYvLw==
-X-Gm-Gg: Acq92OGkUs3+I47JDQJD5yt2TpvNmCknizNV2pJyUrbCzCyHnEEeNI3qvUZQ1T3kUcl
-	huWLFKbmZ0bHXtPQKIuJxbzDF22WGcffTuSi6AzyCZvxP2ET2qSjRShBHHGRlRjvHsBGqE3lp7k
-	Ebj7UCKkd8Ap0u2GrBl6IV7Qjag9112CFikysux+HYy8ws3vKywjPuhgF0z9NYTp3xaXuj5hXGP
-	NP+iZ++9GY03wwChEmoHiJho0r8YEyRxAFX09M44G3boWramG9KSOHDpN5DJjf+UnfGyWvcxCKA
-	SabwjYNP0Um6CaP7rdjZ91CGaGk8au44tPR3uDvDU7UwXf8=
-X-Received: by 2002:a17:907:1c9c:b0:b98:40e:f335 with SMTP id
- a640c23a62f3a-bd51795070cmr615382266b.34.1779047000052; Sun, 17 May 2026
- 12:43:20 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Sun, 17 May 2026 12:43:19 -0700
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Sun, 17 May 2026 12:43:19 -0700
-From: Angelo Dureghello <adureghello@baylibre.com>
-References: <20260506142644.3234270-2-gerg@kernel.org> <20260506142644.3234270-8-gerg@kernel.org>
- <40aefc39-bd98-460d-8aa7-5dd79f562e0d@app.fastmail.com> <fdd6fc14-f607-4186-8db4-25de973ac322@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FE9430C17F
+	for <linux-can@vger.kernel.org>; Sun, 17 May 2026 20:08:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779048524; cv=none; b=PsMQkakNCwnd0DqntIscQWQ6jvWP7ba7aPrq8UHJyAZomo0HP0SVhQJKwtpVBwF1+e9B5kveeXe+mUE2yPF9IsZICjC3d++1d/6Dud5N6PzKWxPJFBfyPIIDl8nCzPfOHqIoArmI06DZJdGdsinuy+3CBL/OK45r6CLsvUzkTnc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779048524; c=relaxed/simple;
+	bh=zf+st0yI5heHtI4FZ1FB5w9AS2N7hIXhtUlFxWhN0A0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=RSv1Qx6kzC6gn7vsNWuEVK+ExdIcaiyEcGxSczsbZbSXl+Uu/D6E+dww91pV6paytT5GnHtIPR+Lbh0qoeSUZKbadFdJQrCb+DXUbeTaNF6e46nmV0gs8apXl2UzvMayM54vvH+BIyaKVquOr4RpphvTg5kuvVXY9eRAJS3HQJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=skn4WbDv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD4A0C2BCB8;
+	Sun, 17 May 2026 20:08:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779048523;
+	bh=zf+st0yI5heHtI4FZ1FB5w9AS2N7hIXhtUlFxWhN0A0=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=skn4WbDvz+YzVITEc2A8jMQWG/mEwxA1MR+1BDPd+IfvSaGYnSZ9lHk/QLpM49Q6T
+	 c0LlbgxeLH4cPOwqeh1j4tokTG8lkBim9yAp4xlNXejrTuSE4dN5trJLNKAjfubCyQ
+	 qvBpa6ElOb6MJT9zJHDqLNY6TRi7RnZJndmwy+XIk6F/TsBFY/mnzVPCymlRBgLTXd
+	 3eVUD1nkIyhutnjHanw9a7II5F3eY2ADvBb/0YjfTpxM8oJo87qM7lssEfu/PWF1Cp
+	 bAXT2WEHmuXQ4HV7ErGjDvlzbXSCLv546B1GJIGE4c7DuMtjF+26q+kebOKJvksx+R
+	 c2u+VNkBuEIJw==
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id C860BF4007A;
+	Sun, 17 May 2026 16:08:42 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Sun, 17 May 2026 16:08:42 -0400
+X-ME-Sender: <xms:SiAKajBOiIDolb2a-kfqXaAxniwDVxeyJ3C8HynOWI8qwMgSTYi72Q>
+    <xme:SiAKakU-F8DyfzAbbYSvmyQROv5ynEHlx7fw9HE4l4kBDZHIYU0nPOpy6o0_L0-2d
+    cV4vtZ1_lbnQ_eR7J5fLOhLDW_VAawJuxJhX8yIlecxTa0BMTljwOk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddufeeiledtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrfgrth
+    htvghrnhepjeejffetteefteekieejudeguedvgfeffeeitdduieekgeegfeekhfduhfel
+    hfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedtvdeg
+    qddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrdguvg
+    dpnhgspghrtghpthhtohepkedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprggu
+    uhhrvghghhgvlhhlohessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepohhlthgvrg
+    hnvhesghhmrghilhdrtghomhdprhgtphhtthhopehgvghrgheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheplhhinhhugidqmheikehksehlihhsthhsrdhlihhnuhigqdhmieekkh
+    drohhrghdprhgtphhtthhopegumhgrvghnghhinhgvsehvghgvrhdrkhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtoheplhhinhhugidqtggrnhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+    dprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopehlihhnuhigqdhsphhisehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:SiAKakTianBIt_kJfTpAUmYEDEIsRbz-RK4e6Tn06xUqLrBqrGtXeQ>
+    <xmx:SiAKaiMlHYWf2OJPGa0E8bXjTkpF2wUjEXjTjbDZuGSiH8Nc2n3Y4A>
+    <xmx:SiAKaig-ETwcDW2Bs9qgLLZp2xq0cxnQ8FQ8o0l1WRMYU6rDzDByng>
+    <xmx:SiAKavlN24Wb70sjBSt7-4YEC_WTmYn4eUwrlV0pEiWMCpa-NsW10Q>
+    <xmx:SiAKaughoEk4-LIi6rkg2hjw1pPG16O79DVmftYomWtTb3OCI6X8tIjv>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id A509E182007A; Sun, 17 May 2026 16:08:42 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <fdd6fc14-f607-4186-8db4-25de973ac322@kernel.org>
-Date: Sun, 17 May 2026 12:43:19 -0700
-X-Gm-Features: AVHnY4LTi1UepgBp7RlwHGhgQikPAAttg6_8VSJjgHVMj7UNTEH_cv4_jkSHs5E
-Message-ID: <CALSJ-wCrNDv3N2Kdo0uoXsKGtp0GthJRBeYTNQA1gGE2akUWFg@mail.gmail.com>
+X-ThreadId: Am-_gogYW4uZ
+Date: Sun, 17 May 2026 22:08:22 +0200
+From: "Arnd Bergmann" <arnd@kernel.org>
+To: "Angelo Dureghello" <adureghello@baylibre.com>,
+ "Greg Ungerer" <gerg@kernel.org>
+Cc: linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-can@vger.kernel.org,
+ linux-spi@vger.kernel.org, "Vladimir Oltean" <olteanv@gmail.com>
+Message-Id: <9391b782-7727-47fa-ac37-05cd50821d35@app.fastmail.com>
+In-Reply-To: 
+ <CALSJ-wCrNDv3N2Kdo0uoXsKGtp0GthJRBeYTNQA1gGE2akUWFg@mail.gmail.com>
+References: <20260506142644.3234270-2-gerg@kernel.org>
+ <20260506142644.3234270-8-gerg@kernel.org>
+ <40aefc39-bd98-460d-8aa7-5dd79f562e0d@app.fastmail.com>
+ <fdd6fc14-f607-4186-8db4-25de973ac322@kernel.org>
+ <CALSJ-wCrNDv3N2Kdo0uoXsKGtp0GthJRBeYTNQA1gGE2akUWFg@mail.gmail.com>
 Subject: Re: [RFC 4/4] m68k: coldfire: fix non-standard readX()/writeX() functions
-To: Greg Ungerer <gerg@kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, linux-m68k@lists.linux-m68k.org, 
-	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-can@vger.kernel.org, linux-spi@vger.kernel.org, 
-	Vladimir Oltean <olteanv@gmail.com>, Angelo Dureghello <adureghello@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: E6AB05639AB
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 849C1563B0B
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[baylibre-com.20251104.gappssmtp.com:s=20251104];
+X-Spamd-Result: default: False [-2.15 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,lists.linux-m68k.org,vger.kernel.org,gmail.com,baylibre.com];
-	TAGGED_FROM(0.00)[bounces-7648-lists,linux-can=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	DKIM_TRACE(0.00)[baylibre-com.20251104.gappssmtp.com:+];
+	FREEMAIL_CC(0.00)[lists.linux-m68k.org,vger.kernel.org,gmail.com];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7649-lists,linux-can=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[app.fastmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[adureghello@baylibre.com,linux-can@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_NEQ_ENVFROM(0.00)[arnd@kernel.org,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid,baylibre-com.20251104.gappssmtp.com:dkim]
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-Hi all,
-
-sorry that i could check this now only, hope is not too late.
-
-On Thu, May 07, 2026 at 10:43:01PM +1000, Greg Ungerer wrote:
-> Hi Arnd,
+On Sun, May 17, 2026, at 21:43, Angelo Dureghello wrote:
+> On Thu, May 07, 2026 at 10:43:01PM +1000, Greg Ungerer wrote:
+>> On 7/5/26 05:12, Arnd Bergmann wrote:
+>> > On Wed, May 6, 2026, at 16:26, Greg Ungerer wrote:
 >
-> On 7/5/26 05:12, Arnd Bergmann wrote:
-> > On Wed, May 6, 2026, at 16:26, Greg Ungerer wrote:
-> >
-> > > drivers/dma/mcf-edma-main.c
-> > >    Supports big-endian access by setting the big-endian flag of
-> > >    the drivers struct fsl_edma_engine. But locally should be using
-> > >    ioread32be() and iowrite32be() instead of ioread32() and iowrite32().
-> >
-> > I'm still a bit confused about how this works at the moment,
-> > since the drivers/dma/fsl-edma-common.h file already contains
-> > checks for the edma->big_endian flag, which is set in
-> > mcf_edma_probe(). The version after your patch makes sense
-> > to me, but it looks like the existing code cannot work.
+> [    2.270000] fsl-dspi fsl-dspi.0: Not able to get desc for DMA xfer
+> [    2.280000] fsl-dspi fsl-dspi.0: DMA transfer failed
+> [    2.280000] spi_master spi0: failed to transfer one message from queue
+> [    2.290000] spi_master spi0: noqueue transfer failed
+> [    2.290000] spi-nor spi0.1: probe with driver spi-nor failed with error -5
 >
-> Yes, it certainly doesn't look right to me either.
+> DSPI is using edma, i will try to understand where the issue is asap.
 >
-> Angelo: you look to be the original author of this driver, can you shed any
-> light on its working status in mainline currently?
->
+> About how it works:
+> - for accesses to edma module (IP) mmio registers, must be native
+> big_endian, so using the "be" suffix in "mcf"_edma looks ok for me.
 
-I was some years far from this driver (and the kernel itself), but i have
-seen there are several changes in the edma common part from that time.
-I remember i reviewed/tested some of them, some other unfortunately not.
+The twist here is that with the way that readl() is defined on
+coldfire as a non-swapping operation, and the generic
+definition assuming the opposite in
 
-I realized last month, that i was back working on this board (stmark2)
-that somehting related to edma or dspi looks broken in mainline now:
+static inline u32 ioread32be(const void __iomem *addr)
+{
+        return swab32(readl(addr));
+}
 
-[    2.270000] fsl-dspi fsl-dspi.0: Not able to get desc for DMA xfer
-[    2.280000] fsl-dspi fsl-dspi.0: DMA transfer failed
-[    2.280000] spi_master spi0: failed to transfer one message from queue
-[    2.290000] spi_master spi0: noqueue transfer failed
-[    2.290000] spi-nor spi0.1: probe with driver spi-nor failed with error -5
+the function called ioread32be() actually tries to access
+the registers as little-endian. I can see two possible ways
+we got here, but don't know which one is currect:
 
-DSPI is using edma, i will try to understand where the issue is asap.
+a) the device actually has little-endian registers (like it
+   does on i.MX, but unlike all other coldfire devices), and
+   you just never noticed because using ioread32be() worked
+   as you expected.
 
-About how it works:
-- for accesses to edma module (IP) mmio registers, must be native
-big_endian, so using the "be" suffix in "mcf"_edma looks ok for me.
-- for accessing the "tcd" memory structure, that must be, from what i
-remember, anyway in little endian, independently from the cpu core
-endiannes, this is the reason that big_endian flag is needed, it is
-used for tcd area accesses, so the IP module was built.
-The tcd area may be similar to pci accesses (see mcf54415 RM 19.4.16).
+b) you tested the driver using an ioread32be() definition that
+   did not have a byteswap and it correctly accessed big-endian
+   registers at the time, but the version in mainline today does
+   not.
 
-Anyway, tested the patch, nothing looks changed nor in better or worst.
-Will look into this in the next days.
+> - for accessing the "tcd" memory structure, that must be, from what i
+> remember, anyway in little endian, independently from the cpu core
+> endiannes, this is the reason that big_endian flag is needed, it is
+> used for tcd area accesses, so the IP module was built.
+> The tcd area may be similar to pci accesses (see mcf54415 RM 19.4.16).
 
->
-> > > drivers/spi/spi-fsl-dspi.c
-> > >    Setting the regmap format_endian flags to use native endian will
-> > >    force driver to use appropriate big or little endian access on
-> > >    whatever platform it is built for.
-> > >
-> > > These drivers have only been compile tested.
-> >
-> > I would suggest marking these as explicit BIG_ENDIAN rather than
-> > NATIVE_ENDIAN. The effect should be the same since coldfire CPUs
-> > cannot run little-endian code, but the way that hardware usually
-> > works is that the endianess is fixed at the bus level to one way
-> > or the other. NATIVE_ENDIAN to me implies that the registers
-> > have configurable endianess that is switched along with the CPU
-> > mode.
->
-> Ok, will change. I chose native endian in this case since the regmap config
-> entry used for the m5441x family is also used by the vf610 devce (which looks
-> to be an ARM imx SoC). So it will need a duplicate setup with those endian
-> flags set to BIG_ENDIAN. But that is no problem.
->
-> Thanks
-> Greg
->
+edma_read_tcdreg() calls into edma_readl(), which is the same function
+that is used for normal register access, so from what I can tell,
+they always use the same endianess here.
 
-Regards,
-angelo
+      Arnd
 
