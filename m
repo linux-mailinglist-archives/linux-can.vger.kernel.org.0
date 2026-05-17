@@ -1,192 +1,146 @@
-Return-Path: <linux-can+bounces-7641-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7642-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6DBrIeuxCWo4lgQAu9opvQ
-	(envelope-from <linux-can+bounces-7641-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 14:17:47 +0200
+	id cLsAM6PNCWq2qAQAu9opvQ
+	(envelope-from <linux-can+bounces-7642-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 16:16:03 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 913EB560EA3
-	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 14:17:46 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BD655618FD
+	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 16:16:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B6E4A3006B46
-	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 12:17:44 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 64A8E3004DFE
+	for <lists+linux-can@lfdr.de>; Sun, 17 May 2026 14:16:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 432862F1FEF;
-	Sun, 17 May 2026 12:17:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FD8F3B840F;
+	Sun, 17 May 2026 14:15:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=berkoc.com header.i=@berkoc.com header.b="iGPL7977"
 X-Original-To: linux-can@vger.kernel.org
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+Received: from mail-01.1984.is (mail-01.1984.is [185.112.145.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C204C305691;
-	Sun, 17 May 2026 12:17:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98EA53B4EBD;
+	Sun, 17 May 2026 14:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.112.145.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779020264; cv=none; b=gdEU25VmyGP1PCV/poJrjWonxCgFCjHXyZPSlB0aOvHWlnh/cV/sKT1+XtuVSsfLzcMJmdN6Gf/Y1g6AL7XXQCVbs4WRYvABgxcGzf8252XL8J3qsOdudKIdf58RYda7jI8/JQwjO97B2il+0PO0Ti83EHbmp8ICAMS+cF81CFo=
+	t=1779027358; cv=none; b=kdLV4gUeYw6oOnpYu0cDRkclo1eey4IS4/WNYfo2ho5J4f0RHlSzhYRqbsXWgt1PfhgJhjXEeZ33qaXynP+ZW4VX/6ouauKNgByFIQm8O1azbTUwC5TCCHUpzthW5mxkodgqhX45ZWK++ajjs4KVJqX8H5OZTKd20icYOsZDTk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779020264; c=relaxed/simple;
-	bh=afeVXxMLu9PA/RifFsGXDf3B7y8laAam881xtqAvz40=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=gnkieHgNg9hqlazRv6JtOyg/IgBk+fbGn9OCzLYile0b2pcZIjoQAm7LJRvI/I+0gxFU1HyhLFABLkWqUgjszmJWjBgK4VQFloSVlxA3Fls69sbfn9kFv3HkcXIw9168a3+QsSSKZMesL37gksUJuEIt9/YbrWQlKWwPsaKJ2VQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 64HCHJi3038911;
-	Sun, 17 May 2026 21:17:19 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from [192.168.1.5] (M106072072000.v4.enabler.ne.jp [106.72.72.0])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 64HCHJGc038908
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Sun, 17 May 2026 21:17:19 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <c109e9fc-3fb7-4a48-a0bd-a4d7663e7342@I-love.SAKURA.ne.jp>
-Date: Sun, 17 May 2026 21:17:19 +0900
+	s=arc-20240116; t=1779027358; c=relaxed/simple;
+	bh=Qga+mtvz86YHLopOaANdVdDeOH1iglUFDZnSQM3MKCM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VUCnVq5YQjRM818/634H19b+EyDtLoZ0Lf85sRS4TFuYIK9dwXZeWA8LqY97cIpSsvVZ36/EjHJNlBFPTzDM5P48fGmXisSXos9j16w+cCBOe2I2hh2OpKkGV171j6ku/ZmUj14stvPRQxLGiNMqUH7p1t/XyecNmujj8sTg2Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=berkoc.com; spf=pass smtp.mailfrom=berkoc.com; dkim=pass (2048-bit key) header.d=berkoc.com header.i=@berkoc.com header.b=iGPL7977; arc=none smtp.client-ip=185.112.145.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=berkoc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=berkoc.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=berkoc.com;
+	s=1984; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date
+	:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=ROYjdED/XPcRufNK0R//jz4sQ/Lqx1XU3qMXN4nQjJ0=; b=iGPL7977BgnMDW+CgbK0wpi67E
+	Bi1gwBiCxmhTTRlHW+cBi+Q2zl7sl+HE7WhZunYyHaD8QIGa8IKAPgxnMxJ1G1fJrVAAwtgXl4yIP
+	TitoRltX79BofRzR6eQZNkr0EXBiFRAvRf52UBrcP7C+zflarAS1l3B8Yvg154kl+mIqMH1ngCn41
+	4ZdKeJcAl1QTwRZ+EWLJYByaAVoMAK+zIB7qrGJN3N4wRtSLGNP1IeSFP+JhQZwmPQAqZicKyiOug
+	sGySRwZV/J0T7A9jYcnEOMLY08qLkdSz2gDZluAF4Rc5ZIZcwOAuM/vn6pRyCCGgc7Ro27a5NY7Jg
+	zS9BIjwg==;
+Received: from localhost
+	by mail-01.1984.is with utf8esmtp (Exim 4.96)
+	(envelope-from <me@berkoc.com>)
+	id 1wOcHR-00GB0n-34;
+	Sun, 17 May 2026 14:15:46 +0000
+From: Berkant Koc <me@berkoc.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+ Vincent Mailhol <mailhol@kernel.org>,
+ Stephane Grosjean <stephane.grosjean@hms-networks.com>
+Cc: linux-can@vger.kernel.org,
+ netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ kernel@pengutronix.de
+Subject: [PATCH 0/2] can: usb: validate URB length in PEAK-USB rx callbacks
+Date: Sun, 17 May 2026 15:55:00 +0200
+Message-ID: <20260517-can-usb-fix-cover@berkoc.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH net] can: j1939: use netdevice_tracker for j1939_priv tracking
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Anti-Virus-Server: fsav303.rs.sakura.ne.jp
-X-Virus-Status: clean
-X-Rspamd-Queue-Id: 913EB560EA3
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -0.0 (/)
+X-Authenticated-User: me@berkoc.com
+X-Sender-Address: me@berkoc.com
+X-Rspamd-Queue-Id: 1BD655618FD
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [1.54 / 15.00];
+	DMARC_POLICY_REJECT(2.00)[berkoc.com : SPF not aligned (strict),reject];
+	R_DKIM_REJECT(1.00)[berkoc.com:s=1984];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_FROM(0.00)[bounces-7641-lists,linux-can=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[i-love.sakura.ne.jp];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[me@berkoc.com,linux-can@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-7642-lists,linux-can=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[berkoc.com:-];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[penguin-kernel@I-love.SAKURA.ne.jp,linux-can@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.964];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[7];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[berkoc.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-syzbot is still reporting
+This series mirrors the two gs_usb hardening fixes that landed in 6.18
+(commits 6fe9f3279f7d and 395d988f9386) for the two PEAK-System USB
+drivers that share the same "walk records inside the bulk-in URB"
+pattern: pcan_usb_fd.c and pcan_usb_pro.c. Both decode loops read the
+on-wire record header before validating that the URB actually contains
+that header, allowing a malicious USB device that emulates a PEAK CAN
+adapter to trigger a short read of one or two bytes past the URB
+buffer on every poll cycle.
 
-  unregister_netdevice: waiting for vcan0 to become free. Usage count = 2
+Patch 1 adds a sizeof(struct pucan_msg) check at the top of the
+pcan_usb_fd_decode_buf() loop and rejects records whose announced size
+is smaller than the header itself.
 
-problem. A debug printk() patch in linux-next-20260508 identified that
-there is dev_hold()/dev_put() imbalance in j1939_priv management.
+Patch 2 adds a one-byte check before reading pr->data_type in
+pcan_usb_pro_decode_buf(), which is the field used to index the
+record-size table.
 
-  Call trace for vcan0[26] +4 at
-       __dev_hold include/linux/netdevice.h:4470 [inline]
-       netdev_hold include/linux/netdevice.h:4513 [inline]
-       dev_hold include/linux/netdevice.h:4536 [inline]
-       j1939_priv_create net/can/j1939/main.c:140 [inline]
-       j1939_netdev_start+0x36b/0xc10 net/can/j1939/main.c:268
-       j1939_sk_bind+0x853/0xb30 net/can/j1939/socket.c:506
-       __sys_bind_socket net/socket.c:1948 [inline]
-       __sys_bind+0x2e9/0x410 net/socket.c:1979
+Both fixes are static-analysis-identified mirrors of the gs_usb
+precedent. I did not have access to a PCAN-USB-FD or PCAN-USB-Pro
+adapter and therefore no live KASAN trip is attached, but the trigger
+condition (URB actual_length below the per-record header size) is
+identical to the gs_usb case that Marc Kleine-Budde fixed in November.
 
-  Call trace for vcan0[28] -3 at
-       __dev_put include/linux/netdevice.h:4456 [inline]
-       netdev_put include/linux/netdevice.h:4523 [inline]
-       dev_put include/linux/netdevice.h:4548 [inline]
-       __j1939_priv_release net/can/j1939/main.c:166 [inline]
-       kref_put include/linux/kref.h:65 [inline]
-       j1939_priv_put+0x128/0x270 net/can/j1939/main.c:172
-       j1939_sk_sock_destruct+0x52/0x90 net/can/j1939/socket.c:388
-       __sk_destruct+0x8d/0x9d0 net/core/sock.c:2352
-       rcu_do_batch kernel/rcu/tree.c:2617 [inline]
-       rcu_core kernel/rcu/tree.c:2869 [inline]
-       rcu_cpu_kthread+0x99e/0x1470 kernel/rcu/tree.c:2957
-       smpboot_thread_fn+0x541/0xa50 kernel/smpboot.c:160
-       kthread+0x388/0x470 kernel/kthread.c:436
-       ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
-       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+A third candidate file, drivers/net/can/usb/usb_8dev.c, was reviewed
+for the same pattern but already validates "pos + sizeof(struct
+usb_8dev_rx_msg) > urb->actual_length" at the top of its loop and uses
+a fixed-size record, so no patch is included for it.
 
-For further investigation using upstream kernels, enable netdevice_tracker
-in j1939_priv management.
+Note: a concurrent series by James Gao (msgid <TYCPR01MB856782BAA657447E5EDDDC1FF0062>) hardens different sites in pcan_usb_pro.c (handle_canmsg + handle_error); the hunks in patch 2/2 here do not overlap.
 
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
- net/can/j1939/j1939-priv.h | 1 +
- net/can/j1939/main.c       | 8 ++++----
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Berkant Koc (2):
+  can: peak_usb: validate URB length in pcan_usb_fd_decode_buf()
+  can: peak_usb: validate URB length in pcan_usb_pro_decode_buf()
 
-diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
-index 81f58924b4ac..e92beb24b50b 100644
---- a/net/can/j1939/j1939-priv.h
-+++ b/net/can/j1939/j1939-priv.h
-@@ -60,6 +60,7 @@ struct j1939_priv {
- 	rwlock_t lock;
- 
- 	struct net_device *ndev;
-+	netdevice_tracker dev_tracker;
- 
- 	/* list of 256 ecu ptrs, that cache the claimed addresses.
- 	 * also protected by the above lock
-diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
-index 9937c04241bc..5e5e6c228f22 100644
---- a/net/can/j1939/main.c
-+++ b/net/can/j1939/main.c
-@@ -137,7 +137,7 @@ static struct j1939_priv *j1939_priv_create(struct net_device *ndev)
- 	priv->ndev = ndev;
- 	kref_init(&priv->kref);
- 	kref_init(&priv->rx_kref);
--	dev_hold(ndev);
-+	netdev_hold(ndev, &priv->dev_tracker, GFP_KERNEL);
- 
- 	netdev_dbg(priv->ndev, "%s : 0x%p\n", __func__, priv);
- 
-@@ -163,7 +163,7 @@ static void __j1939_priv_release(struct kref *kref)
- 	WARN_ON_ONCE(!list_empty(&priv->ecus));
- 	WARN_ON_ONCE(!list_empty(&priv->j1939_socks));
- 
--	dev_put(ndev);
-+	netdev_put(ndev, &priv->dev_tracker);
- 	kfree(priv);
- }
- 
-@@ -281,7 +281,7 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
- 		 */
- 		kref_get(&priv_new->rx_kref);
- 		mutex_unlock(&j1939_netdev_lock);
--		dev_put(ndev);
-+		netdev_put(ndev, &priv->dev_tracker);
- 		kfree(priv);
- 		return priv_new;
- 	}
-@@ -298,7 +298,7 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
- 	j1939_priv_set(ndev, NULL);
- 	mutex_unlock(&j1939_netdev_lock);
- 
--	dev_put(ndev);
-+	netdev_put(ndev, &priv->dev_tracker);
- 	kfree(priv);
- 
- 	return ERR_PTR(ret);
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c  |  7 ++++---
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c | 15 +++++++++++++--
+ 2 files changed, 17 insertions(+), 5 deletions(-)
+
 -- 
-2.54.0
-
+2.47.3
 
