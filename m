@@ -1,160 +1,256 @@
-Return-Path: <linux-can+bounces-7657-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7658-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SBQcMmnlCmqJ9AQAu9opvQ
-	(envelope-from <linux-can+bounces-7657-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 18 May 2026 12:09:45 +0200
+	id 2JNxMUC7C2q3LgUAu9opvQ
+	(envelope-from <linux-can+bounces-7658-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 19 May 2026 03:22:08 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4522B56A663
-	for <lists+linux-can@lfdr.de>; Mon, 18 May 2026 12:09:44 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD4D9576024
+	for <lists+linux-can@lfdr.de>; Tue, 19 May 2026 03:22:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BC3FF3004243
-	for <lists+linux-can@lfdr.de>; Mon, 18 May 2026 10:09:43 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 926FE30125B7
+	for <lists+linux-can@lfdr.de>; Tue, 19 May 2026 01:22:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CB3031AAA8;
-	Mon, 18 May 2026 10:09:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=berkoc.com header.i=@berkoc.com header.b="q/JJrviT";
-	dkim=temperror (0-bit key) header.d=berkoc.com header.i=@berkoc.com header.b="efuWtV7H"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A84E229B12;
+	Tue, 19 May 2026 01:22:01 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-03.1984.is (mail-03.1984.is [93.95.224.70])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22F3317163;
-	Mon, 18 May 2026 10:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.95.224.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B2223ED5B;
+	Tue, 19 May 2026 01:21:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779098980; cv=none; b=WWrdMb5SSGOADJckMwaQB06TzYiOoYi2hW1Hs+OwO/mx3ZwwBP6GjKKHiNNSldbtUqulCSx1R2i0J6oAbXxDKtcQ9Fx5nFJbOQ1KRgXwHqw3jPX4xfWEaLUnO3wguKlad4svaQzDspyrf9LZJImRNvPV2lJccHdRF7LIWSWyh+Q=
+	t=1779153721; cv=none; b=XMvgHWi7KNCXVHide7mFKzxRyXbxY95wKaySml4NqBuwZqHGLNorbRp4fudP7JC6+IMaa1oU7mE9zPLLN1vYwM8warGUr9j43n2YCQy/51jIeTOsbYOWjXU1KmH3tb7paBNzw/U/86C2RiXClliakw+TdW2fqwOm7OieZSCzLas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779098980; c=relaxed/simple;
-	bh=xx5xGxZ0HbjQ/uTeoMm8qFIQ+IOXXdvxDFKs0PexdL4=;
-	h=From:To:Cc:Subject:In-Reply-To:Message-ID:Date; b=urHq+lp3f7WllpdspdyXSHzE5macabqCOMj6lBCXmIqnft2D7//d4yHEkgRzhz9Gz2aYjWozfSRGqSf2SAtqyNJFTb6RZ2X+ZnmGPewRcw1WbCGLofTI8OB06E1X5aCa3MGaPmGJI8LrEsi/JyRRd+naWbkfw3DNh6ShyBawzIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=berkoc.com; spf=pass smtp.mailfrom=berkoc.com; dkim=pass (2048-bit key) header.d=berkoc.com header.i=@berkoc.com header.b=q/JJrviT; dkim=temperror (0-bit key) header.d=berkoc.com header.i=@berkoc.com header.b=efuWtV7H; arc=none smtp.client-ip=93.95.224.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=berkoc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=berkoc.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=berkoc.com;
-	s=1984; h=Date:Message-ID:In-Reply-To:Subject:Cc:To:From:Sender:Reply-To:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=qOZcHzFQs6+ZPH5VLzN8MPVqCvbGjRE9wSlF/Xi0stA=; b=q/JJrviTJsLTKAautR0kGBcNqR
-	V3MGki5YSz+tQrjD49JC+nH5Kwxp+14K11uLC0j2DXtjB2HXJk2OPl+EIjMfKxAq8gTg0WKzciCj2
-	yy9a0oaUwYcOdO/oRxyJbSFTdK9AxVlQg9TgS/6iF1zNhaCoUzJYtthDlyHT+OuC6H77atwnd5VaP
-	NfwwriS+BFTxs3y7BYRMUWxOkuv/QqHfZ/ZbJz2287BFS24lNljlYThHA38cHPGd9CAzdQbcwKiWj
-	QbNlwgOWYlznhvFnNIGUkfQqsaGum7N0NNGYaa4U8C9DskONtTMTioINIw1b9ma2OuX5Vn8pvLvw7
-	N+o4MxkQ==;
-Received: from localhost
-	by mail-03.1984.is with utf8esmtp (Exim 4.96)
-	(envelope-from <me@berkoc.com>)
-	id 1wOuuc-002Owt-3A;
-	Mon, 18 May 2026 10:09:34 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=berkoc.com;
- i=@berkoc.com; q=dns/txt; s=me; t=1779098964; h=message-id : date :
- subject : cc : to : from : sender : reply-to;
- bh=qOZcHzFQs6+ZPH5VLzN8MPVqCvbGjRE9wSlF/Xi0stA=;
- b=efuWtV7HAkQM3i/t2IWKoWSwn8mzRDJI3eLTatE8vkojfZI8sW5W/zwOdkwsLkEneYkb7
- OjpblLXvYmar1MbFC95yTvpddv+1cV7pHrDxLFakfkjoRh4RnGIaJSDvpC5fgliMwbLWVW9
- SON2+Ll8c8TYw1d9DPNsxwFbyxxOkbBk1mGhC9/3/ZcAubvd49vMVNuU0+xEb0YzLVh3bLp
- 0mYYnRmexp1Eza1Clyadls1C/Q46aBs+GjkOrBzwTQAfOXTbI3Id/fn8LVnhKVNGNvPzglj
- zemNh6jTAEVPYXasrR9FbIaiUfjllgX5e2c2vh3d5l+MWSGnIHkM5OugWhRw==
-From: Berkant Koc <me@berkoc.com>
-To: Vincent Mailhol <mailhol@kernel.org>
-Cc: linux-can@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] can: peak_usb: validate URB length in
- pcan_usb_fd_decode_buf()
-In-Reply-To: <cd33f886-75fb-47b8-b839-97fc6b11743c@kernel.org>
-Message-ID: <177909896433.60730.7315497633021818819@berkoc.com>
-Date: Mon, 18 May 2026 12:09:24 +0200
-X-Spam-Score: -0.2 (/)
-X-Authenticated-User: me@berkoc.com
-X-Sender-Address: me@berkoc.com
+	s=arc-20240116; t=1779153721; c=relaxed/simple;
+	bh=ewChc/ER0917lirtRzENqvjMiCzDIUR29ne0LCRL+MQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
+	 In-Reply-To:Content-Type; b=etjRXTusxiWdsF1At/3ho3o2H0LBtZYgSXFHczbd6MJ5BtqFktENf2dhPCNmotqATMB481QbhBeCS0biZz1z9rjv4XH4901G8EX5bO+XgBVTWhVxqR566E3iY+KDtpMItBV3CfdJCNtHAaEZ1TEkB3bS5duLfvUgETXILDgbU90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 64J1LZGQ036493;
+	Tue, 19 May 2026 10:21:35 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from [192.168.1.5] (M106072072000.v4.enabler.ne.jp [106.72.72.0])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 64J1LZBl036483
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Tue, 19 May 2026 10:21:35 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <ef62371e-ddd5-4074-b554-410c708ca1cd@I-love.SAKURA.ne.jp>
+Date: Tue, 19 May 2026 10:21:32 +0900
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-X-Rspamd-Queue-Id: 4522B56A663
-X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [3.14 / 15.00];
-	SEM_URIBL_FRESH15(3.00)[berkoc.com:dkim];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[berkoc.com:s=me];
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH net v2] can: j1939: use netdevice_tracker for
+ j1939_{priv,session,ecu} tracking
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+To: Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>
+References: <c109e9fc-3fb7-4a48-a0bd-a4d7663e7342@I-love.SAKURA.ne.jp>
+Content-Language: en-US
+In-Reply-To: <c109e9fc-3fb7-4a48-a0bd-a4d7663e7342@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Anti-Virus-Server: fsav402.rs.sakura.ne.jp
+X-Virus-Status: clean
+X-Spamd-Result: default: False [-1.46 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
-	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_MIXED(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7657-lists,linux-can=lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DMARC_NA(0.00)[berkoc.com: no valid DMARC record];
-	R_DKIM_REJECT(0.00)[berkoc.com:s=1984];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_RCPT(0.00)[linux-can];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[i-love.sakura.ne.jp:email,I-love.SAKURA.ne.jp:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	R_DKIM_NA(0.00)[];
+	DMARC_NA(0.00)[i-love.sakura.ne.jp];
+	FROM_NEQ_ENVFROM(0.00)[penguin-kernel@I-love.SAKURA.ne.jp,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	FROM_NEQ_ENVFROM(0.00)[me@berkoc.com,linux-can@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[berkoc.com:-,berkoc.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_SPF_ALLOW(0.00)[+ip4:172.105.105.114:c];
-	MISSING_XM_UA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,berkoc.com:mid,berkoc.com:dkim]
+	TAGGED_FROM(0.00)[bounces-7658-lists,linux-can=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[]
+X-Rspamd-Queue-Id: CD4D9576024
 X-Rspamd-Action: no action
+X-Rspamd-Server: lfdr
 
-Vincent,
+syzbot is still reporting
 
-Thanks for the input on both points. Let me work through them and
-share where I land.
+  unregister_netdevice: waiting for vcan0 to become free. Usage count = 2
 
-> Your message doesn't follow the mailing list etiquette
-> [...]
-> kernel mailing lists exclusively require that all communication is
-> sent as interleaved quoted replies.
+problem. A debug printk() patch in linux-next-20260508 identified that
+there is dev_hold()/dev_put() imbalance in j1939_priv management.
 
-For context: the previous message was a tool-disclosure reply you'd
-requested via private CC, not a patch revision. I had treated those
-two formats differently. Going forward, I'll keep both in interleaved-
-quoted format on-list, as in this reply.
+  Call trace for vcan0[26] +4 at
+     __dev_hold include/linux/netdevice.h:4470 [inline]
+     netdev_hold include/linux/netdevice.h:4513 [inline]
+     dev_hold include/linux/netdevice.h:4536 [inline]
+     j1939_priv_create net/can/j1939/main.c:140 [inline]
+     j1939_netdev_start+0x36b/0xc10 net/can/j1939/main.c:268
+     j1939_sk_bind+0x853/0xb30 net/can/j1939/socket.c:506
+     __sys_bind_socket net/socket.c:1948 [inline]
+     __sys_bind+0x2e9/0x410 net/socket.c:1979
 
-> Is this answer also AI generated? If yes, please don't directly copy
-> paste AI answers to the mailing list. We expect you to add value to
-> the AI generated output.
+  Call trace for vcan0[28] -3 at
+     __dev_put include/linux/netdevice.h:4456 [inline]
+     netdev_put include/linux/netdevice.h:4523 [inline]
+     dev_put include/linux/netdevice.h:4548 [inline]
+     __j1939_priv_release net/can/j1939/main.c:166 [inline]
+     kref_put include/linux/kref.h:65 [inline]
+     j1939_priv_put+0x128/0x270 net/can/j1939/main.c:172
+     j1939_sk_sock_destruct+0x52/0x90 net/can/j1939/socket.c:388
+     __sk_destruct+0x8d/0x9d0 net/core/sock.c:2352
+     rcu_do_batch kernel/rcu/tree.c:2617 [inline]
+     rcu_core kernel/rcu/tree.c:2869 [inline]
+     rcu_cpu_kthread+0x99e/0x1470 kernel/rcu/tree.c:2957
+     smpboot_thread_fn+0x541/0xa50 kernel/smpboot.c:160
+     kthread+0x388/0x470 kernel/kthread.c:436
+     ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
+     ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
 
-To set the record straight: the tool-description paragraph is template
-text I maintain under version control for tool-disclosure requests
-across multiple maintainer threads, not LLM output. The methodology
-section (peak_usb seed commit, pattern scan across
-drivers/net/can/usb/, manual reproduction with synthetic short URBs)
-was hand-written from my notes at submission time.
+This refcount leak in j1939_priv might be caused by a refcount leak in
+j1939_{session,ecu} because j1939_{session,ecu} holds a ref on j1939_priv.
+For further investigation using upstream kernels, enable netdevice_tracker
+in j1939_{priv,session,ecu} management.
 
-Agreed that posting unaltered template text on-list reads the same as
-LLM-paste from a reader's perspective. I'll rewrite tool-disclosure
-sections in-thread from now on so the substance is fresh per maintainer.
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+---
+ net/can/j1939/bus.c        | 2 ++
+ net/can/j1939/j1939-priv.h | 3 +++
+ net/can/j1939/main.c       | 8 ++++----
+ net/can/j1939/transport.c  | 2 ++
+ 4 files changed, 11 insertions(+), 4 deletions(-)
 
-> Ack. Please use that tag.
+diff --git a/net/can/j1939/bus.c b/net/can/j1939/bus.c
+index dc374286eeb6..cdc3c0a71937 100644
+--- a/net/can/j1939/bus.c
++++ b/net/can/j1939/bus.c
+@@ -20,6 +20,7 @@ static void __j1939_ecu_release(struct kref *kref)
+ 	struct j1939_priv *priv = ecu->priv;
+ 
+ 	list_del(&ecu->list);
++	netdev_put(priv->ndev, &ecu->priv_dev_tracker);
+ 	kfree(ecu);
+ 	j1939_priv_put(priv);
+ }
+@@ -155,6 +156,7 @@ struct j1939_ecu *j1939_ecu_create_locked(struct j1939_priv *priv, name_t name)
+ 	if (!ecu)
+ 		return ERR_PTR(-ENOMEM);
+ 	kref_init(&ecu->kref);
++	netdev_hold(priv->ndev, &ecu->priv_dev_tracker, gfp_any());
+ 	ecu->addr = J1939_IDLE_ADDR;
+ 	ecu->name = name;
+ 
+diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
+index 81f58924b4ac..cf26352d1d8c 100644
+--- a/net/can/j1939/j1939-priv.h
++++ b/net/can/j1939/j1939-priv.h
+@@ -38,6 +38,7 @@ struct j1939_ecu {
+ 	struct hrtimer ac_timer;
+ 	struct kref kref;
+ 	struct j1939_priv *priv;
++	netdevice_tracker priv_dev_tracker;
+ 
+ 	/* count users, to help transport protocol decide for interaction */
+ 	int nusers;
+@@ -60,6 +61,7 @@ struct j1939_priv {
+ 	rwlock_t lock;
+ 
+ 	struct net_device *ndev;
++	netdevice_tracker dev_tracker;
+ 
+ 	/* list of 256 ecu ptrs, that cache the claimed addresses.
+ 	 * also protected by the above lock
+@@ -230,6 +232,7 @@ enum j1939_session_state {
+ 
+ struct j1939_session {
+ 	struct j1939_priv *priv;
++	netdevice_tracker priv_dev_tracker;
+ 	struct list_head active_session_list_entry;
+ 	struct list_head sk_session_queue_entry;
+ 	struct kref kref;
+diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
+index 9937c04241bc..5e5e6c228f22 100644
+--- a/net/can/j1939/main.c
++++ b/net/can/j1939/main.c
+@@ -137,7 +137,7 @@ static struct j1939_priv *j1939_priv_create(struct net_device *ndev)
+ 	priv->ndev = ndev;
+ 	kref_init(&priv->kref);
+ 	kref_init(&priv->rx_kref);
+-	dev_hold(ndev);
++	netdev_hold(ndev, &priv->dev_tracker, GFP_KERNEL);
+ 
+ 	netdev_dbg(priv->ndev, "%s : 0x%p\n", __func__, priv);
+ 
+@@ -163,7 +163,7 @@ static void __j1939_priv_release(struct kref *kref)
+ 	WARN_ON_ONCE(!list_empty(&priv->ecus));
+ 	WARN_ON_ONCE(!list_empty(&priv->j1939_socks));
+ 
+-	dev_put(ndev);
++	netdev_put(ndev, &priv->dev_tracker);
+ 	kfree(priv);
+ }
+ 
+@@ -281,7 +281,7 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
+ 		 */
+ 		kref_get(&priv_new->rx_kref);
+ 		mutex_unlock(&j1939_netdev_lock);
+-		dev_put(ndev);
++		netdev_put(ndev, &priv->dev_tracker);
+ 		kfree(priv);
+ 		return priv_new;
+ 	}
+@@ -298,7 +298,7 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
+ 	j1939_priv_set(ndev, NULL);
+ 	mutex_unlock(&j1939_netdev_lock);
+ 
+-	dev_put(ndev);
++	netdev_put(ndev, &priv->dev_tracker);
+ 	kfree(priv);
+ 
+ 	return ERR_PTR(ret);
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index df93d57907da..158433511552 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -283,6 +283,7 @@ static void j1939_session_destroy(struct j1939_session *session)
+ 		kfree_skb(skb);
+ 	}
+ 	__j1939_session_drop(session);
++	netdev_put(session->priv->ndev, &session->priv_dev_tracker);
+ 	j1939_priv_put(session->priv);
+ 	kfree(session);
+ }
+@@ -1515,6 +1516,7 @@ static struct j1939_session *j1939_session_new(struct j1939_priv *priv,
+ 	INIT_LIST_HEAD(&session->active_session_list_entry);
+ 	INIT_LIST_HEAD(&session->sk_session_queue_entry);
+ 	kref_init(&session->kref);
++	netdev_hold(priv->ndev, &session->priv_dev_tracker, gfp_any());
+ 
+ 	j1939_priv_get(priv);
+ 	session->priv = priv;
+-- 
+2.54.0
 
-Confirmed. v2 of the peak_usb series will carry:
 
-  Assisted-by: Claude:claude-opus-4-7 berkoc-pipeline
-
-in the trailer. Same convention going forward across all my
-submissions, in line with the kernel AI-tooling policy.
-
-Appreciate the feedback. I revert back to you with the v2 of the
-peak_usb series and look forward to your review.
-
-Best regards,
-Berkant
 
