@@ -1,91 +1,98 @@
-Return-Path: <linux-can+bounces-7667-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7668-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OFfQGPCoDWox1QUAu9opvQ
-	(envelope-from <linux-can+bounces-7667-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 20 May 2026 14:28:32 +0200
+	id OGTWKFqqDWpr1AUAu9opvQ
+	(envelope-from <linux-can+bounces-7668-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 20 May 2026 14:34:34 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB65658DA52
-	for <lists+linux-can@lfdr.de>; Wed, 20 May 2026 14:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A7C158DC49
+	for <lists+linux-can@lfdr.de>; Wed, 20 May 2026 14:34:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 68C343028350
-	for <lists+linux-can@lfdr.de>; Wed, 20 May 2026 12:18:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1F6A6302003B
+	for <lists+linux-can@lfdr.de>; Wed, 20 May 2026 12:27:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EA1A3D7D82;
-	Wed, 20 May 2026 12:18:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AEFB3DBD73;
+	Wed, 20 May 2026 12:27:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="IyeQYiiY";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="BO0iBWMn"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="iPBR4wSB";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="Lw7WvieL"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.161])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6BB53A4505
-	for <linux-can@vger.kernel.org>; Wed, 20 May 2026 12:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D75BC39B483
+	for <linux-can@vger.kernel.org>; Wed, 20 May 2026 12:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.216
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779279487; cv=pass; b=h6fMJmZOogXHr30U5VQjLHnx6maU49uE+fb1qXKKTvVg8EABh3fyVZJJtGrEkPKF+EbaIiIgLy4J+KOjFiMXRnL8h7w/wrYienzWvVZC++WCbFZA65HopJhncaA0XZcegrJbiaYRZsVYQVUclqJ1CWcFmvY4GMkqmK1YexoD4xo=
+	t=1779280030; cv=pass; b=acyTtupLGzRX65O1pikzHCGogfsbX4fVxlBUYRFPZUGx45DG6z57f4vljN7HNRq+GfZqUCEHPtOAU99sKQ1/ftislwRrhgawuQlGXYOmVmHDlxZvEdLxNZu6O5/46Hz7mUC4n6K4SSkH/Qui0vUYnqwqrAdjmnQu7wV2p/ktPNY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779279487; c=relaxed/simple;
-	bh=F9czB/FqWcLcCOVHHUDGqDCFFRw+4uzIX/NmGbE4vxA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BLbmYEuNsDfnEoVtRjVEQaCuIKCHzUOxPj9KdicmDE372GWHo3j9FaOseIMEEPmIgQkR3ywEYduYf/COTiSt+nYdyuf8UqQfdobHQC+JJJ9EMiEFZiKqV0UX4Z3AnUJsD2ZcCOphTEFAc8Z8GM+hCRXjYI96VikUvLrngKVJfSQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=IyeQYiiY; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=BO0iBWMn; arc=pass smtp.client-ip=81.169.146.161
+	s=arc-20240116; t=1779280030; c=relaxed/simple;
+	bh=ov+Fi7x7NyEQ8WLARRi6DEERVtZyOqfcA/7l3QE+G/U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bDI+tfBcQ38W5Jwz7220KysUwKU1Lkq5JI58Viytmto4ZhvLi4JhGI8v4IUog94+1QXI4mESLKT81nXIQa5SjDaPUzS1P5wpm4/w860YMthTiER90YLXyeeebrUU5SMaF4I1SJoaK6nvH3qifvkC6Mj0AiJBGOz49+XJumN54p4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=iPBR4wSB; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Lw7WvieL; arc=pass smtp.client-ip=81.169.146.216
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
 ARC-Seal: i=1; a=rsa-sha256; t=1779279301; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=sUwGotjFzW/P0kXnjFUoafgrTfZ41pd7aMsgN9iye5RpXKFAo5Ib5KT7Wz5TZKWxsO
-    nuMiPErekEpzNu9On/yiMNZtGy8pcRlPltK1JfT66O9LgAXrYrTsO3K2SjWEpBPYRPCn
-    Karc3Ru2gHMk5nG/WyhwxS9sD8YJUNnKPnFZKwMuRJKGKyDuapulDtSIXuutltNSfQ6e
-    zkQO1MF5DfU/h35//I5e741vP688puq8Fka5ev6Imj8NTh7nR+/MUOjBo3V5W0msZ6kK
-    ZsL9DxO7YmoMNLSVXmblf6hZAeWe+jtgbtunGsU46nWDSwVtmLoV126Xfd3BhUkenZx+
-    RteA==
+    b=BXXt3K26coP7dcRAojQHILmwROs+P0uoGuQ4TfnssiU0i0FCfun7cJZr59t6857pHu
+    yl+w4G9P8YvIgotbEolpia+Hk4+z2rEnRCS1M+IIq3659gYxHnYebL6JU1sIfiZX7Wu6
+    Mm6luoIymTjgMp0FR4A9go/7HhIOWVJk/SJ70CDylsfI7TKYnZpS12G8+6de2G162v8c
+    oj8qlXHoFKq95r2ilstJw8OS/NL37Qv0gMlimFwhrwsdDH4LNVYS0cfjpUF6ky2g76RL
+    F+smRFvkDrvhQENtUX8x+7Am2ciLmZ/YNoNL7ZWONlhkrJvZ8S78gOmQHVCjXwL6Qr0G
+    RY6g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1779279301;
     s=strato-dkim-0002; d=strato.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=mBjTfcp3D7E7kRpp/vu04xRLPP8ISPkUSWguvsSrL0c=;
-    b=ScXZO4lkZ2BwZBT7wsKVYkFIS0gh85gIzfwQbdbp258AWEvFSUHj/wFdbmbZhW1hpm
-    xupPBw7oDEc2PUdjj5sFUQvCU8xH130lstKQqllLbJXXuhyI95f5zBsM6nnxERBH2DMh
-    eC67u29UFOzhcrZls4ODHTOhWvMoRi1oHStbalezXh5gfAUvqdQPX9QZDIcIYbS6ciUo
-    GMKBjJ0sG8GeqDhc5MKpznxpuIyl7Vx1MMqc2d+ETCJ1Rf6zBZwNC8cdKf9/hbAx5Ckp
-    H8eNgVn1yZ4ghS3MjcwwkLBBSjnoiZX1byw3isddeyT1nDUHpVNsa6ouF9Z2TR3jWlI+
-    Itng==
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=VH2WMST+t50EOxz85a/NTnDdIsdV25Thz78cdUTxFMc=;
+    b=Mab+zvvuKDT3074qAdBnkE15a5arSaYWdCoL4sCDaJ5QK7enrbwCfI7qjtGnRNGl6X
+    OrUudQpGn7CIYD7u4dnwUZ7AC5AhFB18SkjtEd07RDg/UNr5yXvQKXkrU76LLGRYiRIY
+    zB1WP+AAQATyiKT7Prf8EvQwVv77H3niDq7IKZQW1Khkn+/uvviFswWHDgo6TKYY/zQN
+    HDU5I4vAu74AYm1jXh3HGo2YgXyhdNdKrXPafUWNotXjCFeAnnDAkySi4soXzuPCIJmb
+    L7tQF2q6Ez8nNE+Jzhufz9m9d1lMn9jA1AiIxtX5RaVl6lmGLmFEyiCfBsFflHac2x/9
+    Q1JA==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo00
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1779279301;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=mBjTfcp3D7E7kRpp/vu04xRLPP8ISPkUSWguvsSrL0c=;
-    b=IyeQYiiYrtO8R5i1QL1y8pKSoE9QCLc464gtsDmFe9xla34AZv+l4gcxCM8Fs7eNSd
-    Fh6EEkBgXMzMIa3M/urGa7Z5zGN3D+JvuKIj27de158BIz0itiGwGAvFTg3bm4BCJq5B
-    UZrbNF5U1GTcCD1wTBlPY7IOc+f0+Iu9MBwdm2UaZiNoF/rBxV+pgGK6Tuq6hVhEv0cC
-    UGl/Dq9wdkwEBrL3WYJHE9Cql+shVhqnh1868CCrhJRbp3cllYGXTaZDmz0X1f/0uAUO
-    pMH4ccHX/FxWXBSlbDP4qzih95MuC4LytIJYFYmf9x8ozin6KEbk9OfwQS1ccweIkKXQ
-    5XlQ==
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=VH2WMST+t50EOxz85a/NTnDdIsdV25Thz78cdUTxFMc=;
+    b=iPBR4wSBlzczUFBXEcEx73PkwQqFTDn0+Pa+Kbx5OUHW5JelZVJ61tvV7Mi9fDHozu
+    w8Gi0WC7r2LF+EPu5D5AcPf3RKvuW2tbS7Uwy3E0bXjoyANgrJmq+cTAbFfwPQ0RiUTp
+    4kQbMh5tTeA41iMzCDKoyr1IzNd3hEWO/zmJuRoSgGD8lGQWhKxd6Kzm7CVp/tasW2v6
+    3+39SN/C8vKelq69/3wJOHGI8NBZT0ojrbTG0V/Tc7M1Mb6Wc9uYeFCiT78uY7pkYzMf
+    4o8EbX642Xo82qAlMChYO5A62oWEMXgYpp/Yq0A4OxlreppUq0N2LNWAwcKTHbuqi90Z
+    jPlw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1779279301;
     s=strato-dkim-0003; d=hartkopp.net;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=mBjTfcp3D7E7kRpp/vu04xRLPP8ISPkUSWguvsSrL0c=;
-    b=BO0iBWMn+5dE3t3wRYKXMEQVeGfpfX5wO9+RFac1cc+9E1A0NpSY9sQ0tI8X9AI4TW
-    0Se1wnLVA3sKOAIounCQ==
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=VH2WMST+t50EOxz85a/NTnDdIsdV25Thz78cdUTxFMc=;
+    b=Lw7WvieLTv2s1qQHkzV6usa4K64Gb2+6gkJU5tGPGL0a1EJzWS8dEVVDWBDYahlhzr
+    72iWhbipSD0cQK8hXjCw==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7s0ZDT0tksFSR+Aix0esQJVIAlZEg=="
 Received: from lenov17.lan
     by smtp.strato.de (RZmta 55.0.1 AUTH)
-    with ESMTPSA id Kba96d24KCF0LFG
+    with ESMTPSA id Kba96d24KCF1LFH
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Wed, 20 May 2026 14:15:00 +0200 (CEST)
+    Wed, 20 May 2026 14:15:01 +0200 (CEST)
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH 0/2] Fix two KCSAN issues
-Date: Wed, 20 May 2026 14:14:48 +0200
-Message-ID: <20260520121450.27964-1-socketcan@hartkopp.net>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	syzbot+75e5e4ae00c3b4bb544e@syzkaller.appspotmail.com
+Subject: [PATCH 1/2] can: bcm: add locking when updating filter and timer values
+Date: Wed, 20 May 2026 14:14:49 +0200
+Message-ID: <20260520121450.27964-2-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260520121450.27964-1-socketcan@hartkopp.net>
+References: <20260520121450.27964-1-socketcan@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -103,42 +110,246 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-7668-lists,linux-can=lfdr.de];
+	DKIM_TRACE(0.00)[hartkopp.net:+];
+	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7667-lists,linux-can=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWO(0.00)[2];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[hartkopp.net:+];
+	RCPT_COUNT_THREE(0.00)[3];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
+	TAGGED_RCPT(0.00)[linux-can,75e5e4ae00c3b4bb544e];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,hartkopp.net:mid,hartkopp.net:dkim]
-X-Rspamd-Queue-Id: AB65658DA52
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,hartkopp.net:email,hartkopp.net:mid,hartkopp.net:dkim]
+X-Rspamd-Queue-Id: 0A7C158DC49
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Patch 1 supersedes the "add locking when updating filter and timer values"
-https://patchwork.kernel.org/project/linux-can/patch/20260219-bcm_spin_lock_init-v3-2-c61026740d7b@hartkopp.net/
-where the readers in softirq/timer context have not been addressed
-correctly and some comment was insufficient.
+KCSAN detected a simultaneous access to timer values that can be
+overwritten in bcm_rx_setup when updating timer and filter content.
+This caused no functional issues in the past as the new values might
+show up at any time without losing its intended functionality.
 
-Patch 2 fixed an issue that has been detected by KCSAN when I was testing
-patch 1 ;-)
+Btw. the KCSAN report can be resolved by protecting the 'lockless'
+data updates with a spin_lock_bh().
 
-Oliver Hartkopp (2):
-  can: bcm: add locking when updating filter and timer values
-  can: bcm: use atomic access in receive statistics
+Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
+Reported-by: syzbot+75e5e4ae00c3b4bb544e@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/linux-can/6975d5cf.a00a0220.33ccc7.0022.GAE@google.com/
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+ net/can/bcm.c | 61 +++++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 52 insertions(+), 9 deletions(-)
 
- net/can/bcm.c | 88 ++++++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 69 insertions(+), 19 deletions(-)
-
+diff --git a/net/can/bcm.c b/net/can/bcm.c
+index abf7bd2c2e6f..ff1f5ff8121d 100644
+--- a/net/can/bcm.c
++++ b/net/can/bcm.c
+@@ -123,10 +123,11 @@ struct bcm_op {
+ 	struct canfd_frame sframe;
+ 	struct canfd_frame last_sframe;
+ 	struct sock *sk;
+ 	struct net_device *rx_reg_dev;
+ 	spinlock_t bcm_tx_lock; /* protect currframe/count in runtime updates */
++	spinlock_t bcm_rx_update_lock; /* protect filter/timer data updates */
+ };
+ 
+ struct bcm_sock {
+ 	struct sock sk;
+ 	int bound;
+@@ -622,10 +623,12 @@ static void bcm_rx_starttimer(struct bcm_op *op)
+ static enum hrtimer_restart bcm_rx_timeout_handler(struct hrtimer *hrtimer)
+ {
+ 	struct bcm_op *op = container_of(hrtimer, struct bcm_op, timer);
+ 	struct bcm_msg_head msg_head;
+ 
++	spin_lock_bh(&op->bcm_rx_update_lock);
++
+ 	/* if user wants to be informed, when cyclic CAN-Messages come back */
+ 	if ((op->flags & RX_ANNOUNCE_RESUME) && op->last_frames) {
+ 		/* clear received CAN frames to indicate 'nothing received' */
+ 		memset(op->last_frames, 0, op->nframes * op->cfsiz);
+ 	}
+@@ -638,10 +641,12 @@ static enum hrtimer_restart bcm_rx_timeout_handler(struct hrtimer *hrtimer)
+ 	msg_head.ival1   = op->ival1;
+ 	msg_head.ival2   = op->ival2;
+ 	msg_head.can_id  = op->can_id;
+ 	msg_head.nframes = 0;
+ 
++	spin_unlock_bh(&op->bcm_rx_update_lock);
++
+ 	bcm_send_to_user(op, &msg_head, NULL, 0);
+ 
+ 	return HRTIMER_NORESTART;
+ }
+ 
+@@ -686,19 +691,26 @@ static int bcm_rx_thr_flush(struct bcm_op *op)
+  *                      Check for throttled data and send it to the userspace
+  */
+ static enum hrtimer_restart bcm_rx_thr_handler(struct hrtimer *hrtimer)
+ {
+ 	struct bcm_op *op = container_of(hrtimer, struct bcm_op, thrtimer);
++	enum hrtimer_restart ret;
++
++	spin_lock_bh(&op->bcm_rx_update_lock);
+ 
+ 	if (bcm_rx_thr_flush(op)) {
+ 		hrtimer_forward_now(hrtimer, op->kt_ival2);
+-		return HRTIMER_RESTART;
++		ret = HRTIMER_RESTART;
+ 	} else {
+ 		/* rearm throttle handling */
+ 		op->kt_lastmsg = 0;
+-		return HRTIMER_NORESTART;
++		ret = HRTIMER_NORESTART;
+ 	}
++
++	spin_unlock_bh(&op->bcm_rx_update_lock);
++
++	return ret;
+ }
+ 
+ /*
+  * bcm_rx_handler - handle a CAN frame reception
+  */
+@@ -743,10 +755,12 @@ static void bcm_rx_handler(struct sk_buff *skb, void *data)
+ 		traffic_flags |= RX_LOCAL;
+ 		if (skb->sk == op->sk)
+ 			traffic_flags |= RX_OWN;
+ 	}
+ 
++	spin_lock_bh(&op->bcm_rx_update_lock);
++
+ 	if (op->flags & RX_FILTER_ID) {
+ 		/* the easiest case */
+ 		bcm_rx_update_and_send(op, op->last_frames, rxframe,
+ 				       traffic_flags);
+ 		goto rx_starttimer;
+@@ -778,10 +792,12 @@ static void bcm_rx_handler(struct sk_buff *skb, void *data)
+ 		}
+ 	}
+ 
+ rx_starttimer:
+ 	bcm_rx_starttimer(op);
++
++	spin_unlock_bh(&op->bcm_rx_update_lock);
+ }
+ 
+ /*
+  * helpers for bcm_op handling: find & delete bcm [rx|tx] op elements
+  */
+@@ -1146,10 +1162,12 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+ 		return -EINVAL;
+ 
+ 	/* check the given can_id */
+ 	op = bcm_find_op(&bo->rx_ops, msg_head, ifindex);
+ 	if (op) {
++		void *new_frames = NULL;
++
+ 		/* update existing BCM operation */
+ 
+ 		/*
+ 		 * Do we need more space for the CAN frames than currently
+ 		 * allocated? -> This is a _really_ unusual use-case and
+@@ -1157,33 +1175,53 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+ 		 */
+ 		if (msg_head->nframes > op->nframes)
+ 			return -E2BIG;
+ 
+ 		if (msg_head->nframes) {
+-			/* update CAN frames content */
+-			err = memcpy_from_msg(op->frames, msg,
++			/* get new CAN frames content before locking */
++			new_frames = kmalloc(msg_head->nframes * op->cfsiz,
++					     GFP_KERNEL);
++			if (!new_frames)
++				return -ENOMEM;
++
++			err = memcpy_from_msg(new_frames, msg,
+ 					      msg_head->nframes * op->cfsiz);
+-			if (err < 0)
++			if (err < 0) {
++				kfree(new_frames);
+ 				return err;
+-
+-			/* clear last_frames to indicate 'nothing received' */
+-			memset(op->last_frames, 0, msg_head->nframes * op->cfsiz);
++			}
+ 		}
+ 
++		spin_lock_bh(&op->bcm_rx_update_lock);
+ 		op->nframes = msg_head->nframes;
+ 		op->flags = msg_head->flags;
+ 
++		if (msg_head->nframes) {
++			/* update CAN frames content */
++			memcpy(op->frames, new_frames,
++			       msg_head->nframes * op->cfsiz);
++
++			/* clear last_frames to indicate 'nothing received' */
++			memset(op->last_frames, 0,
++			       msg_head->nframes * op->cfsiz);
++		}
++		spin_unlock_bh(&op->bcm_rx_update_lock);
++
++		/* free temporary frames / kfree(NULL) is safe */
++		kfree(new_frames);
++
+ 		/* Only an update -> do not call can_rx_register() */
+ 		do_rx_register = 0;
+ 
+ 	} else {
+ 		/* insert new BCM operation for the given can_id */
+ 		op = kzalloc(OPSIZ, GFP_KERNEL);
+ 		if (!op)
+ 			return -ENOMEM;
+ 
+ 		spin_lock_init(&op->bcm_tx_lock);
++		spin_lock_init(&op->bcm_rx_update_lock);
+ 		op->can_id = msg_head->can_id;
+ 		op->nframes = msg_head->nframes;
+ 		op->cfsiz = CFSIZ(msg_head->flags);
+ 		op->flags = msg_head->flags;
+ 
+@@ -1266,26 +1304,31 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+ 
+ 	} else {
+ 		if (op->flags & SETTIMER) {
+ 
+ 			/* set timer value */
++			spin_lock_bh(&op->bcm_rx_update_lock);
+ 			op->ival1 = msg_head->ival1;
+ 			op->ival2 = msg_head->ival2;
+ 			op->kt_ival1 = bcm_timeval_to_ktime(msg_head->ival1);
+ 			op->kt_ival2 = bcm_timeval_to_ktime(msg_head->ival2);
++			op->kt_lastmsg = 0;
++			spin_unlock_bh(&op->bcm_rx_update_lock);
+ 
+ 			/* disable an active timer due to zero value? */
+ 			if (!op->kt_ival1)
+ 				hrtimer_cancel(&op->timer);
+ 
+ 			/*
+ 			 * In any case cancel the throttle timer, flush
+ 			 * potentially blocked msgs and reset throttle handling
+ 			 */
+-			op->kt_lastmsg = 0;
+ 			hrtimer_cancel(&op->thrtimer);
++
++			spin_lock_bh(&op->bcm_rx_update_lock);
+ 			bcm_rx_thr_flush(op);
++			spin_unlock_bh(&op->bcm_rx_update_lock);
+ 		}
+ 
+ 		if ((op->flags & STARTTIMER) && op->kt_ival1)
+ 			hrtimer_start(&op->timer, op->kt_ival1,
+ 				      HRTIMER_MODE_REL_SOFT);
 -- 
 2.53.0
 
