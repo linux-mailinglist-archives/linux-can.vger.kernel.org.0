@@ -1,311 +1,328 @@
-Return-Path: <linux-can+bounces-7692-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7693-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OPznGttuE2oCBAcAu9opvQ
-	(envelope-from <linux-can+bounces-7692-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sun, 24 May 2026 23:34:19 +0200
+	id cIM6HcIFFGpKJAcAu9opvQ
+	(envelope-from <linux-can+bounces-7693-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 10:18:10 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E8C75C4602
-	for <lists+linux-can@lfdr.de>; Sun, 24 May 2026 23:34:17 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCF945C791F
+	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 10:18:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 041783002F49
-	for <lists+linux-can@lfdr.de>; Sun, 24 May 2026 21:34:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5C55030115B2
+	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 08:18:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E63F332EC8;
-	Sun, 24 May 2026 21:34:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C1413E1695;
+	Mon, 25 May 2026 08:18:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="dI9Wx9Il"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i2D5s7BR"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418DE3382E8
-	for <linux-can@vger.kernel.org>; Sun, 24 May 2026 21:34:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779658451; cv=pass; b=uTFG+vXHIo4QCNfaOnGLqq4h+Va5tdrgiyMzZWdrpjb+GP6oqdvayD/PCAEpREcem3i0+6GNrntDgN9mdgTzXZzKlWWipwSrjQWIt8Ty9Opnl4zU6FGohoy0Hcmp4x5E19Lmqc3kWVPr9c1vEjUFfvXc2kuoFuGI1bE/7XIJYqE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779658451; c=relaxed/simple;
-	bh=scbTGzWKrkbb2tr2ByuUctuCpzVcmORNYkqkGCRtn9g=;
-	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gKM60BV6+Bbz1U0Hig6HdpTRPHICqcl/G8MDJtmoQvv7BNN1sICLX6iaPq5jdJY4JH+TQIJmlSHnOFz8y7/+h7QFt+vGsCNT9qWIVJNXn6gq/vtrDDBlZyg+VMG/Y0i9Y6CkOiBBaoIBooSGk02xoMLr5EdT5OWcpdZBXUeuD7Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=dI9Wx9Il; arc=pass smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-bd9a71b565aso988535566b.0
-        for <linux-can@vger.kernel.org>; Sun, 24 May 2026 14:34:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779658444; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QtrOLpBKwVgWNxuQuaCKSSfuG4khxyvX4VokdfGMXNkD3m9NVj0Hsmf953kC1nk9I7
-         P0YRJj9ZmmA5jD3pEEB21Zy3XFPb7mFh2P7ruvNlSbnGRG3xDgJgWsPuPi9YuifUPQaz
-         u7JxOGXcSv3EGj/TS+LvoqI+wKyf3qVtp5E4Ki35MWII0sOqB/eZDoStpzkjaINFpbUU
-         BCnIN21S5Xz/GDZ3cObEzqMeR5yAal9UaGYhvGdPgkP4c/Z8Hauhpv3pAlPe2NOEONB4
-         rQetwhqnKKiGWGDkD7FvknPyvt+pQxHJIeJ6MvTuaXHbZ95/1kTiW+hZePf5dDScoax4
-         sG5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
-         :from:dkim-signature;
-        bh=4v82pm3nplUGvi0gYlaKk5FJ7bsCM62ozlNkSbZa6Zs=;
-        fh=iQZvxHYDz2txmfedm1TMm7uQrcL3htit0rzLrHL88as=;
-        b=Ta8SQNOiRyi2h+MkfcxD9e7s9Q9kcFF3UR08r6oYxIgctyhvxCZ8nwvwz39YYsstr2
-         TgCfsDYhoPgwwnZWrtMk+7oBhXdXdu9xuxq998pHi8vkEWh4KX+l6PswzW4bw1NsBj0m
-         FSAd9ywLuJcmFLxff3bjF6no1vj6WXN4PyFDbXNkmyeVsEhDy+S4G5184FNgp7M+vDNC
-         WwG7Nn7ewmk5+BNPul/Oozt8HPrmXqhkqhPR0h/nUdKSRFB9BQsKRFlRS6RxDoJ4oWHM
-         H3EBh1xopXCyHUDRc97LLe8qWKMXXRS4YsUwPgndloy9RCylKTKVj9MyEcRt17lNdjB6
-         5w0Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E2E3D3CE8
+	for <linux-can@vger.kernel.org>; Mon, 25 May 2026 08:18:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779697085; cv=none; b=OthKJ6c3KMv5G9AwbO1fsH/4PATz1ihhaSeoVkbibEDDXkejZmBtdqVbNjMZgMhY36Tm/sdhJeClwCsCXzsp7D4exJ2do8136V31BidniaC/tJ9aL1C9Q5/PiMKA093Q2AlgR7SBLUJKYlRen0TnR3yhZXJMgF3pQmnKWCw1czU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779697085; c=relaxed/simple;
+	bh=2EmRJVOu9kxZujWs9EHUsfBKTk0WixSaolqBsSe+3cw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=MkoyIeLFI3m0w/V559X8URrLaw9ywVUqeaoJAHjtDb+WrHaEXnqdfvAtqoZghABjtjqTZ69vys9/YTAoMoCG8nD6QeNwCOvAcXhGQn0000RRAnMr3IGzZd7lSkMa7+JbhxvvnqQuMbfy5379wTOz+T/x0YWHcFAuKWFjEyDhhjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i2D5s7BR; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3664df32e91so10827539a91.3
+        for <linux-can@vger.kernel.org>; Mon, 25 May 2026 01:18:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1779658444; x=1780263244; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4v82pm3nplUGvi0gYlaKk5FJ7bsCM62ozlNkSbZa6Zs=;
-        b=dI9Wx9IlulTxnU50+ZCYg+ivBJ1CYKYps37HKVNJlAPnF/3s0QcWVS6qRlYQLRZztF
-         Qfaqqlhn81vKV7JwfXqgyFaq3v5TGk3AtpGsk0zfVRWmEWagwV8v7wxK6auGypZ4zCYo
-         HsrCYFAiImlqmDryLWoGq86hmmiPPAo54Ow1TrdjHoH6QNQDd6puhS9wKwPAdsEs1Hqo
-         0V/hfUr+fBBWFr9bIcQ6SDoye43O1UXvzbjlSc94ZrfLmYZi/RM+fymy//YKn3AG/EZ0
-         vCiBWKL/XTBaXL05OTbFMEs1z6su13MD3epDofxSLJZCmurdfhdDxhNwy9rL5QidxmZ3
-         0AxQ==
+        d=gmail.com; s=20251104; t=1779697083; x=1780301883; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dc4O5/kSgHyWkY3Qo5dJGWH4VWfSLL8bPtdDsIJFGxs=;
+        b=i2D5s7BRJpcTb8H4a2tfRzC1PkmLFikC/gQNEOWlJMtpBNxSBiyUstqNqEmoVCC1Rl
+         7bRFbG5vXwxY7+5Ec2TTfYAP2uEm1Swf1kXCoixwkmJjlOBCcRNYQgr740yENfKUEcdh
+         c8VlBxDJbBjThI8SPAh5mDIegj+VHtdrPqer9xqSL3rQLWeTSOMInK7NYcwcuwCvTHLA
+         H+AVxQW/eNLwyR6KJMANVRiuJB7LPiFC9l+7w/gDy6+0asfUNwvXVlWKob2pFBUgv98L
+         4qyfu6R86SVSi2x19VnXw+0nJr9TXspQ2z8XJm63mxMi1AD5cZWKkNuhqWtAQAy5lq7/
+         Es9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779658444; x=1780263244;
-        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4v82pm3nplUGvi0gYlaKk5FJ7bsCM62ozlNkSbZa6Zs=;
-        b=GC+X2zIMfn3lkPR2sR9HBewK+80IgxkV0VaY/EWPE5bukLsD3xvO6WnuztH+yrhpQo
-         nbwNWaF6BVq3yNZCyfxqb1s0Phv1VPDT4jmLrVdq+vPYPLVvomc+PCe27ifAEBIzabRT
-         QaDi1+ZJq5yIomNSwzfkzdUlH7QQB6E7+FnpnuY4jkCvLMqSI6cCr7gYHvbSBqZePIyQ
-         Ko7IOr+SOxCqNCOX+5eeuZ2wMF5vEQMogJkA+O4COWtPbpwayplf8sqWGHVqnGKTeHZS
-         ASleNCiNxFVni1NbFF06P0Bugvwaplgc5XFV69UyAKBhJG4nsA+1JuSiYEliIbxa2Omi
-         xlJA==
-X-Forwarded-Encrypted: i=1; AFNElJ+c6TIz1CDmQ0khnwSKNd5NN2JfGdpY4LSBtg7DAhGg1G1b5yH7kx4U4jvYNGevUSSRuqanMqQP/EA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2QUC/Oa39rJO6UB81lXSzLX9XdRxo9FTQJpZfoEJxhtfwttkD
-	nP2A+V1KJYBPi/2r3Q0Leq5YjUE2TfEBC67U+3PshQpOu6f6SGgP+nDHoY7y57F0clYPztKpKQg
-	EkBZfucUfPwS4+SI/hFmn2qqiwNwwOV3RzkEcEtigTA==
-X-Gm-Gg: Acq92OHqGSBL7SVS+wa6vmCXBQdHoJf4aO5mXlesQ0UCpvyL30uGcGXX3+AQ7Jodl4K
-	xUnLUw1tbyX8pY/V+C40dWwu17u3DkM0bZiyznSqr/2ubS7VzqTASWwBd6Zd9TuUMYkBWyf3NNW
-	PCg5q0kr3SeSSyhjn62DZtXDDIp7D3fDLCSXyJhJYIRk9NX4oj9p6ZAFIdkYAtg+zyq5ttSfz3I
-	tmFWu/vJp42I74Yh2U5QRp7r63cNg8Jv8Idq9JsV94AHjxzTgA1tbt+mwHD7CGCvYBqfpkHNH0q
-	ED9CtoGFGPGai00PyThgv3QfDZZYCcrwkGMvL936Pudx6rA=
-X-Received: by 2002:a17:907:75f8:b0:bc6:1c2:ee46 with SMTP id
- a640c23a62f3a-bdd22e30ca3mr532419766b.11.1779658443593; Sun, 24 May 2026
- 14:34:03 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Sun, 24 May 2026 16:34:03 -0500
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Sun, 24 May 2026 16:34:03 -0500
-From: Angelo Dureghello <adureghello@baylibre.com>
-References: <20260506142644.3234270-2-gerg@kernel.org> <20260506142644.3234270-8-gerg@kernel.org>
- <40aefc39-bd98-460d-8aa7-5dd79f562e0d@app.fastmail.com> <fdd6fc14-f607-4186-8db4-25de973ac322@kernel.org>
- <CALSJ-wCrNDv3N2Kdo0uoXsKGtp0GthJRBeYTNQA1gGE2akUWFg@mail.gmail.com>
- <9391b782-7727-47fa-ac37-05cd50821d35@app.fastmail.com> <CALSJ-wBRmUpjz-_ehZ0U0Gu+fPqRUeAn47E0_pwpXQa0tCNzVA@mail.gmail.com>
- <CALSJ-wCuZs9cBJsuOOYMEYM6xOXZbdOm_pr=70d3HRYYSYJ0KA@mail.gmail.com> <CALSJ-wDm8NoB8mF3KSx49XMSWz1vjwFhSmgJZWq8pN2pCf12mw@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1779697083; x=1780301883;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Dc4O5/kSgHyWkY3Qo5dJGWH4VWfSLL8bPtdDsIJFGxs=;
+        b=ClNz4QiSMElpj22xADw8HAK2go0y5YrSOxp1p0ug9T5reSXmWaQOq7rfS3PHOLi8Uj
+         1Xj+u27nH46WV0Rk/rsaY8Bsn6/22QZUQHWm3ggqhb0kkiUhezqpE2/FEtJtBqDuCt+5
+         iABMMIHtK/x6ijYgCfNBn9nKpz1gl5ag9SYkzWQnggbm8F5+NOLAvM2Zi/okP6LkzwSr
+         3DkdPD5brYNwcVzd3NqAUBFDW4KZN1zN4YWTlw1ebXmH/rlIAbKiO4GmA6uCw27yBtmn
+         yxG+//vkjF4fRd+5gI89QaepqMwd11gj6ydNZgy4k3GthaGycaOjXn4Oa3ZrsbKol/bV
+         Q+HQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/Xw32UOj8JX9zsBVw2rh61/hr9l/Fv5fdZWROvrQfj12eIfR5LsQX/Mb0eojhDFXICGZYxPH/nBfI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYFmILVuo5IIA+kIGfGvkLdUuVR7sXRCeIXZ2oGc0jRCv3Ngli
+	jAiwYrcC/cAt90YvwntWvpYXKl+Webxhi7EuYVG88VekU8zq6z/3fTHn
+X-Gm-Gg: Acq92OERY2Zs1Cf8geZj14Ra7yE4lZadmbKClFIl18cP9UVcq9beY47Bz9hnGMFJovG
+	17OwYIwFKXldXBxma6lXY7Yu3i52AmCEQ3D2Zvtg7mLeick+Hl+/W46g/3xFR/WB5Px6SElKzjf
+	/mI3icNmgl/IQEIWNsu+Yi+G6Fjl9SKnKQhY/ger52bhAPKKvNGZ1H1Ug0LjZnkT4Ymb2VkPsK7
+	dc8S72O/qEDZiah5d9/kxR558dDUJDu/98033Ed2/UrLsWgCw1aq0GiVP/7tnC40iHVl4KKHDWW
+	t1Kuer5d21phVIO+keXEGa7fiIS+R3SGm6nNFn722WPlC1qN/9pJXXOPDK4Ouafr1FgvefE2EZw
+	3wkmVXb1+D6no3OzwgH97qSWpou7lzyrX+VjG227Y7eG11q3SpPLNFu4IbKvZpxCnGQh0l7TeC+
+	kcsKJqlfEpOPaKLsTQEsrzgpBucP0o8K1LAsc89n/kck0iTkcBspJkBQJMvHfGKcU2X2XJ6aZt0
+	XgE
+X-Received: by 2002:a17:90b:3a10:b0:369:a359:b192 with SMTP id 98e67ed59e1d1-36a67475b45mr12807202a91.10.1779697082704;
+        Mon, 25 May 2026 01:18:02 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a721c7cf9sm8964102a91.10.2026.05.25.01.17.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 May 2026 01:18:02 -0700 (PDT)
+From: a0282524688@gmail.com
+To: Ming Yu <tmyu0@nuvoton.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Lee Jones <lee@kernel.org>
+Cc: Ming Yu <a0282524688@gmail.com>,
+	linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org
+Subject: [PATCH v5 1/7] mfd: nct6694: Move module type macros to shared header
+Date: Mon, 25 May 2026 16:17:30 +0800
+Message-Id: <20260525081736.2904310-2-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260525081736.2904310-1-a0282524688@gmail.com>
+References: <20260525081736.2904310-1-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CALSJ-wDm8NoB8mF3KSx49XMSWz1vjwFhSmgJZWq8pN2pCf12mw@mail.gmail.com>
-Date: Sun, 24 May 2026 16:34:03 -0500
-X-Gm-Features: AVHnY4KPts6giB7v-VLhDVFgaj3UBt2D1rd6Lp0dLsbZHZD9ROK0A3o-BziA5dQ
-Message-ID: <CALSJ-wDY_8SMAvKT0L6wMbH1=w5pZNmV=xyeX1REb=BMRZWj-g@mail.gmail.com>
-Subject: Re: [RFC 4/4] m68k: coldfire: fix non-standard readX()/writeX() functions
-To: Angelo Dureghello <adureghello@baylibre.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, Greg Ungerer <gerg@kernel.org>, linux-m68k@lists.linux-m68k.org, 
-	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-can@vger.kernel.org, linux-spi@vger.kernel.org, 
-	Vladimir Oltean <olteanv@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,lists.linux-m68k.org,vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-7692-lists,linux-can=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	DKIM_TRACE(0.00)[baylibre.com:+];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-7693-lists,linux-can=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[adureghello@baylibre.com,linux-can@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[a0282524688@gmail.com,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-0.997];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux-m68k.org:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,mail.gmail.com:mid,baylibre.com:dkim,lst.de:email]
-X-Rspamd-Queue-Id: 6E8C75C4602
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: CCF945C791F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sun, May 24, 2026 at 02:17:07PM -0700, Angelo Dureghello wrote:
-> Hi All,
->
-> On Sun, May 17, 2026 at 03:41:31PM -0700, Angelo Dureghello wrote:
-> > Hi,
-> >
-> > On Sun, May 17, 2026 at 03:04:23PM -0700, Angelo Dureghello wrote:
-> > > Hi Arnd,
-> > >
-> > > On Sun, May 17, 2026 at 10:08:22PM +0200, Arnd Bergmann wrote:
-> > > > On Sun, May 17, 2026, at 21:43, Angelo Dureghello wrote:
-> > > > > On Thu, May 07, 2026 at 10:43:01PM +1000, Greg Ungerer wrote:
-> > > > >> On 7/5/26 05:12, Arnd Bergmann wrote:
-> > > > >> > On Wed, May 6, 2026, at 16:26, Greg Ungerer wrote:
-> > > > >
-> > > > > [    2.270000] fsl-dspi fsl-dspi.0: Not able to get desc for DMA xfer
-> > > > > [    2.280000] fsl-dspi fsl-dspi.0: DMA transfer failed
-> > > > > [    2.280000] spi_master spi0: failed to transfer one message from queue
-> > > > > [    2.290000] spi_master spi0: noqueue transfer failed
-> > > > > [    2.290000] spi-nor spi0.1: probe with driver spi-nor failed with error -5
-> > > > >
-> >
-> > About this issue, it fails on dma_pool_alloc(), so tomorrow will check,
-> > i probably lost some dma config option.
-> >
->
-> so i worked on this open issue above:
->
-> - moved to master and rebased,
-> - crated a wip/edma branch,
-> - bisected and found the offending commit, before this, mcf-edma driver
->   and connected spi-fsl-dspi (using edma) was both working correctly.
->
-> 7a360df941a4bd60847208de59f1ac8b166265a2 is the first bad commit
-> commit 7a360df941a4bd60847208de59f1ac8b166265a2 (HEAD)
-> Author: Christoph Hellwig <hch@lst.de>
-> Date:   Thu Oct 12 09:52:27 2023 +0200
->
->     m68k: don't provide arch_dma_alloc for nommu/coldfire
->
->     Coldfire cores configured with a data cache can't provide coherent
->     DMA allocations at all.
->
->     Instead of returning non-coherent kernel memory in this case,
->     return NULL and fail the allocation.
->
->     The only driver that used to rely on the previous behavior (fec) has
->     been switched to use non-coherent allocations for this case recently.
->
->     Signed-off-by: Christoph Hellwig <hch@lst.de>
->     Reviewed-by: Greg Ungerer <gerg@linux-m68k.org>
->     Tested-by: Greg Ungerer <gerg@linux-m68k.org>
->
->  arch/m68k/Kconfig      |  1 -
->  arch/m68k/kernel/dma.c | 23 -----------------------
->  2 files changed, 24 deletions(-)
->
-> So i can try next week a patch for edma looking what has been done
-> in fec, and since i am probably the only with mcf54415, will test it
-> here.
->
+From: Ming Yu <a0282524688@gmail.com>
 
-Looking into this better, looks like the above commit was meant for the
-majority on non-mmu ColdFire. I think mcf5441x and some other with mmu
-enabled can flag pages as "page cache disabled".
+Move NCT6694_XXX_MOD  macro definitions from individual sub-device
+drivers into the shared header include/linux/mfd/nct6694.h.
 
-So i would re-enabled that code only for such mmu families.
+This is a prerequisite for supporting multiple transport interfaces
+(USB, HIF) without duplicating these definitions.
 
-Please let me know if i am correct.
-Thanks.
+No functional change.
 
-> > > > > DSPI is using edma, i will try to understand where the issue is asap.
-> > > > >
-> > > > > About how it works:
-> > > > > - for accesses to edma module (IP) mmio registers, must be native
-> > > > > big_endian, so using the "be" suffix in "mcf"_edma looks ok for me.
-> > > >
-> > > > The twist here is that with the way that readl() is defined on
-> > > > coldfire as a non-swapping operation, and the generic
-> > > > definition assuming the opposite in
-> > > >
-> > > > static inline u32 ioread32be(const void __iomem *addr)
-> > > > {
-> > > >         return swab32(readl(addr));
-> > > > }
-> > > >
-> > > > the function called ioread32be() actually tries to access
-> > > > the registers as little-endian. I can see two possible ways
-> > > > we got here, but don't know which one is currect:
-> > > >
-> > > > a) the device actually has little-endian registers (like it
-> > > >    does on i.MX, but unlike all other coldfire devices), and
-> > > >    you just never noticed because using ioread32be() worked
-> > > >    as you expected.
-> > > >
-> > > > b) you tested the driver using an ioread32be() definition that
-> > > >    did not have a byteswap and it correctly accessed big-endian
-> > > >    registers at the time, but the version in mainline today does
-> > > >    not.
-> > >
-> > > Ok. The ioread32be now works properly since i had applied Greg patches.
-> > > I generated an error in _probe on edma channel 2, reading status reg.
-> > > looks consistent:
-> > >
-> > > 	iowrite16(2121, regs->erqh);
-> > > 	iowrite8(0x77, regs->serq);
-> > > 	iowrite8(0x12, regs->ssrt);
-> > > 	
-> > > 	u32 status = ioread32be(regs->es);
-> > > 	printk("%s() status: %04x\n", __func__, status);
-> > >
-> > > [    0.140000] mcf_edma_probe() entering
-> > > [    0.140000] mcf_edma_probe(): allocating data
-> > > [    0.140000] mcf_edma_probe() status: 800012f8
-> > >
-> > > If i am not loosing myself in this r/w labyrinth, the path should be:
-> > >
-> > > 1) Greg removed coldfire readl/writel, leaving now the standard LE r/w,
-> > > 2) So the ioread32be swaps the standard LE read giving BE.
-> > >
-> > > Am i correct ?
-> > >
-> > >
-> > > >
-> > > > > - for accessing the "tcd" memory structure, that must be, from what i
-> > > > > remember, anyway in little endian, independently from the cpu core
-> > > > > endiannes, this is the reason that big_endian flag is needed, it is
-> > > > > used for tcd area accesses, so the IP module was built.
-> > > > > The tcd area may be similar to pci accesses (see mcf54415 RM 19.4.16).
-> > > >
-> > > > edma_read_tcdreg() calls into edma_readl(), which is the same function
-> > > > that is used for normal register access, so from what I can tell,
-> > > > they always use the same endianess here.
-> > > >
-> > >
-> > > If edma_readl was using
-> > >
-> > >         if (edma->big_endian)
-> > >                 val = ioread32be(addr);
-> > >
-> > > and never changed, without Greg patch, it was likely returning little
-> > > endian for coldfire and correct LE for other arch ? :)
-> > >
-> > > I remember something about tcd area was coded LE, but will investigate
-> > > better, now i am over midnight.
-> > >
-> > > Regards,
-> > > angelo
-> > >
-> > > >       Arnd
-> >
-> > Regards,
-> > angelo
->
-> Regards,
-> angelo
+Signed-off-by: Ming Yu <a0282524688@gmail.com>
+---
+Changes in v5:
+- Split from the monolithic v4 patch to follow the single logical change principle.
 
-Regards,
-angelo
+ drivers/gpio/gpio-nct6694.c         |  7 -------
+ drivers/hwmon/nct6694-hwmon.c       | 21 ---------------------
+ drivers/i2c/busses/i2c-nct6694.c    |  7 -------
+ drivers/net/can/usb/nct6694_canfd.c |  6 ------
+ drivers/rtc/rtc-nct6694.c           |  7 -------
+ drivers/watchdog/nct6694_wdt.c      |  7 -------
+ include/linux/mfd/nct6694.h         |  9 +++++++++
+ 7 files changed, 9 insertions(+), 55 deletions(-)
+
+diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
+index a8607f0d9915..53bfc5983648 100644
+--- a/drivers/gpio/gpio-nct6694.c
++++ b/drivers/gpio/gpio-nct6694.c
+@@ -13,13 +13,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 GPIO controller.
+- * This defines the module type used for communication with the NCT6694
+- * GPIO controller over the USB interface.
+- */
+-#define NCT6694_GPIO_MOD	0xFF
+-
+ #define NCT6694_GPIO_VER	0x90
+ #define NCT6694_GPIO_VALID	0x110
+ #define NCT6694_GPI_DATA	0x120
+diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
+index 6dcf22ca5018..581451875f2c 100644
+--- a/drivers/hwmon/nct6694-hwmon.c
++++ b/drivers/hwmon/nct6694-hwmon.c
+@@ -15,13 +15,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 report channel
+- * This defines the module type used for communication with the NCT6694
+- * report channel over the USB interface.
+- */
+-#define NCT6694_RPT_MOD			0xFF
+-
+ /* Report channel */
+ /*
+  * The report channel is used to report the status of the hardware monitor
+@@ -38,13 +31,6 @@
+ #define NCT6694_TIN_STS(x)		(0x6A + (x))
+ #define NCT6694_FIN_STS(x)		(0x6E + (x))
+ 
+-/*
+- * USB command module type for NCT6694 HWMON controller.
+- * This defines the module type used for communication with the NCT6694
+- * HWMON controller over the USB interface.
+- */
+-#define NCT6694_HWMON_MOD		0x00
+-
+ /* Command 00h - Hardware Monitor Control */
+ #define NCT6694_HWMON_CONTROL		0x00
+ #define NCT6694_HWMON_CONTROL_SEL	0x00
+@@ -53,13 +39,6 @@
+ #define NCT6694_HWMON_ALARM		0x02
+ #define NCT6694_HWMON_ALARM_SEL		0x00
+ 
+-/*
+- * USB command module type for NCT6694 PWM controller.
+- * This defines the module type used for communication with the NCT6694
+- * PWM controller over the USB interface.
+- */
+-#define NCT6694_PWM_MOD			0x01
+-
+ /* PWM Command - Manual Control */
+ #define NCT6694_PWM_CONTROL		0x01
+ #define NCT6694_PWM_CONTROL_SEL		0x00
+diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nct6694.c
+index 1413ab6f9462..ef3329f34246 100644
+--- a/drivers/i2c/busses/i2c-nct6694.c
++++ b/drivers/i2c/busses/i2c-nct6694.c
+@@ -12,13 +12,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 I2C controller.
+- * This defines the module type used for communication with the NCT6694
+- * I2C controller over the USB interface.
+- */
+-#define NCT6694_I2C_MOD			0x03
+-
+ /* Command 00h - I2C Deliver */
+ #define NCT6694_I2C_DELIVER		0x00
+ #define NCT6694_I2C_DELIVER_SEL		0x00
+diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nct6694_canfd.c
+index e5f7f8849a73..262b4c26c9d4 100644
+--- a/drivers/net/can/usb/nct6694_canfd.c
++++ b/drivers/net/can/usb/nct6694_canfd.c
+@@ -18,12 +18,6 @@
+ 
+ #define DEVICE_NAME "nct6694-canfd"
+ 
+-/* USB command module type for NCT6694 CANfd controller.
+- * This defines the module type used for communication with the NCT6694
+- * CANfd controller over the USB interface.
+- */
+-#define NCT6694_CANFD_MOD			0x05
+-
+ /* Command 00h - CAN Setting and Initialization */
+ #define NCT6694_CANFD_SETTING			0x00
+ #define NCT6694_CANFD_SETTING_ACTIVE_CTRL1	BIT(0)
+diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
+index 35401a0d9cf5..c06902f150c9 100644
+--- a/drivers/rtc/rtc-nct6694.c
++++ b/drivers/rtc/rtc-nct6694.c
+@@ -14,13 +14,6 @@
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 RTC controller.
+- * This defines the module type used for communication with the NCT6694
+- * RTC controller over the USB interface.
+- */
+-#define NCT6694_RTC_MOD		0x08
+-
+ /* Command 00h - RTC Time */
+ #define NCT6694_RTC_TIME	0x0000
+ #define NCT6694_RTC_TIME_SEL	0x00
+diff --git a/drivers/watchdog/nct6694_wdt.c b/drivers/watchdog/nct6694_wdt.c
+index bc3689bd4b6b..4c06ac105562 100644
+--- a/drivers/watchdog/nct6694_wdt.c
++++ b/drivers/watchdog/nct6694_wdt.c
+@@ -20,13 +20,6 @@
+ 
+ #define NCT6694_WDT_MAX_DEVS		2
+ 
+-/*
+- * USB command module type for NCT6694 WDT controller.
+- * This defines the module type used for communication with the NCT6694
+- * WDT controller over the USB interface.
+- */
+-#define NCT6694_WDT_MOD			0x07
+-
+ /* Command 00h - WDT Setup */
+ #define NCT6694_WDT_SETUP		0x00
+ #define NCT6694_WDT_SETUP_SEL(idx)	(idx ? 0x01 : 0x00)
+diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+index 6eb9be2cd4a0..3c683e317aa3 100644
+--- a/include/linux/mfd/nct6694.h
++++ b/include/linux/mfd/nct6694.h
+@@ -8,6 +8,15 @@
+ #ifndef __MFD_NCT6694_H
+ #define __MFD_NCT6694_H
+ 
++#define NCT6694_HWMON_MOD	0x00
++#define NCT6694_PWM_MOD		0x01
++#define NCT6694_I2C_MOD		0x03
++#define NCT6694_CANFD_MOD	0x05
++#define NCT6694_WDT_MOD		0x07
++#define NCT6694_RTC_MOD		0x08
++#define NCT6694_RPT_MOD		0xFF
++#define NCT6694_GPIO_MOD	NCT6694_RPT_MOD
++
+ #define NCT6694_VENDOR_ID	0x0416
+ #define NCT6694_PRODUCT_ID	0x200B
+ #define NCT6694_INT_IN_EP	0x81
+-- 
+2.34.1
+
 
