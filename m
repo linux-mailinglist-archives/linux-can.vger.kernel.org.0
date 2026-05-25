@@ -1,123 +1,322 @@
-Return-Path: <linux-can+bounces-7696-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7697-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YLGhBs9GFGrzLwcAu9opvQ
-	(envelope-from <linux-can+bounces-7696-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 14:55:43 +0200
+	id SFSVI6ZRFGryMQcAu9opvQ
+	(envelope-from <linux-can+bounces-7697-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 15:41:58 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 856825CAC90
-	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 14:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 24DC95CB4B8
+	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 15:41:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D65D93032048
-	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 12:53:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C688E301C5B5
+	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 13:39:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B7B2382F2D;
-	Mon, 25 May 2026 12:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C04C384CCD;
+	Mon, 25 May 2026 13:39:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DGrAti9Y"
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="Hxkft0Kv"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27672381AE6;
-	Mon, 25 May 2026 12:53:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779713627; cv=none; b=af0BDNcSF360r+1F/fy9KWz5fIX08yag5dHH1Ph5rJR9/J5wJRL6pgWoFQB2pIdBwkuDBqTJg+/p2DRrzxA3clKAOvMwv7sm7qSRUJSYbLKiap9c6ZFtU9l858iM1iUnYU6hJy6CYPFKmEWPTVoK6j8vizGSuhBRPD5xL+LagYw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779713627; c=relaxed/simple;
-	bh=DIZwqP41tyEe/8hPVsegjZc07Fhyc7NMZvMgei5ETQs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jv0Ud+8fLXxlr4LQ1Yk3hCJyAW3y50/F9yP+TXgWakvWAGDe3sa1l5eCkIRkys6ozgqKLkSgD0WpuOibgUlrXwKbt+GI3ZEn53TGCQ/dFz5eu2EcGAouD++3iZoSA+bPimdHf5fGAqBe6DiCZ32KWo4/TcamGtbwpQB7r4e7xyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DGrAti9Y; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B4951F000E9;
-	Mon, 25 May 2026 12:53:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779713625;
-	bh=OQkCyN8EOO+Sh6b4vpdhJ/1vAaeseyuR9ZKMPwZ4Emw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=DGrAti9Y+63+kP6YvwChZ2SpvYGUI3uCrNj2mEQ08L6S2zGe/X18d0AZ1kpbxHSfy
-	 45kgJl3Mzk1CGuvtmxrpAx4uF//A/Xqznydxe4KV1BnGdDe4ysAzmt12BKeb72pf4Z
-	 2p6fejyKuMmdS1c+BYXRgKleUd7x1BfpMcS0FNI7DILbXmN1um3BHD01LRxRoKLNRK
-	 OPf1ZiZ79aSpLOLiA3ONZXkWip0IeEDdD1OhrC1jtKseK8UcMIM2mBEGtQtVVqY+uJ
-	 r0bm3SQgYWFrS0f+IsuXER+rGM4wv00t0guaPbJ8h5AUKSg/dAqPqaZ+YtrWmv2Rq7
-	 blZFIamOBKEhQ==
-Message-ID: <150cf471-665a-4693-a2d2-31c73cfa8e57@kernel.org>
-Date: Mon, 25 May 2026 14:53:41 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E59382363
+	for <linux-can@vger.kernel.org>; Mon, 25 May 2026 13:39:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779716398; cv=pass; b=if03lRZiolqcanqpdPzi+Flq3scIHFrLmbD8YcgslyH+/ciy7/WdOl/JhfqDjyaMx1wSw2r56peCyBL/isgqMdvOkm9J37NLVlLzm9YBfMf01iLC4z2ELsETOqNyJrgSONksESsjvLscmj7XyUUDrMdhd7qz6aHhxzyLgmNOCeE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779716398; c=relaxed/simple;
+	bh=NjcoxtPxAXPyy+r6qEG8tR6sVU2Znv7M+7Rf2K1IM6s=;
+	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U/e4Q3cwb+y5mavlqvcIHshu3+MRiruYEcrfPTfXNm1lT7CgbjvASH+eujuuXKkMawFFhUmYyer+6d0xLLGAQ0Q9Pew4X2Bedb7W3SAfqk8AS6Jq16l1xNeKtaagE7Zyg18nrLzheY32GPkyroWaeCD69u9M1tKvy1vtD6Rk7l8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=Hxkft0Kv; arc=pass smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-68852a4fc68so4130585a12.3
+        for <linux-can@vger.kernel.org>; Mon, 25 May 2026 06:39:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779716393; cv=none;
+        d=google.com; s=arc-20240605;
+        b=OE5mi1FmlvXEklKpF848VggEMiRTzYbjiutupR9pUKXGNoA4oEtQRtRdlaRcW6oQrv
+         C3Ixxq+ZOou/DoZMWeOemVkkw8cBDSvb8AHfTAbaRs06grt9vmEH4NmFXM5pNnAiYP/g
+         kvh98o6se8NuW65vkMEeBtoz6EpgDtvedYWNDaxvnlw17AX4io8uG4F+iaBPpLJsdrPn
+         na4Xt7HGaSraPlOP52UXkgbzI722Ny1HUc3A0ihBYhu733+q1yihG19lIzOExyoz1ceV
+         uUYPAnsybjFf1bFLU3HUnSX/nCVcoO4EZlB8Gu4KmnY5cD5pGMI+1l+4n72veQbFs+tv
+         B9DA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
+         :from:dkim-signature;
+        bh=hvrtSfS2XPLiN7M0l4zK1UsQIdB9tCKglzozVLNovnI=;
+        fh=jcYTIxaI0h6lEY+Q9Bsx+H/rIj3NPVrFkmzTcwa9mas=;
+        b=gkHGB41Jvmgf/2z0rF1cB/jqX/+ynQ+pnK47JxuxFy2q+zwX0wz1AU87/iqDxyWCmT
+         GTn/Rza+mhqCalM6av15sjAyD9/2yJ/WKMjEhK6vLFwhf1b8S1n9xseFmLEa4HhkFfqo
+         abNY7VeYEq267r/jweTnYNPVlKGiJf+zi+/hsb6zwoKysDFnBqtE3it7VZC5AIdHox6q
+         bpXiPhT2hKojif/94fmtR67tMHcelXRNsl0R8/MzLoVPfh3sdX7ZUCuMLbuGRvgP5pvg
+         qP9KIK67nXckdUuikUSsJJTplspvi8NFK0fuGy0FnnDFeL8RCznEAFpD/YKn2v8/moXl
+         tJmA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1779716393; x=1780321193; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hvrtSfS2XPLiN7M0l4zK1UsQIdB9tCKglzozVLNovnI=;
+        b=Hxkft0KvERMTMzXxBOlEr+W32q8Kan57nvrkaB+PJ8ITksriR6rgI0qC9VTOSLr1Bf
+         kogt7MG/kMnTrMgaaI3TmrgX9yoY1/liPHUCu0rbHgQ637XtxKyacCov0miYljweQEFm
+         xCcMHhiDlI50D1uVioaqqE3YXcpbQYqj0p8WwUOWSdkTWgGCUImac9TUUIraBxRCS710
+         Gk7b4a6+XukROM3clvflFf5cjBUvjjQWdpJ2GrDfDeAuEEd8RH/GhxpoNBda+QqzobWl
+         Wz1AJW5PLxq3DG2SIGRkqqMLIL+mc31Uxb9qV+CSI9bcbd0nX5iPZPWAclklz/8OwkuT
+         +mjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779716393; x=1780321193;
+        h=cc:to:subject:message-id:date:in-reply-to:mime-version:references
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hvrtSfS2XPLiN7M0l4zK1UsQIdB9tCKglzozVLNovnI=;
+        b=ItEW4f4pDwngZ7aqHF4AP4oiKIgbrqsdFbdPbaipT2NNvHZYwwAo0ku0HJFG7XbMI2
+         8ITWvqx0K/eKspbuYpmB2lPH38d0EgklUYypAOQLn5Fa1h0xyYR3w2wEJ6+lsqIJk1Ce
+         IpdbphNpWyvM1N2AVbz4KqXjOhHCfaRjuxwFKjQZiMw+LKJmYajHs0T4YLFz9WBFXsud
+         RLV/C8EWSTPYkuK3uSu8UQ1BgZPoJarK1jo3XGj/0O+DsDScrUsnQpEg4cdAztH+Wady
+         7UFBElWPFn3byOSzy4DnE/aIQN+m3TaDUkOtuLhWu3k5mSXiwIUlGsRfcghNo+scLHXk
+         wvWQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+utKnbv5OiswsVBYQ0go7ejMN4AElCS6ksVWhV7hQMFL1P/fU/+wOi9vh9hBaMdHWFg/bUe7M+ItY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6ihJsScmRuGWWdZDsJHxRynYfKnUUKBXiqva105nnC/wl0dJ2
+	txew/IAmiG/pNmsYqECj4xwt6beMTodLKaOQd8hlntYnIVe6mJSPvI3Ez6xKt7LLWc1E7SIxYMh
+	5uubSmPthMkCNtVKIHwA1GLNfWmRTzGbZUcatz15ZQA==
+X-Gm-Gg: Acq92OEgVaXWH6Qj+qGTYJ/yZIwJKKBjJ08hrRox6FeyAHfvqcmR021Zm07Zs3z/AsT
+	TiUn4s1zKzLzHw0FWzwxhahZMxNOLrWYZioxOnJ0oP7R8rh1oPL1mPMiKgvi8UKxf6EDaa2MTtg
+	XJiPVuhGrWNwXaXPq42K0w95n+WIi1AvbNWq50KlLfCPYzDRpp4S8EY+W72FjOXZ/PrFeMIWFjY
+	F8woLidNYWJBnDWW0JeBs4Y+AE2fnRfPu8wYfyg75O2BYrniYsqIsq77wp57x724YknV9mOMBkM
+	vtnBz+dzynPZhPtU4nCIs+9kYgcHejZQ+aON
+X-Received: by 2002:a17:907:3c8a:b0:bcf:9dd2:f79e with SMTP id
+ a640c23a62f3a-bdd26cd265bmr861792166b.29.1779716393446; Mon, 25 May 2026
+ 06:39:53 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 25 May 2026 06:39:52 -0700
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 25 May 2026 06:39:52 -0700
+From: Angelo Dureghello <adureghello@baylibre.com>
+References: <20260506142644.3234270-2-gerg@kernel.org> <20260506142644.3234270-8-gerg@kernel.org>
+ <40aefc39-bd98-460d-8aa7-5dd79f562e0d@app.fastmail.com> <fdd6fc14-f607-4186-8db4-25de973ac322@kernel.org>
+ <CALSJ-wCrNDv3N2Kdo0uoXsKGtp0GthJRBeYTNQA1gGE2akUWFg@mail.gmail.com>
+ <9391b782-7727-47fa-ac37-05cd50821d35@app.fastmail.com> <CALSJ-wBRmUpjz-_ehZ0U0Gu+fPqRUeAn47E0_pwpXQa0tCNzVA@mail.gmail.com>
+ <CALSJ-wCuZs9cBJsuOOYMEYM6xOXZbdOm_pr=70d3HRYYSYJ0KA@mail.gmail.com>
+ <CALSJ-wDm8NoB8mF3KSx49XMSWz1vjwFhSmgJZWq8pN2pCf12mw@mail.gmail.com> <CALSJ-wDY_8SMAvKT0L6wMbH1=w5pZNmV=xyeX1REb=BMRZWj-g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] can: m_can: pci: Remove driver_data
-To: "Markus Schneider-Pargmann (The Capable Hub)" <msp@baylibre.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-References: <20260515-topic-mcan-pci-driverdata-v7-1-v2-1-e33e014ff328@baylibre.com>
-From: Vincent Mailhol <mailhol@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20260515-topic-mcan-pci-driverdata-v7-1-v2-1-e33e014ff328@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+In-Reply-To: <CALSJ-wDY_8SMAvKT0L6wMbH1=w5pZNmV=xyeX1REb=BMRZWj-g@mail.gmail.com>
+Date: Mon, 25 May 2026 06:39:52 -0700
+X-Gm-Features: AVHnY4LbckeKGYKU7CghJurgC1FodfGLzJmAolw5gCW0YFJ46Zr4ueny_XzVmqs
+Message-ID: <CALSJ-wBfn9vkZYM8AfB3SvCH-AkuYEW9ccQ-p3N+GWR11da5dQ@mail.gmail.com>
+Subject: Re: [RFC 4/4] m68k: coldfire: fix non-standard readX()/writeX() functions
+To: Angelo Dureghello <adureghello@baylibre.com>
+Cc: Arnd Bergmann <arnd@kernel.org>, Greg Ungerer <gerg@kernel.org>, linux-m68k@lists.linux-m68k.org, 
+	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-can@vger.kernel.org, linux-spi@vger.kernel.org, 
+	Vladimir Oltean <olteanv@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[kernel.org,lists.linux-m68k.org,vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-7697-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7696-lists,linux-can=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	DMARC_NA(0.00)[baylibre.com];
+	DKIM_TRACE(0.00)[baylibre.com:+];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-can@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[adureghello@baylibre.com,linux-can@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-can];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,baylibre.com:email]
-X-Rspamd-Queue-Id: 856825CAC90
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linux-m68k.org:email]
+X-Rspamd-Queue-Id: 24DC95CB4B8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 15/05/2026 at 15:15, Markus Schneider-Pargmann (The Capable Hub) wrote:
-> driver_data is set to M_CAN_CLOCK_FREQ_EHL for all models. This change
-> was already five years ago, I don't expect any follow up models that
-> need to set a different frequency through the driver_data at this point.
-> 
-> Hardcode the M_CAN_CLOCK_FREQ_EHL. Once there are new models we can
-> evaluate what data needs to be in driver_data.
-> 
-> Acked-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
-> Signed-off-by: Markus Schneider-Pargmann (The Capable Hub) <msp@baylibre.com>
+Hi Greg and all,
 
-Reviewed-by: Vincent Mailhol <mailhol@kernel.org>
+so i posted a patch this morning to have edma driver back working.
+If approved, i can proceed testing this RFC (adjusting it as needed)
+with edma and dspi driver.
 
+Regards,
+angelo
 
-Yours sincerely,
-Vincent Mailhol
-
+On Sun, May 24, 2026 at 04:34:03PM -0500, Angelo Dureghello wrote:
+> On Sun, May 24, 2026 at 02:17:07PM -0700, Angelo Dureghello wrote:
+> > Hi All,
+> >
+> > On Sun, May 17, 2026 at 03:41:31PM -0700, Angelo Dureghello wrote:
+> > > Hi,
+> > >
+> > > On Sun, May 17, 2026 at 03:04:23PM -0700, Angelo Dureghello wrote:
+> > > > Hi Arnd,
+> > > >
+> > > > On Sun, May 17, 2026 at 10:08:22PM +0200, Arnd Bergmann wrote:
+> > > > > On Sun, May 17, 2026, at 21:43, Angelo Dureghello wrote:
+> > > > > > On Thu, May 07, 2026 at 10:43:01PM +1000, Greg Ungerer wrote:
+> > > > > >> On 7/5/26 05:12, Arnd Bergmann wrote:
+> > > > > >> > On Wed, May 6, 2026, at 16:26, Greg Ungerer wrote:
+> > > > > >
+> > > > > > [    2.270000] fsl-dspi fsl-dspi.0: Not able to get desc for DMA xfer
+> > > > > > [    2.280000] fsl-dspi fsl-dspi.0: DMA transfer failed
+> > > > > > [    2.280000] spi_master spi0: failed to transfer one message from queue
+> > > > > > [    2.290000] spi_master spi0: noqueue transfer failed
+> > > > > > [    2.290000] spi-nor spi0.1: probe with driver spi-nor failed with error -5
+> > > > > >
+> > >
+> > > About this issue, it fails on dma_pool_alloc(), so tomorrow will check,
+> > > i probably lost some dma config option.
+> > >
+> >
+> > so i worked on this open issue above:
+> >
+> > - moved to master and rebased,
+> > - crated a wip/edma branch,
+> > - bisected and found the offending commit, before this, mcf-edma driver
+> >   and connected spi-fsl-dspi (using edma) was both working correctly.
+> >
+> > 7a360df941a4bd60847208de59f1ac8b166265a2 is the first bad commit
+> > commit 7a360df941a4bd60847208de59f1ac8b166265a2 (HEAD)
+> > Author: Christoph Hellwig <hch@lst.de>
+> > Date:   Thu Oct 12 09:52:27 2023 +0200
+> >
+> >     m68k: don't provide arch_dma_alloc for nommu/coldfire
+> >
+> >     Coldfire cores configured with a data cache can't provide coherent
+> >     DMA allocations at all.
+> >
+> >     Instead of returning non-coherent kernel memory in this case,
+> >     return NULL and fail the allocation.
+> >
+> >     The only driver that used to rely on the previous behavior (fec) has
+> >     been switched to use non-coherent allocations for this case recently.
+> >
+> >     Signed-off-by: Christoph Hellwig <hch@lst.de>
+> >     Reviewed-by: Greg Ungerer <gerg@linux-m68k.org>
+> >     Tested-by: Greg Ungerer <gerg@linux-m68k.org>
+> >
+> >  arch/m68k/Kconfig      |  1 -
+> >  arch/m68k/kernel/dma.c | 23 -----------------------
+> >  2 files changed, 24 deletions(-)
+> >
+> > So i can try next week a patch for edma looking what has been done
+> > in fec, and since i am probably the only with mcf54415, will test it
+> > here.
+> >
+>
+> Looking into this better, looks like the above commit was meant for the
+> majority on non-mmu ColdFire. I think mcf5441x and some other with mmu
+> enabled can flag pages as "page cache disabled".
+>
+> So i would re-enabled that code only for such mmu families.
+>
+> Please let me know if i am correct.
+> Thanks.
+>
+> > > > > > DSPI is using edma, i will try to understand where the issue is asap.
+> > > > > >
+> > > > > > About how it works:
+> > > > > > - for accesses to edma module (IP) mmio registers, must be native
+> > > > > > big_endian, so using the "be" suffix in "mcf"_edma looks ok for me.
+> > > > >
+> > > > > The twist here is that with the way that readl() is defined on
+> > > > > coldfire as a non-swapping operation, and the generic
+> > > > > definition assuming the opposite in
+> > > > >
+> > > > > static inline u32 ioread32be(const void __iomem *addr)
+> > > > > {
+> > > > >         return swab32(readl(addr));
+> > > > > }
+> > > > >
+> > > > > the function called ioread32be() actually tries to access
+> > > > > the registers as little-endian. I can see two possible ways
+> > > > > we got here, but don't know which one is currect:
+> > > > >
+> > > > > a) the device actually has little-endian registers (like it
+> > > > >    does on i.MX, but unlike all other coldfire devices), and
+> > > > >    you just never noticed because using ioread32be() worked
+> > > > >    as you expected.
+> > > > >
+> > > > > b) you tested the driver using an ioread32be() definition that
+> > > > >    did not have a byteswap and it correctly accessed big-endian
+> > > > >    registers at the time, but the version in mainline today does
+> > > > >    not.
+> > > >
+> > > > Ok. The ioread32be now works properly since i had applied Greg patches.
+> > > > I generated an error in _probe on edma channel 2, reading status reg.
+> > > > looks consistent:
+> > > >
+> > > > 	iowrite16(2121, regs->erqh);
+> > > > 	iowrite8(0x77, regs->serq);
+> > > > 	iowrite8(0x12, regs->ssrt);
+> > > > 	
+> > > > 	u32 status = ioread32be(regs->es);
+> > > > 	printk("%s() status: %04x\n", __func__, status);
+> > > >
+> > > > [    0.140000] mcf_edma_probe() entering
+> > > > [    0.140000] mcf_edma_probe(): allocating data
+> > > > [    0.140000] mcf_edma_probe() status: 800012f8
+> > > >
+> > > > If i am not loosing myself in this r/w labyrinth, the path should be:
+> > > >
+> > > > 1) Greg removed coldfire readl/writel, leaving now the standard LE r/w,
+> > > > 2) So the ioread32be swaps the standard LE read giving BE.
+> > > >
+> > > > Am i correct ?
+> > > >
+> > > >
+> > > > >
+> > > > > > - for accessing the "tcd" memory structure, that must be, from what i
+> > > > > > remember, anyway in little endian, independently from the cpu core
+> > > > > > endiannes, this is the reason that big_endian flag is needed, it is
+> > > > > > used for tcd area accesses, so the IP module was built.
+> > > > > > The tcd area may be similar to pci accesses (see mcf54415 RM 19.4.16).
+> > > > >
+> > > > > edma_read_tcdreg() calls into edma_readl(), which is the same function
+> > > > > that is used for normal register access, so from what I can tell,
+> > > > > they always use the same endianess here.
+> > > > >
+> > > >
+> > > > If edma_readl was using
+> > > >
+> > > >         if (edma->big_endian)
+> > > >                 val = ioread32be(addr);
+> > > >
+> > > > and never changed, without Greg patch, it was likely returning little
+> > > > endian for coldfire and correct LE for other arch ? :)
+> > > >
+> > > > I remember something about tcd area was coded LE, but will investigate
+> > > > better, now i am over midnight.
+> > > >
+> > > > Regards,
+> > > > angelo
+> > > >
+> > > > >       Arnd
+> > >
+> > > Regards,
+> > > angelo
+> >
+> > Regards,
+> > angelo
+>
+> Regards,
+> angelo
 
