@@ -1,56 +1,57 @@
-Return-Path: <linux-can+bounces-7701-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7702-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SGfiJ82eFGoLPAcAu9opvQ
-	(envelope-from <linux-can+bounces-7701-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 21:11:09 +0200
+	id qGJIL+OeFGoLPAcAu9opvQ
+	(envelope-from <linux-can+bounces-7702-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 21:11:31 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05CD85CDF35
-	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 21:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15CCA5CDF4E
+	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 21:11:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 469D2300E391
-	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 19:10:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DF6DA302262C
+	for <lists+linux-can@lfdr.de>; Mon, 25 May 2026 19:10:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3271D385D79;
-	Mon, 25 May 2026 19:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 733B937CD53;
+	Mon, 25 May 2026 19:10:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=alexander.hoelzl@gmx.net header.b="ZIJ8Witc"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=alexander.hoelzl@gmx.net header.b="s6KOFQJv"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D598C37CD53;
-	Mon, 25 May 2026 19:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E905838423F;
+	Mon, 25 May 2026 19:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779736233; cv=none; b=Ug2N3sTh7IlcPBs8HpmvUDXCSn/d33yMYkOG+UZb1nH516LaQ1ehxFaaz9vCdPM0ywTS7ZIilha+CwYCiLUki90NvTTzitd23C4Z6qElj1GIfStctAe230j6CCJgGc1DojVVxiC9tNlgjMaFyn0BXX+EHSX3SLuvdj6dLisI2nE=
+	t=1779736238; cv=none; b=uNpNFM5CqZgL/bIx2NhluqfQRQLZW1zyU/TwbMCDXEYwVp6QjrvA6wyRG42avKdIqMw9NGW+67yfyGJNcXQ2KIbTfEYfjR0XVKByIrYQKWkZN537vW8jb+OSmGilIOy7GTiFoSRnBG6cyMNZZowGGE+7KiWVNh/L1GyIJCnJtII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779736233; c=relaxed/simple;
-	bh=j6TtPZIwygCYSwj2hsswtI0LNcGQJtEimUrgu0y17GU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rnp4XU2/7C/lSe1mzIm43zn8HZV6wHc60dlUh+U7kjcxb1nUn0vPYg3BWC64w2+jIFHPY9jWQXomQh1aeyWjpkjnBMSHrj9mpFhWrEaUcP5YZCMIduFSE7YlqbPpJM3fTnV6vnmXeRhxt8I6KY39z4rGq29MEreJU/AK0FISabY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=alexander.hoelzl@gmx.net header.b=ZIJ8Witc; arc=none smtp.client-ip=212.227.15.19
+	s=arc-20240116; t=1779736238; c=relaxed/simple;
+	bh=KMWoBcApqlzqSQP5zDn3fyfi9XAs41jfVui5hFzJyl4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KYpUke3TDF0WZVJ6t4COr5C3C8njUb+WqzaaKA54u+p4S3OuEnrGILnCAl2w+Xs8oEDSbcaV1RzG3zH42rFBtinnNP8lYKQLNk0IVRe6yq2nu/uMB5OdzcCV7vcb4/vAtLyrn7YyvFTGnD4Gy+YBra0PLYY3MmWyRqXXPPzXaR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=alexander.hoelzl@gmx.net header.b=s6KOFQJv; arc=none smtp.client-ip=212.227.15.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1779736227; x=1780341027;
+	s=s31663417; t=1779736230; x=1780341030;
 	i=alexander.hoelzl@gmx.net;
-	bh=0Aa0Pc47Z3GORKsLW2I162WQpy+Pmhsa9vgIaYAuVvc=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	bh=WeDZ+/9HU8XuxaSxC8BvuEEjCYskaUWMr0oVW6N+yfs=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=ZIJ8WitcfWPe/tyb/hn/QQxg/PRGlj1GZw3bkdCn0+ImoptkiA6Dy1DuKJc+ORkT
-	 9w2YiRWF0HqcmjqFIRUQoHT6N4u58716eP1B8yPt/ZLn/kvYtPMYHG3BBJl6oAyY/
-	 yt/PJHhkaYfUAK5O14iaQeFtR2UlNssbRW1me0T0ZVqX3gLtv7Btaw39UoodOxiuK
-	 /PLsp1nqLjFHRWfIDBK7AlzstQL/+gg9WMqKJAZUT+znlfDwPr+Go03426x23qEX2
-	 DcN0NC86m63qn1tPmM5Lhj+BThmeLWgnJftwlPHc2TbrRYQ0/fVDpyXw5C5KGPbBd
-	 nF3zPBHIaPKcjEWquQ==
+	b=s6KOFQJve6rV4759XOXhn/kA1DK6VYwlDQt2ADZwYO/AVjda2GJdXEGMFNq7x3wp
+	 YZN3B70/gvRbsCZdtInUZDuTpWpZVobRUMV1AcVtEobL+XxR/zFCdNjs9zzAWDSMq
+	 VRaj1nTwza5FMEb3VeAN8ZRWBJNi1tlkE2BMBSdBzKCmzDfzOw77WDUf05llF92gp
+	 kP3iT8Wzt9IOAmALnTVl9ONobd/j7lYQd8/MNMN7O3GRBcaP0jkUNV4AEBLiwoLvC
+	 WoUMI+wG3imXLsgjhS7xgZXV+VRAxpuGDermphwo6kojHfvnIRaaVACTULstROgSl
+	 39JnNtODP070s+eaUg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJE6L-1wmH2e2Gnz-00QFPt; Mon, 25
- May 2026 21:10:27 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFsZ3-1wXv0z2XWB-00Bp9Z; Mon, 25
+ May 2026 21:10:30 +0200
 From: =?UTF-8?q?Alexander=20H=C3=B6lzl?= <alexander.hoelzl@gmx.net>
 To: o.rempel@pengutronix.de
 Cc: robin@protonic.nl,
@@ -58,10 +59,12 @@ Cc: robin@protonic.nl,
 	kernel@pengutronix.de,
 	linux-can@vger.kernel.org,
 	=?UTF-8?q?Alexander=20H=C3=B6lzl?= <alexander.hoelzl@gmx.net>
-Subject: [PATCH v3 1/2] Fix J1939 implementation not handling holds correctly
-Date: Mon, 25 May 2026 21:08:48 +0200
-Message-ID: <20260525190948.42461-1-alexander.hoelzl@gmx.net>
+Subject: [PATCH v3 2/2] Add J1939 CTS hold tests
+Date: Mon, 25 May 2026 21:08:49 +0200
+Message-ID: <20260525190948.42461-2-alexander.hoelzl@gmx.net>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260525190948.42461-1-alexander.hoelzl@gmx.net>
+References: <20260525190948.42461-1-alexander.hoelzl@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -70,92 +73,91 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:+T6AeYbstrmFaM0PWt/FAliE5FJ0yttjffLUBh86a15w0Zo75ca
- vnsSx8SL7yumOqYaVjvf9WPqCM3GrBFVr0uKEEctnK8PTDKQFo3v5RWED4AvWNv8A2KU8mq
- X5llOKioxJMaJD4IYR4Ucr6lqv5Z8DVL9zJ8fOEmKo3uElsWCbGYBj2/qhSDGmYpbL0OBzT
- yWtpcGNnVMzjVjrUAoVjg==
+X-Provags-ID: V03:K1:NOZvNcYK96qsmhHQ3+AJ5kYuDtobhqWR/V6f8aj22eT3DIEPqhs
+ bseigwcB4I3ZZrT0+bO3fNGR5BO6LmUH7wJd2ZD67ktC7IV3k+hHCboIjZU3Ldv/pQDzVkS
+ WCTEtEj8e1QHIv+wfdMo20c+ukwJ0O7qmk2NZwt+BzGijViwtISITy8D+TZXCUL1uSdrj4f
+ L3tIoLucKjYQsaNc9SZaA==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:MYR+90VdshQ=;wuVhpkZOExb5HKo7H6s44RCtNsl
- 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
- sX5uVTD/Q=
+UI-OutboundReport: notjunk:1;M01:P0:s0gGLmrvUzI=;DcTLu8Z6AqeevUBC8FWbaPy5QUy
+ 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
+ W8/37R6NOcO9rQrJ5U=
 X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
@@ -166,7 +168,7 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7701-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7702-lists,linux-can=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_FROM(0.00)[gmx.net];
@@ -183,158 +185,518 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 05CD85CDF35
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,j1939.name:url,test_cts_hold.sh:url]
+X-Rspamd-Queue-Id: 15CCA5CDF4E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The J1939 protocol allows the receiver of directed segemented messages
-to hold the data transfer. The kernel implementation did not handle hold
-messages correctly was not able to resume from a hold.
+Add tests to verify the correct behavior of CTS hold messages.
 
-To do so the behavior of j1939_xtp_rx_cts_one was modified to allow the
-handling of a hold. The previous sanity check was removed as it only
-guarded against a flood of consecutive CTS, but prevented the hold
-from working correctly. This patch changes this behavior to allow
-for consectuive CTS to enable holds. An additional sanity check
-has been added which prevents requsts of already transferred and
-acked packets. In this case the kernel will abort immediately
-instead of going into a timeout.
-
-Fix J1939 RTS/CTS session not being able to resume from hold.
-Replace hardcoded timeout with define.
-Add CTS hold behavior tests.
+The test verify that the J1939 is correctly able to restart the
+transmission after the reception of a hold message and the
+session is terminated if the receiver does not send a CTS to
+resume from the hold.
 
 Signed-off-by: Alexander H=C3=B6lzl <alexander.hoelzl@gmx.net>
 =2D--
-I've integrated the comments you've send. In one of the comments you've=20
-referenced a wrong section of the J1939 standard. For the hold message
-you've referenced SAE J1939-21 2001 - 5.10.2.4 Connection Closure,
-but it should have been SAE 5.102.2.3 Data Transfer. That I have
-changed. Otherwise everything should be according to your comments :)
+ tools/testing/selftests/net/can/.gitignore    |   1 +
+ tools/testing/selftests/net/can/Makefile      |   8 +-
+ tools/testing/selftests/net/can/config        |   1 +
+ .../testing/selftests/net/can/test_cts_hold.c | 359 ++++++++++++++++++
+ .../selftests/net/can/test_cts_hold.sh        |  45 +++
+ 5 files changed, 412 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/net/can/test_cts_hold.c
+ create mode 100755 tools/testing/selftests/net/can/test_cts_hold.sh
 
- net/can/j1939/transport.c | 68 +++++++++++++++++++++++++++++----------
- 1 file changed, 51 insertions(+), 17 deletions(-)
-
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index df93d57907da..e2c79df7b04e 100644
-=2D-- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -32,6 +32,13 @@
- #define J1939_ETP_CMD_EOMA 0x17
- #define J1939_ETP_CMD_ABORT 0xff
+diff --git a/tools/testing/selftests/net/can/.gitignore b/tools/testing/se=
+lftests/net/can/.gitignore
+index 764a53fc837f..96ef18ae986d 100644
+=2D-- a/tools/testing/selftests/net/can/.gitignore
++++ b/tools/testing/selftests/net/can/.gitignore
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ test_raw_filter
++test_cts_hold
+\ No newline at end of file
+diff --git a/tools/testing/selftests/net/can/Makefile b/tools/testing/self=
+tests/net/can/Makefile
+index 5b82e60a03e7..182346682bce 100644
+=2D-- a/tools/testing/selftests/net/can/Makefile
++++ b/tools/testing/selftests/net/can/Makefile
+@@ -4,8 +4,12 @@ top_srcdir =3D ../../../../..
 =20
-+/* Time until session invalidation upon reception of a hold message.
-+ * Corresponds to T4 in the specification.
-+ * See ISO 11783-3 2018 - 5.10.3.5 Connection closure
-+ * and SAE J1939-21 2022 - 5.10.2.4 Connection Closure
-+ */
-+#define J1939_CTS_HOLD_TIMEOUT_MS 1050
+ CFLAGS +=3D -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $=
+(KHDR_INCLUDES)
+=20
+-TEST_PROGS :=3D test_raw_filter.sh
++TEST_PROGS :=3D \
++	test_raw_filter.sh \
++	test_cts_hold.sh \
+=20
+-TEST_GEN_FILES :=3D test_raw_filter
++TEST_GEN_FILES :=3D \
++	test_raw_filter \
++	test_cts_hold \
+=20
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/net/can/config b/tools/testing/selfte=
+sts/net/can/config
+index 188f79796670..cb538ed93ae4 100644
+=2D-- a/tools/testing/selftests/net/can/config
++++ b/tools/testing/selftests/net/can/config
+@@ -1,3 +1,4 @@
+ CONFIG_CAN=3Dm
+ CONFIG_CAN_DEV=3Dm
+ CONFIG_CAN_VCAN=3Dm
++CONFIG_CAN_J1939=3Dm
+\ No newline at end of file
+diff --git a/tools/testing/selftests/net/can/test_cts_hold.c b/tools/testi=
+ng/selftests/net/can/test_cts_hold.c
+new file mode 100644
+index 000000000000..4fe4b97d6206
+=2D-- /dev/null
++++ b/tools/testing/selftests/net/can/test_cts_hold.c
+@@ -0,0 +1,359 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
++#include <time.h>
 +
- enum j1939_xtp_abort {
- 	J1939_XTP_NO_ABORT =3D 0,
- 	J1939_XTP_ABORT_BUSY =3D 1,
-@@ -1428,6 +1435,16 @@ j1939_xtp_rx_eoma(struct j1939_priv *priv, struct s=
-k_buff *skb,
- 	j1939_session_put(session);
- }
-=20
-+/* See:
-+ * SAE J1939-21 2022 - 5.10.2.3 Data Transfer
-+ * ISO 11783-3 2018 - 5.11.5.4 Extended Connection Mode Clear To Send (ET=
-P.CM_CTS)
-+ * The number of packets to send can be set to 0 to hold the connection
-+ */
-+static inline bool j1939_cts_is_hold(const struct sk_buff *skb)
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <sys/ioctl.h>
++#include <net/if.h>
++#include <linux/if.h>
++
++#include <linux/can.h>
++#include <linux/can/raw.h>
++#include <linux/can/j1939.h>
++
++
++#include "kselftest_harness.h"
++
++
++#define SENDER_ADDR		0x10
++#define RECEIVER_ADDR	0x20
++
++#define TEST_PGN 0xAB00
++#define SENDER_TP_CM_ID		(0x18EC2010 | CAN_EFF_FLAG)
++#define RECEIVER_TP_CM_ID	(0x18EC1020 | CAN_EFF_FLAG)
++
++#define DEFAULT_RECV_TIMEOUT_MS 2000
++
++/* Segemented payload sent by the J1939 socket*/
++const uint8_t J1939_PAYLOAD[] =3D {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x=
+06, 0x07, 0x08, 0x09};
++
++/* Expected RTS payload */
++const uint8_t RTS_PAYLOAD[] =3D {0x10, 0x0A, 0x00, 0x02, 0x02, 0x00, 0xAB=
+, 0x00};
++/* Hold payload to be sent by raw socket */
++const uint8_t HOLD_PAYLOAD[] =3D {0x11, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0xA=
+B, 0x00};
++/* CTS to send to only allow for the transmission of one data frame */
++const uint8_t CTS_1_FRAME_PAYLOAD[] =3D {0x11, 0x01, 0x01, 0xFF, 0xFF, 0x=
+00, 0xAB, 0x00};
++/* Resume payload to resume from connection which has been held directly =
+after RTS*/
++const uint8_t RESUME_IMMEDIATE_PAYLOAD[] =3D {0x11, 0x02, 0x01, 0xFF, 0xF=
+F, 0x00, 0xAB, 0x00};
++/* Resume payload to resume session which has been held after first data =
+frame */
++const uint8_t RESUME_PAYLOAD[] =3D {0x11, 0x01, 0x02, 0xFF, 0xFF, 0x00, 0=
+xAB, 0x00};
++/* Data payloads */
++const uint8_t DATA_1_PAYLOAD[] =3D {0x01, 0x00, 0x01, 0x02, 0x03, 0x04, 0=
+x05, 0x06};
++const uint8_t DATA_2_PAYLOAD[] =3D {0x02, 0x07, 0x08, 0x09, 0xFF, 0xFF, 0=
+xFF, 0xFF};
++
++/* EOMA payload to cleanup session */
++const uint8_t EOMA_PAYLOAD[] =3D {0x13, 0x0A, 0x00, 0x02, 0xFF, 0x00, 0xA=
+B, 0x00};
++
++/* Timeout payload sent on connection timeout */
++const uint8_t ABORT_TIMEOUT_PAYLOAD[] =3D {0xFF, 0x03, 0xFF, 0xFF, 0xFF, =
+0x00, 0xAB, 0x00};
++char CANIF[IFNAMSIZ];
++
++static int recv_payload_timeout(int sock, const uint8_t *payload, size_t =
+len, int timeout_ms)
 +{
-+	return (!skb->data[1]);
-+}
++	struct can_frame rx_frame =3D {};
++	struct pollfd pfd =3D {
++		.fd =3D sock,
++		.events =3D POLLIN,
++	};
++	int ret;
 +
- static void
- j1939_xtp_rx_cts_one(struct j1939_session *session, struct sk_buff *skb)
- {
-@@ -1442,9 +1459,28 @@ j1939_xtp_rx_cts_one(struct j1939_session *session,=
- struct sk_buff *skb)
-=20
- 	netdev_dbg(session->priv->ndev, "%s: 0x%p\n", __func__, session);
-=20
--	if (session->last_cmd =3D=3D dat[0]) {
--		err =3D J1939_XTP_ABORT_DUP_SEQ;
--		goto out_session_cancel;
-+	session->last_cmd =3D dat[0];
-+
-+	if (j1939_cts_is_hold(skb)) {
-+		/* The originator should abort the session after T4 (=3D< 1050ms):
-+		 *   SAE J1939-21 2022 - 5.10.2.4 Connection Closure
-+		 *   a lack of a CTS for more than (T4) seconds after a CTS (0) message=
- to
-+		 *   hold the connection open" will all cause a connection closure to o=
-ccur.
-+		 *
-+		 * The receiver should send followup CTS not later then Th (=3D< 500ms)=
-:
-+		 *   SAE J1939-21 2001 - C.1 Connection Mode Data Transfer
-+		 *   The responder station then issues a TP.CM_CTS indicating that it w=
-ants
-+		 *   to hold the connection open but cannot receive any packets right n=
-ow. A
-+		 *   maximum of 500 ms later it must send another TP.CM_CTS message to =
-hold
-+		 *   the connection.
-+		 *
-+		 */
-+		if (session->transmission)
-+			j1939_session_txtimer_cancel(session);
-+
-+		j1939_tp_set_rxtimeout(session, J1939_CTS_HOLD_TIMEOUT_MS);
-+		netdev_dbg(session->priv->ndev, "%s: 0x%p received CTS hold\n", __func_=
-_, session);
-+		return;
- 	}
-=20
- 	if (session->skcb.addr.type =3D=3D J1939_ETP)
-@@ -1457,7 +1493,11 @@ j1939_xtp_rx_cts_one(struct j1939_session *session,=
- struct sk_buff *skb)
- 	else if (dat[1] > session->pkt.block /* 0xff for etp */)
- 		goto out_session_cancel;
-=20
--	/* set packet counters only when not CTS(0) */
-+	if (session->pkt.tx_acked >=3D pkt) {
-+		err =3D J1939_XTP_ABORT_DUP_SEQ;
-+		goto out_session_cancel;
++	/* Wait for data to be ready to read, up to timeout_ms */
++	ret =3D poll(&pfd, 1, timeout_ms);
++	if (ret < 0) {
++		perror("poll failed");
++		return 1;
 +	}
 +
- 	session->pkt.tx_acked =3D pkt - 1;
- 	j1939_session_skb_drop_old(session);
- 	session->pkt.last =3D session->pkt.tx_acked + dat[1];
-@@ -1467,19 +1507,13 @@ j1939_xtp_rx_cts_one(struct j1939_session *session=
-, struct sk_buff *skb)
- 	/* TODO: do not set tx here, do it in txtimer */
- 	session->pkt.tx =3D session->pkt.tx_acked;
-=20
--	session->last_cmd =3D dat[0];
--	if (dat[1]) {
--		j1939_tp_set_rxtimeout(session, 1250);
--		if (session->transmission) {
--			if (session->pkt.tx_acked)
--				j1939_sk_errqueue(session,
--						  J1939_ERRQUEUE_TX_SCHED);
--			j1939_session_txtimer_cancel(session);
--			j1939_tp_schedule_txtimer(session, 0);
--		}
--	} else {
--		/* CTS(0) */
--		j1939_tp_set_rxtimeout(session, 550);
-+	j1939_tp_set_rxtimeout(session, 1250);
-+	if (session->transmission) {
-+		if (session->pkt.tx_acked)
-+			j1939_sk_errqueue(session,
-+						J1939_ERRQUEUE_TX_SCHED);
-+		j1939_session_txtimer_cancel(session);
-+		j1939_tp_schedule_txtimer(session, 0);
- 	}
- 	return;
-=20
++	if (ret =3D=3D 0) {
++		fprintf(stderr, "timeout waiting for can raw frame\n");
++		return 1;
++	}
++
++	/* Socket is readable, recv will not block */
++	if (recv(sock, &rx_frame, sizeof(rx_frame), 0) < 0) {
++		perror("failed to recv can raw frame");
++		return 1;
++	}
++
++	if (rx_frame.len !=3D len) {
++		fprintf(stderr, "received data length does not match expected value\n")=
+;
++		return 1;
++	}
++
++	if (memcmp(rx_frame.data, payload, len)) {
++		fprintf(stderr, "received data does not match expected value\n");
++		return 1;
++	}
++
++	return 0;
++}
++
++static int recv_payload(int sock, const uint8_t *payload, size_t len)
++{
++	return recv_payload_timeout(sock, payload, len, DEFAULT_RECV_TIMEOUT_MS)=
+;
++}
++
++
++FIXTURE(can_env)
++{
++	int j1939_sock;
++	int raw_sock;
++};
++
++FIXTURE_SETUP(can_env)
++{
++	struct sockaddr_can addr =3D {};
++	struct ifreq ifr =3D {};
++	int ret;
++
++	self->raw_sock =3D -1;
++	self->j1939_sock =3D -1;
++
++	self->raw_sock =3D socket(PF_CAN, SOCK_RAW, CAN_RAW);
++	ASSERT_GE(self->raw_sock, 0)
++		TH_LOG("failed to create CAN_RAW socket: %d", errno);
++
++	strncpy(ifr.ifr_name, CANIF, sizeof(ifr.ifr_name));
++	ret =3D ioctl(self->raw_sock, SIOCGIFINDEX, &ifr);
++	ASSERT_GE(ret, 0)
++		TH_LOG("failed SIOCGIFINDEX: %d", errno);
++
++
++	addr.can_family =3D AF_CAN;
++	addr.can_ifindex =3D ifr.ifr_ifindex;
++
++	ret =3D bind(self->raw_sock, (struct sockaddr *)&addr, sizeof(addr));
++	ASSERT_EQ(ret, 0)
++		TH_LOG("failed bind CAN_RAW socket: %d", errno);
++
++	self->j1939_sock =3D socket(PF_CAN, SOCK_DGRAM, CAN_J1939);
++	ASSERT_GE(self->j1939_sock, 0)
++		TH_LOG("failed to create CAN_J1939 socket: %d", errno);
++
++	addr.can_addr.j1939.addr =3D SENDER_ADDR;
++	addr.can_addr.j1939.name =3D J1939_NO_NAME;
++	addr.can_addr.j1939.pgn =3D J1939_NO_PGN;
++
++	ret =3D bind(self->j1939_sock, (struct sockaddr *)&addr, sizeof(addr));
++	ASSERT_EQ(ret, 0)
++		TH_LOG("failed bind CAN_J1939 socket: %d", errno);
++
++	addr.can_addr.j1939.addr =3D RECEIVER_ADDR;
++	addr.can_addr.j1939.pgn =3D TEST_PGN;
++	ret =3D connect(self->j1939_sock, (struct sockaddr *)&addr, sizeof(addr)=
+);
++	ASSERT_EQ(ret, 0)
++		TH_LOG("failed connect CAN_J1939 socket: %d", errno);
++}
++
++FIXTURE_TEARDOWN(can_env)
++{
++	if (self->j1939_sock !=3D -1)
++		close(self->j1939_sock);
++
++	if (self->raw_sock !=3D -1)
++		close(self->raw_sock);
++}
++
++/* Test RTS/CTS transport without hold as baseline */
++TEST_F(can_env, test_no_hold)
++{
++	struct can_frame tx_frame =3D {
++		.can_id =3D RECEIVER_TP_CM_ID,
++		.len =3D 8,
++	};
++
++	memcpy(tx_frame.data, RESUME_IMMEDIATE_PAYLOAD, sizeof(RESUME_IMMEDIATE_=
+PAYLOAD));
++
++	int res =3D send(self->j1939_sock, J1939_PAYLOAD, sizeof(J1939_PAYLOAD),=
+ 0);
++
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send j1939 payload: %d", errno);
++
++
++	res =3D recv_payload(self->raw_sock, RTS_PAYLOAD, sizeof(RTS_PAYLOAD));
++	ASSERT_EQ(res, 0)
++		TH_LOG("Failed to receive RTS as expeceted");
++
++	res =3D send(self->raw_sock, &tx_frame, sizeof(tx_frame), 0);
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send hold with raw sock: %d", errno);
++
++	res =3D recv_payload(self->raw_sock, DATA_1_PAYLOAD, sizeof(DATA_1_PAYLO=
+AD));
++	ASSERT_EQ(res, 0)
++		TH_LOG("Failed to receive DATA 1 as expeceted");
++
++	res =3D recv_payload(self->raw_sock, DATA_2_PAYLOAD, sizeof(DATA_2_PAYLO=
+AD));
++	ASSERT_EQ(res, 0)
++		TH_LOG("Failed to receive DATA 2 as expeceted");
++
++	memcpy(tx_frame.data, EOMA_PAYLOAD, sizeof(EOMA_PAYLOAD));
++	res =3D send(self->raw_sock, &tx_frame, sizeof(tx_frame), 0);
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send EOMA with raw sock: %d", errno);
++}
++
++/* Test holding RTS/CTS transport on first frame and resuming immediatley=
+ */
++TEST_F(can_env, test_hold_resume_immediate)
++{
++	struct can_frame tx_frame =3D {
++		.can_id =3D RECEIVER_TP_CM_ID,
++		.len =3D 8,
++	};
++
++	memcpy(tx_frame.data, HOLD_PAYLOAD, sizeof(HOLD_PAYLOAD));
++
++	int res =3D send(self->j1939_sock, J1939_PAYLOAD, sizeof(J1939_PAYLOAD),=
+ 0);
++
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send j1939 payload: %d", errno);
++
++
++	res =3D recv_payload(self->raw_sock, RTS_PAYLOAD, sizeof(RTS_PAYLOAD));
++	ASSERT_EQ(res, 0)
++		TH_LOG("Failed to receive RTS as expeceted");
++
++	res =3D send(self->raw_sock, &tx_frame, sizeof(tx_frame), 0);
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send hold with raw sock: %d", errno);
++
++	/* Wait for 300ms before sending the resume */
++	usleep(300000);
++
++	memcpy(tx_frame.data, RESUME_IMMEDIATE_PAYLOAD, sizeof(RESUME_IMMEDIATE_=
+PAYLOAD));
++	res =3D send(self->raw_sock, &tx_frame, sizeof(tx_frame), 0);
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send resume with raw sock: %d", errno);
++
++	res =3D recv_payload(self->raw_sock, DATA_1_PAYLOAD, sizeof(DATA_1_PAYLO=
+AD));
++	ASSERT_EQ(res, 0)
++		TH_LOG("Failed to receive DATA 1 as expeceted");
++
++	res =3D recv_payload(self->raw_sock, DATA_2_PAYLOAD, sizeof(DATA_2_PAYLO=
+AD));
++	ASSERT_EQ(res, 0)
++		TH_LOG("Failed to receive DATA 2 as expeceted");
++
++	memcpy(tx_frame.data, EOMA_PAYLOAD, sizeof(EOMA_PAYLOAD));
++	res =3D send(self->raw_sock, &tx_frame, sizeof(tx_frame), 0);
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send EOMA with raw sock: %d", errno);
++}
++
++/* Test send hold in transport session and resuming */
++TEST_F(can_env, test_hold_resume)
++{
++	struct can_frame tx_frame =3D {
++		.can_id =3D RECEIVER_TP_CM_ID,
++		.len =3D 8,
++	};
++
++	memcpy(tx_frame.data, CTS_1_FRAME_PAYLOAD, sizeof(CTS_1_FRAME_PAYLOAD));
++
++	int res =3D send(self->j1939_sock, J1939_PAYLOAD, sizeof(J1939_PAYLOAD),=
+ 0);
++
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send j1939 payload: %d", errno);
++
++	res =3D recv_payload(self->raw_sock, RTS_PAYLOAD, sizeof(RTS_PAYLOAD));
++	ASSERT_EQ(res, 0)
++		TH_LOG("Failed to receive RTS as expeceted");
++
++	res =3D send(self->raw_sock, &tx_frame, sizeof(tx_frame), 0);
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send cts(1) with raw sock: %d", errno);
++
++	res =3D recv_payload(self->raw_sock, DATA_1_PAYLOAD, sizeof(DATA_1_PAYLO=
+AD));
++	ASSERT_EQ(res, 0)
++		TH_LOG("Failed to receive RTS as expeceted");
++
++	memcpy(tx_frame.data, HOLD_PAYLOAD, sizeof(HOLD_PAYLOAD));
++	res =3D send(self->raw_sock, &tx_frame, sizeof(tx_frame), 0);
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send hold with raw sock: %d", errno);
++
++	/* Wait for 300ms before sending the resume */
++	usleep(300000);
++
++	memcpy(tx_frame.data, RESUME_PAYLOAD, sizeof(RESUME_PAYLOAD));
++	res =3D send(self->raw_sock, &tx_frame, sizeof(tx_frame), 0);
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send resume with raw sock: %d", errno);
++
++	res =3D recv_payload(self->raw_sock, DATA_2_PAYLOAD, sizeof(DATA_2_PAYLO=
+AD));
++	ASSERT_EQ(res, 0)
++		TH_LOG("Failed to receive DATA 2 as expeceted");
++
++	memcpy(tx_frame.data, EOMA_PAYLOAD, sizeof(EOMA_PAYLOAD));
++	res =3D send(self->raw_sock, &tx_frame, sizeof(tx_frame), 0);
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send EOMA with raw sock: %d", errno);
++}
++
++/* Test timeout after not resuming hold */
++TEST_F(can_env, test_hold_timeout)
++{
++	struct can_frame tx_frame =3D {
++		.can_id =3D RECEIVER_TP_CM_ID,
++		.len =3D 8,
++	};
++	struct timespec start, end;
++	long elapsed_ms;
++	int res;
++
++	memcpy(tx_frame.data, HOLD_PAYLOAD, sizeof(HOLD_PAYLOAD));
++	res =3D send(self->j1939_sock, J1939_PAYLOAD, sizeof(J1939_PAYLOAD), 0);
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send j1939 payload: %d", errno);
++
++	res =3D recv_payload(self->raw_sock, RTS_PAYLOAD, sizeof(RTS_PAYLOAD));
++	ASSERT_EQ(res, 0)
++		TH_LOG("Failed to receive RTS as expected");
++
++	res =3D send(self->raw_sock, &tx_frame, sizeof(tx_frame), 0);
++	ASSERT_GT(res, 0)
++		TH_LOG("failed to send hold with raw sock: %d", errno);
++
++	/* Record start time */
++	clock_gettime(CLOCK_MONOTONIC, &start);
++
++	/*
++	 * Receive with a timeout larger than the expected 1050ms J1939 timeout.
++	 * 2000ms provides plenty of headroom for CI without hanging indefinitel=
+y.
++	 */
++	res =3D recv_payload_timeout(self->raw_sock, ABORT_TIMEOUT_PAYLOAD,
++				   sizeof(ABORT_TIMEOUT_PAYLOAD), 2000);
++
++	ASSERT_EQ(res, 0)
++		TH_LOG("Failed to receive abort as expected");
++
++	/* Record end time and calculate elapsed milliseconds */
++	clock_gettime(CLOCK_MONOTONIC, &end);
++	elapsed_ms =3D (end.tv_sec - start.tv_sec) * 1000 +
++		     (end.tv_nsec - start.tv_nsec) / 1000000;
++
++	/*
++	 * The actual timeout is 1050ms. We define an acceptable window
++	 * to account for CI scheduling variations.
++	 */
++	ASSERT_GE(elapsed_ms, 1000)
++		TH_LOG("Abort received too early: %ld ms", elapsed_ms);
++	ASSERT_LE(elapsed_ms, 1500)
++		TH_LOG("Abort received too late: %ld ms", elapsed_ms);
++}
++
++int main(int argc, char **argv)
++{
++	char *ifname =3D getenv("CANIF");
++
++	if (!ifname) {
++		printf("CANIF environment variable must contain the test interface\n");
++		return KSFT_FAIL;
++	}
++
++	strncpy(CANIF, ifname, sizeof(CANIF) - 1);
++
++	return test_harness_run(argc, argv);
++}
+diff --git a/tools/testing/selftests/net/can/test_cts_hold.sh b/tools/test=
+ing/selftests/net/can/test_cts_hold.sh
+new file mode 100755
+index 000000000000..e69e9109245c
+=2D-- /dev/null
++++ b/tools/testing/selftests/net/can/test_cts_hold.sh
+@@ -0,0 +1,45 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++ALL_TESTS=3D"
++	test_cts_hold
++"
++
++net_dir=3D$(dirname $0)/..
++source $net_dir/lib.sh
++
++export CANIF=3D${CANIF:-"vcan0"}
++BITRATE=3D${BITRATE:-500000}
++
++setup()
++{
++	if [[ $CANIF =3D=3D vcan* ]]; then
++		ip link add name $CANIF type vcan || exit $ksft_skip
++	else
++		ip link set dev $CANIF type can bitrate $BITRATE || exit $ksft_skip
++	fi
++	ip link set dev $CANIF up
++	pwd
++}
++
++cleanup()
++{
++	ip link set dev $CANIF down
++	if [[ $CANIF =3D=3D vcan* ]]; then
++		ip link delete $CANIF
++	fi
++}
++
++test_cts_hold()
++{
++	./test_cts_hold
++	check_err $?
++	log_test "test_cts_hold"
++}
++
++trap cleanup EXIT
++setup
++
++tests_run
++
++exit $EXIT_STATUS
 =2D-=20
 2.54.0
 
