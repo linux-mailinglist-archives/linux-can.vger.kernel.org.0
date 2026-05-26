@@ -1,90 +1,90 @@
-Return-Path: <linux-can+bounces-7705-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7706-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aLNgGn9+FWqtWAcAu9opvQ
-	(envelope-from <linux-can+bounces-7705-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 13:05:35 +0200
+	id uInZAmmtFWpkXwcAu9opvQ
+	(envelope-from <linux-can+bounces-7706-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 16:25:45 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF1915D4A1C
-	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 13:05:34 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 611515D76FF
+	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 16:25:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9AED9300E253
-	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 10:59:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 970BD30A55A6
+	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 14:16:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF653DD856;
-	Tue, 26 May 2026 10:59:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4E73B9935;
+	Tue, 26 May 2026 14:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="JeaGSPnD";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="UOY/OOmp"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="QMs4ONC8";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="rC8wXz4S"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.216])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E92F3CA4BF
-	for <linux-can@vger.kernel.org>; Tue, 26 May 2026 10:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D0439B97B;
+	Tue, 26 May 2026 14:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.21
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779793191; cv=pass; b=CS6df2ixwpSu/ulzLR97JybptqLt4peSSQ6aTeJ9mtyT/qaez7Rh6yBo9mN9XtkcVvymseIhC4eNmW7s2QzgQdkhphEqH3hKVBLJB4KztwEjSpswYJt2j1g+2iOt8bwhwhWG8I+aCwCH9pyoj47/74CflhnUguZJ9zUb40e6TEw=
+	t=1779804983; cv=pass; b=e8SeyRH37VnYB+ZCigYO8rXvafvmath4IX39oNCl6olkqui0fdjKQ+Ngy/ucsuLM/wEjcVYyPf3ud0Ax0fsIpAu24Q3/4IkbJDjua/TVY8Bu6pDhjjHJr6w489ecOh1ScJ5yhR584RWcuCHTMOUIUw9PHSf2xjwsOkcLzR7e7cU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779793191; c=relaxed/simple;
-	bh=VSjxwCB3YAnEvJ9x9a/8TJR4ulTC8lJKW7S6/kgHmyw=;
+	s=arc-20240116; t=1779804983; c=relaxed/simple;
+	bh=mAr8FXNf74QdPPTucdO2WeER74ejdM6LT7lfWu4ZMEY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DfB98L3X3W2p1Bba2tEla7x1DF8pRq5ypcnowN+GmyRe76Ifkctmb8Fu4mxWBkYoHYofo9Xsl2+5k+sM9gROP0d7XpgE6mmBYJHyFQAS9DYV42eOrcIBVQEjg9VP+sedjtnk/cWxASf8xJOT5wS7dYD8CmbFDVtb6qrs3DTsgbY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=JeaGSPnD; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=UOY/OOmp; arc=pass smtp.client-ip=81.169.146.216
+	 In-Reply-To:Content-Type; b=bvoU1pKngPHzekB36McjiW7h30Hr62nnrAhoKSSaJmMyWwQZn8UloXIea+pys/XsNEHfG//bGSyvSaL/sb1i/glQ9cPg/2D9eHWCvbgEbc9HxXNbU9VxYXdfgs3tpdh5/MgnTIG7coVs+gb6WRUiePvtwXzn/qaDtruEwIgIp9U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=QMs4ONC8; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=rC8wXz4S; arc=pass smtp.client-ip=85.215.255.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1779793181; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1779804975; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=ApOQVBhItoA5hzQTyYhLDpj9YiFW5LZ7n7Cxf+Vmo6tl4Lg+4B84b4GhAgb7zzsLjx
-    MAGcDq77nlJV9E0E6NqM0CBW7lUr6PQKtsZRl5QoDjS14Nl/3Q9uIWyubM0fSa6odsGZ
-    arGV1iBsugb++URrFlcPPiTQEgFNmwhjcmKPpOuiarDTm9X8T3EDFOXyU5zsrP9FovkK
-    5eRXSgJGD95DseCRcGdNv72x05OvohuQesjgHukybQ1V3h8vHZ4SO04+PWOil6KHzjjc
-    s18KygGxa+/KA6ypYdE6AiVfPGoMxSJWX31TR1QE471qx322a+SFAbO+3/F7QClhe1gG
-    OGTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1779793181;
+    b=WRLU10xdPFJm7up7qyDFujkJphANMyWxRXRL4sheM0C7p9G3mfwiKVgldplkt4s3Cv
+    6sDzYCr+K3kpydn2Ik3P1p21VN6u0PB8DFjVcXZaaqRS3gj7cmQE0yTT5hgJ4bi13T+z
+    J7snQjXVJz2UeWzxtFl9+veO0zC9EVqg6lwFT7R+P1AskluQDjoOZpHZS4mHBZj0Kc4z
+    tz/6bfwE95YLHounKSuaMSgf9PhCjLZpcm7IvmyeyGNENk+VyzubuKgfOXwf+nrR9dUy
+    Yypa4GQaLO0TMoTozKNH5P9zxFTjvZWxHEax6eK0QHSe6NbY3ksZlIzLkiob8MdgVkFx
+    b14Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1779804975;
     s=strato-dkim-0002; d=strato.com;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=Wsog6vkIHYV+XZ+McVYGFSFZFxQ8V2JlCaLz89lVYqg=;
-    b=alkdm3bQI/4DhrNkXaHdEbqnLu1eHMWy/pby7iJE61AP1j3aBcZLJN8mDTMK9nuB3c
-    pg7MTIDB5ycOPEj6C22tkh/cWKtIizbQzaXUFpDmfUOEJy9biY1VPOOStbUuwJ2MUbxN
-    c+KgQ3nFdrrQ/KtHK1UKOY/LDUwQfn2kcgT4sHwwus0zFQQvuCx2vWbRhaOobpc/f/A/
-    Va5czB+wOAwDtH54wu0IItKT/CKPW+CzHNW98UUtcApbjWZAg45lCXn37eQelNXJ7DK1
-    yykejxu2vMvU0oZ1JsWtmOz1LeZ/Y4HEZecWLoGwjQRcuE8avy4O8k4Sr44Zbm/rXCEi
-    Wh7Q==
+    bh=wNroAQZEc5Vu5580qCLfd2xd6CbtwldOENcIuckL81c=;
+    b=JJIsBoku3o+qugfaLGMp/cLWPqWpQPfZfnAks22ndRidzWF4vIZ+Ro58Q6gKd4pOUE
+    k32Z/d6qs9Y+W0L9k7oL6ct6EC9KIX+6w/frUwfh8g5cPZlJAyrNZhFoUrtm+MOzNpmH
+    /vo356V86OCATmnlfSrirwju0ALnpBylHxkWrQ69Uy+TQY6+HM8ZGzhFMbUMR7ErVG0s
+    CfyRjm8l31MNFO9EdOCwBvtb6derXu9c1Iv2iyWToBybqteleyvPiwk/64OhYGH8Ibtv
+    2dqYjrwfh6n+8vpM3R7X1sHgKeQLoiHMFLLG29CZph/AIunNZyI7N21rfASyeX8mH1QX
+    cm2g==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1779793181;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1779804975;
     s=strato-dkim-0002; d=hartkopp.net;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=Wsog6vkIHYV+XZ+McVYGFSFZFxQ8V2JlCaLz89lVYqg=;
-    b=JeaGSPnDgSPYknoys2wZN7UkrIyLRpNMvwTTUMe+Z7dHipFiE/7V8w/IeFpUcL6LLa
-    YYZsZ2kl/hgXFRNrgs3gCImYNtxCMgtyRnH/UOUBkoOREFrHkJu4yM8pYOx7jqKd2WM4
-    r34PBrug1XWyQTyvlWf4E/aJrzuxxGulpKGfdxBu4z1nfjvjn3kJ8UHb9eApcziheZn3
-    WakoXN3ueAl55JkjYZ6PmDB94kHeHx/vmitZRXYPeAu+1uRdXQzH4F+HcBjgUEF9jUOy
-    AqqTPDuUSQlnn9vfaCCtSymw7vu+lQ4C/saSRD80cMtfEk/Br0IzxNZHTzwe/4XIyg9m
-    pHog==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1779793181;
+    bh=wNroAQZEc5Vu5580qCLfd2xd6CbtwldOENcIuckL81c=;
+    b=QMs4ONC8qQ9XlpAic4ScGmfagmRUMomcdRbBPqU9pwqhqQFdAXrUI8JIqUVqyfNhiS
+    pjDfDuIkwZW7rTFpvz4pyfw3aql9rkllxJY/Yvjc/ycyutgIg/ohN2cmHyHwZNHzIeed
+    SnNAOk+cOeDdyZQgP/ReUtEDMQbfXHivGvpC/VpBpzmYy4xypp9Ry5zg5idRhZ4xi8xO
+    9UJz0jPLEvwH2bMh3UZRAVVXSjkFskCJoXGNz7Thc8IvgTDE2EXEXjRI6flChMQFtgOB
+    P2RaCu3um9lmQEjU0l5FV8wq6xPwnZOBri+shuAhrFRvo97Zb5aTDnrWkYAwWLVNUhvb
+    NpQg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1779804975;
     s=strato-dkim-0003; d=hartkopp.net;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=Wsog6vkIHYV+XZ+McVYGFSFZFxQ8V2JlCaLz89lVYqg=;
-    b=UOY/OOmpCmPqgXIF3SNcAvEjn/WVVyH4NSEKVkhsu1SRhHcTPRkqSmmj43kmJewH4H
-    9PDLHCSUSrq+XsS8hSAw==
+    bh=wNroAQZEc5Vu5580qCLfd2xd6CbtwldOENcIuckL81c=;
+    b=rC8wXz4SZ4KO0suK5U/u3kOgRuG/XxkeOvuv73mpbiCNb233nvQhDZS3qKFgCQyNtj
+    Ga5nkYL++MfKUzH73JCw==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7s0ZDT0tksFSR+Aix0esQJVIAlZEg=="
 Received: from [IPV6:2a00:6020:4a38:6800:217d:dfe3:b063:ecb0]
     by smtp.strato.de (RZmta 55.0.1 AUTH)
-    with ESMTPSA id Kba96d24QAxfcud
+    with ESMTPSA id Kba96d24QEGFdsX
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Tue, 26 May 2026 12:59:41 +0200 (CEST)
-Message-ID: <c2ab7868-35bd-4c50-9257-73c743bfad81@hartkopp.net>
-Date: Tue, 26 May 2026 12:59:41 +0200
+    Tue, 26 May 2026 16:16:15 +0200 (CEST)
+Message-ID: <95496603-2ce3-473f-ab26-ed6ee0f966c2@hartkopp.net>
+Date: Tue, 26 May 2026 16:16:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -92,97 +92,103 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH can] can: bcm: add synchronize_rcu() in bcm_delete_rx_op()
- to fix UAF
-To: Zhenghang Xiao <kipreyyy@gmail.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>, Lee Jones <lee@kernel.org>
-Cc: linux-can@vger.kernel.org
-References: <20260526102349.94074-1-kipreyyy@gmail.com>
+Subject: Re: [PATCH] can: af_can: reject can rx unregister if dev is not can
+To: Edward Adam Davis <eadavis@qq.com>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ mkl@pengutronix.de, syzbot+8ed98cbd0161632bce95@syzkaller.appspotmail.com,
+ syzkaller-bugs@googlegroups.com
+References: <d80a783d-d6b3-4a70-944e-8eb9b0000e11@hartkopp.net>
+ <tencent_59FEDDAE991CCFC48D9A25A48D82923A5D07@qq.com>
 Content-Language: en-US
 From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20260526102349.94074-1-kipreyyy@gmail.com>
+In-Reply-To: <tencent_59FEDDAE991CCFC48D9A25A48D82923A5D07@qq.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7705-lists,linux-can=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com,pengutronix.de,kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-7706-lists,linux-can=lfdr.de];
+	FREEMAIL_TO(0.00)[qq.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_THREE(0.00)[4];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
 	DKIM_TRACE(0.00)[hartkopp.net:+];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linux.dev:url]
-X-Rspamd-Queue-Id: BF1915D4A1C
+	TAGGED_RCPT(0.00)[linux-can,8ed98cbd0161632bce95];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[appspotmail.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,syzkaller.appspot.com:url,qq.com:email,hartkopp.net:mid,hartkopp.net:dkim]
+X-Rspamd-Queue-Id: 611515D76FF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Lee Jones is already working on a workqueue based approach:
 
-https://lore.kernel.org/linux-can/20260520080523.2513957-1-lee@kernel.org/
 
-to not(!) re-introduce the costly synchronize_rcu().
+On 26.05.26 01:46, Edward Adam Davis wrote:
+> On Mon, 25 May 2026 20:15:21 +0200, Oliver Hartkopp wrote:
+>>> When a user binds a non-CAN device to a socket, the vulnerability reported
+>>> in [1] is triggered during the socket's closure and release phase, due to
+>>> the inability to find the expected receive list.
+>>>
+>>> Added checks for Mid-layer private and type during the rx unregistration
+>>> process.
+>>>
+>>> [1]
+>>> KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+>>> pc : can_rx_unregister+0x124/0x560 net/can/af_can.c:537
+>>> Call trace:
+>>>    can_rx_unregister+0x124/0x560 net/can/af_can.c:531 (P)
+>>>    isotp_release+0x500/0x9d8 net/can/isotp.c:1232
+>>>    __sock_release+0xa0/0x1d4 net/socket.c:722
+>>>    sock_close+0x24/0x38 net/socket.c:1514
+>>>
+>>> Fixes: bdfb5765e45b ("can: af_can: remove NULL-ptr checks from users of can_dev_rcv_lists_find()")
+>>> Reported-by: syzbot+8ed98cbd0161632bce95@syzkaller.appspotmail.com
+>>> Closes: https://syzkaller.appspot.com/bug?extid=8ed98cbd0161632bce95
+>>> Tested-by: syzbot+8ed98cbd0161632bce95@syzkaller.appspotmail.com
+>>> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+>>
+>> Hello Edward,
+>>
+>> many thanks for your investigation an effort to address the syzcaller issue!
+>>
+>> Btw. the root cause of the problem, that the receive lists can not be
+>> accessed is the bonding process that the bonding driver mutates
+>> and modifies the network device states to fit an Ethernet-like
+>> aggregation model. Which destroys the can_ml_priv.
+> I noticed the "bonding" aspect, but I haven't yet delved deeply into
+> understanding why a vxcan interface cannot be enslaved to a bonding
+> net dev. After testing your patch, I observed that sockets previously
+> bound to the bonding net dev are no longer bound to that bonding net dev.
 
-There's only some feedback from the AI bot that has to be considered.
+I don't understand this last sentence.
 
-https://netdev-ai.bots.linux.dev/ai-review.html?id=9e8842e7-59a2-4ec5-9f65-1df7973c6170
+With my patch the CAN interfaces can not be enslaved anymore.
+As Syzbot is simply doing whatever is possible, it get's an error and 
+this error path is closed. Of course Syzbot can still test AF_CAN sockets.
 
-I expect the updated v2 patch this week.
+Regarding your observation the I assume that the bonding driver makes an 
+interface down/up cycle or something similar which might have such an 
+effect.
+
+But in the end it doesn't crash anymore when the bonding driver is 
+trying to fiddle with CAN interfaces.
 
 Best regards,
 Oliver
-
-On 26.05.26 12:23, Zhenghang Xiao wrote:
-> bcm_delete_rx_op() calls can_rx_unregister() which does hlist_del_rcu(),
-> preventing new bcm_rx_handler invocations. However, already-dispatched
-> handlers continue running under rcu_read_lock() on other CPUs. The
-> subsequent bcm_remove_op() cancels the hrtimers and schedules deferred
-> free via call_rcu(), but a concurrent bcm_rx_handler can re-arm
-> op->thrtimer via hrtimer_start() after the cancel returns. The re-armed
-> timer fires on freed memory after the grace period.
-> 
-> The RX_NO_AUTOTIMER flag added by commit f1b4e32aca08 ("can: bcm: use
-> call_rcu() instead of costly synchronize_rcu()") only guards op->timer
-> (via bcm_rx_starttimer), not op->thrtimer (via bcm_rx_update_and_send).
-> 
-> Add synchronize_rcu() between list_del_rcu() and bcm_remove_op(),
-> matching the pattern in bcm_release(). This ensures all in-flight
-> handlers complete before timers are cancelled.
-> 
-> Fixes: f1b4e32aca08 ("can: bcm: use call_rcu() instead of costly synchronize_rcu()")
-> Signed-off-by: Zhenghang Xiao <kipreyyy@gmail.com>
-> ---
->   net/can/bcm.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/net/can/bcm.c b/net/can/bcm.c
-> index a4bef2c48a55..ae083f59a9ef 100644
-> --- a/net/can/bcm.c
-> +++ b/net/can/bcm.c
-> @@ -870,6 +870,7 @@ static int bcm_delete_rx_op(struct list_head *ops, struct bcm_msg_head *mh,
->   						  bcm_rx_handler, op);
->   
->   			list_del_rcu(&op->list);
-> +			synchronize_rcu();
->   			bcm_remove_op(op);
->   			return 1; /* done */
->   		}
 
 
