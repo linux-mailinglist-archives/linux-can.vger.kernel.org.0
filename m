@@ -1,90 +1,51 @@
-Return-Path: <linux-can+bounces-7706-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7707-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uInZAmmtFWpkXwcAu9opvQ
-	(envelope-from <linux-can+bounces-7706-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 16:25:45 +0200
+	id gBhHEcTEFWoAagcAu9opvQ
+	(envelope-from <linux-can+bounces-7707-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 18:05:24 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 611515D76FF
-	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 16:25:44 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDA3D5D9482
+	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 18:05:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 970BD30A55A6
-	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 14:16:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2D7203000518
+	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 15:58:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4E73B9935;
-	Tue, 26 May 2026 14:16:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93CD0390C85;
+	Tue, 26 May 2026 15:58:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="QMs4ONC8";
-	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="rC8wXz4S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FFHyjCob"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D0439B97B;
-	Tue, 26 May 2026 14:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779804983; cv=pass; b=e8SeyRH37VnYB+ZCigYO8rXvafvmath4IX39oNCl6olkqui0fdjKQ+Ngy/ucsuLM/wEjcVYyPf3ud0Ax0fsIpAu24Q3/4IkbJDjua/TVY8Bu6pDhjjHJr6w489ecOh1ScJ5yhR584RWcuCHTMOUIUw9PHSf2xjwsOkcLzR7e7cU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779804983; c=relaxed/simple;
-	bh=mAr8FXNf74QdPPTucdO2WeER74ejdM6LT7lfWu4ZMEY=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F5CE368D69;
+	Tue, 26 May 2026 15:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779811080; cv=none; b=gtDftM6CxEAL/lZ3MiYd2g+6oWlz4UtB5dSNQONGYRJkA4SjxYuX2lLOUr2ypwiaJsKRXUQ/51A+ZACmMBrTPlPeq8GnaBrLg9lxQU5jOIFxznj52TgtgFqjaHcalDG4NIoRMDyWQ6bleT7yVqHz3th1yL1152hmoKI+y4Dnw7U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779811080; c=relaxed/simple;
+	bh=Ele+E0tQkfHRAao8H64HR6F68ewe7ulRXtIQ8P4KHYw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bvoU1pKngPHzekB36McjiW7h30Hr62nnrAhoKSSaJmMyWwQZn8UloXIea+pys/XsNEHfG//bGSyvSaL/sb1i/glQ9cPg/2D9eHWCvbgEbc9HxXNbU9VxYXdfgs3tpdh5/MgnTIG7coVs+gb6WRUiePvtwXzn/qaDtruEwIgIp9U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=QMs4ONC8; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=rC8wXz4S; arc=pass smtp.client-ip=85.215.255.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
-ARC-Seal: i=1; a=rsa-sha256; t=1779804975; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=WRLU10xdPFJm7up7qyDFujkJphANMyWxRXRL4sheM0C7p9G3mfwiKVgldplkt4s3Cv
-    6sDzYCr+K3kpydn2Ik3P1p21VN6u0PB8DFjVcXZaaqRS3gj7cmQE0yTT5hgJ4bi13T+z
-    J7snQjXVJz2UeWzxtFl9+veO0zC9EVqg6lwFT7R+P1AskluQDjoOZpHZS4mHBZj0Kc4z
-    tz/6bfwE95YLHounKSuaMSgf9PhCjLZpcm7IvmyeyGNENk+VyzubuKgfOXwf+nrR9dUy
-    Yypa4GQaLO0TMoTozKNH5P9zxFTjvZWxHEax6eK0QHSe6NbY3ksZlIzLkiob8MdgVkFx
-    b14Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1779804975;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=wNroAQZEc5Vu5580qCLfd2xd6CbtwldOENcIuckL81c=;
-    b=JJIsBoku3o+qugfaLGMp/cLWPqWpQPfZfnAks22ndRidzWF4vIZ+Ro58Q6gKd4pOUE
-    k32Z/d6qs9Y+W0L9k7oL6ct6EC9KIX+6w/frUwfh8g5cPZlJAyrNZhFoUrtm+MOzNpmH
-    /vo356V86OCATmnlfSrirwju0ALnpBylHxkWrQ69Uy+TQY6+HM8ZGzhFMbUMR7ErVG0s
-    CfyRjm8l31MNFO9EdOCwBvtb6derXu9c1Iv2iyWToBybqteleyvPiwk/64OhYGH8Ibtv
-    2dqYjrwfh6n+8vpM3R7X1sHgKeQLoiHMFLLG29CZph/AIunNZyI7N21rfASyeX8mH1QX
-    cm2g==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1779804975;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=wNroAQZEc5Vu5580qCLfd2xd6CbtwldOENcIuckL81c=;
-    b=QMs4ONC8qQ9XlpAic4ScGmfagmRUMomcdRbBPqU9pwqhqQFdAXrUI8JIqUVqyfNhiS
-    pjDfDuIkwZW7rTFpvz4pyfw3aql9rkllxJY/Yvjc/ycyutgIg/ohN2cmHyHwZNHzIeed
-    SnNAOk+cOeDdyZQgP/ReUtEDMQbfXHivGvpC/VpBpzmYy4xypp9Ry5zg5idRhZ4xi8xO
-    9UJz0jPLEvwH2bMh3UZRAVVXSjkFskCJoXGNz7Thc8IvgTDE2EXEXjRI6flChMQFtgOB
-    P2RaCu3um9lmQEjU0l5FV8wq6xPwnZOBri+shuAhrFRvo97Zb5aTDnrWkYAwWLVNUhvb
-    NpQg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1779804975;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=wNroAQZEc5Vu5580qCLfd2xd6CbtwldOENcIuckL81c=;
-    b=rC8wXz4SZ4KO0suK5U/u3kOgRuG/XxkeOvuv73mpbiCNb233nvQhDZS3qKFgCQyNtj
-    Ga5nkYL++MfKUzH73JCw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7s0ZDT0tksFSR+Aix0esQJVIAlZEg=="
-Received: from [IPV6:2a00:6020:4a38:6800:217d:dfe3:b063:ecb0]
-    by smtp.strato.de (RZmta 55.0.1 AUTH)
-    with ESMTPSA id Kba96d24QEGFdsX
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Tue, 26 May 2026 16:16:15 +0200 (CEST)
-Message-ID: <95496603-2ce3-473f-ab26-ed6ee0f966c2@hartkopp.net>
-Date: Tue, 26 May 2026 16:16:09 +0200
+	 In-Reply-To:Content-Type; b=TTTi91qdBxBSXzCpxnVERoEZ30TQbXbOj19GmZF8YECVJ9WnzpR/MEwEdR6btN1MxSnBvlA8qGQ/Sh5A2rJytZinzOosalwLDvo4oraAgvrBbptNgF14baL/4VrSWNPk7GnqQs669shD6bF5/5vgLPyYzOzi1FhC3E1av3oyKDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FFHyjCob; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 463DD1F000E9;
+	Tue, 26 May 2026 15:57:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779811079;
+	bh=79tFNywJ1ujWM1ngLzbyRJb8vvTvJrlWsQKys4QTyM0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=FFHyjCob9W5eGLAeyPyOqWuc32kLdbwtTPW1L/MzM3/PVGFryHJVEVMVKiLONgfh/
+	 eK8by759I2vHyBl63O8aDKG2+3Ot5BqcGF9ytC2kTz07KLzKbDhLPy281kN3JSJ5C2
+	 MRwiHl2VSqc7vfsbI4RO4pZNRI9heBH/c8EUa2nhE02rfuwnV4VU4vuX+HNBwZ7iOv
+	 XT579DOPnVr9hqWv/hIWH4m3JTVUoUrrWWLX94dhehUOahlbM0W3liEORGW2Jv2eqR
+	 pBl2vq4n0MuMQ6GYZrQPe6wJYo0I4HKS+pHwVYvfFrxraDs9H0Ien5xphd0rIsIdAY
+	 pSut3Kzm45Z2w==
+Message-ID: <6ea756bf-d776-4eff-b0ca-eeaa6737e035@kernel.org>
+Date: Tue, 26 May 2026 17:57:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -92,103 +53,107 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] can: af_can: reject can rx unregister if dev is not can
-To: Edward Adam Davis <eadavis@qq.com>
-Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
- mkl@pengutronix.de, syzbot+8ed98cbd0161632bce95@syzkaller.appspotmail.com,
- syzkaller-bugs@googlegroups.com
-References: <d80a783d-d6b3-4a70-944e-8eb9b0000e11@hartkopp.net>
- <tencent_59FEDDAE991CCFC48D9A25A48D82923A5D07@qq.com>
+Subject: Re: [PATCH 1/2] can: Add Loongson CAN-FD controller support
+To: Binbin Zhou <zhoubb.aaron@gmail.com>
+Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen
+ <chenhuacai@loongson.cn>, Marc Kleine-Budde <mkl@pengutronix.de>,
+ Bingxiong Li <libingxiong@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+ Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+ linux-can@vger.kernel.org, jeffbai@aosc.io
+References: <cover.1777273055.git.zhoubinbin@loongson.cn>
+ <d7b19f6c1e634ffe4454809e73fb03058e7a1a9d.1777273055.git.zhoubinbin@loongson.cn>
+ <709ef711-4af1-413e-9662-08892b18fca5@kernel.org>
+ <CAMpQs4K5Q_vC=wnGp3gf=F5RU8t61PLh4dLEmcLMMbM4mR+Wnw@mail.gmail.com>
+From: Vincent Mailhol <mailhol@kernel.org>
 Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <tencent_59FEDDAE991CCFC48D9A25A48D82923A5D07@qq.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <CAMpQs4K5Q_vC=wnGp3gf=F5RU8t61PLh4dLEmcLMMbM4mR+Wnw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
-	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7706-lists,linux-can=lfdr.de];
-	FREEMAIL_TO(0.00)[qq.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-7707-lists,linux-can=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-0.999];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[hartkopp.net:+];
+	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can,8ed98cbd0161632bce95];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[appspotmail.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,syzkaller.appspot.com:url,qq.com:email,hartkopp.net:mid,hartkopp.net:dkim]
-X-Rspamd-Queue-Id: 611515D76FF
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: DDA3D5D9482
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+On 21/05/2026 at 05:24, Binbin Zhou wrote:
+> Hi Vincent:
+> 
+> On Thu, May 7, 2026 at 1:50 AM Vincent Mailhol <mailhol@kernel.org> wrote:
+
+(...)
+
+>> Use the CAN TDC framework to get the SSP value (c.f. struct can_tdc,
+>> struct can_tdc_const and can_fd_tdc_is_enabled())
+> 
+> Last question:
+> 
+> In the general framework, the calculation condition for tdco is
+> (dbt->brp == 1 || dbt->brp == 2), which does not seem to correspond to
+> the current condition (dbt->bitrate > 1000000).
+
+Where does the current condition comes from? Is it some empirical test?
+
+FYI, the
+
+  (dbt->brp == 1 || dbt->brp == 2)
+
+check comes from ISO 11898.
+
+> Although for CANFD, rates below 1 Mbit/s would negate the primary
+> advantages of FD, from a controller hardware design perspective, I
+> would still prefer to retain the condition (dbt->bitrate > 1000000).
+> 
+> Do you have any other suggestions?
+
+Using TDC on low bitrates is indeed unstable and can lead to bus errors.
+But the condition which you suggest
+
+  (dbt->bitrate > 1000000)
+
+is indirectly linked with the brp values. That's why the brp check is
+sufficient (and more precise than the empirical 1 Mbit/s threshold value).
+
+Are you able to trigger any bus errors when using TDC with a brp value
+of 1 or 2 and a bitrate below 1 Mbit/sec? If no, there is no reason to
+add this extra check and we can continue to rely on the framework test.
 
 
-On 26.05.26 01:46, Edward Adam Davis wrote:
-> On Mon, 25 May 2026 20:15:21 +0200, Oliver Hartkopp wrote:
->>> When a user binds a non-CAN device to a socket, the vulnerability reported
->>> in [1] is triggered during the socket's closure and release phase, due to
->>> the inability to find the expected receive list.
->>>
->>> Added checks for Mid-layer private and type during the rx unregistration
->>> process.
->>>
->>> [1]
->>> KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
->>> pc : can_rx_unregister+0x124/0x560 net/can/af_can.c:537
->>> Call trace:
->>>    can_rx_unregister+0x124/0x560 net/can/af_can.c:531 (P)
->>>    isotp_release+0x500/0x9d8 net/can/isotp.c:1232
->>>    __sock_release+0xa0/0x1d4 net/socket.c:722
->>>    sock_close+0x24/0x38 net/socket.c:1514
->>>
->>> Fixes: bdfb5765e45b ("can: af_can: remove NULL-ptr checks from users of can_dev_rcv_lists_find()")
->>> Reported-by: syzbot+8ed98cbd0161632bce95@syzkaller.appspotmail.com
->>> Closes: https://syzkaller.appspot.com/bug?extid=8ed98cbd0161632bce95
->>> Tested-by: syzbot+8ed98cbd0161632bce95@syzkaller.appspotmail.com
->>> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
->>
->> Hello Edward,
->>
->> many thanks for your investigation an effort to address the syzcaller issue!
->>
->> Btw. the root cause of the problem, that the receive lists can not be
->> accessed is the bonding process that the bonding driver mutates
->> and modifies the network device states to fit an Ethernet-like
->> aggregation model. Which destroys the can_ml_priv.
-> I noticed the "bonding" aspect, but I haven't yet delved deeply into
-> understanding why a vxcan interface cannot be enslaved to a bonding
-> net dev. After testing your patch, I observed that sockets previously
-> bound to the bonding net dev are no longer bound to that bonding net dev.
-
-I don't understand this last sentence.
-
-With my patch the CAN interfaces can not be enslaved anymore.
-As Syzbot is simply doing whatever is possible, it get's an error and 
-this error path is closed. Of course Syzbot can still test AF_CAN sockets.
-
-Regarding your observation the I assume that the bonding driver makes an 
-interface down/up cycle or something similar which might have such an 
-effect.
-
-But in the end it doesn't crash anymore when the bonding driver is 
-trying to fiddle with CAN interfaces.
-
-Best regards,
-Oliver
+Yours sincerely,
+Vincent Mailhol
 
 
