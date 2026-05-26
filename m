@@ -1,224 +1,215 @@
-Return-Path: <linux-can+bounces-7709-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7710-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QBfoH+XVFWrRcgcAu9opvQ
-	(envelope-from <linux-can+bounces-7709-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 19:18:29 +0200
+	id qL4WGav1FWqzfwcAu9opvQ
+	(envelope-from <linux-can+bounces-7710-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 21:34:03 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D80405DA806
-	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 19:18:28 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61F765DC05D
+	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 21:34:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 44C8530804CF
-	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 16:53:06 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 761043010830
+	for <lists+linux-can@lfdr.de>; Tue, 26 May 2026 19:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01BD23B95E7;
-	Tue, 26 May 2026 16:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8EE36E46C;
+	Tue, 26 May 2026 19:33:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bHUe9s3H"
+	dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="icMq0wN3";
+	dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b="3xLllx5+"
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B224A372ECC;
-	Tue, 26 May 2026 16:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779814384; cv=none; b=k60vp9sI5aib3/9/h4udMHTksI3KFDN0dCt2nwB0gWBYDAs563gB2TaTJj6XUGemNrP3y3LSuQEtzUtcNrXHQTgvPhbgom5U73bai2VqUy0bV8zlYThvhgzuQTr6omTr/nKtqnLD0CKXvyqFRfpGmZwdy5GgU3Sc/ZQUkiO3GIM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779814384; c=relaxed/simple;
-	bh=1LjAskGguz2rfgTsGFjdgHEYYWC/5+g0apQbVjirT74=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=SRXTPHCsRxwMLBBzi6Oin1aqqx4YqgAJCSZYSrUh7Uj8+RHpgtrZacCSc0DXlNL4b+vgp9Wa7tziQs0b8iQWEVziH3x2YbC4eDsJb9KXgdWGA4U2c0hCGW/3aGJKMKuyNyYU4htynE1rHgK4On8qSu/iDNGVGWpdCfL3bfgGzsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bHUe9s3H; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D511F000E9;
-	Tue, 26 May 2026 16:53:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779814383;
-	bh=6L1yzNzManCBqw0iUGXBvopsXg6RqxnpLx+6+pZbk4k=;
-	h=From:To:Subject:Date;
-	b=bHUe9s3HER94OX/fVTnu0pM2/GinyBNjFZ2sdOi0Yp12+5vXnn8wDfDqtygtCu8Bc
-	 Tjzs7tcckiDp3i/HTGeqx5IVl0SAXhsWR0+6IIrwH20WR6tbwO8IxLShSnSXq0xnjV
-	 8qRtF21ivwz+WYfgV5q7Kz0TlA9l/5ZufldJ2B3qu5PJuOLQM92o3sTiKJAsE0L/Rd
-	 +532jwyufQxxb2/2txmjhB/sfvWVubBUbrMPZM8G3fo1gqEy6Fetm3cqJvYxPRzfem
-	 lAOAzdD3AXt2Ci326I3LqbYIRU3IYBeMMWw5TfSL3umPS1Wf3/gcamhIlfUEnIC5Ww
-	 KvvJXw2QHLrYw==
-From: Lee Jones <lee@kernel.org>
-To: lee@kernel.org,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/1] can: bcm: defer rx_op deallocation to workqueue to fix thrtimer UAF
-Date: Tue, 26 May 2026 17:52:56 +0100
-Message-ID: <20260526165257.3705239-1-lee@kernel.org>
-X-Mailer: git-send-email 2.54.0.746.g67dd491aae-goog
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47AA97E792;
+	Tue, 26 May 2026 19:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.164
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779824034; cv=pass; b=rljfxtx8+JE6TiwFKRhisJl+NvWPQgf3dOq/nO0GrbxL8zgWLFs/E8yHAUGyD7VK8Be6DQKw0W6Q4e3HZf2celZAVmJm2/qOoMfirTzu5si1KqXlF7GF9YplS4MoItSEHThNPsHAQfNYifWZmTLw5/6L4GoxliQHH28O9704hNA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779824034; c=relaxed/simple;
+	bh=SYsPZs7a9SyuBfEe3D95+YF1+EA2QufZNXEnknDO+TM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kUbv3dYRayDtimK+B9BZAZHNz+pTV7vkRVJfxtCOtlChmn4OmOWxlm0sbv5YrypooGyyoGwAEoyTU+HDT/7Ag2aLpyBEfct4tIPpQi6MfDnm+Vkjm3EYRVaUfgoVoec+gTVn0Cr8T4TY7FWBxSpWWrnfdCfG1LtpulgzZ+/Mzpw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=icMq0wN3; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=3xLllx5+; arc=pass smtp.client-ip=81.169.146.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hartkopp.net
+ARC-Seal: i=1; a=rsa-sha256; t=1779824015; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=i5MVm7OwmoD7M70nhAvZckQfB2wY0vbfNKIulTfGqXK8X8K5o+ujqiP+9Xk5C67ikf
+    E5C1DTJ8t6uUyKBfT7OT0ilCa7w/VtI+3O7zzSRLfUBMxgSD0NCZgEaFa40DzleSW3oR
+    48tczZLldL7Lu3i17B7ze7aP34sjWX3nr1XTGkwUOInrL06nNUq5+p1u0K4tLjCfwPv/
+    5nxziUV+NkjpDrcD8RSCB/qRj7aoiNAy96VSMKCUed6hkNzN4HK+kK1WTtOl2T5nSZky
+    FSBDENZKIh2DhvE6L+CdZVcurJoZ/y9pNl3KPOgZpIMyZaJF3zxrGwp7ciwJcq4CeNYy
+    cPkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1779824015;
+    s=strato-dkim-0002; d=strato.com;
+    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
+    bh=yrKSjqssC7gr/00PqSV8FsCccDTknFlBMpv6CB0ZYwI=;
+    b=ILIUjuQJFx1IUP6LCDn1wcP+FnGdSfDoXyiZ4+DcVucBEY++ExLpOdievGnFtCaNBr
+    cknSwmL3d3Z5/M0jdlB5XKaM0P8vHYlvZwMjWWOtsF6WFWeSyPmwIsM8DejU9fWAxolP
+    8LTOF2g1sDgVo/EmLgYG3JAFAUswWJeCNeFVJ/a3ZjXjZd7UbjQzrJG4jZ/Uo+OoXUSK
+    ma+AvqG9kGMGL7a4CGYjxQXtmVJMZNX5OSKoNzh09YZV0fghu02dFrfwXpO7bKcsywCU
+    TIHyUv1xGOyfzFGZugIX2WzzK41KJ951kCE6hfwNWMU7LMNUln1ZhXjEIpFs/43C9QxH
+    UYKw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1779824015;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
+    bh=yrKSjqssC7gr/00PqSV8FsCccDTknFlBMpv6CB0ZYwI=;
+    b=icMq0wN3eA3rciBQDzBrgiImtbzJEo9yIqJ3I6eKsWc50STpPzyoftpV+I13kf/FEO
+    BtdgcSlL730g6zLbV1ZgtzCqCo4XKhoMd6Y1yvaQYtiAj8JEFA0lPK2PmeEztQYiBsQN
+    UmNut6iXarMFzGIItE4U+HZ67YgdIYAuRmS7wghL0JIIZ9y6eH1gDgnOCULcjC7L63sL
+    /YRNispoeq21Y2S+gosZB1M2+AsTS/yab62iCX5uVsY0IZwNNme9SkZ3MUJaSSOeOGvp
+    OncmIVfhbT7V0PJ1R0bXHaoB8Esa5rYjmjzUwaYXJ37+K++bKPAkmXxbfo6hON1HstQ6
+    UsIQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1779824015;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
+    bh=yrKSjqssC7gr/00PqSV8FsCccDTknFlBMpv6CB0ZYwI=;
+    b=3xLllx5+Bsy1kpofotGWpNEtevngMTbRZvYf8qdjqN0Kib4b4PPFDZYx14CA0Iuw9J
+    jdrjDP9juST8fWaSJ2Cw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeFQ7s0ZDT0tksFSR+Aix0esQJVIAlZEg=="
+Received: from [127.0.1.1]
+    by smtp.strato.de (RZmta 55.0.1 AUTH)
+    with ESMTPSA id Kba96d24QJXZedT
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Tue, 26 May 2026 21:33:35 +0200 (CEST)
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+Date: Tue, 26 May 2026 21:33:19 +0200
+Subject: [PATCH] bonding: refuse to enslave CAN devices
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260526-bonding-candev-v1-1-ba1df400918a@hartkopp.net>
+X-B4-Tracking: v=1; b=H4sIAH71FWoC/yXMSwqDMBRG4a3IHRuIQQW7FXGQxx97HVxLoiKIe
+ 29qh9/gnIsyEiPTq7oo4eDMqxQ0dUX+bWWG4lBMRpted6ZXbpXAMitvJeBQsbXaRwNgcFSiT0L
+ k8xmO0995dwv89rvQfX8BRdgU5XIAAAA=
+X-Change-ID: 20260526-bonding-candev-f4a0cf2eee9b
+To: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-can@vger.kernel.org, 
+ syzbot+8ed98cbd0161632bce95@syzkaller.appspotmail.com, 
+ Oliver Hartkopp <socketcan@hartkopp.net>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779824015; l=2929;
+ i=socketcan@hartkopp.net; s=20260128; h=from:subject:message-id;
+ bh=SYsPZs7a9SyuBfEe3D95+YF1+EA2QufZNXEnknDO+TM=;
+ b=UywXRtabtOqgKOVcXvRWj/TPgcI73jizoiw2nanEO1TDm9SYNzs5otxERjnIKjSIU7bYvqtpK
+ so19BlLEtzAC7hbrNj1n4HkqwWerR6aSEnpZTX6EYIP85ccNJ6bwlqG
+X-Developer-Key: i=socketcan@hartkopp.net; a=ed25519;
+ pk=/gU/7/wBqak3kTsTeFbCCqUi9dnh+1i6ITEkfPj/BvU=
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7709-lists,linux-can=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7710-lists,linux-can=lfdr.de];
+	DKIM_TRACE(0.00)[hartkopp.net:+];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lee@kernel.org,linux-can@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can,netdev,8ed98cbd0161632bce95];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: D80405DA806
+	DBL_BLOCKED_OPENRESOLVER(0.00)[syzkaller.appspot.com:url,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 61F765DC05D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Commit f1b4e32aca08 ("can: bcm: use call_rcu() instead of costly
-synchronize_rcu()") replaced synchronize_rcu() in bcm_delete_rx_op()
-with call_rcu() and introduced the RX_NO_AUTOTIMER flag.
+syzbot reported a kernel paging request crash in
+can_rx_unregister() inside net/can/af_can.c. The crash occurs
+because a virtual CAN device (vxcan) is being enslaved to a
+bonding master.
 
-However, this flag check was omitted for thrtimer in the packet rx
-fast-path. During BCM RX operation teardown, a concurrent RCU reader
-(bcm_rx_handler) can race and re-arm thrtimer via
-bcm_rx_update_and_send() after call_rcu() has been scheduled.  Once
-the RCU grace period elapses, bcm_op is freed.  The subsequently
-firing thrtimer then dereferences the deallocated op, causing a UAF.
+During the enslavement process, the bonding driver mutates
+and modifies the network device states to fit an Ethernet-like
+aggregation model. However, CAN devices operate on a completely
+different Layer 2 architecture, relying on the CAN mid-layer
+private data structure (can_ml_priv) instead of standard
+Ethernet structures. Since bonding does not initialize or
+maintain these CAN structures, subsequent operations on the
+half-enslaved interface (such as closing associated sockets
+via isotp_release) lead to a null-pointer dereference when
+accessing the CAN receiver lists.
 
-Adding flag checks to the rx fast-path (bcm_rx_update_and_send) does not
-fully close the TOCTOU race and introduces latency for every CAN frame.
-Conversely, calling hrtimer_cancel() directly inside the RCU callback
-(softirq context) is fatal as hrtimer_cancel() can sleep, triggering
-a "scheduling while atomic" panic.
+Bonding CAN interfaces is architecturally invalid as CAN lacks
+MAC addresses, ARP capabilities, and standard Ethernet
+link-layer mechanisms. While generic loopback devices are
+blocked globally in net/core/dev.c, virtual CAN devices
+bypass this check because they do not carry the IFF_LOOPBACK
+flag, despite acting as local software-loopbacks.
 
-Resolve this by deferring the timer cancellation and memory free to a
-dedicated unbound workqueue (bcm_wq).  The RCU callback now queues a
-work item to bcm_wq, which safely cancels both timers and deallocates
-memory in sleepable process context.  A dedicated workqueue is used to
-prevent system-wide WQ saturation and is cleanly flushed/destroyed
-on module unload to avoid rmmod page faults.
+Fix this by explicitly blocking network devices of type
+ARPHRD_CAN from being enslaved at the very beginning of
+bond_enslave(). This prevents illegal state mutations,
+eliminates the resulting KASAN crashes, and avoids potential
+memory leaks from incomplete socket cleanups.
 
-Fixes: f1b4e32aca08 ("can: bcm: use call_rcu() instead of costly synchronize_rcu()")
-Signed-off-by: Lee Jones <lee@kernel.org>
+As the CAN support has been added a long time after bonding
+the Fixes-tag points to the introduction of ARPHRD_CAN that
+would have needed a specific handling in bonding_main.c.
+
+Fixes: cd05acfe65ed ("[CAN]: Allocate protocol numbers for PF_CAN")
+Reported-by: syzbot+8ed98cbd0161632bce95@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=8ed98cbd0161632bce95
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
-v1 => v2: New patch using workqueues
-v2 => v3: Add memory barrier
+ drivers/net/bonding/bond_main.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- net/can/bcm.c | 29 ++++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index af82a3df2c5d..82e779f7916b 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -1888,10 +1888,16 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+ 	const struct net_device_ops *slave_ops = slave_dev->netdev_ops;
+ 	struct slave *new_slave = NULL, *prev_slave;
+ 	struct sockaddr_storage ss;
+ 	int res = 0, i;
+ 
++	if (slave_dev->type == ARPHRD_CAN) {
++		BOND_NL_ERR(bond_dev, extack,
++			    "CAN devices cannot be enslaved");
++		return -EPERM;
++	}
++
+ 	if (slave_dev->flags & IFF_MASTER &&
+ 	    !netif_is_bond_master(slave_dev)) {
+ 		BOND_NL_ERR(bond_dev, extack,
+ 			    "Device type (master device) cannot be enslaved");
+ 		return -EPERM;
 
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index a4bef2c48a55..c49b09f3229f 100644
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -58,6 +58,7 @@
- #include <linux/can/skb.h>
- #include <linux/can/bcm.h>
- #include <linux/slab.h>
-+#include <linux/workqueue.h>
- #include <linux/spinlock.h>
- #include <net/can.h>
- #include <net/sock.h>
-@@ -92,6 +93,8 @@ MODULE_ALIAS("can-proto-2");
- 
- #define BCM_MIN_NAMELEN CAN_REQUIRED_SIZE(struct sockaddr_can, can_ifindex)
- 
-+static struct workqueue_struct *bcm_wq;
-+
- /*
-  * easy access to the first 64 bit of can(fd)_frame payload. cp->data is
-  * 64 bit aligned so the offset has to be multiples of 8 which is ensured
-@@ -105,6 +108,7 @@ static inline u64 get_u64(const struct canfd_frame *cp, int offset)
- struct bcm_op {
- 	struct list_head list;
- 	struct rcu_head rcu;
-+	struct work_struct work;
- 	int ifindex;
- 	canid_t can_id;
- 	u32 flags;
-@@ -793,9 +797,12 @@ static struct bcm_op *bcm_find_op(struct list_head *ops,
- 	return NULL;
- }
- 
--static void bcm_free_op_rcu(struct rcu_head *rcu_head)
-+static void bcm_free_op_work(struct work_struct *work)
- {
--	struct bcm_op *op = container_of(rcu_head, struct bcm_op, rcu);
-+	struct bcm_op *op = container_of(work, struct bcm_op, work);
-+
-+	hrtimer_cancel(&op->timer);
-+	hrtimer_cancel(&op->thrtimer);
- 
- 	if ((op->frames) && (op->frames != &op->sframe))
- 		kfree(op->frames);
-@@ -806,6 +813,14 @@ static void bcm_free_op_rcu(struct rcu_head *rcu_head)
- 	kfree(op);
- }
- 
-+static void bcm_free_op_rcu(struct rcu_head *rcu_head)
-+{
-+	struct bcm_op *op = container_of(rcu_head, struct bcm_op, rcu);
-+
-+	INIT_WORK(&op->work, bcm_free_op_work);
-+	queue_work(bcm_wq, &op->work);
-+}
-+
- static void bcm_remove_op(struct bcm_op *op)
- {
- 	hrtimer_cancel(&op->timer);
-@@ -1839,11 +1854,15 @@ static int __init bcm_module_init(void)
- {
- 	int err;
- 
-+	bcm_wq = alloc_workqueue("can-bcm-wq", WQ_UNBOUND, 0);
-+	if (!bcm_wq)
-+		return -ENOMEM;
-+
- 	pr_info("can: broadcast manager protocol\n");
- 
- 	err = register_pernet_subsys(&canbcm_pernet_ops);
- 	if (err)
--		return err;
-+		goto register_pernet_failed;
- 
- 	err = register_netdevice_notifier(&canbcm_notifier);
- 	if (err)
-@@ -1861,6 +1880,8 @@ static int __init bcm_module_init(void)
- 	unregister_netdevice_notifier(&canbcm_notifier);
- register_notifier_failed:
- 	unregister_pernet_subsys(&canbcm_pernet_ops);
-+register_pernet_failed:
-+	destroy_workqueue(bcm_wq);
- 	return err;
- }
- 
-@@ -1869,6 +1890,8 @@ static void __exit bcm_module_exit(void)
- 	can_proto_unregister(&bcm_can_proto);
- 	unregister_netdevice_notifier(&canbcm_notifier);
- 	unregister_pernet_subsys(&canbcm_pernet_ops);
-+	rcu_barrier();
-+	destroy_workqueue(bcm_wq);
- }
- 
- module_init(bcm_module_init);
--- 
-2.54.0.746.g67dd491aae-goog
+---
+base-commit: d60ec36cab338dfe2ae40d73e9c8d6c4af70d2b8
+change-id: 20260526-bonding-candev-f4a0cf2eee9b
+
+Best regards,
+--  
+Oliver Hartkopp <socketcan@hartkopp.net>
 
 
