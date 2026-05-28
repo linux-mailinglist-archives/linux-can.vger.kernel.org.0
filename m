@@ -1,140 +1,166 @@
-Return-Path: <linux-can+bounces-7719-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7720-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MHgANEEGGGqdZggAu9opvQ
-	(envelope-from <linux-can+bounces-7719-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 28 May 2026 11:09:21 +0200
+	id TNd5NRUPGGqwbQgAu9opvQ
+	(envelope-from <linux-can+bounces-7720-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 28 May 2026 11:47:01 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ECFA5EF3E6
-	for <lists+linux-can@lfdr.de>; Thu, 28 May 2026 11:09:21 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DE355EFDB1
+	for <lists+linux-can@lfdr.de>; Thu, 28 May 2026 11:47:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C91C233E3138
-	for <lists+linux-can@lfdr.de>; Thu, 28 May 2026 08:55:10 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id AD3E03067E44
+	for <lists+linux-can@lfdr.de>; Thu, 28 May 2026 09:46:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1F3638E12D;
-	Thu, 28 May 2026 08:54:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B433B2FF5;
+	Thu, 28 May 2026 09:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="WMsureQg"
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B9034165B
-	for <linux-can@vger.kernel.org>; Thu, 28 May 2026 08:53:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA66D3B1EC6
+	for <linux-can@vger.kernel.org>; Thu, 28 May 2026 09:45:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779958440; cv=none; b=bsVJa3RZTuELRyK3h/YH50gSUUiucthCnRrYQNqc7w7QH2BIhAnvsU/vt90mNsuVO/v+KQmY7TRERXfE8xkgIOujr+gsdoAF6PF6++mrkxln5mL4bRJYbbh1QgAbD0ePCLRGEWToOIrdNiOppKwn2KLhnYGecjJA0LxG9ymRMN4=
+	t=1779961551; cv=none; b=RiRPvpR4doH02rGxfBJZTLNKrdWBODMruRCvQqJ4pbZNLSUJg2UdQz11nF2KRS83TfQyff9W+oYzS+yb5ZiYyPzmlDUAJGfQNOLfqtmGIfmrle92D3/OsRb6vn1TFgVK4iIZ1Wn9JddNgOxjFd4kF307iR/kfEtQ4dn2j0MbmWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779958440; c=relaxed/simple;
-	bh=0Gw37sNlsR91KhgF8/wQW3ulj7WrcxlZU/MAaALgfFw=;
-	h=From:Subject:To:Cc:In-Reply-To:Content-Type:Date:Message-Id; b=r6GLl6jEDCpAvRhVZN30dEGVKFx3CUAkYnBw9urN/2ivu0PxcCtJ04Zj+BSZj7lSnQwmYaTfIEwIX0ja8w2/yIQCmsGY8sc7/0sFKwZ0O/bEl+m9ZAVT1oDEnp+tWECldjsizwVY1nJJimVFXMeP3jz69nljWJFvR46I40oAqG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <sha@pengutronix.de>)
-	id 1wSWUp-0003kh-Hb; Thu, 28 May 2026 10:53:43 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <sha@pengutronix.de>)
-	id 1wSWUo-002FGE-0Z;
-	Thu, 28 May 2026 10:53:42 +0200
-Received: from sha by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
-	(envelope-from <sha@pengutronix.de>)
-	id 1wSWUo-00000003ZfC-2dBa;
-	Thu, 28 May 2026 10:53:42 +0200
-From: "Sascha Hauer" <s.hauer@pengutronix.de>
-Subject: Re: [PATCH v3 0/7] hw/arm/sabrelite: Add FlexCAN support
-To: "Marc Kleine-Budde" <mkl@pengutronix.de>
-Cc: "Andrei VOLKOV" <andrey.volkov@munic.io>, "Pavel Pisa" <pisa@fel.cvut.cz>, "Bernhard
- Beschow" <shentey@gmail.com>, =?utf-8?b?TWF0ecOhxaEgQm9iZWs=?= <matyas.bobek@gmail.com>, "Matyas
- Bobek" <bobekmat@fel.cvut.cz>, qemu-devel@nongnu.org, qemu-arm@nongnu.org, "Oliver
- Hartkopp" <socketcan@hartkopp.net>, "Nikita Ostrenkov" <n.ostrenkov@gmail.com>, "Daniel
- P. Berrange" <berrange@redhat.com>, "Peter Maydell" <peter.maydell@linaro.org>, linux-can@vger.kernel.org, "Sascha
- Hauer" <s.hauer@pengutronix.de>, "David Jander" <david@protonic.nl>
-In-Reply-To: <20260527-durable-festive-millipede-f6e2b9-mkl@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 28 May 2026 08:53:42 +0000
-Message-Id: <E1wSWUo-00000003ZfC-2dBa@pty.whiteo.stw.pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+	s=arc-20240116; t=1779961551; c=relaxed/simple;
+	bh=V13AfRKBoFfWymKdCDI1z5Br/O/2J+tw3n3387QbOCA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MXAVft/1CB+4ejusTudg+1/pRjbxCwl/c8He+WMipWZ2mEqh8fW1L1zOGgfXd4Arp1H7JJCZ6+HMnwJXaXjn1zxlrmxj6eSOHvB4OaWSfe/WPGJzTrjXSGZsUU6X+g2bQE7bfcd0rjFpph7052srw876TbH5sn0HjBc5CyCPir0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=WMsureQg; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-45e7c636e74so6687601f8f.0
+        for <linux-can@vger.kernel.org>; Thu, 28 May 2026 02:45:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1779961547; x=1780566347; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nh6aSIZiiIgo8ohcnAvcWtYuptVBBfGbUMRArMN4MVY=;
+        b=WMsureQgqgI+T8zlRE9t+pkPs0nVOkRpK25oKTPf+S4vkuvNnaJ7dLlZmtQS2N67Qt
+         0iCWsK0zr5aMRO4Rp2Zc66oLcZOPx57P22MZpPeS/c7pyOnDpDCRtqRS6XGgf2v+ImUY
+         gpdrz5eNTh57p97PsOohdcvye5CI85hShleNOBat6pvQGrqYKSYhXloRT/7TuAOkR8LK
+         Nk2CSLexvuQuM/Cx37LZdOiXmRxHVS/HIGwVB/2twaqwB3+6Xqax9ZiPF906Ri3/fomW
+         rmj29Bs2jtdb0+ccBxfw3nHHFQrXIAgpPuYfymOTV+OZzlfibAfFXlduUkmeiFhp+R9u
+         cOxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779961547; x=1780566347;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nh6aSIZiiIgo8ohcnAvcWtYuptVBBfGbUMRArMN4MVY=;
+        b=VE9qqIIUAP8KRcinxXrB3rKEiaSfa5l6hC39stdJpu4w9NwAF2nOTSkRoLr8ViaKz9
+         Us/kt0sHGRne1SmbC3DiQL0NPEkP5lS5CE0PAM4foxaE8DVpfF4G1Eyqu3xrJvtl2e1t
+         OaTpbVgNhys1bpLQ7htiVtcEjBSG3BumhMqzJYxwSLpiHkwt7f9KuCLJhAbHHhxjFrSn
+         yuFp2ocmOVGvDOk+mY3N/PWNODfpFT7/u+yPbLPtACXyzlgXqzCRHhulJ46ndUqoqKd4
+         iEOca9fRTjIdu9lHAmpx540fpxHrJGcoLdCMsMKscGpO8ztBiPg7hTmQwlHkVnmXSY96
+         bPGA==
+X-Gm-Message-State: AOJu0YxYwhNIVu+mAoZ5kHCIxWm5pQwzM+V3sqochOulZZdy5obLbvxu
+	e1LWX0EqnscTlB99gGjP9DySQgHZMJhFn638ZYjuizOdpULkLsFsiK26UI4OCzPJqsY=
+X-Gm-Gg: Acq92OFrAU3BYMGBbNrR4AM5DODzzXyn4tYII0d7rfNKuo4sjqZMAAom8249Ec3jh9C
+	+RSMwNg/MboK1L03TEXKTB4ODwnz3CknI7VUb66CCmz1EeB1SbM8ZpBIwfc5+lV9LUJy9e0fsCk
+	5PhQnwJMfHolh87SolKDsYwjsP/UYQVKhgzy2QnnrHx6eh9ELbFTGrRDkr+boWc3UEitBQL3M5H
+	Bq/0ZQCClM+4T6TKwFbIB5bNxcpcSJvbdMVNsEaCpq4PFY/Dg2fSHsJBghatSaTJ20PmBV/HMIv
+	eowOtQ+KuqXIgVUL4mPmnEDx5g9tzSksZpOiuH+LHcZxtQxBFlzCLCOucJyCaMzBbqGyMClR9S8
+	8HkGwEVC3Uw/4w/eWvc9yzv0nuH43E8XSFeT90HJsMgk7wfnqR6nKz2RB6mnpGeUF3o+r+veFf9
+	EP4uqzLZQvQQkLK/KJTjyEQ6HTQiKSvAtCgLQ5uOjlXtmYj/kqd+oQBZBQ/FKzymsxrkz346C31
+	H0xQG0S+2YiI2q3AfK+iUV5HA==
+X-Received: by 2002:a05:6000:4b05:b0:452:c9f:4b91 with SMTP id ffacd0b85a97d-45eb367f6e7mr41451950f8f.4.1779961547141;
+        Thu, 28 May 2026 02:45:47 -0700 (PDT)
+Received: from localhost (p200300f65f47db04e95e43453a0d1648.dip0.t-ipconnect.de. [2003:f6:5f47:db04:e95e:4345:3a0d:1648])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-45edb5b314dsm11510561f8f.30.2026.05.28.02.45.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2026 02:45:46 -0700 (PDT)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>
+Cc: linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] can: flexcan: Drop unused platform driver data
+Date: Thu, 28 May 2026 11:45:39 +0200
+Message-ID: <20260528094540.1867783-2-u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-X-Spamd-Result: default: False [2.04 / 15.00];
-	MISSING_MIME_VERSION(2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1253; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=V13AfRKBoFfWymKdCDI1z5Br/O/2J+tw3n3387QbOCA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBqGA7EkaqACZXilClx9eWgJ28cjRa813TGq79hT QDff5lCWp+JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCahgOxAAKCRCPgPtYfRL+ Tm0WB/4s96D1moX08qH819PyesNSQ/XkDxeJhj4TuMiXRl2AeSdT6aoBHmyqGuB/6w0pv+OwDj+ NYCyJgcke3j45TyozVXc7nblD/XzU3IEmXovXaP1MR2t5egfFSyDUl1LegeqH6gi9vTYHP+b/ZF joVtmPN8fGETe5+08hRQIEqzVO8nqPHdgutQbL31eOQfC/wpxyssZAqeUrbmIKYygsHsfa4DHCk N9ljpcu2MDAf/kSw6Ixq4UOMr36fCOzT4X3H7md/wYTgbTVNj0ZIiT2NVCZt3dQvbni9iL/YDyb 9cVyShyUxJcCU4wEBKv/6z0ixE2dmU9YEdUVxfmcSK3xjRKH
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FREEMAIL_CC(0.00)[munic.io,fel.cvut.cz,gmail.com,nongnu.org,hartkopp.net,redhat.com,linaro.org,vger.kernel.org,pengutronix.de,protonic.nl];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7719-lists,linux-can=lfdr.de];
-	DMARC_NA(0.00)[pengutronix.de];
+	TAGGED_FROM(0.00)[bounces-7720-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[baylibre.com];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[baylibre.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	FROM_NEQ_ENVFROM(0.00)[s.hauer@pengutronix.de,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.990];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	R_DKIM_NA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-can@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,munic.io:email,pty.whiteo.stw.pengutronix.de:mid,pengutronix.de:url]
-X-Rspamd-Queue-Id: 2ECFA5EF3E6
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,baylibre.com:email,baylibre.com:mid,baylibre.com:dkim]
+X-Rspamd-Queue-Id: 9DE355EFDB1
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 2026-05-27 20:38, Marc Kleine-Budde wrote:
-> On 27.05.2026 18:25:37, Andrei VOLKOV wrote:
-> > As the original author, I have no objection to reusing (my part of) the
-> > header under GPL-2.0-or-later. The reason it was not done that way in
-> > 2005/2006 is simple: only GPLv2 existed at the time.
-> >
-> > All the more so since, as already noted, the code in question is essent=
-ially
-> > a direct transcription of offsets and bit-fields from the Freescale/NXP
-> > datasheets, which leaves very little room for a meaningful copyright cl=
-aim
-> > in the first place.
-> >
-> > Personally, I would prefer that this code not be rewritten and be kept =
-as
-> > is, to avoid introducing subtle bugs in QEMU later on.
-> > That said, @Sascha and @David may have a different opinion.
-> >
-> > PS: andrey.volkov@munic.io is my correct current work address, but I wo=
-uld
-> > prefer to use my personal one for this discussion.
->=20
-> I've added David on Cc and given them a short overview of this
-> discussion and linked this thread.
->=20
-> I'll agree to re-license the register definitions of the flexcan driver
-> to GPL-2.0-or-later. I'll poke Sasha tomorrow.
+No function in the flexcan driver ever accesses the .driver_data member
+of its .id_table array as device_get_match_data() returns NULL for
+non-of platform devices. So drop that unused assignment.
 
-No objections from me as well.
+While touching that array, drop the trailing comma after the terminator
+entry.
 
-Sascha
+Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
+---
+Hello,
 
---
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+I found this patch opportunity while working on a cleanup quest that has
+unifying platform_device_id arrays as first step.
+
+Best regards
+Uwe
+ drivers/net/can/flexcan/flexcan-core.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
+index f5d22c61503f..1871def90fe3 100644
+--- a/drivers/net/can/flexcan/flexcan-core.c
++++ b/drivers/net/can/flexcan/flexcan-core.c
+@@ -2077,10 +2077,9 @@ MODULE_DEVICE_TABLE(of, flexcan_of_match);
+ static const struct platform_device_id flexcan_id_table[] = {
+ 	{
+ 		.name = "flexcan-mcf5441x",
+-		.driver_data = (kernel_ulong_t)&fsl_mcf5441x_devtype_data,
+ 	}, {
+ 		/* sentinel */
+-	},
++	}
+ };
+ MODULE_DEVICE_TABLE(platform, flexcan_id_table);
+ 
+
+base-commit: e7d700e14934e68f86338c5610cf2ae76798b663
+-- 
+2.47.3
+
 
