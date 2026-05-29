@@ -1,202 +1,163 @@
-Return-Path: <linux-can+bounces-7725-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7726-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EJBgNlhDGGoEiAgAu9opvQ
-	(envelope-from <linux-can+bounces-7725-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 28 May 2026 15:30:00 +0200
+	id hT8zBmjhGGogoggAu9opvQ
+	(envelope-from <linux-can+bounces-7726-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 29 May 2026 02:44:24 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A12D5F2B9B
-	for <lists+linux-can@lfdr.de>; Thu, 28 May 2026 15:29:59 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EEC35FBBF5
+	for <lists+linux-can@lfdr.de>; Fri, 29 May 2026 02:44:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5A25E300C0D6
-	for <lists+linux-can@lfdr.de>; Thu, 28 May 2026 13:29:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C015930976F8
+	for <lists+linux-can@lfdr.de>; Fri, 29 May 2026 00:44:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F2393EE1C7;
-	Thu, 28 May 2026 13:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B9CC34BA5B;
+	Fri, 29 May 2026 00:44:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="pegeU1Mk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X8vCDQKN"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DED3E8343
-	for <linux-can@vger.kernel.org>; Thu, 28 May 2026 13:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE02114A8B;
+	Fri, 29 May 2026 00:44:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779974998; cv=none; b=qjMhrdte6gZY98h3vfkLdmRWi7/OAER0Xau00beb/80ilhC62Y0jx/0q+/cb3bntVcMQjb6fkyMFotfmEyd0NL+NcZQyUWqRJ9x93iM6INY2c+DKZ9ShrSJDA0RkgOmbdDI2M26LDFf14iQIMYoyZdcoY8GdOH770VqLxwuYwIU=
+	t=1780015460; cv=none; b=m/kUTxH8okyukdXH4qvt06WuwL4dK+AvllTvS9tTCT3FU4tmC0+KZ4gxVpAumFzYwprkHooWSBHSnOfaimR1p5ZKQczBdlOE9T5PRzil+IzwF2HFhcCK3WOPsKfmIMQyEqYhSIZo+VNtOvlvU9PZUotdV78usO5zqUyvJmaHZfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779974998; c=relaxed/simple;
-	bh=XNnQVZfxi2P3fZljukpwXEVlZgMpLhjtAPozWaeQj3Y=;
+	s=arc-20240116; t=1780015460; c=relaxed/simple;
+	bh=zNzgnfJ3a45cpED8SGzfgLkvLRVzA8fRgxmHggWk5nc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NYPppeQ8e06KhD5Z0yt1CMnVtxfpz5tdEhhcSzwm4CRJuGMRG5YadPRhiIEbYMaP3F7OGXD0xLkb1hk6KJ4c1oAY2uSyWndmn1Lz6cZeWfHeySexcZf5lTcJY6/W/HwyWoWrW5/tInJsEkY/LcgoP3tiyEXgKHD+wn6Aeg3k9Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=pegeU1Mk; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-49048e043e5so50969815e9.1
-        for <linux-can@vger.kernel.org>; Thu, 28 May 2026 06:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1779974995; x=1780579795; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LCXQegNTB+nVINOGNKfMUrvEbATtYHfPnRY5JjuHmaY=;
-        b=pegeU1MkwVcT9uIBICu0vN1GGtXdM1bBGCVzHQ4PeCziG9hSqIcHCWVQT0nZEav4Kt
-         1gcaj8vLRo53Gn2pzedvvQOWSXRWPP2GY4cJilvYWgt0YZOHURtXNntUTe9XF/EwTWYq
-         2CnfsITsmg8myJK99SOZ9XiqGijTsTCrjwRnQdMLqv9p7eJ7LZqxX0pdV7GDB4QYNU1t
-         Ly19bu749bPwPa95kx/FHnEwdCQQ+XslFMv0TEY5If7+bxfKG+muOpTElQEWTL8qOa4U
-         /r4Qym0kLCloLMk/seh3GF2TkK6u90dZP2rYO7BwXtbtT0r6K6avgufK0Fk3iccqbW8k
-         qQag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779974995; x=1780579795;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LCXQegNTB+nVINOGNKfMUrvEbATtYHfPnRY5JjuHmaY=;
-        b=DvVD/JnhqFEgbaCKkkOanwwreQNVDnuNWuO6y8wwkHnWYLQYhY8ccctPpy0Bstf8sz
-         fFVeG/edtHCHph/FsI2iBXIPlNg/DgdPraw3OlB947lXuhgSQwN86tg8P0wBGciLt8YI
-         99J0jZ695LHjzJn0AokgUJlGvleoEhT/d75fDu/MSr3b9UYuETtvqqKlH+5/cbmn819l
-         XtU+EmTs1yYrqt/TaynIuVvQn8v5KBooom4lau04YTZQFTqQykQAJOGod3E82w3c4AaF
-         WnCB1kiCW2JHNR/kjcrxroV/8nXMZPZ0lqgXX20vB3Odo4CbC04NmH10pjldxVIXg4mI
-         CLHA==
-X-Forwarded-Encrypted: i=1; AFNElJ+0Y3bksT8n9gKLrlDORQGN+o4gFzpH2xsY16E8HZ1225ASwVgxZls6cZDvhjZekh5VepdcV/7lvdE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPiQMzxn3Yrwm64piFMMzw9cthr4HyjQcsXoaZRDIFzYKMtc3K
-	+hGgOGp20tad94nK5qDJx3y2/tZQMESOBvlpT8bEN5RUAwvwR39Rf2HKqoDa3Vpb+GA=
-X-Gm-Gg: Acq92OFvqsvWrRXYXImaATuZXrooHWxn1W5sZIKKSEAvbDfUDqm/02qMkO3azjmuyFR
-	Xe1wU5cCfIWUStunZFE+vF5h0Wttp77MahfqLom5WijuLbNwL/yA9mdP1Rq1OwQ1VBgnNmnfbMJ
-	J89puJhdNmGzQMnMkd1iUjiKgA+DN+M2M0YXOjAdUUrMfjmoD80dHEMXUfnujtBbTDhnU+0alXx
-	YMCahPOiP84+KT2jh8UpkVFvHfffTvGhQHYt8c2ErL04HGd0fnq4ZC2g5nUFzJAmiXPDwSb5wk0
-	o8WSX/Le6Fjh3HDKbT/xmmfO1B+cqXLWsN4ie9NNS2RVJny1Mf1UPT6EEulVq9ISflxCeJROEYo
-	yNWhWFF5SlVvvokU4AW330OuxPIn66OjtWzf4TA5+P8dGnR6HAn/4UFxxPwPTwN3FEDRwtu0VSt
-	6TPiBo4Ij+Ny/2U8jQfMXT9S9E1wxweGHS9Xu/AahzBsdVmpg2tVDEwewIs6es/RLLNq1wj+nBY
-	a4VpjWWDDD1FCO6uJgvHIaX6w==
-X-Received: by 2002:a05:600c:5298:b0:48e:7854:1608 with SMTP id 5b1f17b1804b1-490428dd523mr445577905e9.25.1779974995087;
-        Thu, 28 May 2026 06:29:55 -0700 (PDT)
-Received: from localhost (p200300f65f47db04e567da92d09b3dda.dip0.t-ipconnect.de. [2003:f6:5f47:db04:e567:da92:d09b:3dda])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4908b573d1dsm24714265e9.1.2026.05.28.06.29.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 06:29:54 -0700 (PDT)
-Date: Thu, 28 May 2026 15:29:53 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
-To: Vincent Mailhol <mailhol@kernel.org>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org, 
+	 Content-Type:Content-Disposition:In-Reply-To; b=lHSBbiQwPzgNELynA4z5Ge+o2N8cQl+vcv4LxMxwPtb8PpZKMGfChSQXITZ5aDSnRVbJITV0RpBsjeOIcWNG4aaeNaoO1bgLQzWoRboNvvjc9EwKE2WGrsvtH7NiRaWC+/Bp3H95V4xkNQStPwY5+lyTlkowRIq246FDd3+L4tw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X8vCDQKN; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1780015459; x=1811551459;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zNzgnfJ3a45cpED8SGzfgLkvLRVzA8fRgxmHggWk5nc=;
+  b=X8vCDQKNbRWC1FgAdObVjgv/cDxFvMZWn6gnnGUGDCTjBrp0tZ82x6jo
+   xscgX8aNDw5hlG7SpjL10EF25Ny4oWlCQHNOGUpHKmc5yUZSeIxLat9IV
+   2YINM3FfSiJ4pAhqepKdccAAALTc3FZVtlyr9WACUKYNq9ccTqPR28R79
+   ZBtRrZHyA7oizAjlxWsc9bameaqFrbECEBs/DRmX+v9TbNHYbiTk8N8r0
+   6BrgN2UpLH4e7QvsSOUWcl1Wei6l0jZl2EFIG+zDv4NYZIw5FFFQJboL1
+   uOsUlGJUoWMqwImuNEJaD2TOra/R1T4XgEqYHXFz7qekvYuXL5CgBoK5r
+   Q==;
+X-CSE-ConnectionGUID: 8B4Q0MaPRQCvT7k89oHVFg==
+X-CSE-MsgGUID: T2PrUebmSne+y29JPuCrUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11800"; a="91175595"
+X-IronPort-AV: E=Sophos;i="6.24,174,1774335600"; 
+   d="scan'208";a="91175595"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 17:44:19 -0700
+X-CSE-ConnectionGUID: Pw53IHidR4WMpX5WkFegkQ==
+X-CSE-MsgGUID: tRqCjm1tQrih2B50vzzuiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,174,1774335600"; 
+   d="scan'208";a="247790756"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 28 May 2026 17:44:17 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wSlKg-000000006bW-2XHs;
+	Fri, 29 May 2026 00:44:14 +0000
+Date: Fri, 29 May 2026 08:43:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-can@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v1] can: flexcan: Drop unused platform driver data
-Message-ID: <ahhCjFWJopFbFSg7@monoceros>
+Message-ID: <202605290854.3UtkTrpM-lkp@intel.com>
 References: <20260528094540.1867783-2-u.kleine-koenig@baylibre.com>
- <86caae65-e768-494b-8a75-f79ffcd2f5e4@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="t6cslezevnhpypcv"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <86caae65-e768-494b-8a75-f79ffcd2f5e4@kernel.org>
-X-Spamd-Result: default: False [-3.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
+In-Reply-To: <20260528094540.1867783-2-u.kleine-koenig@baylibre.com>
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7726-lists,linux-can=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7725-lists,linux-can=lfdr.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[baylibre.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-can];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,baylibre.com:email,baylibre.com:dkim]
-X-Rspamd-Queue-Id: 9A12D5F2B9B
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-can];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,intel.com:email,intel.com:mid,intel.com:dkim]
+X-Rspamd-Queue-Id: 5EEC35FBBF5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hi Uwe,
 
---t6cslezevnhpypcv
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1] can: flexcan: Drop unused platform driver data
-MIME-Version: 1.0
+kernel test robot noticed the following build warnings:
 
-Hello Vincent,
+[auto build test WARNING on e7d700e14934e68f86338c5610cf2ae76798b663]
 
-On Thu, May 28, 2026 at 01:02:20PM +0200, Vincent Mailhol wrote:
-> On 28/05/2026 at 11:45, Uwe Kleine-K=F6nig (The Capable Hub) wrote:
-> > No function in the flexcan driver ever accesses the .driver_data member
-> > of its .id_table array as device_get_match_data() returns NULL for
-> > non-of platform devices. So drop that unused assignment.
-> >=20
-> > While touching that array, drop the trailing comma after the terminator
-> > entry.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig (The Capable Hub) <u.kleine-koenig@ba=
-ylibre.com>
-> > ---
-> > Hello,
-> >=20
-> > I found this patch opportunity while working on a cleanup quest that has
-> > unifying platform_device_id arrays as first step.
-> >=20
-> > Best regards
-> > Uwe
-> >  drivers/net/can/flexcan/flexcan-core.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/f=
-lexcan/flexcan-core.c
-> > index f5d22c61503f..1871def90fe3 100644
-> > --- a/drivers/net/can/flexcan/flexcan-core.c
-> > +++ b/drivers/net/can/flexcan/flexcan-core.c
-> > @@ -2077,10 +2077,9 @@ MODULE_DEVICE_TABLE(of, flexcan_of_match);
-> >  static const struct platform_device_id flexcan_id_table[] =3D {
-> >  	{
-> >  		.name =3D "flexcan-mcf5441x",
-> > -		.driver_data =3D (kernel_ulong_t)&fsl_mcf5441x_devtype_data,
->=20
-> But now, fsl_mcf5441x_devtype_data becomes unused, right? Should this
-> also be dropped?
+url:    https://github.com/intel-lab-lkp/linux/commits/Uwe-Kleine-K-nig-The-Capable-Hub/can-flexcan-Drop-unused-platform-driver-data/20260528-181620
+base:   e7d700e14934e68f86338c5610cf2ae76798b663
+patch link:    https://lore.kernel.org/r/20260528094540.1867783-2-u.kleine-koenig%40baylibre.com
+patch subject: [PATCH v1] can: flexcan: Drop unused platform driver data
+config: powerpc-randconfig-001-20260529 (https://download.01.org/0day-ci/archive/20260529/202605290854.3UtkTrpM-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260529/202605290854.3UtkTrpM-lkp@intel.com/reproduce)
 
-Indeed. I would have expected that this results in a compiler warning,
-but there isn't one for me and I expected that the struct is still
-referenced in flexcan_of_match[] but obviously didn't check.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605290854.3UtkTrpM-lkp@intel.com/
 
-I'll wait with a v2 until the discussion in the neighbour thread in
-reply to Marc's review ends.
+All warnings (new ones prefixed by >>):
 
-Best regards
-Uwe
+>> drivers/net/can/flexcan/flexcan-core.c:296:42: warning: 'fsl_mcf5441x_devtype_data' defined but not used [-Wunused-const-variable=]
+     296 | static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
+         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~
 
---t6cslezevnhpypcv
-Content-Type: application/pgp-signature; name="signature.asc"
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
+   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
+   Selected by [y]:
+   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmoYQ08ACgkQj4D7WH0S
-/k6ebwf9Hp0mS55KJ2SPFpKPKwFLOvgU4aNzVxsoNP0gVIOpOuAyjIhbfdvCl5Gj
-WlWg8wjBkcEVQv59iLdGvC5muVwcTrm9iSHvmSvr70ts1DwaGp55YDSxcLnZju4J
-eRcWHe1pC9WSGvloDNOK/WIkdUgaE7Ougr7xNLUxan9M3rAkBEzsr49NnhTGWTZq
-spMi4iSI8D+HUeyXOSiYnHhS5/N2NrWKPk91CGBCzXxvYRZYqWjJAmEZz5sQ2fY2
-Q3eDpjOc+2S4WoeTushQgLbBqnqx+w7abfHCC/cBhssoc5bu6t+VztzkEG0+m52Y
-6nM5jHdvh1o7aiJC04cOVQJo3KdXcA==
-=y3I5
------END PGP SIGNATURE-----
+vim +/fsl_mcf5441x_devtype_data +296 drivers/net/can/flexcan/flexcan-core.c
 
---t6cslezevnhpypcv--
+4b702878afc375 drivers/net/can/flexcan.c              Marc Kleine-Budde 2020-09-22  295  
+d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02 @296  static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
+d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02  297  	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
+c5c88591040ee7 drivers/net/can/flexcan/flexcan-core.c Marc Kleine-Budde 2022-01-07  298  		FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
+d945346db1ef41 drivers/net/can/flexcan/flexcan-core.c Marc Kleine-Budde 2022-08-11  299  		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
+d945346db1ef41 drivers/net/can/flexcan/flexcan-core.c Marc Kleine-Budde 2022-08-11  300  		FLEXCAN_QUIRK_SUPPORT_RX_FIFO,
+d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02  301  };
+d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02  302  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
