@@ -1,158 +1,288 @@
-Return-Path: <linux-can+bounces-7728-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7729-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wGhUCkHzGGoMpQgAu9opvQ
-	(envelope-from <linux-can+bounces-7728-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 29 May 2026 04:00:33 +0200
+	id yKulMcs6HGq1LgkAu9opvQ
+	(envelope-from <linux-can+bounces-7729-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sun, 31 May 2026 15:42:35 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41A5D5FC3DB
-	for <lists+linux-can@lfdr.de>; Fri, 29 May 2026 04:00:31 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42C7B616669
+	for <lists+linux-can@lfdr.de>; Sun, 31 May 2026 15:42:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D9C37301B243
-	for <lists+linux-can@lfdr.de>; Fri, 29 May 2026 02:00:30 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8DAB73002E55
+	for <lists+linux-can@lfdr.de>; Sun, 31 May 2026 13:42:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8666134C990;
-	Fri, 29 May 2026 02:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D548E2D6E66;
+	Sun, 31 May 2026 13:42:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hnY/y2FJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cXsRDvi/"
 X-Original-To: linux-can@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D82803612D5;
-	Fri, 29 May 2026 02:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F5629ACDD;
+	Sun, 31 May 2026 13:42:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780020027; cv=none; b=REv62zTBtWNTmtHhwTbzVuMiIgB0lFCcz4GOFiabgDlL7C0WVi92EGo5ZyQlxOnuFkorJzW59dJKKoGzgH5YpvN1HrRpqEdG+ZTqZE+ZzK2SMbkbdafU2VWLHQ16Yxme2a1GaSG4gpJJDV9cTZ0i/UZGQFjNXK2WW4EkAYEZLDw=
+	t=1780234952; cv=none; b=sw70o3c+/JpwWSSiAwaz5FIxNr7s5QA6LosJny5DkJnbozp6mV0B6x7fRIuyQAgPZ2SorbVIajigHgCnBPMwHNRBVTwvB660hHzKS+L2ZFv5VBV0tArtGt5qNNvF7qQsCh6VY2LCtCeLo7k1Too1mfOEuDnYxjAyJyof7/gDKk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780020027; c=relaxed/simple;
-	bh=v7SUI5JPIDJF7swbx4MsnsnbEBHDeSvQQx/6or3YF0s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SJIkSZlRgz0ligWimFkukb6aRCBBqyXuQOziZql2bNwSVUJE32WulJ35hMcUG3QCkykfMXVV0ZZ3+C6N8DfPena5KBiM84Zrp8dza8SLqaFMGHXHGkixLXJipm+tqcdRX2v5qRrAcHmUlA9jNOuvzxc6y9h0pmE/Rz7Kgnf6AjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hnY/y2FJ; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1780020027; x=1811556027;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v7SUI5JPIDJF7swbx4MsnsnbEBHDeSvQQx/6or3YF0s=;
-  b=hnY/y2FJ1D0BXYK+8sl0UA7LSsmHRv8GoRg5oA/NYSbsSeSJoX6pyaSx
-   3RyDjcej+luRxEkPasX8N+1Lf+NaAMRZ8sTawjxsGDcwcQ7ddXfOr0Lyb
-   1A38L7JeeJILbu11z3KFbrJSDjbGMhQ1BnaxqDyNihWA9icv8LsL8EMVO
-   Zv1imdKMDTd8ztkqvim60HGUqXq/Uc2DbYDfU9j/VmSRAb4csJkMz9vc8
-   C95AmieFMKV4YsF7NiY9cTSt7wZWLMyhcOce9JXnY3peCSD+n+sPdX6IM
-   qc0Zr09orX4xf/gXXNYPbyvW2DqtroH4lmkT2dL4J0OsNrDiLxg4/4ymw
-   g==;
-X-CSE-ConnectionGUID: 7H7NBzrFQGu+5O9vpJcaBg==
-X-CSE-MsgGUID: uv0FfuvCR5+FZ4r5qHbufA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11800"; a="81054079"
-X-IronPort-AV: E=Sophos;i="6.24,174,1774335600"; 
-   d="scan'208";a="81054079"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 19:00:26 -0700
-X-CSE-ConnectionGUID: KAmQrINJTRiB8jymJW2/UA==
-X-CSE-MsgGUID: gegDXNHeQG26tWvke58ANw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,174,1774335600"; 
-   d="scan'208";a="236364381"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 28 May 2026 19:00:23 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wSmWK-000000006fW-3PRA;
-	Fri, 29 May 2026 02:00:20 +0000
-Date: Fri, 29 May 2026 10:00:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] can: flexcan: Drop unused platform driver data
-Message-ID: <202605290912.Y77fySxN-lkp@intel.com>
-References: <20260528094540.1867783-2-u.kleine-koenig@baylibre.com>
+	s=arc-20240116; t=1780234952; c=relaxed/simple;
+	bh=zR05hWiH8Rlw66oNAUtRAX4ISbevpkF+05gVF+o8TOI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pgBCByvc0ilfWLdJO+o8Ygi5J6KtJ4f59ta5WgfetYhhemA/qzMDenQTpyLzSsmspEavEZE8kyfnvVk57GPom+EPQuVmmKxIE3F/YJJgVuCAwkz+kfEGWEEPXln63YEhzBoUvF9c6BoH2moYTTERen1PC7nUpa6NyXG203zchrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cXsRDvi/; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 292F41F00893;
+	Sun, 31 May 2026 13:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780234951;
+	bh=dSjHAroP5+L4GQyBa+FNhJO3ihTn8ULsRc3iTGS7mDA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=cXsRDvi/iiCxcm/KxbaJf9zvaok8JsIXFHPo0E7kunRCe3kAoGRmggGMBZhV3+J1M
+	 aBtew1idHllMUPngx2cKEvhiUqvyMeJvHto5gwOoIy/NM/J6qCviVP+j8mT9/+esaI
+	 I19uZ/k1Qk8zp/neDywXwiSTtYAHgdjDrteA2ukGXtYtf1sGIPhgtOx5onzx0vbRGu
+	 uRtxcrgygRELyKumKRmwQIZP03gzFGUarcsHAB8nVrjXyp8Eb1DizwAdhr3mtefN8L
+	 /g/YB8P4e8WgBkLOzO5H4SsGU9/4mlGAA0uXE+ts7cKNJeMh2//ZoZD5qsNEF4pUL0
+	 fdr2Fo8BEoOzA==
+Message-ID: <2b532d56-dce4-4f6d-84e0-2fd87d5494f8@kernel.org>
+Date: Sun, 31 May 2026 23:42:26 +1000
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260528094540.1867783-2-u.kleine-koenig@baylibre.com>
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 4/4] m68k: coldfire: fix non-standard readX()/writeX()
+ functions
+To: Angelo Dureghello <adureghello@baylibre.com>
+Cc: Arnd Bergmann <arnd@kernel.org>, linux-m68k@lists.linux-m68k.org,
+ linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-can@vger.kernel.org, linux-spi@vger.kernel.org,
+ Vladimir Oltean <olteanv@gmail.com>, Christoph Hellwig <hch@lst.de>
+References: <20260506142644.3234270-2-gerg@kernel.org>
+ <20260506142644.3234270-8-gerg@kernel.org>
+ <40aefc39-bd98-460d-8aa7-5dd79f562e0d@app.fastmail.com>
+ <fdd6fc14-f607-4186-8db4-25de973ac322@kernel.org>
+ <CALSJ-wCrNDv3N2Kdo0uoXsKGtp0GthJRBeYTNQA1gGE2akUWFg@mail.gmail.com>
+ <9391b782-7727-47fa-ac37-05cd50821d35@app.fastmail.com>
+ <CALSJ-wBRmUpjz-_ehZ0U0Gu+fPqRUeAn47E0_pwpXQa0tCNzVA@mail.gmail.com>
+ <CALSJ-wCuZs9cBJsuOOYMEYM6xOXZbdOm_pr=70d3HRYYSYJ0KA@mail.gmail.com>
+ <CALSJ-wDm8NoB8mF3KSx49XMSWz1vjwFhSmgJZWq8pN2pCf12mw@mail.gmail.com>
+ <CALSJ-wDY_8SMAvKT0L6wMbH1=w5pZNmV=xyeX1REb=BMRZWj-g@mail.gmail.com>
+Content-Language: en-US
+From: Greg Ungerer <gerg@kernel.org>
+In-Reply-To: <CALSJ-wDY_8SMAvKT0L6wMbH1=w5pZNmV=xyeX1REb=BMRZWj-g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	TAGGED_FROM(0.00)[bounces-7728-lists,linux-can=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[kernel.org,lists.linux-m68k.org,vger.kernel.org,gmail.com,lst.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-7729-lists,linux-can=lfdr.de];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-can@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gerg@kernel.org,linux-can@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 41A5D5FC3DB
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,linux-m68k.org:email]
+X-Rspamd-Queue-Id: 42C7B616669
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Uwe,
+Hi Angelo,
 
-kernel test robot noticed the following build warnings:
+(Adding Christoph to CC list)
 
-[auto build test WARNING on e7d700e14934e68f86338c5610cf2ae76798b663]
+On 25/5/26 07:34, Angelo Dureghello wrote:
+> On Sun, May 24, 2026 at 02:17:07PM -0700, Angelo Dureghello wrote:
+>> Hi All,
+>>
+>> On Sun, May 17, 2026 at 03:41:31PM -0700, Angelo Dureghello wrote:
+>>> Hi,
+>>>
+>>> On Sun, May 17, 2026 at 03:04:23PM -0700, Angelo Dureghello wrote:
+>>>> Hi Arnd,
+>>>>
+>>>> On Sun, May 17, 2026 at 10:08:22PM +0200, Arnd Bergmann wrote:
+>>>>> On Sun, May 17, 2026, at 21:43, Angelo Dureghello wrote:
+>>>>>> On Thu, May 07, 2026 at 10:43:01PM +1000, Greg Ungerer wrote:
+>>>>>>> On 7/5/26 05:12, Arnd Bergmann wrote:
+>>>>>>>> On Wed, May 6, 2026, at 16:26, Greg Ungerer wrote:
+>>>>>>
+>>>>>> [    2.270000] fsl-dspi fsl-dspi.0: Not able to get desc for DMA xfer
+>>>>>> [    2.280000] fsl-dspi fsl-dspi.0: DMA transfer failed
+>>>>>> [    2.280000] spi_master spi0: failed to transfer one message from queue
+>>>>>> [    2.290000] spi_master spi0: noqueue transfer failed
+>>>>>> [    2.290000] spi-nor spi0.1: probe with driver spi-nor failed with error -5
+>>>>>>
+>>>
+>>> About this issue, it fails on dma_pool_alloc(), so tomorrow will check,
+>>> i probably lost some dma config option.
+>>>
+>>
+>> so i worked on this open issue above:
+>>
+>> - moved to master and rebased,
+>> - crated a wip/edma branch,
+>> - bisected and found the offending commit, before this, mcf-edma driver
+>>    and connected spi-fsl-dspi (using edma) was both working correctly.
+>>
+>> 7a360df941a4bd60847208de59f1ac8b166265a2 is the first bad commit
+>> commit 7a360df941a4bd60847208de59f1ac8b166265a2 (HEAD)
+>> Author: Christoph Hellwig <hch@lst.de>
+>> Date:   Thu Oct 12 09:52:27 2023 +0200
+>>
+>>      m68k: don't provide arch_dma_alloc for nommu/coldfire
+>>
+>>      Coldfire cores configured with a data cache can't provide coherent
+>>      DMA allocations at all.
+>>
+>>      Instead of returning non-coherent kernel memory in this case,
+>>      return NULL and fail the allocation.
+>>
+>>      The only driver that used to rely on the previous behavior (fec) has
+>>      been switched to use non-coherent allocations for this case recently.
+>>
+>>      Signed-off-by: Christoph Hellwig <hch@lst.de>
+>>      Reviewed-by: Greg Ungerer <gerg@linux-m68k.org>
+>>      Tested-by: Greg Ungerer <gerg@linux-m68k.org>
+>>
+>>   arch/m68k/Kconfig      |  1 -
+>>   arch/m68k/kernel/dma.c | 23 -----------------------
+>>   2 files changed, 24 deletions(-)
+>>
+>> So i can try next week a patch for edma looking what has been done
+>> in fec, and since i am probably the only with mcf54415, will test it
+>> here.
+>>
+> 
+> Looking into this better, looks like the above commit was meant for the
+> majority on non-mmu ColdFire. I think mcf5441x and some other with mmu
+> enabled can flag pages as "page cache disabled".
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Uwe-Kleine-K-nig-The-Capable-Hub/can-flexcan-Drop-unused-platform-driver-data/20260528-181620
-base:   e7d700e14934e68f86338c5610cf2ae76798b663
-patch link:    https://lore.kernel.org/r/20260528094540.1867783-2-u.kleine-koenig%40baylibre.com
-patch subject: [PATCH v1] can: flexcan: Drop unused platform driver data
-config: i386-buildonly-randconfig-002-20260529 (https://download.01.org/0day-ci/archive/20260529/202605290912.Y77fySxN-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260529/202605290912.Y77fySxN-lkp@intel.com/reproduce)
+I don't think that is right. The way the underlying data cache is setup for
+MMU ColdFire (via the ACR/CACR registers) means that individual pages cannot
+be marked as non-cached. So coherent memory allocations are not possible -
+at least the way things are today.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605290912.Y77fySxN-lkp@intel.com/
+It would be possible to set aside a chunk of RAM at kernel startup time
+to use as a pool for coherent allocations (since it could be marked as
+non-cached via the ACR/CACR registers), but there is no code to support doing
+that today.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/can/flexcan/flexcan-core.c:296:42: warning: unused variable 'fsl_mcf5441x_devtype_data' [-Wunused-const-variable]
-     296 | static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+Regards
+Greg
 
 
-vim +/fsl_mcf5441x_devtype_data +296 drivers/net/can/flexcan/flexcan-core.c
+> So i would re-enabled that code only for such mmu families.
+> 
+> Please let me know if i am correct.
+> Thanks.
+> 
+>>>>>> DSPI is using edma, i will try to understand where the issue is asap.
+>>>>>>
+>>>>>> About how it works:
+>>>>>> - for accesses to edma module (IP) mmio registers, must be native
+>>>>>> big_endian, so using the "be" suffix in "mcf"_edma looks ok for me.
+>>>>>
+>>>>> The twist here is that with the way that readl() is defined on
+>>>>> coldfire as a non-swapping operation, and the generic
+>>>>> definition assuming the opposite in
+>>>>>
+>>>>> static inline u32 ioread32be(const void __iomem *addr)
+>>>>> {
+>>>>>          return swab32(readl(addr));
+>>>>> }
+>>>>>
+>>>>> the function called ioread32be() actually tries to access
+>>>>> the registers as little-endian. I can see two possible ways
+>>>>> we got here, but don't know which one is currect:
+>>>>>
+>>>>> a) the device actually has little-endian registers (like it
+>>>>>     does on i.MX, but unlike all other coldfire devices), and
+>>>>>     you just never noticed because using ioread32be() worked
+>>>>>     as you expected.
+>>>>>
+>>>>> b) you tested the driver using an ioread32be() definition that
+>>>>>     did not have a byteswap and it correctly accessed big-endian
+>>>>>     registers at the time, but the version in mainline today does
+>>>>>     not.
+>>>>
+>>>> Ok. The ioread32be now works properly since i had applied Greg patches.
+>>>> I generated an error in _probe on edma channel 2, reading status reg.
+>>>> looks consistent:
+>>>>
+>>>> 	iowrite16(2121, regs->erqh);
+>>>> 	iowrite8(0x77, regs->serq);
+>>>> 	iowrite8(0x12, regs->ssrt);
+>>>> 	
+>>>> 	u32 status = ioread32be(regs->es);
+>>>> 	printk("%s() status: %04x\n", __func__, status);
+>>>>
+>>>> [    0.140000] mcf_edma_probe() entering
+>>>> [    0.140000] mcf_edma_probe(): allocating data
+>>>> [    0.140000] mcf_edma_probe() status: 800012f8
+>>>>
+>>>> If i am not loosing myself in this r/w labyrinth, the path should be:
+>>>>
+>>>> 1) Greg removed coldfire readl/writel, leaving now the standard LE r/w,
+>>>> 2) So the ioread32be swaps the standard LE read giving BE.
+>>>>
+>>>> Am i correct ?
+>>>>
+>>>>
+>>>>>
+>>>>>> - for accessing the "tcd" memory structure, that must be, from what i
+>>>>>> remember, anyway in little endian, independently from the cpu core
+>>>>>> endiannes, this is the reason that big_endian flag is needed, it is
+>>>>>> used for tcd area accesses, so the IP module was built.
+>>>>>> The tcd area may be similar to pci accesses (see mcf54415 RM 19.4.16).
+>>>>>
+>>>>> edma_read_tcdreg() calls into edma_readl(), which is the same function
+>>>>> that is used for normal register access, so from what I can tell,
+>>>>> they always use the same endianess here.
+>>>>>
+>>>>
+>>>> If edma_readl was using
+>>>>
+>>>>          if (edma->big_endian)
+>>>>                  val = ioread32be(addr);
+>>>>
+>>>> and never changed, without Greg patch, it was likely returning little
+>>>> endian for coldfire and correct LE for other arch ? :)
+>>>>
+>>>> I remember something about tcd area was coded LE, but will investigate
+>>>> better, now i am over midnight.
+>>>>
+>>>> Regards,
+>>>> angelo
+>>>>
+>>>>>        Arnd
+>>>
+>>> Regards,
+>>> angelo
+>>
+>> Regards,
+>> angelo
+> 
+> Regards,
+> angelo
 
-4b702878afc375 drivers/net/can/flexcan.c              Marc Kleine-Budde 2020-09-22  295  
-d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02 @296  static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
-d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02  297  	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
-c5c88591040ee7 drivers/net/can/flexcan/flexcan-core.c Marc Kleine-Budde 2022-01-07  298  		FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
-d945346db1ef41 drivers/net/can/flexcan/flexcan-core.c Marc Kleine-Budde 2022-08-11  299  		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
-d945346db1ef41 drivers/net/can/flexcan/flexcan-core.c Marc Kleine-Budde 2022-08-11  300  		FLEXCAN_QUIRK_SUPPORT_RX_FIFO,
-d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02  301  };
-d9cead75b1c66b drivers/net/can/flexcan.c              Angelo Dureghello 2021-07-02  302  
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
