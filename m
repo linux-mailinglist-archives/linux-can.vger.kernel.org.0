@@ -1,90 +1,90 @@
-Return-Path: <linux-can+bounces-7754-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7755-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id iHB5J5skIGr8wwAAu9opvQ
-	(envelope-from <linux-can+bounces-7754-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 03 Jun 2026 14:56:59 +0200
+	id JhalAqYlIGrGxQAAu9opvQ
+	(envelope-from <linux-can+bounces-7755-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 03 Jun 2026 15:01:26 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0437637BCE
-	for <lists+linux-can@lfdr.de>; Wed, 03 Jun 2026 14:56:58 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CB79637CD9
+	for <lists+linux-can@lfdr.de>; Wed, 03 Jun 2026 15:01:25 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0002 header.b="awx9ki/L";
-	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0003 header.b=ca32LwXN;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7754-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7754-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0002 header.b="Pz/PQ8J+";
+	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0003 header.b=+1VDuUj8;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7755-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7755-lists+linux-can=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=hartkopp.net;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 549E2300C583
-	for <lists+linux-can@lfdr.de>; Wed,  3 Jun 2026 12:51:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E17FE30FE3BF
+	for <lists+linux-can@lfdr.de>; Wed,  3 Jun 2026 12:54:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8C773D669C;
-	Wed,  3 Jun 2026 12:51:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 075F647ECE4;
+	Wed,  3 Jun 2026 12:54:02 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C5A43C077;
-	Wed,  3 Jun 2026 12:51:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C706F2264A7;
+	Wed,  3 Jun 2026 12:53:59 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780491095; cv=pass; b=CRN03CGhzfnrW1ks27bk81ZomALADQAR5jRaYY5PSynHy673mwVZZy64d0PeDNMVsqmtFf+OT2J5eruF/oYNvoPmo3DsTdob1OPyAZjrIng6749xfG+ReV9ZQcwRnkqPZ91mPSsJXORw8V/ilYe9+77uPipQgWtlWN8j0JVk3VQ=
+	t=1780491241; cv=pass; b=E1zMme4b55sEtweqt4d2S/mmHiIDZ1dRc2Dv9yeXZTInfOhoO/aajwzqagM82W1gbWBVxaNvVZifkszoOTWC7LvPgCB3TrnPoBT7jyHBl4GpZobp0IEgn8k8D5PFLS3I+2S8cXI5dDbjXdky55uMRcvRqhAxDjy6I1ysNRfpmT8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780491095; c=relaxed/simple;
-	bh=JMq5UWb+EMGSNcSbGDLsSgTYR0F0f5hnCXf6E3ORmGE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=tH43WNPMUJK8qqWwLQl3srWPOLUrzKYmv55YkGAe5ZEjajAQ5wVFWJx3g7plS+T9mWhco7MEzIcEpp867rMK2+0vf0I6PdeQ6F9X/ZE83zd4MIkScMgqjFn8VCiNJnoRYuxvKyGEOXdcUTd6cSQfC84J9FWMv2dx5KoS8wSmbJc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=awx9ki/L; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=ca32LwXN; arc=pass smtp.client-ip=81.169.146.167
-ARC-Seal: i=1; a=rsa-sha256; t=1780490905; cv=none;
+	s=arc-20240116; t=1780491241; c=relaxed/simple;
+	bh=N0r0/FJRU8FYET34La8UGAEpoLuB68ut3JwehoeYLqQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MlTgWB/zBnreUNsYM+nZ4/sI+2FNvISbkICiXX7+pcdWHi/b5ehr4b4KwkPQA5BmHs8kp8j02wtgpDYW/1ZXf2INcGHtTJDMluubSr2DUcqbd063RETxAXmDZfLjEzFBsVY7f8PxSuUQJQNQY3ZzqxEz8NZhBtRkokt6ZSyC9PA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Pz/PQ8J+; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=+1VDuUj8; arc=pass smtp.client-ip=81.169.146.167
+ARC-Seal: i=1; a=rsa-sha256; t=1780491051; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=riyEm5JQ+GsiXRngLz0S1tMHffH7ayyzHEoi0VeYTancEX+tptGfcDqthVTRWt11lv
-    mUHN9MVjxOHkvfM+27jqPntW3lfWIy5vIeTriZt3CSQNMMGvZ0gqKAqCvjLILbOf73mc
-    YOZTsZ2dsW5AxXgw0gYnwIRMUL3v4r8zpkqD9x5oAU34OsPzKW71013A34yCiXE0KdkE
-    o+cJ9fBl31dNoQkRebojAnMsggY7QQbWTRcJ+jKHQhv3UWXCxMVtnmdPfJo/8aB+GLUy
-    4TX4xD2NQJKeHp2lQRruopYiL38ar9NtBzPKMFxINiAX+QxpEJ8Mb5/Uq9ObUN6jiLwt
-    wztQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1780490905;
+    b=J7dM+qog8oZThHuDABETXOdQlYL3JZSGY1gkmGy4/FLV81LNQ5sdaK/pwKNMk4RwmG
+    I3t3Tlez8TMij+HXaeYlSIinvDhm7L/U+5THZzdL94CeFClxQs7zfpC4dnLv/gqmxj7Y
+    PFASXynBGhH51GjoiA8XwWl7exwyGfJsgIvNBOBct067CXMBGV40cOd/ckaq79+Mb6fH
+    qlmWfmOr1x/Hr/QllD+OEn2+utEKbDCRIn8UkUoFgu5CTHibD7wcITcjEmBqkc5uPHLg
+    13r29qBPP54TeMMUKi/mstLDPz0KDvrnkvxvXSG5c/ykeWQbNy/czsrVjDYXToDfzfJE
+    QgHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1780491051;
     s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=in/kH2aiZrg6By3S7ArPkKZaBDXFzOBlC8Oa4OSl1sM=;
-    b=VONZ2tEhFUeD4MTShOYRLF4H6ZrOEgSu1CwCXighqANbvS+1SNMiNcFF8ImXdoIFv8
-    YMDCIsd8WY3oegvSDUgx6Qdfz5iBH1OYolAjL4neIPiMJ2yuBOCanLK1ZwozODfV2MAF
-    AX+dExqhIl5NtJKTdpDrjpnp/euiZ4/Wo0wHyeYG2N44/UzylomvhTc/+eWInndnTDNg
-    tnq0EZ0JMTSF1yfJKzmAzBmbGKU/2UBPJmhpl8z5eKDdkR2LZzzGViEq+1ar75Qg3wyQ
-    Mk84Q0OiRe0860gzJoQ7tsqw4iF835RIDg3RSoMK7OJF1og+XzD8WnZKzVBYOnbQvfxN
-    dCtw==
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=rt+5p90dyAdQVIbs7nxq88gbTVhCl35Ll+6dLcBfYi8=;
+    b=e21VY9cN1zpgR7frh7tL1XvVd2269Wh4iJ2PkqPGW1EXBrq7ZQrNrbLn0tRA3WrAjj
+    qQIjx4J6veMq2AlwEgkNpoU5nPAzY6RUW3WQxCDm7pvQp8nKrmplA5bcs9UxEAwy1Hj+
+    ZHSPotWzl0pIUaZut74Xtmp2rPAapN/mLLpwaVLFLZmP/D43WixEDivJe9SDww2Q3Y0C
+    JbIZYpNiWVvmayNv07DBi8i+yO3xlPTD6HFBsZTZJDayysMaNDzZH/tvrdbAWlcogGc8
+    17FHnVmSha73GyoYE4KBB7ZJWq3/PKEXcQ73Dxqm4Tv7nRavV9/IPwZCvoC/+XJnHN8s
+    e0AA==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1780490905;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1780491051;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=in/kH2aiZrg6By3S7ArPkKZaBDXFzOBlC8Oa4OSl1sM=;
-    b=awx9ki/LT6/TcM1kb5G0KHyEsv5aLnauLl68ho1NQOu68elZSYgJSfRIUBTY/wOaux
-    nZhC+BiUk2aeV+1RIFfr0XilQTI0hl+ElYTqQCOoKV5F3hp18DfFEDC3gENuyh92W6L9
-    pxNrHNgURZQJryVd5ggTwDaSPEgxCRAAkoOwBdxcSwEaBkIsg3Sv4h/Zwhgr7u+IFwKI
-    wf3cpWgvSYp6ONv6apLHqpMSPtdNaxHg9UiOoVnE4xyXjXYmobtsV4sVbYvsp5vFwJ0l
-    vXBmlNZV3u/a9SmzQ6ou7hIRiPxicaH+Dh6aC/pDqE/x3BjwcRfK7biUe2OEiCJiLMpj
-    EV+g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1780490905;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=rt+5p90dyAdQVIbs7nxq88gbTVhCl35Ll+6dLcBfYi8=;
+    b=Pz/PQ8J+ly4xXbKEIAX23i33HvPhVY7Kt9WaPFJUvQlwSnFKgM4x5uUeXj+TuK6/xs
+    EBZbiEwQSCYZotNg92B9sZ6x27VdueymGXmVs3AZ0+x5E16gnd2pS1p7qRk/3CE99XP8
+    v6Ur0tsuwWxV7l8RBgyHcfgsK5XkuXDoddV9bfmal1RFvXGKAczqdWsiajx9V3PYgDkl
+    CcyLarhRJL0SOOKPUW4Xe5fwJ9yL9ShREv84BkgZYIpLBN1EwKMXJTLJ/dF+Kp1Pnqx7
+    sqsgdV6OnbtjXJH81kK8dTL+cVdZfryuoHJo2L8qNGx2I1SiRIW18K5i3Q2t+ynTfg60
+    wQ3g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1780491051;
     s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=in/kH2aiZrg6By3S7ArPkKZaBDXFzOBlC8Oa4OSl1sM=;
-    b=ca32LwXNb3DlaKXtZtbcZsSCrtcTo697Lij/84OFgo5iFHschiMVxEtq4g5vTVuRKz
-    qMb/jEC9zeWGm8zGVrBQ==
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=rt+5p90dyAdQVIbs7nxq88gbTVhCl35Ll+6dLcBfYi8=;
+    b=+1VDuUj81BzZJGBRyqhSiF+D+ZXlnNAvXnT9BFkWjagWwnXqs8tb02EiwqiFpQX+lT
+    j23U8ZLtpDQZQjHai4BA==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tRkI16oOSW1Ti/f4PoH8="
 Received: from [192.168.90.236]
     by smtp.strato.de (RZmta 55.0.1 DYNA|AUTH)
-    with ESMTPSA id Kba96d253CmPWII
+    with ESMTPSA id Kba96d253CopWJ6
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Wed, 3 Jun 2026 14:48:25 +0200 (CEST)
-Message-ID: <f80790ca-64e3-4581-a6d7-8e53e8949026@hartkopp.net>
-Date: Wed, 3 Jun 2026 14:48:25 +0200
+    Wed, 3 Jun 2026 14:50:51 +0200 (CEST)
+Message-ID: <f83e25e1-b9f5-4810-bbd6-fdb8d2a10c8e@hartkopp.net>
+Date: Wed, 3 Jun 2026 14:50:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -92,206 +92,135 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [can?] memory leak in can_rx_register
-To: syzbot <syzbot+24201717ed2da31b8fae@syzkaller.appspotmail.com>,
- linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, mkl@pengutronix.de,
- syzkaller-bugs@googlegroups.com
-References: <6a1ffdd9.278b5b03.2bcf39.004b.GAE@google.com>
+Subject: Re: [PATCH net-next 2/2] can: isotp: convert to getsockopt_iter
+To: Breno Leitao <leitao@debian.org>
+Cc: Robin van der Gracht <robin@protonic.nl>,
+ Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+ Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260507-getsock_two_can-v1-0-3c2ae9edfadc@debian.org>
+ <20260507-getsock_two_can-v1-2-3c2ae9edfadc@debian.org>
+ <14d3ad71-ade2-4d2b-8a67-b0fda3eef2b7@hartkopp.net>
+ <aiAcRJ8TBjWhlKhQ@gmail.com>
 Content-Language: en-US
 From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <6a1ffdd9.278b5b03.2bcf39.004b.GAE@google.com>
+In-Reply-To: <aiAcRJ8TBjWhlKhQ@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=2c6ad6fefffa76b1];
 	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-7755-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7754-lists,linux-can=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:syzbot+24201717ed2da31b8fae@syzkaller.appspotmail.com,m:linux-can@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:mkl@pengutronix.de,m:syzkaller-bugs@googlegroups.com,m:syzbot@syzkaller.appspotmail.com,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:leitao@debian.org,m:robin@protonic.nl,m:o.rempel@pengutronix.de,m:kernel@pengutronix.de,m:mkl@pengutronix.de,m:linux-can@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:kernel-team@meta.com,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[hartkopp.net:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[hartkopp.net:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TAGGED_RCPT(0.00)[linux-can];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can,24201717ed2da31b8fae];
-	RCPT_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	REDIRECTOR_URL(0.00)[goo.gl];
-	SUBJECT_HAS_QUESTION(0.00)[]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[hartkopp.net:mid,hartkopp.net:dkim,hartkopp.net:from_mime,hartkopp.net:email,vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: C0437637BCE
+X-Rspamd-Queue-Id: 6CB79637CD9
 
-Hi,
 
-I don't see any CAN netdevice name in the logs.
 
-So it is likely some bonding/teaming magic again, which should be fixed 
-by "bonding: refuse to enslave CAN devices"
+On 03.06.26 14:25, Breno Leitao wrote:
+> On Mon, May 11, 2026 at 09:05:07AM +0200, Oliver Hartkopp wrote:
+>>
+>>
+>> On 07.05.26 11:34, Breno Leitao wrote:
+>>> Convert CAN ISO-TP socket's getsockopt implementation to use the new
+>>> getsockopt_iter callback with sockopt_t.
+>>>
+>>> Key changes:
+>>> - Replace (char __user *optval, int __user *optlen) with sockopt_t *opt
+>>> - Use opt->optlen for buffer length (input) and returned size (output)
+>>> - Use copy_to_iter() instead of put_user()/copy_to_user()
+>>>
+>>> Signed-off-by: Breno Leitao <leitao@debian.org>
+>>> ---
+>>>    net/can/isotp.c | 12 +++++-------
+>>>    1 file changed, 5 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/net/can/isotp.c b/net/can/isotp.c
+>>> index c48b4a818297e..1c33f09fbd338 100644
+>>> --- a/net/can/isotp.c
+>>> +++ b/net/can/isotp.c
+>>> @@ -1500,7 +1500,7 @@ static int isotp_setsockopt(struct socket *sock, int level, int optname,
+>>>    }
+>>>    static int isotp_getsockopt(struct socket *sock, int level, int optname,
+>>> -			    char __user *optval, int __user *optlen)
+>>> +			    sockopt_t *opt)
+>>>    {
+>>>    	struct sock *sk = sock->sk;
+>>>    	struct isotp_sock *so = isotp_sk(sk);
+>>> @@ -1509,8 +1509,7 @@ static int isotp_getsockopt(struct socket *sock, int level, int optname,
+>>>    	if (level != SOL_CAN_ISOTP)
+>>>    		return -EINVAL;
+>>> -	if (get_user(len, optlen))
+>>> -		return -EFAULT;
+>>> +	len = opt->optlen;
+>>>    	if (len < 0)
+>>>    		return -EINVAL;
+>>> @@ -1544,9 +1543,8 @@ static int isotp_getsockopt(struct socket *sock, int level, int optname,
+>>>    		return -ENOPROTOOPT;
+>>>    	}
+>>> -	if (put_user(len, optlen))
+>>> -		return -EFAULT;
+>>> -	if (copy_to_user(optval, val, len))
+>>> +	opt->optlen = len;
+>>> +	if (copy_to_iter(val, len, &opt->iter_out) != len)
+>>>    		return -EFAULT;
+>>>    	return 0;
+>>>    }
+>>> @@ -1718,7 +1716,7 @@ static const struct proto_ops isotp_ops = {
+>>>    	.listen = sock_no_listen,
+>>>    	.shutdown = sock_no_shutdown,
+>>>    	.setsockopt = isotp_setsockopt,
+>>> -	.getsockopt = isotp_getsockopt,
+>>> +	.getsockopt_iter = isotp_getsockopt,
+>>>    	.sendmsg = isotp_sendmsg,
+>>>    	.recvmsg = isotp_recvmsg,
+>>>    	.mmap = sock_no_mmap,
+>>>
+>>
+>> Same pattern as in net/can/raw.c that had slipped in via net-next last time
+>> ;-)
+>>
+>> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+>>
+>> Thanks Breno!
+> 
+> Thanks for the review!
+> 
+> I haven't seen this on linux-next yet. Please let me know if there is any
+> update that is expected from my side.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8ba68464e4787b6a7ec938826e16124df20fd23d
+This patch will likely go upstream via can-next.
+
+Marc currently seems to be busy.
 
 Best regards,
 Oliver
-
-On 03.06.26 12:11, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    af4e9ef3d784 uaccess: Fix scoped_user_read_access() for 'p..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13a7935a580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2c6ad6fefffa76b1
-> dashboard link: https://syzkaller.appspot.com/bug?extid=24201717ed2da31b8fae
-> compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
-> syz repro:      [OBSOLETE] https://syzkaller.appspot.com/x/repro.syz?x=14986d5a580000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/70cb2ebe1e6e/disk-af4e9ef3.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/945fea3c8a6d/vmlinux-af4e9ef3.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/fa6a6a5cbcc8/bzImage-af4e9ef3.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+24201717ed2da31b8fae@syzkaller.appspotmail.com
-> 
-> BUG: memory leak
-> unreferenced object 0xffff888127ebfb40 (size 80):
->    comm "syz.5.22", pid 6143, jiffies 4294942019
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 10 8b fd 08 81 88 ff ff  ................
->      02 00 00 00 ff 07 00 c0 00 00 00 00 00 00 00 00  ................
->    backtrace (crc 976436cd):
->      kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
->      slab_post_alloc_hook mm/slub.c:4520 [inline]
->      slab_alloc_node mm/slub.c:4844 [inline]
->      kmem_cache_alloc_noprof+0x372/0x480 mm/slub.c:4851
->      can_rx_register+0xbf/0x220 net/can/af_can.c:461
->      isotp_bind+0x470/0x510 net/can/isotp.c:1345
->      __sys_bind_socket net/socket.c:1874 [inline]
->      __sys_bind_socket net/socket.c:1866 [inline]
->      __sys_bind+0x131/0x160 net/socket.c:1905
->      __do_sys_bind net/socket.c:1910 [inline]
->      __se_sys_bind net/socket.c:1908 [inline]
->      __x64_sys_bind+0x1c/0x30 net/socket.c:1908
->      do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->      do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
->      entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
-> BUG: memory leak
-> unreferenced object 0xffff888127ebfaf0 (size 80):
->    comm "syz.5.22", pid 6143, jiffies 4294942019
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 00 cb fd 08 81 88 ff ff  ................
->      00 00 00 80 ff ff ff df 00 00 00 00 00 00 00 00  ................
->    backtrace (crc 4af33172):
->      kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
->      slab_post_alloc_hook mm/slub.c:4520 [inline]
->      slab_alloc_node mm/slub.c:4844 [inline]
->      kmem_cache_alloc_noprof+0x372/0x480 mm/slub.c:4851
->      can_rx_register+0xbf/0x220 net/can/af_can.c:461
->      isotp_bind+0x29f/0x510 net/can/isotp.c:1352
->      __sys_bind_socket net/socket.c:1874 [inline]
->      __sys_bind_socket net/socket.c:1866 [inline]
->      __sys_bind+0x131/0x160 net/socket.c:1905
->      __do_sys_bind net/socket.c:1910 [inline]
->      __se_sys_bind net/socket.c:1908 [inline]
->      __x64_sys_bind+0x1c/0x30 net/socket.c:1908
->      do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->      do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
->      entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
-> BUG: memory leak
-> unreferenced object 0xffff888127d994b0 (size 80):
->    comm "syz.6.23", pid 6176, jiffies 4294942079
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 10 8b a8 13 81 88 ff ff  ................
->      02 00 00 00 ff 07 00 c0 00 00 00 00 00 00 00 00  ................
->    backtrace (crc 179b079f):
->      kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
->      slab_post_alloc_hook mm/slub.c:4520 [inline]
->      slab_alloc_node mm/slub.c:4844 [inline]
->      kmem_cache_alloc_noprof+0x372/0x480 mm/slub.c:4851
->      can_rx_register+0xbf/0x220 net/can/af_can.c:461
->      isotp_bind+0x470/0x510 net/can/isotp.c:1345
->      __sys_bind_socket net/socket.c:1874 [inline]
->      __sys_bind_socket net/socket.c:1866 [inline]
->      __sys_bind+0x131/0x160 net/socket.c:1905
->      __do_sys_bind net/socket.c:1910 [inline]
->      __se_sys_bind net/socket.c:1908 [inline]
->      __x64_sys_bind+0x1c/0x30 net/socket.c:1908
->      do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->      do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
->      entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
-> BUG: memory leak
-> unreferenced object 0xffff888127d99460 (size 80):
->    comm "syz.6.23", pid 6176, jiffies 4294942079
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 00 cb a8 13 81 88 ff ff  ................
->      00 00 00 80 ff ff ff df 00 00 00 00 00 00 00 00  ................
->    backtrace (crc ca0c0020):
->      kmemleak_alloc_recursive include/linux/kmemleak.h:44 [inline]
->      slab_post_alloc_hook mm/slub.c:4520 [inline]
->      slab_alloc_node mm/slub.c:4844 [inline]
->      kmem_cache_alloc_noprof+0x372/0x480 mm/slub.c:4851
->      can_rx_register+0xbf/0x220 net/can/af_can.c:461
->      isotp_bind+0x29f/0x510 net/can/isotp.c:1352
->      __sys_bind_socket net/socket.c:1874 [inline]
->      __sys_bind_socket net/socket.c:1866 [inline]
->      __sys_bind+0x131/0x160 net/socket.c:1905
->      __do_sys_bind net/socket.c:1910 [inline]
->      __se_sys_bind net/socket.c:1908 [inline]
->      __x64_sys_bind+0x1c/0x30 net/socket.c:1908
->      do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->      do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
->      entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
-> connection error: failed to recv *flatrpc.ExecutorMessageRawT: EOF
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
-> If the report is already addressed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
-> 
-> If you want syzbot to run the reproducer, reply with:
-> #syz test: git://repo/address.git branch-or-commit-hash
-> If you attach or paste a git patch, syzbot will apply it before testing.
-> 
-> If you want to overwrite report's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
-> 
-> If the report is a duplicate of another one, reply with:
-> #syz dup: exact-subject-of-another-report
-> 
-> If you want to undo deduplication, reply with:
-> #syz undup
 
 
