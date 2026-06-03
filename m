@@ -1,259 +1,268 @@
-Return-Path: <linux-can+bounces-7736-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7737-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 3iBUKNR4H2oUmQAAu9opvQ
-	(envelope-from <linux-can+bounces-7736-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 03 Jun 2026 02:44:04 +0200
+	id IDJ5GqjUH2poqgAAu9opvQ
+	(envelope-from <linux-can+bounces-7737-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 03 Jun 2026 09:15:52 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1203D6333C4
-	for <lists+linux-can@lfdr.de>; Wed, 03 Jun 2026 02:44:04 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F473635130
+	for <lists+linux-can@lfdr.de>; Wed, 03 Jun 2026 09:15:52 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=k5Nhht5i;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7736-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-7736-lists+linux-can=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=gmail.com;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
+	dkim=pass header.d=NXP1.onmicrosoft.com header.s=selector1-NXP1-onmicrosoft-com header.b=R54Xj8OY;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7737-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-can+bounces-7737-lists+linux-can=lfdr.de@vger.kernel.org";
+	dmarc=fail reason="SPF not aligned (relaxed), DKIM not aligned (relaxed)" header.from=nxp.com (policy=none);
+	arc=reject ("cv is fail on i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D4FB2301BC39
-	for <lists+linux-can@lfdr.de>; Wed,  3 Jun 2026 00:43:31 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D4F3B3048207
+	for <lists+linux-can@lfdr.de>; Wed,  3 Jun 2026 07:13:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78E30234964;
-	Wed,  3 Jun 2026 00:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26CD239902D;
+	Wed,  3 Jun 2026 07:13:50 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013042.outbound.protection.outlook.com [40.107.159.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172CE23D7FF
-	for <linux-can@vger.kernel.org>; Wed,  3 Jun 2026 00:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5AA3955F9;
+	Wed,  3 Jun 2026 07:13:48 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780447411; cv=pass; b=juLhV4PI1yaJrOWO+GL1vRYPtmPA40zmfTQ8XcWnf2XiRzI3IbiJfhIAuTwuHJo890u1X65VxBTVLXImRpYvo9g0brzM94oPD0v3CDH0qyJBKb0h3DShloDd2rURyxYNhTZys2Ze1GsrRI+z6ngG+LIqlRwI6u8cDUmchaZpESQ=
+	t=1780470830; cv=fail; b=iS5ODWEOzInxOynUbVCIKKuZcrS6/FTZB+twDeDXJGjQ+XxFQkocbO2j+b0xk3FLoq6eqsOWZ48fJfFEE/uBBdbhOpNldDHqBd72Eej5eHeC6eLNfZJBAwxIsy9Iy6xHJYr/VcQsfieexE+LdUqIH9uulWbsj74XQ5qOKrlBV+8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780447411; c=relaxed/simple;
-	bh=eXlPzJlmUX16orKo8VrfXZmXFclPCCHVVfUpU8AR1aw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J6NSVoEANBSTS7DEoVOvwQu04q+9aGs5mPcJBP+fhaSXGHWVGh6tDVs+fNSpdNWuMw9mxUUn2s8Tjq1JEHVH2FBV3yXL/BLiGkDwd62hK3fixB9iTfE1Q2IP9NMd0lsPDHp/L2BxvytPHAN0A7Fy+GX1NV3ml1kVGwKZnkRqhFQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k5Nhht5i; arc=pass smtp.client-ip=209.85.208.50
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6896c54a7easo977639a12.3
-        for <linux-can@vger.kernel.org>; Tue, 02 Jun 2026 17:43:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780447408; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QO1gcNP/R4ybVkXO3R+L/3h12BjTIIvz0VeCG/eTNQ2+HpPW8SI8Px4SpzhOHECN5p
-         mLo3KeD97fez12kKT6Pc7NGYRIdiE3pz/qzTpjKWkpPkVOhun8lbQx2GrhDLjgykoeTW
-         1KFnoDl6kn4X/P8c7X4gzKOw6pNmPCLoj6xZZO048XuBCgzjAZdKeduWhnFLbBtS7+T7
-         hPZ1yPIoUV/m3KMPmYQytULAHhxqCDpd1YG5Q3GWJ5QpNlbap+//Mz42i6LLyv/hcwBY
-         Lb9YMnZcLYgFlvskeyPZ0F4iFkY2GlCevwiIZPhJWoVQmc7KxyQqiW1VyOuMawqaYDfo
-         93jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4jpvdYmaA+cZI0xSbj3UsROS3FB9s5X7rfA1BJRjmjY=;
-        fh=3iytm150aLZKfjJdwP8oeAFYFcdhTw4Q1nsWvvXyqzE=;
-        b=Sffb3pr3JIh8eeTX2svgI/qI6mYc9x3QOnenlkTjRQJ4+BfDt5mlneCKzEkVpQ47Nt
-         MVumgi4B9U9ikT1oJGfBDebZK3y70UufT5wA1JJzSMLPfrJdYaKreSwcnq2yzAVDzEna
-         p7wme5gJZfOnpGm8B2DcdPtkeDHQog3brvAQHxJp2vXh/TRdVkE8ibu7EFkH6aQAgFoc
-         NbC+esbPHAy87/MPpRWHNGiy2db7gZ2mF6Y/Ykvf7V0l0cLlfXomURn6oLySRm+a+W/l
-         cTIAFloRlCYG1+DtQNTukNj5GQJAc1FrDgxr83wHy7ifoS+tH6L7DEJRjfrBgbGZyZar
-         /jsg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780447408; x=1781052208; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4jpvdYmaA+cZI0xSbj3UsROS3FB9s5X7rfA1BJRjmjY=;
-        b=k5Nhht5ibgkscdxAo6W35iKt4/PrM8aC9yUlv6NTteJYaDGTl8So7CAiMjOiBjC/fj
-         fKrEVgr0OWc9IG4OiAMjFCymwggKLQZCM45LojOFwyjh0nnijnDTD14L05IF+zSIdHzd
-         mw4DQb1b/pyu5oWUCLBXmgZGuGeLcQn0mctV/Kc/Kiw/BeixE1beitCJdJCRa+80Gf9v
-         B8CFdKnRbfy1SgajqiVyj7JDJQihvo37ScU/w3p+GQJYMJz4l/Eun7rRj7wB9ou/vYem
-         wTULy5UivFe1EQD7nM8dk1mhTV3Ty1fd+AAUdL6fe6GZqO9YZ/WkHUEjPZK+D3fZoB3H
-         jpGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780447408; x=1781052208;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4jpvdYmaA+cZI0xSbj3UsROS3FB9s5X7rfA1BJRjmjY=;
-        b=Af0vsI4HpIhrxVBf8zPx4HTLLbJH2EQ4mItZ4NDgF/fclDUhoIeY9BF3KpNTzlM/aV
-         8GOADz+YFNIK154pEVi6vPViRSdndP8JyAlv7iDq5CcJ3wUrdNG3bFAWDiQ4J5+USRpv
-         byVCTDUfhP07KcqZauxHiE7Mr/PvtspkB8/Le+doroHIhWQGQrR0ylTOUcESnfz+vx2E
-         N3GEqPARI2e+ngYZffU1tZYN6YlsnjyvgxmueA+KWRr0qhulLWEdlRb3aFCEoAn0ADKd
-         JYgFNTiigsC/DHQuE4vdd2vLm4IXnzGJVSPALyJSjT3qQpRk7dkop9r6AJC/1rkL2ZOK
-         e+zA==
-X-Gm-Message-State: AOJu0YxS5gck2315AlY5spQAj3IfL5nh97k8hv5PuFd5tW82PasuD2g2
-	5va2zhLw6QYmlzunTuAcLeeZsBfuy41b+4G6d9dEuuWpAcJjcAvEJ6/7RBssRzx/DxMGnoAkWcB
-	QxgM6TZlDXbAUmrL7O86Ut6HiV/Klf/Y=
-X-Gm-Gg: Acq92OHib3LCTAazah5/3VLMUXhUzvVyZCsKISqrdKu1luE08DT+iB3U1D0rzxd7eh7
-	/kJtlZqd7p2AbNUD3yY9dGznOLzRuKrf0SALZWTNkdKBdWKQQK9v44G2GIMTaDOlCvbO2RzPoSK
-	kX3ADp37HEA6kyeGRitRGEd6N8qmMhMj9tU7KgeHdhw8hi3PL5o2GGzMjflrBFVOi1uOPnyQZWM
-	ydp6Pt9B95C1CKN32taLGBFW5S0wDL9b20UIn0aA2r+0qUdqYg7tiVXXBbczofsAV/YxpWQItVG
-	UiJGlL8W8Ag4CkNJSUsw7AAN2CMpJgFVXrLe8rkMdvD82dBGwGxz12kT1/KLW4BVs1eHVx7JNO5
-	9Orm9CYfCuVxhL2ooAngTQ0R/9jrZrtE+yooRb6FQWsN34npkkKjubv8QQG6kGdSqVZOu
-X-Received: by 2002:a05:6402:27c6:b0:68a:e054:5b72 with SMTP id
- 4fb4d7f45d1cf-68e7234890fmr364848a12.19.1780447408373; Tue, 02 Jun 2026
- 17:43:28 -0700 (PDT)
+	s=arc-20240116; t=1780470830; c=relaxed/simple;
+	bh=Zm3ptvpQhDE782aiCSoVyFyVihJlbDFrV5ltrpuZJiE=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=u3egJ4o7Mi/Pm6k2P58wyuNwPzkKr/zjcZA/AGq4Xmm7MVK2Tl7mQPyMTqXIaaQ8uCgOSqSl8o/7bsrC0KmB/o0j5FFJZenslj4odH4WcpIwpHgYEf6wSv4kPpDbyjM8ovbBu3/XrMKNyyERKfNJKn5Zx/2nuhbb5lC8iQcurwE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=R54Xj8OY; arc=fail smtp.client-ip=40.107.159.42
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=i7pesPjKhahJljlvPjGJIAFS/3iORk9o8OdLOMp5WimTqEMjVvxFxnCUV2ggmeGUaodP9sQ5G9R4Jmw6NuVNHdABItZOfUTMjZY+hJHdXEeTnzbqVQ9P9va5w4VQ8MZPns0115vW+c/Rt9NdB/S1n8RTkWKx5X+KjPYA9BLBYg9m63y1MONk0MI8kOUOVkGHtfieU4xsvCPNWf3wkfX5X/c0xdy8k1EBCzGidy5l2tr/E2aPS+kfRAKk3BeWUT8DJi3S0ZHP1yW6WxOxyFnCANsQCpYYV8mv0YowhYSAxYgVuxhEdtIrTE7cNChJMU+ETi4xIICewGXnIEC52Gn67w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Mrc9KkrT2cLU62y0xbay03DEnmjCaXnOa+oNEqr+A8Y=;
+ b=VJ+dg88JrHVgxJ1L4KO67X7PvGJnqCWsie2ByLvdWF0bIWd/fjQ3+2xGc9VP+LDBri/HRIL4y3gDySdb7x7l9qU3sPpg4GqomOvGc1+kT1unFmBgWVuXHTf7jL+pE38EL815OJ/uNHuQeDJg4xUWdPOUusbQD8bbTGTUQaI+qdeO7xAf48pnwrYzq+hw0CWv7vqPXwg7pZ6EElr6Owp5XMo9VEOp2BOCR7ugttc0ps69Rl8EZwMQw4DTgBqpr56xHi9TmIIwhUik3MP0yAq2MV4PHQfIFwhA8sPO3NkmpqtgE3x/vETZr2g1ySBwDRkXGezkwQlwMbjVgBcnIHBAUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Mrc9KkrT2cLU62y0xbay03DEnmjCaXnOa+oNEqr+A8Y=;
+ b=R54Xj8OYX9Wto7jPEsRpx1g4vxWv8ow0EoBXCYC1i5rU3m/0j9M7z5wY6YonueXCJl7d3VVIfremSUY6tS2zt1OsHPD8lmOwmRmfALBVU6o1hNr2YNwpCo0dDIzzA2gR+1tsAVHUJ/K9Zk3Y0y0WXknr8kUzJT9aI4KY/cDJKTHr2fn2NNbTlLgvJ0RzgamegB4AaIdDKTOtBYTSYtz2M2+chLSpH2To5s2STNfxzkI1wVvlsUbhiCDWoanhbJwpgETWC00Ih9NDKq72rYPKemIrPpJa0BIjh9VCWlMhAX9Kc36GOHE2eNOZFfHie6nxKOODjsMP3d5Pg0SUCOiE1g==
+Received: from AM0PR04MB5858.eurprd04.prod.outlook.com (2603:10a6:208:132::23)
+ by PA1PR04MB11406.eurprd04.prod.outlook.com (2603:10a6:102:4f1::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.7; Wed, 3 Jun 2026
+ 07:13:45 +0000
+Received: from AM0PR04MB5858.eurprd04.prod.outlook.com
+ ([fe80::bdf4:c9d1:4e3f:68c6]) by AM0PR04MB5858.eurprd04.prod.outlook.com
+ ([fe80::bdf4:c9d1:4e3f:68c6%4]) with mapi id 15.21.0071.011; Wed, 3 Jun 2026
+ 07:13:45 +0000
+From: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>,
+	linux-can@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	NXP S32 Linux Team <s32@nxp.com>,
+	Christophe Lizzi <clizzi@redhat.com>,
+	Alberto Ruiz <aruizrui@redhat.com>,
+	Enric Balletbo <eballetb@redhat.com>,
+	Eric Chanudet <echanude@redhat.com>,
+	Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+Subject: [PATCH RESEND v4 0/8] can: flexcan: Add NXP S32N79 SoC support
+Date: Wed,  3 Jun 2026 09:13:34 +0200
+Message-ID: <20260603071342.641874-1-ciprianmarian.costea@oss.nxp.com>
+X-Mailer: git-send-email 2.43.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR4P281CA0263.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:e8::10) To AM0PR04MB5858.eurprd04.prod.outlook.com
+ (2603:10a6:208:132::23)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260602223431.17672-1-rosenp@gmail.com> <36da6192-a69e-4ab8-90f6-590f620ecc5f@kernel.org>
-In-Reply-To: <36da6192-a69e-4ab8-90f6-590f620ecc5f@kernel.org>
-From: Rosen Penev <rosenp@gmail.com>
-Date: Tue, 2 Jun 2026 17:43:16 -0700
-X-Gm-Features: AVHnY4I8kd0-VEgIUuwO044sR2XaPtAvngH1tDopWNo3whojGds4rDa2vj0yKhM
-Message-ID: <CAKxU2N86OYiXvtw=n5gNAtRzYeqf8UKA-Y=NTNoXMza70hHnjg@mail.gmail.com>
-Subject: Re: [PATCH] can: mscan: replace in_8/out_8 with ioread8/iowrite8
-To: Vincent Mailhol <mailhol@kernel.org>
-Cc: linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>, chleroy@kernel.org, 
-	open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB5858:EE_|PA1PR04MB11406:EE_
+X-MS-Office365-Filtering-Correlation-Id: d0324b00-3866-4965-0d5c-08dec13fa5fc
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|1800799024|366016|19092799006|376014|7416014|6133799003|18002099003|56012099006|11063799006;
+X-Microsoft-Antispam-Message-Info:
+ 6jjSuVWSgifgZtfAgA8NX5QhdBawyFCQ5dfIOgmhDLz+VUXUA6tJUlqUzyEmJXALSk3Vrdif6Ut2gk6OFAc4auCQ1AqpEuZiEPiR0khZ3LadTv0Y248r8AksKUMPDDtrjjlIWF3kIsQoyd0OOw7X8eGMwBfx7TzokBXrWsvraYjVby8exh2iVtvvNQ14ELn1cLe6DR4ApBgEcHsfRCEkDIRWqQQVhL6IHo1YKMMWE8luCeOI3L0pL0DjzCNet5cSyAFhBus1P+nKRyNyZvN0uPOHTOyrwNf5lMad9CMD0Kg7askuNtiFoVuW5WbKt40hT04+cf2I3fdgqMgmV4k1xAUc7GqoBvclRSQOl51g7J0x71C9VTwp5HUszvnKBZnhaH+++FWJ5dTBUpnduz0+q00asjGnV9ZIW/frmVroBm5eg5zmVhw1VqycXRPYKLls0WSgtAelzKh3jPAqVfqi1Yk4syOe24E2AExdPYM00/xxv+ZZn6T2vDWu7yNHGoT+Y4DHSPQs4HjDXJn93T0aMoAO2n5AZ8XH009+3EvZubh1oW9Gr7OSyQP25pn12psu9p6F6ITBt0LcXoMJtyohRUme27h1YsBoFHP+cWwyIXi4GHlDKiXv6KGpmMwxgD24JPNPIpsQOOJ4M7iAOhI8XtJs463rn29f4rIVJVmiFLFaEmo5GUd9u9vW4dKx1cOV
+X-Forefront-Antispam-Report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB5858.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(19092799006)(376014)(7416014)(6133799003)(18002099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+ =?utf-8?B?OVZvRDlJOXhQR1BoeHZWc0ROZnpkd0RmZ1BUaWM5aGlkZWRYRkdiTkY1a0Zx?=
+ =?utf-8?B?RXFLeHRwblVsRVNRQnhaQjRJSnBGekw3RUQ3TXJqVDlkMkFhYVFPT2pld0Q0?=
+ =?utf-8?B?aVAxNnRGZ2NsVzBsa3ZRSW9tempTYkRiZlVSbmxSL0dmZG5saFNOT3NnaXVB?=
+ =?utf-8?B?NzhDNTd3bDMxeFBTcjN2OS9IZEMxV3Q2R3lEU2tSQzc3QWpRZ0ZvMks1b2xU?=
+ =?utf-8?B?L204ZUhQMW9OM0ZmcnZjTTByd0tMR01IYkxaWGdSd0JOQTdWc0NOeGIrbysy?=
+ =?utf-8?B?N2RyeUExUENFOVlrNDhuSVBvS0pSN0ZCb1FxRkVIa0FTMk9pMzhUeW9kMnZQ?=
+ =?utf-8?B?cGRYanBzUmxVQ3p2T0l1QXNBRzl4dmpqYk02R2JGVXNyRGo5VmRRcWIvODBN?=
+ =?utf-8?B?MjcyUWU5MndocHpXcDZmNE5mekM5eUVIamkvWWNGQ1ZNTTY1Um16N0VDeFd5?=
+ =?utf-8?B?bmJCbzJIRlNCU3laZjFwWW9JMnQzYVpNWENEaG5xRk9LNlZYVld1SEJGaGlt?=
+ =?utf-8?B?ZlR6anFKRktJWWxGMjE0WFduZG8vTjBiTERrL3RZOHZQTkpBL1lpZTd5QkpZ?=
+ =?utf-8?B?M0xQRWwrNkFBY3FKeENKKzJMNkZJQ2xqNUlXeHpCZU45R0Y3TkRWZnQ4TEQy?=
+ =?utf-8?B?TlJTT0kwcVI0YnVjVkt1dGVSejcyb1lsak1odHZuMHdMbm0yUDB5VDk1UUVJ?=
+ =?utf-8?B?L1NhRVZobmNjU2luVGlYeEcyWjIrbUZKMS9tY0FLY1g1eXU2TlFVdk4rSW04?=
+ =?utf-8?B?NllPcTdDaGRNN0UxOWhFMmViaVNUMTdlZmZOVnNrMGRjRGlzREUwUHN2R1Bj?=
+ =?utf-8?B?SEthbkFvWllrQis5aFpWWEN0M1ZlRUNsY0NHZXNoQ2dvTUFhRFFNaUZhbnB0?=
+ =?utf-8?B?Q29TVmRWTjFDTnFwdlBCTUxJaG9jTndmR1AvS0gvVm9jMzhiRitTd2VVOE1i?=
+ =?utf-8?B?Wm1zM09iLzRVNVNjemRQUng4RWYrZUMrTkF0SFkyUWRCakJ2dkdCN1A3ZGZm?=
+ =?utf-8?B?cStxSWRZemlOd24rb0ZqdURpYTlCOFk5RkVaQXM2YkdqS3NZWDRJczhUYlQx?=
+ =?utf-8?B?cW9nUHBab04yczRTa05sbk1aRjZhdVZ4azlNTURUM3dpOUJnemZta24yRjA5?=
+ =?utf-8?B?b2ppZFpDdlFLMXV6ak8wUTd4TW52MVFwaE51UlEva3pjNncyUXRwMVR2Qm82?=
+ =?utf-8?B?TEZSZzdHbEk1UDh3MW1uRTdmNWo0RG9QeFBEQklDSnpmY3pPMEZSZk1pTjJ2?=
+ =?utf-8?B?RlRSVUFhbE5aZG9ybEJJY1FPRzBkVWJZL3Z5TVF6Y1k1Vm9FOERHYXRFazdO?=
+ =?utf-8?B?RjBGMVZzR2NwNGxiTHJmQzN1Y0Y2SWgyeWVZQ0I5RW9mcmsxeXgvZ3R3andk?=
+ =?utf-8?B?WXhjNlZ5dDFxRW9JcExWR21jNENtMjNYNEljM21UNS9ZOWtyT3RjYW0rZnl6?=
+ =?utf-8?B?ZWdCb3Y3WDVGN3JwMDloYjRIbm8wZHdONFFqeXN0TzBVeWw1OFJtQXFSamdj?=
+ =?utf-8?B?TXJQYXdZYWJzNG1uNU5qMm0rZjdUekhkV1dMUUhIZjlsVklzc0gzeGo3Uy82?=
+ =?utf-8?B?TlNwUEFaVGVZNHRqNWNHOUZiRXdJUzYxOTVOaTdTMVZzdEJRU3VYdGlzK0ZX?=
+ =?utf-8?B?WjlGekxienpoQ25aNUtnVHU1NWNreTRvODcxVVc4QXpmUk0yL1RCMjdEcUYw?=
+ =?utf-8?B?MTdiRW8xRFB0UGhjUFVFNVBEVndvZlJhWTM5VE1CUUpWTWlnY2FYN081dkdo?=
+ =?utf-8?B?OVNHS3hrbGV4WTllbHVpWGJmUjRHUUp3ajdxUDBMQmtYUWRNNWhEQWlQSkZz?=
+ =?utf-8?B?SjMvc2ZJZm1KZXVGMVF2MHVtRkV3ejEvVWhzQ3dSa1JXMmxqSHMzVndhOVh5?=
+ =?utf-8?B?RzhGZElSNGVWN2hSMHpab1U2VFRJT2MzNmY4NUJtTjRGQVVuQ05tWC9GaXhx?=
+ =?utf-8?B?bFd4Ky9HZTNSK3dlODJ2dUFFdmMvWVJUSlFkRXl1WGRBUEFHb0F0Sy93Y2w2?=
+ =?utf-8?B?bm9CVWdvTDRRalAwWHdQVm0vak9pZjg2Q2x4bUo0TTdVdi9nMlozNG05VEx3?=
+ =?utf-8?B?Rk9aSmJSeWwrcGUvMUx2NGdibkFtYUxENTBhTlpwVzlMYVZHOEpkQko5S0Fa?=
+ =?utf-8?B?aVB3Q0lVWXp4Nk5tQy9PV1RRN0lZWGNiSmJkZ2xKWmdNam5Ha3pWaW1WdUNL?=
+ =?utf-8?B?ZEN5SkQzRUcrd0ZwMmpOVVZQUTBWRFg0bHdxN1RwMHdPRGdZbzdDcE8wc2hw?=
+ =?utf-8?B?VmRBZjg0MEFaNWFpYnV6R1p1V1EvYmRPZlY2Wm45Q21qTGliTTIvNGVNWTcv?=
+ =?utf-8?B?UTdaWGZhalE3Q2s5d21kai9LOFJDaEQ4c05CVEwyWUl5cjFtSUh1Z1N1T3B2?=
+ =?utf-8?Q?3xAa2y/qoq6xhA+c=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0324b00-3866-4965-0d5c-08dec13fa5fc
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB5858.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2026 07:13:44.9298
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BOhSFephKOzuvLh00XKTSeRgAzUlFVbheTpHxZnmTENs93YAewv0KZBaA9f85wfyi2HqfMrnboBsLG/upUVtmVVj7CL8jclf1OiI5su/Wu8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB11406
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+X-Spamd-Result: default: False [2.94 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_DKIM_ALLOW(-0.20)[NXP1.onmicrosoft.com:s=selector1-NXP1-onmicrosoft-com];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[nxp.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:mailhol@kernel.org,m:linux-can@vger.kernel.org,m:mkl@pengutronix.de,m:chleroy@kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER(0.00)[rosenp@gmail.com,linux-can@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-7737-lists,linux-can=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7736-lists,linux-can=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:mailhol@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:festevam@gmail.com,m:kernel@pengutronix.de,m:linux-can@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:s32@nxp.com,m:clizzi@redhat.com,m:aruizrui@redhat.com,m:eballetb@redhat.com,m:echanude@redhat.com,m:ciprianmarian.costea@oss.nxp.com,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER(0.00)[ciprianmarian.costea@oss.nxp.com,linux-can@vger.kernel.org];
+	FREEMAIL_TO(0.00)[pengutronix.de,kernel.org,nxp.com,gmail.com];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[NXP1.onmicrosoft.com:+];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ciprianmarian.costea@oss.nxp.com,linux-can@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can,dt];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-can];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5]
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,oss.nxp.com:from_mime,oss.nxp.com:mid,NXP1.onmicrosoft.com:dkim,vger.kernel.org:from_smtp,nxp.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 1203D6333C4
+X-Rspamd-Queue-Id: 1F473635130
 
-On Tue, Jun 2, 2026 at 5:29=E2=80=AFPM Vincent Mailhol <mailhol@kernel.org>=
- wrote:
->
-> On 03/06/2026 at 00:34, Rosen Penev wrote:
-> > Mechanical conversion of the ppc4xx-specific in_8/out_8 accessors and
-> > the setbits8/clrbits8 macros to the generic ioread8/iowrite8 helpers
-> > for portability.
-> >
-> > Add HAS_IOMEM as these functions need it.
-> >
-> > Add COMPILE_TEST as a result. This can be built anywhere now.
-> >
-> > Assisted-by: opencode:big-pickle
-> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
->
-> I left a comment for a potential extension of the patch, but it is ok as-=
-is.
->
-> Reviewed-by: Vincent Mailhol <mailhol@kernel.org>
->
-> > ---
-> >  drivers/net/can/mscan/Kconfig |   3 +-
-> >  drivers/net/can/mscan/mscan.c | 143 +++++++++++++++++-----------------
-> >  2 files changed, 73 insertions(+), 73 deletions(-)
-> >
-> > diff --git a/drivers/net/can/mscan/Kconfig b/drivers/net/can/mscan/Kcon=
-fig
-> > index dfe6bd9947bb..ef3a99b3d3db 100644
-> > --- a/drivers/net/can/mscan/Kconfig
-> > +++ b/drivers/net/can/mscan/Kconfig
-> > @@ -1,6 +1,7 @@
-> >  # SPDX-License-Identifier: GPL-2.0-only
-> >  config CAN_MSCAN
-> > -     depends on PPC
-> > +     depends on PPC || COMPILE_TEST
-> > +     depends on HAS_IOMEM
->
-> It seems to me that following your changes, it should also now become
-> easy to add COMPILE_TEST to config CAN_MPC5XXX.
-I'll look into this.
->
-> mpc5xxx_can.c has a couple of unused headers, after removing those, I
-> could compile test it!
->
-> These are my local changes:
->
-> ----8<----
-> diff --git a/drivers/net/can/mscan/Kconfig b/drivers/net/can/mscan/Kconfi=
-g
-> index ef3a99b3d3db..9bffd91ea418 100644
-> --- a/drivers/net/can/mscan/Kconfig
-> +++ b/drivers/net/can/mscan/Kconfig
-> @@ -13,7 +13,7 @@ if CAN_MSCAN
->
->  config CAN_MPC5XXX
->         tristate "Freescale MPC5xxx onboard CAN controller"
-> -       depends on (PPC_MPC52xx || PPC_MPC512x)
-> +       depends on PPC_MPC52xx || PPC_MPC512x || COMPILE_TEST
->         help
->           If you say yes here you get support for Freescale's MPC5xxx
->           onboard CAN controller. Currently, the MPC5200, MPC5200B and
-> diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/=
-mpc5xxx_can.c
-> index 0080c39ee182..759efb71d843 100644
-> --- a/drivers/net/can/mscan/mpc5xxx_can.c
-> +++ b/drivers/net/can/mscan/mpc5xxx_can.c
-> @@ -9,8 +9,6 @@
->   */
->
->  #include <linux/kernel.h>
-> -#include <linux/module.h>
-> -#include <linux/interrupt.h>
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
->  #include <linux/netdevice.h>
-> @@ -18,11 +16,6 @@
->  #include <linux/of.h>
->  #include <linux/of_address.h>
->  #include <linux/of_irq.h>
-> -#include <linux/of_platform.h>
-> -#include <sysdev/fsl_soc.h>
-> -#include <linux/clk.h>
-> -#include <linux/io.h>
-> -#include <asm/mpc52xx.h>
->
->  #include "mscan.h"
-> ----8<----
->
-> Et voil=C3=A0 ! Both CAN_MSCAN and CAN_MPC5XXX can now be compile tested!
-drivers/net/can/mscan/mpc5xxx_can.c:22:10: fatal error:
-'sysdev/fsl_soc.h' file not found 22 | #include <sysdev/fsl_soc.h> |
-^~~~~~~~~~~~~~~~~~
+From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
 
-drivers/net/can/mscan/mpc5xxx_can.c:376:2: error: call to undeclared
-function '_memcpy_fromio'; ISO C99 and later do not support implicit
-function declarations [-Wimplicit-function-declaration] 376 |
-_memcpy_fromio(&saved_regs, regs, sizeof(*regs)); | ^
+This patch series adds FlexCAN support for the NXP S32N79 SoC.
 
-needs more work.
->
->
-> >       tristate "Support for Freescale MSCAN based chips"
-> >       help
-> >         The Motorola Scalable Controller Area Network (MSCAN) definitio=
-n
->
->
->
-> Yours sincerely,
-> Vincent Mailhol
+The S32N79 is an automotive-grade processor from NXP with multiple
+FlexCAN instances. The FlexCAN IP integration on S32N79 differs from
+other SoCs in the interrupt routing - it uses two separate interrupt
+lines:
+  - one interrupt for mailboxes 0-127
+  - one interrupt for bus error detection and device state changes
+
+The CAN controllers are connected through an irqsteer interrupt
+controller in the RCU (Resource Control Unit) domain.
+
+This series:
+  1. Splits flexcan_irq() into dedicated handlers for multi-IRQ platforms
+  2. Adds dt-bindings documentation for S32N79 FlexCAN
+  3. Introduces FLEXCAN_QUIRK_IRQ_BERR to handle the two-interrupt
+     configuration
+  4. Adds S32N79 device data and compatible string to the driver
+  5. Adds FlexCAN device tree nodes for S32N79 SoC
+  6. Enables FlexCAN devices on the S32N79-RDB board
+
+Tested on S32N79-RDB board with CAN and CAN FD communication.
+
+This is a resend of v4 with no changes.
+
+v4 -> v3
+- flexcan_chip_interrupts_enable(): disable/enable all IRQ lines
+  (not just dev->irq) during IMASK register writes
+- Split rx/tx masks per mailbox IRQ line (struct flexcan_mb_irq) so
+  each handler on S32G2 only processes its own MB range
+- Added received Acked-by tag on DT bindings patch
+
+v3 -> v2
+- Split flexcan_irq() into dedicated handlers (flexcan_irq_mb,
+  flexcan_irq_boff, flexcan_irq_berr) to fix duplicate event
+  processing when multiple IRQ lines run concurrently (new patch).
+- Added flexcan_irq_esr() handler composing state + berr for S32N79
+- Ordered quirks used by s32n devtype data by value.
+
+v2 -> v1
+- Renamed FLEXCAN_QUIRK_NR_IRQ_2 to FLEXCAN_QUIRK_IRQ_BERR to better
+describe the actual hardware feature
+- Appended new quirk at the end
+- Switched from platform_get_irq to platform_get_irq_byname usage
+- Updated interrupt description in dt-bindings
+
+Ciprian Marian Costea (8):
+  can: flexcan: use dedicated IRQ handlers for multi-IRQ platforms
+  can: flexcan: disable all IRQ lines in
+    flexcan_chip_interrupts_enable()
+  can: flexcan: split rx/tx masks per mailbox IRQ line
+  dt-bindings: can: fsl,flexcan: add NXP S32N79 SoC support
+  can: flexcan: add FLEXCAN_QUIRK_IRQ_BERR quirk
+  can: flexcan: add NXP S32N79 SoC support
+  arm64: dts: s32n79: add FlexCAN nodes
+  arm64: dts: s32n79: enable FlexCAN devices
+
+ .../bindings/net/can/fsl,flexcan.yaml         |  30 ++-
+ arch/arm64/boot/dts/freescale/s32n79-rdb.dts  |  12 +
+ arch/arm64/boot/dts/freescale/s32n79.dtsi     |  50 ++++
+ drivers/net/can/flexcan/flexcan-core.c        | 249 +++++++++++++++---
+ drivers/net/can/flexcan/flexcan.h             |  12 +-
+ 5 files changed, 316 insertions(+), 37 deletions(-)
+
+-- 
+2.43.0
+
 
