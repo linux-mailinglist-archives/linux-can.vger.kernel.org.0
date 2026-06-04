@@ -1,195 +1,230 @@
-Return-Path: <linux-can+bounces-7756-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7757-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ABGfHsmfIGq05wAAu9opvQ
-	(envelope-from <linux-can+bounces-7756-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 03 Jun 2026 23:42:33 +0200
+	id PiaMBcoSIWqR+wAAu9opvQ
+	(envelope-from <linux-can+bounces-7757-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 04 Jun 2026 07:53:14 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE71563B6E0
-	for <lists+linux-can@lfdr.de>; Wed, 03 Jun 2026 23:42:32 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AA7D63D170
+	for <lists+linux-can@lfdr.de>; Thu, 04 Jun 2026 07:53:13 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7756-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7756-lists+linux-can=lfdr.de@vger.kernel.org";
-	dmarc=fail reason="SPF not aligned (relaxed), No valid DKIM" header.from=collabora.com (policy=none);
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=Zdm8MWNv;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7757-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7757-lists+linux-can=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2C349307DFA3
-	for <lists+linux-can@lfdr.de>; Wed,  3 Jun 2026 21:39:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 541793009B05
+	for <lists+linux-can@lfdr.de>; Thu,  4 Jun 2026 05:53:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F6414A2E24;
-	Wed,  3 Jun 2026 21:39:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 558DC38836D;
+	Thu,  4 Jun 2026 05:53:11 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7AD14A2E07;
-	Wed,  3 Jun 2026 21:39:31 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780522774; cv=none; b=C5Ibx7KZSdSjPrRdNDwHEYUpk7E3YDWijoRddn4CwtGE1G6ZdW+9bs/sOO/nCg0Qe199ip/GL4pNZfS7uLutvDoRzPgztUHMLTPGbMBuHtC4c5eKCROdwgacJMIkJD9zDBeyLyq1MFjvcIHmRBzhQaceBxixEtsIsLDTC65LPFg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780522774; c=relaxed/simple;
-	bh=4ixFSV/12Id5tf/md9aSMpcT24U/Cz8Zv3drM0rLg14=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=SFQB5u1wrQ6bk0OIbhMPSA427JzkCvRvmRzFA6kMc5oOBL7fPw63LEIsHjjTeDWb23rEfGliLS0hcJzKF110BIlEaQxb0tgFCQgH396gRGw8w7gvZCKKTFuTuqnwDKCssF03ccmH5bk5ANFlnwoCn6YQ/2EVmNa89GYwHM6Dc0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A3131F0089B;
-	Wed,  3 Jun 2026 21:39:31 +0000 (UTC)
-Received: by venus (Postfix, from userid 1000)
-	id 7F4B0181D83; Wed, 03 Jun 2026 23:39:29 +0200 (CEST)
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: linux-phy@lists.infradead.org, 
- Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: Vinod Koul <vkoul@kernel.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>, dri-devel@lists.freedesktop.org, 
- freedreno@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org, 
- linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
- linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
- linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org, 
- linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org, 
- linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
- linux-usb@vger.kernel.org, netdev@vger.kernel.org, spacemit@lists.linux.dev, 
- UNGLinuxDriver@microchip.com, Abhinav Kumar <abhinav.kumar@linux.dev>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Alim Akhtar <alim.akhtar@samsung.com>, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- Andrzej Hajda <andrzej.hajda@intel.com>, Andy Yan <andy.yan@rock-chips.com>, 
- Bart Van Assche <bvanassche@acm.org>, Bjorn Helgaas <bhelgaas@google.com>, 
- Can Guo <quic_cang@quicinc.com>, Chanho Park <chanho61.park@samsung.com>, 
- Chen-Yu Tsai <wens@kernel.org>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
- Damien Le Moal <dlemoal@kernel.org>, 
- Daniel Machon <daniel.machon@microchip.com>, 
- David Airlie <airlied@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
- Dmitry Baryshkov <lumag@kernel.org>, Eric Dumazet <edumazet@google.com>, 
- Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
- Inki Dae <inki.dae@samsung.com>, Jagan Teki <jagan@amarulasolutions.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- JC Kuo <jckuo@nvidia.com>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Jessica Zhang <jesszhan0024@gmail.com>, Joe Perches <joe@perches.com>, 
- Johan Hovold <johan+linaro@kernel.org>, Jonas Karlman <jonas@kwiboo.se>, 
- Jonathan Hunter <jonathanh@nvidia.com>, 
- Kevin Xie <kevin.xie@starfivetech.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Linus Walleij <linusw@kernel.org>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Magnus Damm <magnus.damm@gmail.com>, 
- Manivannan Sadhasivam <mani@kernel.org>, 
- Marc Kleine-Budde <mkl@pengutronix.de>, 
- Marek Szyprowski <m.szyprowski@samsung.com>, 
- Marijn Suijten <marijn.suijten@somainline.org>, 
- Markus Schneider-Pargmann <msp@baylibre.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Mathias Nyman <mathias.nyman@intel.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Maxime Ripard <mripard@kernel.org>, Michael Dege <michael.dege@renesas.com>, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Niklas Cassel <cassel@kernel.org>, Nitin Rawat <quic_nitirawa@quicinc.com>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Peter Chen <peter.chen@kernel.org>, 
- Peter Griffin <peter.griffin@linaro.org>, 
- Rob Clark <robin.clark@oss.qualcomm.com>, Robert Foss <rfoss@kernel.org>, 
- Rob Herring <robh@kernel.org>, 
- "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
- Samuel Holland <samuel@sholland.org>, Sandy Huang <hjc@rock-chips.com>, 
- Sascha Hauer <s.hauer@pengutronix.de>, Sean Paul <sean@poorly.run>, 
- Sebastian Reichel <sre@kernel.org>, Shawn Guo <shawn.guo@linaro.org>, 
- Shawn Lin <shawn.lin@rock-chips.com>, Simona Vetter <simona@ffwll.ch>, 
- Steen Hegelund <Steen.Hegelund@microchip.com>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Vincent Mailhol <mailhol@kernel.org>, Xu Yang <xu.yang_2@nxp.com>, 
- Yixun Lan <dlan@kernel.org>, 
- Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-In-Reply-To: <20260505100523.1922388-1-vladimir.oltean@nxp.com>
-References: <20260505100523.1922388-1-vladimir.oltean@nxp.com>
-Subject: Re: (subset) [PATCH v8 phy-next 00/31] Split Generic PHY consumer
- and provider API
-Message-Id: <178052276949.2678508.3221123153750103034.b4-ty@collabora.com>
-Date: Wed, 03 Jun 2026 23:39:29 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4103CD8AC
+	for <linux-can@vger.kernel.org>; Thu,  4 Jun 2026 05:53:09 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780552391; cv=pass; b=EHOTnsCR+bP3EYtc/K0FtyhVnFyQ2XAdu5MKe+/Vzd7sZWywFrPy5fh6kZP1k91hbRjgeMTAiHUZRdk4YMAf+/5VrThEdLATzAklKk33RHWGBlZ7evLPJ7SmrD+wqS9M1MWyHAUGFL96qzk7+QhQwv2kDZY49lUW1x+Ft+Vw1bM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780552391; c=relaxed/simple;
+	bh=TLSpcxtgDeJBIXPHc/zgfPpJqeFc/XjZXKIQU+6j4Wg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LyFg+VylTfiLy/cPNwUGhW0kfgLuDTmzJ4sXoEv6PhSMMKQeePScDwus/WKGwsUDPQw+uMIPVDtW/DgMdC6j4UV3x4hcqtpa9wRygKEjRpHCtGMJswrwiEGaI0yc8C9KsepHlRHLFScw+xBcslL1+XYjXKXoRmtIzC4iAWM9kzk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zdm8MWNv; arc=pass smtp.client-ip=209.85.208.45
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-68c19f1f3ceso391757a12.2
+        for <linux-can@vger.kernel.org>; Wed, 03 Jun 2026 22:53:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780552388; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KPVdJecKnASplzwgIw9VJB1L5KYCxwGwqEPgpnUnygeJNsP4vgZkqYFEpr93yR30aw
+         ps3MQHPvTM7XrG8z1oAjJ3CldIkpHEb4cgNJcTZ65RCubUGEGdLCKzOKNSffZ0M0/p86
+         ll8B/Os+7ozFwEtJ+bCJ9sN+c/EyaA6FLeaznZw0ZOdY+E33xV5xF9EoAb70RzKmymrX
+         UryRItnVhVA70kaERJV1QMXGIUedFS51hXGHQNfFkML1i+2Mbo45qtrTuiuBSQbzMNMo
+         zvD6+SsoXsDqflmaQDbtioBmhDLiIkGGIHbveApO+ELDhIgGLbgtabkR40piiivvlA/q
+         xVFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ghFlsP350/NvZ7Hzmhk2+1q0DGzMho+/JxGVwW5E1Gg=;
+        fh=A5daGtlwruRpfTeUXnnitNu4af19e9UfwS62x47akvo=;
+        b=YDAxBtD9mNCc9Q+S5ELVfgyEu/h/36RkHR8544N8gckoavvuvlgsxH3Bc7tHFlwb5u
+         i5y6QQ9fJVubf9eYV2RvE16bxi8NdQt2KGOkXri/bJCyoob6ayPqOs4uvvenUaa1O+o/
+         58CcecjPmOHJAcSLtRuCjpwDSSr2+mPpyQON8/aGWGOlrJmuHq+EJ0rZ7efU4aLBj4Oe
+         HYD1XbfdHSQvsQ9WC27JU/r37l9h+cB8b8aMWrY+EV+MvK8b5Lbc1bNIr3YE1o6IHmfB
+         t3HkJc37H48yx5h0G+kzIakOPbMW/tY02iLZBDKHGohAyof83e2Q3lqy15PFCi7hWHYp
+         zV1w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780552388; x=1781157188; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ghFlsP350/NvZ7Hzmhk2+1q0DGzMho+/JxGVwW5E1Gg=;
+        b=Zdm8MWNvBdzryuY/CHHH2VJeE5HSwAUg5sSqVtOjFi4MY1fFzKTQvtvEg9PEreisWl
+         ZTAPTw1LLqW/UhMoepg8sjmeO7hMvq8t8xQG58Jif/QDYyzgtlAhipAmI+du+QWEqGj+
+         hcpZaPZJl9men+luRwIsH+fq6jBlMSxFQl4QbPRabYsdSD0SGqInuik9AnoHi1opg7wD
+         k3w607ZQh2JuYWcaCjvJp0phnZxe/c8Iy9RRLg+5iYJayuBsFJC81re6qIl8mwOiOWM+
+         kGCY6auNr2Ieza3zQ56MRba83hNTz/fCYWW5m0YPZB08/L6CN44bmniXfcEJXYk7udMF
+         BJ1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780552388; x=1781157188;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ghFlsP350/NvZ7Hzmhk2+1q0DGzMho+/JxGVwW5E1Gg=;
+        b=hs1ZKsTBwZkf4mEstkoXE9eMYjcD7FKYMjPqzwBod1yqPrnEoS0ohpuR7yOA4372wd
+         ++L/BOhNBOMLpb7esafo5GHPQeWVLBXScSSXUNj8cF0XAYUIgtbL5Bwq1k3bcdtuv/kH
+         +/LO55cZy2mOZUSz1bRUQNnFwGaNkdIfXq/ZKuTc8sYdWExC+nfL159LwEJjvIFkwXVz
+         sXBw9T2KiSZ83EEeWgNs5ilpx/Ae9EL5vkBCyKiNUxAo8K9KIDN16AaVF0sTk0D0Xit9
+         /oiBqslTcL2iaO4CREtDGizu7dTdy8LAHzvF1KxSevXhRb/4CT1uziu73cUre3wxH5RX
+         BSuw==
+X-Forwarded-Encrypted: i=1; AFNElJ96E3rP+hsTxMHLNzyVC9u3B86f+EZnlVl3Qi/YHVKvyg94xTVTzAlQ4NHVYfO0JiLi9Frce7P7wFw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzucjd1GBVyGGOn5AUIDBFQ52UtyRzGr90M72M33XwKaf3UqAeP
+	f4MNCOHK1pp4m4ztEgPmQgU5XIzvL3t2M8JzD5p0jLJc0jzzhCMJ+5kR/wCp/vvd1Cr6/y+FJpC
+	kVWLNPe/CBVCAwdYMqOwjQy8bHGn2qKM=
+X-Gm-Gg: Acq92OHnCG+9TkEx86Ne3oCX1qhc2L9Iw5KECuGKWboH0jkZgIlKcg5HKJ4LLIiflQr
+	e4bClAcrUivczOOWYBUXo/LEU4W9P/mI/v84ztxIYAwN9HhLUvZIg5Ibrc1NtBsdLcEdCKn3vm0
+	f3ksW2FXCU6tjK+wna8XMfjfy5SCuH2umm/07fnaV7oukkpdeqIpTZ70L70pLn3Y/JkWr3qV+qt
+	H5igDEt4nSOGlJnRNoR5A3oLfHSd8qVnhuEPVI3gvyXJ0qFiKqpU/nFn9EM4Yx0TxsX4nHQ1THQ
+	S/CaObezb1D/GZS5oWp/
+X-Received: by 2002:a17:907:6e89:b0:beb:f71c:63a with SMTP id
+ a640c23a62f3a-bf0ac304ccfmr362950766b.2.1780552387749; Wed, 03 Jun 2026
+ 22:53:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3
+References: <cover.1777273055.git.zhoubinbin@loongson.cn> <d7b19f6c1e634ffe4454809e73fb03058e7a1a9d.1777273055.git.zhoubinbin@loongson.cn>
+ <709ef711-4af1-413e-9662-08892b18fca5@kernel.org> <CAMpQs4K5Q_vC=wnGp3gf=F5RU8t61PLh4dLEmcLMMbM4mR+Wnw@mail.gmail.com>
+ <6ea756bf-d776-4eff-b0ca-eeaa6737e035@kernel.org>
+In-Reply-To: <6ea756bf-d776-4eff-b0ca-eeaa6737e035@kernel.org>
+From: Binbin Zhou <zhoubb.aaron@gmail.com>
+Date: Thu, 4 Jun 2026 13:52:53 +0800
+X-Gm-Features: AVHnY4KGRyyIWLI06LGNy87w7s_XYI73IEIXy_xKoOqPwgPelZOiqr8t8gAYaxU
+Message-ID: <CAMpQs4KfLP9z6TVx+xGzuW7KEXMRAC0Y59hMBUmq57x6U33t7Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] can: Add Loongson CAN-FD controller support
+To: Vincent Mailhol <mailhol@kernel.org>
+Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
+	Marc Kleine-Budde <mkl@pengutronix.de>, Bingxiong Li <libingxiong@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, 
+	linux-can@vger.kernel.org, jeffbai@aosc.io, gongyifu@loongson.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.14 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[collabora.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,lists.freedesktop.org,lists.infradead.org,vger.kernel.org,lists.linux.dev,microchip.com,linux.dev,bootlin.com,samsung.com,lunn.ch,intel.com,rock-chips.com,acm.org,google.com,quicinc.com,tuxon.dev,gmail.com,davemloft.net,nxp.com,glider.be,linuxfoundation.org,sntech.de,amarulasolutions.com,HansenPartnership.com,nvidia.com,perches.com,kwiboo.se,starfivetech.com,oss.qualcomm.com,ideasonboard.com,linux.intel.com,pengutronix.de,somainline.org,baylibre.com,oracle.com,renesas.com,redhat.com,armlinux.org.uk,sholland.org,poorly.run,ffwll.ch,synopsys.com,suse.de];
-	FORGED_RECIPIENTS(0.00)[m:linux-phy@lists.infradead.org,m:vladimir.oltean@nxp.com,m:vkoul@kernel.org,m:neil.armstrong@linaro.org,m:dri-devel@lists.freedesktop.org,m:freedreno@lists.freedesktop.org,m:linux-arm-kernel@lists.infradead.org,m:linux-arm-msm@vger.kernel.org,m:linux-can@vger.kernel.org,m:linux-gpio@vger.kernel.org,m:linux-ide@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-media@vger.kernel.org,m:linux-pci@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:linux-riscv@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-samsung-soc@vger.kernel.org,m:linux-scsi@vger.kernel.org,m:linux-sunxi@lists.linux.dev,m:linux-tegra@vger.kernel.org,m:linux-usb@vger.kernel.org,m:netdev@vger.kernel.org,m:spacemit@lists.linux.dev,m:UNGLinuxDriver@microchip.com,m:abhinav.kumar@linux.dev,m:alexandre.belloni@bootlin.com,m:alim.akhtar@samsung.com,m:andre.draszik@linaro.org,m:andrew+netdev@lunn.ch,m:andrzej.hajda@intel.com,m:andy.yan@rock-chips.com,m:bvanassche@acm.org,m:bh
- elgaas@google.com,m:quic_cang@quicinc.com,m:chanho61.park@samsung.com,m:wens@kernel.org,m:claudiu.beznea@tuxon.dev,m:dlemoal@kernel.org,m:daniel.machon@microchip.com,m:airlied@gmail.com,m:davem@davemloft.net,m:lumag@kernel.org,m:edumazet@google.com,m:festevam@gmail.com,m:Frank.Li@nxp.com,m:geert+renesas@glider.be,m:gregkh@linuxfoundation.org,m:heiko@sntech.de,m:inki.dae@samsung.com,m:jagan@amarulasolutions.com,m:kuba@kernel.org,m:James.Bottomley@HansenPartnership.com,m:jckuo@nvidia.com,m:jernej.skrabec@gmail.com,m:jesszhan0024@gmail.com,m:joe@perches.com,m:johan+linaro@kernel.org,m:jonas@kwiboo.se,m:jonathanh@nvidia.com,m:kevin.xie@starfivetech.com,m:krzysztof.kozlowski@oss.qualcomm.com,m:kwilczynski@kernel.org,m:Laurent.pinchart@ideasonboard.com,m:linusw@kernel.org,m:lpieralisi@kernel.org,m:maarten.lankhorst@linux.intel.com,m:magnus.damm@gmail.com,m:mani@kernel.org,m:mkl@pengutronix.de,m:m.szyprowski@samsung.com,m:marijn.suijten@somainline.org,m:msp@baylibre.com,m:martin.petersen@o
- racle.com,m:mathias.nyman@intel.com,m:mchehab@kernel.org,m:mripard@kernel.org,m:michael.dege@renesas.com,m:nicolas.ferre@microchip.com,m:cassel@kernel.org,m:quic_nitirawa@quicinc.com,m:pabeni@redhat.com,m:kernel@pengutronix.de,m:peter.chen@kernel.org,m:peter.griffin@linaro.org,m:robin.clark@oss.qualcomm.com,m:rfoss@kernel.org,m:robh@kernel.org,m:rmk+kernel@armlinux.org.uk,m:samuel@sholland.org,m:hjc@rock-chips.com,m:s.hauer@pengutronix.de,m:sean@poorly.run,m:sre@kernel.org,m:shawn.guo@linaro.org,m:shawn.lin@rock-chips.com,m:simona@ffwll.ch,m:Steen.Hegelund@microchip.com,m:thierry.reding@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7756-lists,linux-can=lfdr.de];
-	FORGED_SENDER(0.00)[sebastian.reichel@collabora.com,linux-can@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7757-lists,linux-can=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:mailhol@kernel.org,m:zhoubinbin@loongson.cn,m:chenhuacai@loongson.cn,m:mkl@pengutronix.de,m:libingxiong@loongson.cn,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:loongarch@lists.linux.dev,m:linux-can@vger.kernel.org,m:jeffbai@aosc.io,m:gongyifu@loongson.cn,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	FORGED_SENDER(0.00)[zhoubbaaron@gmail.com,linux-can@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sebastian.reichel@collabora.com,linux-can@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_GT_50(0.00)[106];
-	R_DKIM_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can,netdev,renesas,linaro,kernel];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:mid,collabora.com:from_mime,collabora.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhoubbaaron@gmail.com,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: BE71563B6E0
+X-Rspamd-Queue-Id: 7AA7D63D170
 
+Hi Vincent:
 
-On Tue, 05 May 2026 13:04:52 +0300, Vladimir Oltean wrote:
-> The biggest problem requiring this split is the fact that consumer
-> drivers poke around in struct phy, accessing fields which shouldn't be
-> visible to them. Follow the example of mux, gpio, iio, spi offload,
-> pwrsec, pinctrl and regulator, which each expose separate headers for
-> consumers and providers.
-> 
-> Some off-list discussions were had with Vinod Koul regarding the 3 PHY
-> providers outside the drivers/phy/ subsystem. It was agreed that it is
-> desirable to relocate them to drivers/phy/, rather than to publish
-> phy-provider.h to include/linux/phy/ for liberal use. Only phy.h and
-> (new) phy-props.h - consumer-facing headers - stay there.
-> 
-> [...]
+Sorry for the late reply.
 
-Applied, thanks!
+On Tue, May 26, 2026 at 11:58=E2=80=AFPM Vincent Mailhol <mailhol@kernel.or=
+g> wrote:
+>
+> On 21/05/2026 at 05:24, Binbin Zhou wrote:
+> > Hi Vincent:
+> >
+> > On Thu, May 7, 2026 at 1:50=E2=80=AFAM Vincent Mailhol <mailhol@kernel.=
+org> wrote:
+>
+> (...)
+>
+> >> Use the CAN TDC framework to get the SSP value (c.f. struct can_tdc,
+> >> struct can_tdc_const and can_fd_tdc_is_enabled())
+> >
+> > Last question:
+> >
+> > In the general framework, the calculation condition for tdco is
+> > (dbt->brp =3D=3D 1 || dbt->brp =3D=3D 2), which does not seem to corres=
+pond to
+> > the current condition (dbt->bitrate > 1000000).
+>
+> Where does the current condition comes from? Is it some empirical test?
+>
+> FYI, the
+>
+>   (dbt->brp =3D=3D 1 || dbt->brp =3D=3D 2)
+>
+> check comes from ISO 11898.
+>
+> > Although for CANFD, rates below 1 Mbit/s would negate the primary
+> > advantages of FD, from a controller hardware design perspective, I
+> > would still prefer to retain the condition (dbt->bitrate > 1000000).
+> >
+> > Do you have any other suggestions?
+>
+> Using TDC on low bitrates is indeed unstable and can lead to bus errors.
+> But the condition which you suggest
+>
+>   (dbt->bitrate > 1000000)
+>
+> is indirectly linked with the brp values. That's why the brp check is
+> sufficient (and more precise than the empirical 1 Mbit/s threshold value)=
+.
+>
+> Are you able to trigger any bus errors when using TDC with a brp value
+> of 1 or 2 and a bitrate below 1 Mbit/sec? If no, there is no reason to
+> add this extra check and we can continue to rely on the framework test.
 
-[26/31] power: supply: cpcap-charger: include missing <linux/property.h>
-        commit: a9e36028b688d693d8aefbf84a9899f31a20fcf0
+After offline discussions with our hardware engineers, we have decided
+to retain the existing decision criteria.
 
-Best regards,
--- 
-Sebastian Reichel <sebastian.reichel@collabora.com>
+The threshold is set to `1 Mbit/s` primarily based on the CAN 2.0
+physical layer protocol, which supports a maximum rate of 1 Mbit/s;
+this decision also takes into account that at low baud rates, the bit
+duration is sufficiently long, so there is generally no need to enable
+the second sampling point. Conversely, if the CAN controller=E2=80=99s time
+quanta clock frequency is very high, causing the BRP to consistently
+exceed 2 while traversing parameters, TDC may not be enabled.
 
+Additionally, there is a low probability of bus errors occurring during tes=
+ting.
+
+So, in your opinion, should we keep it as is?
+>
+>
+> Yours sincerely,
+> Vincent Mailhol
+>
+
+--
+Thanks.
+Binbin
 
