@@ -1,159 +1,226 @@
-Return-Path: <linux-can+bounces-7758-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7759-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id aWCXOeoCImpCRgEAu9opvQ
-	(envelope-from <linux-can+bounces-7758-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 05 Jun 2026 00:57:46 +0200
+	id vJeDEUmkImqBbQEAu9opvQ
+	(envelope-from <linux-can+bounces-7759-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 05 Jun 2026 12:26:17 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2A67643E13
-	for <lists+linux-can@lfdr.de>; Fri, 05 Jun 2026 00:57:45 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91C156474E1
+	for <lists+linux-can@lfdr.de>; Fri, 05 Jun 2026 12:26:16 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=ny1bTZtc;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7758-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7758-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=WuYKJMtt;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7759-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-7759-lists+linux-can=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0FB953015A8C
-	for <lists+linux-can@lfdr.de>; Thu,  4 Jun 2026 22:57:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0DA4E30FEA9B
+	for <lists+linux-can@lfdr.de>; Fri,  5 Jun 2026 10:11:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E3A3033FD;
-	Thu,  4 Jun 2026 22:57:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF6E13F44E4;
+	Fri,  5 Jun 2026 10:11:46 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A6D2EFD9B;
-	Thu,  4 Jun 2026 22:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B095D3F0ABF;
+	Fri,  5 Jun 2026 10:11:45 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780613860; cv=none; b=ExWip6hNpJPGPEzFVISm8xbE9T8IqDhzGK25dLgaylz1FziGAvjcCl8ZrwyG2KsRF8Lbv2iyXNJHf64iYUChQquoLnF1TuoGTCnbLZpjZe6TzJRr0ZfwD5GKhI20Y8bV5uZWqYlnh9Gu4I6CPyz4A6co9p7SXsDfTTZLl1xr0O8=
+	t=1780654306; cv=none; b=ftH+PBZH+oCkfoqpL11a4X7/NsuNZaz5+fvWm+r4jeoNSqPe4AhoVo3lmGc96hSfzheCsUf21G9Lv4XoLIBPEoKqx8TY4AoTsxAon7fJWEx6OVhSuP0X+6AfvqnnX8VcwfmtT3x+Afscvieq2U8g6hmELWzymRl8iR6RLs0bMAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780613860; c=relaxed/simple;
-	bh=2TlUIBpxSMH+9bGcBFZbe1n6gKi9gIbnhoT2ikTVCJc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MfW5LqIxh8TaSWSsbtmhRpJu/J1byuDS+JM5G91ZMAAQA5u5lYkAGTE3C/TC+aVMI2WtppJdcTM9OU9fpqEqetBxZwb2ytvAekwuk9WL06G+k4U0Lc73jg/1AFjL7kzXHqaiamTbPgMf2UwDc4oC0LcueO5nJ2Rq2dXluPz/7CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ny1bTZtc; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E36B1F00893;
-	Thu,  4 Jun 2026 22:57:36 +0000 (UTC)
+	s=arc-20240116; t=1780654306; c=relaxed/simple;
+	bh=+oSOPs6reVleJdmau1UD0l1OFs/hLRZSYZdSyznmc6k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uaiOkuJb4l/bBue38yupSKL8stIkyA6tDJeCCko5OqiNapIAX7JU7irdc0ZMpV1swmIoJnV7wACYyooZC4mmSztqyS+FS5gAQPN4ZOMyEIlBSIEBiWyqIqd8EKVxATJjKfb6IQVgtE/Qa7IaWa5K8cQ9gPxxy0xwCtg4uDsPOVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WuYKJMtt; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 426A51F00893;
+	Fri,  5 Jun 2026 10:11:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780613859;
-	bh=eB8NVASMw6EPL4lglam8dxrHSkSbY4ghGAbIjShoqbg=;
-	h=From:Date:Subject:To:Cc;
-	b=ny1bTZtcbVbH1dP6DwLhOb+zF7t/xRud2pn0rNiIDF6rQ3V7oaDig7jC/J/+pKdNb
-	 +AmriHItOcdJll1+jYEBOHAmWQfjHqcIlg/z1TEZMhg7WIzTF4QtyTLiUbpCJwpDIP
-	 720JVgcn0Ehg72rh9bcXOg5orE+qSBsJrAmfQS3EBYeGLAtVALnxoDuRk2qVqN1oRX
-	 y2J32UBuK4NSCgPnypqinWt2H5YIqgUajVBgnM0Bg4gDpLIlrRvwUdsr/xvseAwkRk
-	 ag5mt7FImb9abTYSmq7oGDLrre1DJDp5TsNzOWK7MdmcPi5uWKO2ktuemg+rtRqHwY
-	 EinDYw66qD2Lg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 04 Jun 2026 15:57:15 -0700
-Subject: [PATCH] can: virtio: Fix comment in UAPI header
+	s=k20260515; t=1780654305;
+	bh=aqkBQe41bV9bTC2QJ3RlElkystE3ub8D5XKqw3M77sk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=WuYKJMttjplblCLncClf1gu5wappddlpic3N33kpJlzlKaJD0BWqHv4LaPNAbJ8Ax
+	 LnQ0etd4FoLgpvQtaGElW5MiDG911N5/nkDtfGf6IvWjIQUhhYYhn0nuRmsENOZmgA
+	 v2Am40yyBj/skYr8EkKUdvH7pXOsWdFMU2/VkwOzQ8Dx+3Hb24sgqYkTVIUPI3CWcH
+	 kfkmmkjL42nFi7FBbmgjCHYSoF8R6Kg0Qt+aVUP3GlRv4kkb9x6G2QrMW+DeEtVeo5
+	 JoRKmzE2m4QXwfZSFCjVVs/6s1LBcR9dSJmgVLM+qtJRA+bELS8T/9GlZJgknuSOdY
+	 vfQF1ZO4iS75A==
+Message-ID: <2e9662a3-1047-41b2-a269-8fcd3e30f8f9@kernel.org>
+Date: Fri, 5 Jun 2026 12:11:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260604-virtio_can-fix-uapi-comment-v1-1-199fa96ec5f0@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM0QqDMAxA0V+RPC/QiYj4KyIjjXGLYCttLYL47
- 3bb44HLPSFKUInQVycEyRrVu4LnowL+kHsL6lQMtalb05oGs4ak/sXkcNYDd9oU2a+ruISWaSb
- T2cZ2BOWwBSnN7z6Mf8fdLsLpu4TrugHgD/P8fwAAAA==
-X-Change-ID: 20260604-virtio_can-fix-uapi-comment-bcafa08b4b8a
-To: Harald Mommer <harald.mommer@oss.qualcomm.com>, 
- Matias Ezequiel Vara Larsen <mvaralar@redhat.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>
-Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
- =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
- Mikhail Golubev-Ciuchea <mikhail.golubev-ciuchea@oss.qualcomm.com>, 
- Marc Kleine-Budde <mkl@pengutronix.de>, 
- Francesco Valla <francesco@valla.it>, virtualization@lists.linux.dev, 
- linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1447; i=nathan@kernel.org;
- h=from:subject:message-id; bh=2TlUIBpxSMH+9bGcBFZbe1n6gKi9gIbnhoT2ikTVCJc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFlKTA/uH5s4L8hHfR/7q62fzHL1AoWW7XCWUn9wqzUwV
- OO3tFp+RykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZiImiEjw8pbbGd7Y5MXvJLY
- sU18041Zby9fz/7TcMB0N9ObL6u3nHJlZDjemiJ45aNWV+ARNo1zizk1Hb6bzb7e2q53+RaftLj
- 9PxYA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] can: Add Loongson CAN-FD controller support
+To: Binbin Zhou <zhoubb.aaron@gmail.com>
+Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen
+ <chenhuacai@loongson.cn>, Marc Kleine-Budde <mkl@pengutronix.de>,
+ Bingxiong Li <libingxiong@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+ Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+ linux-can@vger.kernel.org, jeffbai@aosc.io, gongyifu@loongson.cn
+References: <cover.1777273055.git.zhoubinbin@loongson.cn>
+ <d7b19f6c1e634ffe4454809e73fb03058e7a1a9d.1777273055.git.zhoubinbin@loongson.cn>
+ <709ef711-4af1-413e-9662-08892b18fca5@kernel.org>
+ <CAMpQs4K5Q_vC=wnGp3gf=F5RU8t61PLh4dLEmcLMMbM4mR+Wnw@mail.gmail.com>
+ <6ea756bf-d776-4eff-b0ca-eeaa6737e035@kernel.org>
+ <CAMpQs4KfLP9z6TVx+xGzuW7KEXMRAC0Y59hMBUmq57x6U33t7Q@mail.gmail.com>
+From: Vincent Mailhol <mailhol@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=mailhol@kernel.org; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
+ fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
+ F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
+ 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
+ YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
+ dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
+ zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <CAMpQs4KfLP9z6TVx+xGzuW7KEXMRAC0Y59hMBUmq57x6U33t7Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:harald.mommer@oss.qualcomm.com,m:mvaralar@redhat.com,m:mst@redhat.com,m:jasowang@redhat.com,m:xuanzhuo@linux.alibaba.com,m:eperezma@redhat.com,m:mikhail.golubev-ciuchea@oss.qualcomm.com,m:mkl@pengutronix.de,m:francesco@valla.it,m:virtualization@lists.linux.dev,m:linux-can@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:llvm@lists.linux.dev,m:nathan@kernel.org,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER(0.00)[nathan@kernel.org,linux-can@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	TAGGED_FROM(0.00)[bounces-7758-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7759-lists,linux-can=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:zhoubb.aaron@gmail.com,m:zhoubinbin@loongson.cn,m:chenhuacai@loongson.cn,m:mkl@pengutronix.de,m:libingxiong@loongson.cn,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:loongarch@lists.linux.dev,m:linux-can@vger.kernel.org,m:jeffbai@aosc.io,m:gongyifu@loongson.cn,m:zhoubbaaron@gmail.com,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER(0.00)[mailhol@kernel.org,linux-can@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nathan@kernel.org,linux-can@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-can@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	TAGGED_RCPT(0.00)[linux-can];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E2A67643E13
+X-Rspamd-Queue-Id: 91C156474E1
 
-When compile testing the UAPI headers with clang, there is an warning turned
-error for using a C++ style ('//') comment, which is explicitly forbidden for
-UAPI headers.
+On 04/06/2026 at 07:52, Binbin Zhou wrote:
+> Hi Vincent:
+> 
+> Sorry for the late reply.
+> 
+> On Tue, May 26, 2026 at 11:58 PM Vincent Mailhol <mailhol@kernel.org> wrote:
+>>
+>> On 21/05/2026 at 05:24, Binbin Zhou wrote:
+>>> Hi Vincent:
+>>>
+>>> On Thu, May 7, 2026 at 1:50 AM Vincent Mailhol <mailhol@kernel.org> wrote:
+>>
+>> (...)
+>>
+>>>> Use the CAN TDC framework to get the SSP value (c.f. struct can_tdc,
+>>>> struct can_tdc_const and can_fd_tdc_is_enabled())
+>>>
+>>> Last question:
+>>>
+>>> In the general framework, the calculation condition for tdco is
+>>> (dbt->brp == 1 || dbt->brp == 2), which does not seem to correspond to
+>>> the current condition (dbt->bitrate > 1000000).
+>>
+>> Where does the current condition comes from? Is it some empirical test?
 
-  In file included from <built-in>:1:
-  ./usr/include/linux/virtio_can.h:29:35: error: // comments are not allowed in this language [-Werror,-Wcomment]
-     29 | #define VIRTIO_CAN_MAX_DLEN    64 // this is like CANFD_MAX_DLEN
-        |                                   ^
-  1 error generated.
+You did not answer this question. Where does this idea come from? Is it
+an individual initiative from one of your hardware engineers or does it
+come from any literature or research paper?
 
-Switch to a standard C style comment.
+>> FYI, the
+>>
+>>   (dbt->brp == 1 || dbt->brp == 2)
+>>
+>> check comes from ISO 11898.
 
-Fixes: 2b6b4bb7d96f ("can: virtio: Add virtio CAN driver")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- include/uapi/linux/virtio_can.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+My feeling is that you were not aware of the BRP <= 2 criteria. That
+criteria comes from ISO 11898-1. Was your hardware team aware of this
+BRP <= 2 ISO criteria? If yes, what made them decide to not use it?
 
-diff --git a/include/uapi/linux/virtio_can.h b/include/uapi/linux/virtio_can.h
-index 08d7e3e78776..e054d5099241 100644
---- a/include/uapi/linux/virtio_can.h
-+++ b/include/uapi/linux/virtio_can.h
-@@ -26,7 +26,7 @@
- #define VIRTIO_CAN_FLAGS_FD             0x4000
- #define VIRTIO_CAN_FLAGS_RTR            0x2000
- 
--#define VIRTIO_CAN_MAX_DLEN    64 // this is like CANFD_MAX_DLEN
-+#define VIRTIO_CAN_MAX_DLEN    64 /* this is like CANFD_MAX_DLEN */
- 
- struct virtio_can_config {
- #define VIRTIO_CAN_S_CTRL_BUSOFF (1u << 0) /* Controller BusOff */
+>>> Although for CANFD, rates below 1 Mbit/s would negate the primary
+>>> advantages of FD, from a controller hardware design perspective, I
+>>> would still prefer to retain the condition (dbt->bitrate > 1000000).
+>>>
+>>> Do you have any other suggestions?
+>>
+>> Using TDC on low bitrates is indeed unstable and can lead to bus errors.
+>> But the condition which you suggest
+>>
+>>   (dbt->bitrate > 1000000)
+>>
+>> is indirectly linked with the brp values. That's why the brp check is
+>> sufficient (and more precise than the empirical 1 Mbit/s threshold value).
+>>
+>> Are you able to trigger any bus errors when using TDC with a brp value
+>> of 1 or 2 and a bitrate below 1 Mbit/sec? If no, there is no reason to
+>> add this extra check and we can continue to rely on the framework test.
 
----
-base-commit: 7a85231f762aa97b945878abb9a26683486836c6
-change-id: 20260604-virtio_can-fix-uapi-comment-bcafa08b4b8a
+You also didn't answer this second question:
 
-Best regards,
---  
-Cheers,
-Nathan
+  Are you able to trigger any bus errors when using TDC with a brp value
+  of 1 or 2 and a bitrate below 1 Mbit/sec?
+
+> After offline discussions with our hardware engineers, we have decided
+> to retain the existing decision criteria.
+> 
+> The threshold is set to `1 Mbit/s` primarily based on the CAN 2.0
+> physical layer protocol, which supports a maximum rate of 1 Mbit/s;
+> this decision also takes into account that at low baud rates, the bit
+> duration is sufficiently long, so there is generally no need to enable
+> the second sampling point. Conversely, if the CAN controller’s time
+> quanta clock frequency is very high, causing the BRP to consistently
+> exceed 2 while traversing parameters, TDC may not be enabled.
+>> Additionally, there is a low probability of bus errors occurring
+during testing.
+
+Can you prove that the 1Mbit/sec threshold gives a *lower* probability
+of bus errors occurring compared to the BRP <= 2 rule?
+
+The point is that to be accepted, it is insufficient for your new
+criteria to just match the current criteria. It has to *improve* the
+current situation. Otherwise, more code for same performance means that
+we just bloated the kernel with a useless check.
+
+> So, in your opinion, should we keep it as is?
+
+An important aspect for the kernel maintainability is to centralize code
+as much as possible. If you can prove that your 1Mbit/sec threshold is
+*better* than the current rule, then this check must go in the framework
+(e.g. modify can_fd_tdc_is_enabled()) so that all the drivers can
+benefit from it. If not, it has no reason to exist.
+
+As much as possible, we should avoid driver individual initiatives, so
+keeping this condition in your driver is a hard no for me (one exception
+for local workaround would only be if your device has a defect which
+need some unique logic for fixing).
+
+So, either convince me through some tangible proof that your criteria
+improves the ISO criteria (e.g. empirical test showing bus error
+reduction when adding your rule) or drop the idea.
+
+
+Yours sincerely,
+Vincent Mailhol
 
 
