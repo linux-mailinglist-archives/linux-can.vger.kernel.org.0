@@ -1,2108 +1,307 @@
-Return-Path: <linux-can+bounces-7767-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7768-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 7ERrLgAHJ2q+qQIAu9opvQ
-	(envelope-from <linux-can+bounces-7767-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 08 Jun 2026 20:16:32 +0200
+	id X+KMI3a+J2rC1QIAu9opvQ
+	(envelope-from <linux-can+bounces-7768-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 09 Jun 2026 09:19:18 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48E196599C5
-	for <lists+linux-can@lfdr.de>; Mon, 08 Jun 2026 20:16:31 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2979165D1ED
+	for <lists+linux-can@lfdr.de>; Tue, 09 Jun 2026 09:19:18 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b="X8/Z6OvV";
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7767-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-7767-lists+linux-can=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=NXP1.onmicrosoft.com header.s=selector1-NXP1-onmicrosoft-com header.b=XY+WNBRn;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7768-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-can+bounces-7768-lists+linux-can=lfdr.de@vger.kernel.org";
+	dmarc=fail reason="SPF not aligned (relaxed), DKIM not aligned (relaxed)" header.from=nxp.com (policy=none);
+	arc=reject ("cv is fail on i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4F3A13060C81
-	for <lists+linux-can@lfdr.de>; Mon,  8 Jun 2026 17:43:18 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 97F53302A8BD
+	for <lists+linux-can@lfdr.de>; Tue,  9 Jun 2026 07:19:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B071B367283;
-	Mon,  8 Jun 2026 17:43:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34694385D7C;
+	Tue,  9 Jun 2026 07:19:16 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010044.outbound.protection.outlook.com [52.101.69.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544212566D3;
-	Mon,  8 Jun 2026 17:43:14 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780940597; cv=none; b=oP0fTwTFULp95MvbFryB6tR6agIdMIr5Aj/cnmNIEUkmHGEAnFO/zPxx6kuw9NZcUvgHSRlATFfIf/mkeat2bfBpQuh/Q1XBVnU7vc8X6vvEQJqrY0RVzV6VWZxzA7HlpiJcjXld2DwrFA1wNk9zZMAmeOVMt0GNCvK2UDkVf9s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780940597; c=relaxed/simple;
-	bh=HNDx1c3ibZdRHMZ4+I9h23b262DbCJN1Y43Akp7wlVE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WtVtZhQhz1SXiU3Fr5bjSh2ueWRU9j3S9U7VKjveOcfK7FrX8zNo7csj+xqnGqtu28SNPmbPturdFbM5aoEFCjhN3HHfRxZmmeOoYD4njcI5s+LmffuK7SstVM/9jXH0p26u+N9vFk6HZS2BqxfWKe2v/BezfOVz8TgaZWQ4zeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X8/Z6OvV; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C291F00893;
-	Mon,  8 Jun 2026 17:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780940594;
-	bh=xT3Uy7Rcs3JzB4fHu72fAqNz4Ho+p1M02rFHjvhR6HE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=X8/Z6OvVwJdKhWL0ZKWDrCwKo1gIR5hZ98N0Uvxs/NRY9Kqx61W6O3RpeJGHbGQA3
-	 qOUj8JQPfOzc/x+efe7hvUu62zAvU95/PUISwarqBiVQZSBtpThJTb7CeADpLI8MZA
-	 kXV8l3LZ4Q8tt6jLv1RRaj6KCig5+VcJzYiyViPWufBFEv59FI0U3d5wBrOEHOZG2S
-	 KfgECromLkt7vnXSFioXLZ5xs73N3KTUjndZTvtzbTwT/mZhbKYm+KPHP8wwT/BPag
-	 Jp5WcIpAACNRcyV4+pFmNalx+hOcEMyw/p2q0pFjGglMGLUzK3PYn/CIMvnoblDRZh
-	 qUbE/73kgGt3w==
-Message-ID: <c9598f85-5b17-4d38-855e-c3840a01452f@kernel.org>
-Date: Mon, 8 Jun 2026 19:43:10 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B8228DB54;
+	Tue,  9 Jun 2026 07:19:14 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780989556; cv=fail; b=icX7IBvT1B1cc0jlJ3yWkB57yHj3hTmZD3G+0KdYKBWsAQHTRQsu8JqpmDL9cHZtwQSS1CEY1WIMWhaBirakMlspdsYJYFcQYFRvJTcCZnzjNVICQoHPZ1+fOOeaMuIYZUV7e0Jf56t0vVECadTjs33Fddp8YOtqnw/ak2QXn3A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780989556; c=relaxed/simple;
+	bh=689QpCSAtBjFRUQLsuFt/k2FN/DykKln3GreVuQ1e/4=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=bhgq+DLLdgNwfNVu77jjNCLZpzGgSIYGtYbXQzpj7NI2FTIb3LZ1cTmEZAso0YCXvuxvWKZfE76XYzD25Xmuka/NCRZKeDFJcW8SQl/ZdzG2u48w1XngyIUID/2YTQzzkyu2S39ltr/IO/bwJXinkV90UrTq1si1Z1fBZ66gQ1A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=XY+WNBRn; arc=fail smtp.client-ip=52.101.69.44
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cWW+ksse/3I3DXm2r3wMjNdc5+hz+kH/xo3qrsEfDWXxZI6WgxOCisdtSn3M5lFZoXR7xbWSQ6P+7VjsoIym8et4BYXdZUt8fsdw22dg+4VDfg7QCq0cwRcH4t8eVBqTsEHEv3gii4UgAXVAKwijfzJpixNsHJZSKPE8iRGEaITzGinIWlQ9Pr333/EinFMcozna8OP+GAdUge4tb2PMrhmdyXwX4nLwK+oKkQe+IBOlMLLzD72pbCTC4uL+sMpAzXh7qnIxUZMOj2d0SDPhvdZ4NRaf9U0HLCoXJtWcGluWd6oVJVlFyOHLMa9E9bmrCHHb9gLY7W9KQ+jrL9CVUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dHLU9Wv7U2nV/lzMd0Ob4wJkLcW0JbeSeI5RPzv4S/8=;
+ b=F0BNQ2WZWIJwulGzCRQKuvWeUj3+E0B/j2WsO+enkVJh52W4isw7N+hZw/z/wiwV6i3/55VrVJYBpoEY55qGYibQ9sKe0R0i/UNFYa+Iy+SmXpuOsPV2zMCJcxNotwyxhzgdIiB6OgSjCw6VYGFFYYD8DF1fdQfl7pINYlYMeH/SD1UQgOwm+Br8QiEO6AfxM3qMoiLpKqvz23AtaF2lLXFV8TNInvcY6mAyUyYvTffrorIfHqvMd115Mw4YW/q8VxJsBfiZGebpySOTFrWt+5PQBsGyMlLNv/OOiKsEZYpZbambN3wboaLThSJk9J6oXzRfTLbxWDUkHfaifkRNiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dHLU9Wv7U2nV/lzMd0Ob4wJkLcW0JbeSeI5RPzv4S/8=;
+ b=XY+WNBRn+rfjhZb5aVUr0rS6J+J0o4C7yIMizOhkEOvCvgmYzf+OIuuQWAfJKUCCOpT0a84Iab7XYaWx8mZ2qiGtqlrVrZjNbiEALsEe0NMgXFCZkLGpqTdk6bDhIE50Domc9/FAqv8pw4S1bglRMr9n/zI6ZYmKrUk1QAG7XcW8eIjJ/C/xnmswJPY46VCFGL6qsOeZXuRTTHAUG7ibVULztDn+G+b3QvMcYfvJ3974xqqVaqX1iAB9FKrGdnkG9vlFE6Zz7Us57GN9gcLHkB1STaqW4IwvzEF4kH2hvatour+8JiTokbGi5fspGO4BR3/MkpgtqHaOiWAKyVAQ4w==
+Received: from AM0PR04MB5858.eurprd04.prod.outlook.com (2603:10a6:208:132::23)
+ by VI1PR04MB6895.eurprd04.prod.outlook.com (2603:10a6:803:13b::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.14; Tue, 9 Jun 2026
+ 07:19:05 +0000
+Received: from AM0PR04MB5858.eurprd04.prod.outlook.com
+ ([fe80::bdf4:c9d1:4e3f:68c6]) by AM0PR04MB5858.eurprd04.prod.outlook.com
+ ([fe80::bdf4:c9d1:4e3f:68c6%4]) with mapi id 15.21.0092.011; Tue, 9 Jun 2026
+ 07:19:04 +0000
+Message-ID: <971e5c8c-dafa-404d-ac6c-8e52a42b2986@oss.nxp.com>
+Date: Tue, 9 Jun 2026 10:19:01 +0300
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v4 0/8] can: flexcan: Add NXP S32N79 SoC support
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
+ Vincent Mailhol <mailhol@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>, linux-can@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ NXP S32 Linux Team <s32@nxp.com>, Christophe Lizzi <clizzi@redhat.com>,
+ Alberto Ruiz <aruizrui@redhat.com>, Eric Chanudet <echanude@redhat.com>
+References: <20260603071342.641874-1-ciprianmarian.costea@oss.nxp.com>
+ <20260603093941.ysev5do557hy2rui@nxp.com>
+ <CALE0LRuqZhm03QbYg-ZOJcKe0XqCLqVZ8j-4o07QuBF-OqX9BA@mail.gmail.com>
+Content-Language: en-US
+From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+In-Reply-To: <CALE0LRuqZhm03QbYg-ZOJcKe0XqCLqVZ8j-4o07QuBF-OqX9BA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR4P281CA0050.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:cc::11) To AM0PR04MB5858.eurprd04.prod.outlook.com
+ (2603:10a6:208:132::23)
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] can: Add Loongson CAN-FD controller driver
-To: Binbin Zhou <zhoubinbin@loongson.cn>, Binbin Zhou
- <zhoubb.aaron@gmail.com>, Huacai Chen <chenhuacai@loongson.cn>,
- Marc Kleine-Budde <mkl@pengutronix.de>,
- Bingxiong Li <libingxiong@loongson.cn>
-Cc: Huacai Chen <chenhuacai@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
- loongarch@lists.linux.dev, linux-can@vger.kernel.org, jeffbai@aosc.io
-References: <cover.1780908445.git.zhoubinbin@loongson.cn>
- <ed069249061d105d72d2115b8a05216a60cebffb.1780908445.git.zhoubinbin@loongson.cn>
-From: Vincent Mailhol <mailhol@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <ed069249061d105d72d2115b8a05216a60cebffb.1780908445.git.zhoubinbin@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB5858:EE_|VI1PR04MB6895:EE_
+X-MS-Office365-Filtering-Correlation-Id: e7e8932a-f7b9-4da9-41ce-08dec5f76343
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|19092799006|1800799024|7416014|376014|366016|6133799003|22082099003|18002099003|4143699003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info:
+ BMmmMRuOc8kbea7C9r3kzpcQDr7D4r7h712vv4DlrU6Q2Y5PW/3W7EeJgKzeK6QY2v7jWh8qgbazTJoOex6z3fX3G3D5xhe5tcHQmjRidZ9Um6dlQsR5LuwtsRkY0AP0o4Jv4dJu33GzfW+5s2jR0myvvVodWwyKKGccwY/6HpSOoUaxtNzIPMIAbopG1iR61xGX6OTPIYIvl+qVp+4K0CqXMmM60jF5eyjM/AYIYGuWFvuEHfI09jkefjUXDOrrBAYrNdpdO9RCwxyb7p23sQhczMvubM4HYa0vik9nvoY5fDKtPvgFSvyVpE3OWi1gW/25f4kIeue//6kJ8fIubvmtnYMqL2lfSEsRwpHvjWw18o31IVEB9NnXRtD40fIjGIk6fd8/RrvWcjLeGlL/kXs7d45Euc/8rSV7oqA6FidZ5iG4DL7fIqZjtxO6kRFMHIwzf+G0fDgWWQXcHFS8DlKmX5bibHwcvDUyofd2HE0PXPubHH9+aaqSWCetM3Iofm1WwWjeZMC1sihMfYGW8vSjiiMObDBpyVd6n6KdNu8bizvs5Mu04nDK8btDPLAWjYyMBM2QQtkrAevV6fdsnjn+9c+AQkyFSX1cjbvte622IYIXJSBETBJZ1YggVicCYNoWlE5eMtgvau5sMgnDZZ58ciRKFWYopRDWHPuoLzqf65mT4SUXRO3zx+CH7MSl
+X-Forefront-Antispam-Report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB5858.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(7416014)(376014)(366016)(6133799003)(22082099003)(18002099003)(4143699003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+ =?utf-8?B?eWtyL0h4eEt1ZUZ1QTRaZ2pkOUZ1M1lYaGdiczV5aFQ4VVF0T2R6VEsxdGFr?=
+ =?utf-8?B?OUU5RWJrTDB5d2llT2NnbGxKR0xZOC9kdldTTmVBc2duSVJpaU5HQWFIVndo?=
+ =?utf-8?B?bUh4c3EySGZFcnRUdFVwV3FpSHVNOXdhVVE3UFhyVzdHS2J0djFwbEVuZVVY?=
+ =?utf-8?B?QSs4WkVXYVBIZExyeWZ6MUFWUW9Sb0hrbGRZSGJYZE5qb08rNHJrbHVJMFFo?=
+ =?utf-8?B?YTk0NWdlOTVqNzlMUTB1RVpnRWZnSU1kYTNDOVEvc0xTVzVXdC9nTHNLUnBl?=
+ =?utf-8?B?dlNaRWYvMTY5azdDOUtvSUNCdUJBZWpOclRrVWpvU01Eb05nelkwWXlkT0t4?=
+ =?utf-8?B?b2xqN3dXWkt3akFuMnNIT2YzVWhmMVdCcSsxKzVPajMzbEI4a1YyR0VxdG03?=
+ =?utf-8?B?M2FSVWNGVWRheGxSMFVTVzZJTS9rRElUNEh2dVRucHczSS9yRDdCWSsrN1h5?=
+ =?utf-8?B?MldCNHdEelR3K05rUVhyTVVXZUxiZG11YitpaXZmZzhaK0pJekJwV1RwaGdE?=
+ =?utf-8?B?N1pXQ3BJVWhFR0paZU1Gc0dJdTUwSHBpaFRxNktmSXdrdXN2aTViaUdpZWpE?=
+ =?utf-8?B?OWgzVld0elpsb2Vjdks4dk81TnRSZUpFQksvSTlRd2VvUEYvQnp6UWdqbVFS?=
+ =?utf-8?B?c25CeUg1N1lNMVpweWZEWHB3ZThiRUlFSldYeGhJeVFUVjdHNzBnVDNrMSs0?=
+ =?utf-8?B?bTNzTzZvQWRzUTBEdVVVMUVUMERtVkVTTWNObXFOYTQ4czJBSHNUMUFJcmxO?=
+ =?utf-8?B?NytQaE1pazdUQnJKbklCRVFsVUx6ZUtlMWY0aXV1d1B4RExvem40MFRXN1d2?=
+ =?utf-8?B?TjRzdmtENFZ5ejArZzltaWF5YUFMd1piUjFocEVIWSs1anZ1eEpqS2tDNkZp?=
+ =?utf-8?B?UXYrZ0FpL1p4ekxVc3dKQlZpR3VHWDJ6Y0xiR2ZzYWgya3BIcmpMVVdGWjVy?=
+ =?utf-8?B?YTlUaGtwdFphdEFDbGpxMGRNZ3daSUIyTUpiQUxoaTlsM0p5UE0xcERWM0VD?=
+ =?utf-8?B?K2Z5aWM2MjRObDhPblBSUkdPb1BndkdZVGg1Y3QrakNEWHNMSDh2Q1VTR0NK?=
+ =?utf-8?B?MklsWFNMOGJpWFhuZnpLTWFXQjUrVGVPWUF4YUZiSWxNcVl6SGE2Q1h6NWt6?=
+ =?utf-8?B?RC9WL3duc2d0RnJxckpTOWxxbm9zYXh5SWlNMWNtQ0N0bnIvVVlhL25WKzBz?=
+ =?utf-8?B?anZwN1I1YWFtVWxkZ3VWeXpmNG54TkwzQmNQWnp2WlZqTTQ4aFZLSE1aRk96?=
+ =?utf-8?B?cTNpYm12NTBmODQrWmlHWkc4ZFZiNEE3cnhIV1ZYZUExQUVZcjlEUjhwNWZX?=
+ =?utf-8?B?OVIrQS9iSW1tYnZ0cFIxT21TcHZlWE9yMnBTU01yeVJua2Q0eUpRMU9sbXR6?=
+ =?utf-8?B?Y3RBdnF6Szh2a0tTZVRFU0hBUVNCSU03L1I1ODFCcUJ0QURoVlVNY28zMWxu?=
+ =?utf-8?B?M1lyTmIvdWNyd2R5dWpWcktHRTVHNk1sMGUxYjRBTS9nUk91YlRxU1dNa3U1?=
+ =?utf-8?B?NVdISGFyU1dKMkJJUFFBQlpJakg3U2FlWHNTQTlUdHI1aFJ4OE5wNTZnc1NZ?=
+ =?utf-8?B?WithZlhRdlNSdUpETnlyc3FpN0hwQ0FHUllmaWJUODB3WXRJTmw4dHFrWHVT?=
+ =?utf-8?B?eDdxWkxISm1sZ2RxTmw2a3k2V1k1WlBCM1d0NnUzS0tTZm90NjFWbi95QUVu?=
+ =?utf-8?B?MzFuSks2WnBrcHVGNG5ZK2pBTmNKS21SYzFTWm9nbXBuSlpWY2JHVTVOUFFZ?=
+ =?utf-8?B?TTluZ3pnenQrcGFmcFhZQmRxMVpqbGFLMmx2ZVJjSG1ZdGFjYkY1RW5hOHFv?=
+ =?utf-8?B?TmJoNWJHZnJhUldwRnNSTnlNSnZiay9JV1JnUE5XZDJJMHRwZ0ExZDZlaXU4?=
+ =?utf-8?B?Mm1sM3RNa1dBZVZFWFlmTVhUcks4M0hmR2QzUzZCUU5wbDlPVmMrZ3p0TkY4?=
+ =?utf-8?B?UmtpZ1R5UGJ6MUpnYjJUUEF3Z2tiblZGVTJjOFdpZk1hMExscDhkelh0Z0pD?=
+ =?utf-8?B?NlM4TW94VmJRSFB0bFZVVlROdmdIOGZDbm5oYmd6cWJldVF3MmRHeVB2MXNQ?=
+ =?utf-8?B?aGtlVHc0TjdmUksybEE2Mk1LaW8vN3ZDRXdocHdMSUYxTGJzYzN1L0xtbGZw?=
+ =?utf-8?B?bUhVYk04b25URG9sWUxERXlIbmNucllIeTVNRTI1ejZLTyt4YzdLcVZYbG9K?=
+ =?utf-8?B?V0VxM0w2eTJiT2kyMjQ2TUc3SnhFaUR6UFRDaEx5UGdYVHRBaW4xSXRZME5y?=
+ =?utf-8?B?eFRNWDJkeng5MjdVbFdoNzlGbkF3bmhsNVBRY3dvWitIMVBRZUIybjFyci9X?=
+ =?utf-8?B?eEpPRWdvMWZGQUlVOGc0QUlPUFlaSVc0VE43cmdCM1VzWkNGaDU0a2w4U3VU?=
+ =?utf-8?Q?3uVVelOs8I8N/I7I=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7e8932a-f7b9-4da9-41ce-08dec5f76343
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB5858.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2026 07:19:04.8022
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: do0LAzTpXKQXmTVqJua5xwfwGhmssUbTJegHHzC/sqOn6NoiqCueu4/oadpQp9n1C1Tn2JOvsA+tE/teC6EA4QgT11MdV7tdpxDbDoJ7QEs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6895
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [1.94 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_DKIM_ALLOW(-0.20)[NXP1.onmicrosoft.com:s=selector1-NXP1-onmicrosoft-com];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[nxp.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7767-lists,linux-can=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[loongson.cn,gmail.com,pengutronix.de];
-	FORGED_SENDER(0.00)[mailhol@kernel.org,linux-can@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:zhoubinbin@loongson.cn,m:zhoubb.aaron@gmail.com,m:chenhuacai@loongson.cn,m:mkl@pengutronix.de,m:libingxiong@loongson.cn,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:loongarch@lists.linux.dev,m:linux-can@vger.kernel.org,m:jeffbai@aosc.io,m:zhoubbaaron@gmail.com,s:lists@lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7768-lists,linux-can=lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:mailhol.vincent@wanadoo.fr,m:mailhol@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:festevam@gmail.com,m:kernel@pengutronix.de,m:linux-can@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:imx@lists.linux.dev,m:linux-arm-kernel@lists.infradead.org,m:s32@nxp.com,m:clizzi@redhat.com,m:aruizrui@redhat.com,m:echanude@redhat.com,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[ciprianmarian.costea@oss.nxp.com,linux-can@vger.kernel.org];
+	FREEMAIL_TO(0.00)[pengutronix.de,wanadoo.fr];
 	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[NXP1.onmicrosoft.com:+];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ciprianmarian.costea@oss.nxp.com,linux-can@vger.kernel.org];
+	FREEMAIL_CC(0.00)[pengutronix.de,kernel.org,nxp.com,gmail.com,vger.kernel.org,lists.linux.dev,lists.infradead.org,redhat.com];
+	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TAGGED_RCPT(0.00)[linux-can];
-	TO_DN_SOME(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,loongson.cn:email]
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-can,dt];
+	TO_DN_SOME(0.00)[]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 48E196599C5
+X-Rspamd-Queue-Id: 2979165D1ED
 
-On 08/06/2026 at 10:49, Binbin Zhou wrote:
-> Add support for the CAN-FD controller integrated into Loongson-2K series
-> SoCs. The controller supports both Classic CAN and CAN FD, with up to 8
-> transmit buffers, hardware timestamping, error counters, and various
-> control modes (loopback, listen-only, one-shot, non-ISO FD, etc.).
+On 6/3/2026 1:28 PM, Enric Balletbo i Serra wrote:
+> Hi Ciprian,
 > 
-> The driver implements:
-> - NAPI for RX path
-> - TX buffer management with echo skb support
-> - Bus error reporting and fault confinement state handling
-> - Bit timing configuration for nominal and data phase
-> - Secondary Sample Point (SSP) configuration for high bitrates
+> Sorry in advance for the noise, for some strange reason I didn't get
+> or find the cover until now, so I added my tested patch in 1. Doing it
+> now properly.
 > 
-> Co-developed-by: Bingxiong Li <libingxiong@loongson.cn>
-> Signed-off-by: Bingxiong Li <libingxiong@loongson.cn>
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> ---
->  MAINTAINERS                      |    7 +
->  drivers/net/can/Kconfig          |   15 +
->  drivers/net/can/Makefile         |    1 +
->  drivers/net/can/loongson_canfd.c | 1766 ++++++++++++++++++++++++++++++
->  4 files changed, 1789 insertions(+)
->  create mode 100644 drivers/net/can/loongson_canfd.c
+> On Wed, Jun 3, 2026 at 11:44 AM Bough Chen <haibo.chen@oss.nxp.com> wrote:
+
+Hello Marc and Vincent,
+
+Sorry for bothering. Do you expect any more changes to this V4 patchset ?
+
+Best Regards,
+Ciprian
+
+>>
+>> On Wed, Jun 03, 2026 at 09:13:34AM +0200, Ciprian Costea wrote:
+>>> From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+>>>
+>>> This patch series adds FlexCAN support for the NXP S32N79 SoC.
+>>>
+>>> The S32N79 is an automotive-grade processor from NXP with multiple
+>>> FlexCAN instances. The FlexCAN IP integration on S32N79 differs from
+>>> other SoCs in the interrupt routing - it uses two separate interrupt
+>>> lines:
+>>>    - one interrupt for mailboxes 0-127
+>>>    - one interrupt for bus error detection and device state changes
+>>>
+>>> The CAN controllers are connected through an irqsteer interrupt
+>>> controller in the RCU (Resource Control Unit) domain.
+>>>
+>>> This series:
+>>>    1. Splits flexcan_irq() into dedicated handlers for multi-IRQ platforms
+>>>    2. Adds dt-bindings documentation for S32N79 FlexCAN
+>>>    3. Introduces FLEXCAN_QUIRK_IRQ_BERR to handle the two-interrupt
+>>>       configuration
+>>>    4. Adds S32N79 device data and compatible string to the driver
+>>>    5. Adds FlexCAN device tree nodes for S32N79 SoC
+>>>    6. Enables FlexCAN devices on the S32N79-RDB board
+>>>
+>>> Tested on S32N79-RDB board with CAN and CAN FD communication.
+>>
+>> Tested on imx95-19x19-evk board with CAN and CAN FD communication. No issue found.
+>> This means this patch set do not impact the original platforms.
+>>
+>> For this patch set, feel free to add tag:
+>> Reviewed-and-tested-by: Haibo Chen <haibo.chen@nxp.com>
+>>
+>> Regards
+>> Haibo Chen
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 7a2ffd9d37d5..1ee16edae734 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14935,6 +14935,13 @@ F:	arch/loongarch/
->  F:	drivers/*/*loongarch*
->  F:	drivers/cpufreq/loongson3_cpufreq.c
->  
-> +LOONGSON CAN FD DRIVER
-> +M:	Bingxiong Li <libingxiong@loongson.cn>
-> +M:	Binbin Zhou <zhoubinbin@loongson.cn>
-> +L:	linux-can@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/net/can/loongson_canfd.c
-> +
->  LOONGSON GPIO DRIVER
->  M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->  L:	linux-gpio@vger.kernel.org
-> diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-> index e15e320db476..28014e264f30 100644
-> --- a/drivers/net/can/Kconfig
-> +++ b/drivers/net/can/Kconfig
-> @@ -189,6 +189,21 @@ config CAN_KVASER_PCIEFD
->  	    Kvaser M.2 PCIe 4xCAN
->  	    Kvaser PCIe 8xCAN
->  
-> +config CAN_LOONGSON_CANFD
-> +	tristate "Loongson CAN-FD controller"
-> +	depends on HAS_IOMEM || COMPILE_TEST
-> +	select REGMAP_MMIO
-> +	help
-> +	  This is a canfd driver switch for the Loongson platform,
-> +	  integrated with the Loongson-2K series SoCs.
-> +
-> +	  It supports both Classic CAN and CAN FD, with up to 8 transmit
-> +	  buffers, hardware timestamping, error counters, and various
-> +	  control modes.
-> +
-> +	  To compile as a module, choose M here: the module will be
-> +	  called loongson_canfd.
-> +
->  config CAN_SLCAN
->  	tristate "Serial / USB serial CAN Adaptors (slcan)"
->  	depends on TTY
-> diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
-> index d7bc10a6b8ea..1ce78443d710 100644
-> --- a/drivers/net/can/Makefile
-> +++ b/drivers/net/can/Makefile
-> @@ -27,6 +27,7 @@ obj-$(CONFIG_CAN_GRCAN)		+= grcan.o
->  obj-$(CONFIG_CAN_IFI_CANFD)	+= ifi_canfd/
->  obj-$(CONFIG_CAN_JANZ_ICAN3)	+= janz-ican3.o
->  obj-$(CONFIG_CAN_KVASER_PCIEFD)	+= kvaser_pciefd/
-> +obj-$(CONFIG_CAN_LOONGSON_CANFD)	+= loongson_canfd.o
->  obj-$(CONFIG_CAN_MSCAN)		+= mscan/
->  obj-$(CONFIG_CAN_M_CAN)		+= m_can/
->  obj-$(CONFIG_CAN_PEAK_PCIEFD)	+= peak_canfd/
-> diff --git a/drivers/net/can/loongson_canfd.c b/drivers/net/can/loongson_canfd.c
-> new file mode 100644
-> index 000000000000..3794700e04c8
-> --- /dev/null
-> +++ b/drivers/net/can/loongson_canfd.c
-> @@ -0,0 +1,1766 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * LOONGSON CANFD controller
-> + *
-> + * Copyright (C) 2024-2026 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +#include <linux/can/dev.h>
-> +#include <linux/can/error.h>
-> +#include <linux/io.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/netdevice.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/skbuff.h>
-> +#include <linux/string.h>
-> +#include <linux/types.h>
-> +
-> +#define LOONGSON_CANFD_DEVICE_ID	0x0	/* CANFD controller ID Register */
-> +#define LOONGSON_CANFD_MODE		0x4	/* Mode Configuration Register */
-> +#define LOONGSON_CANFD_CONF		0x8	/* Configure Register */
-> +#define LOONGSON_CANFD_STAT		0xc	/* Status Register */
-> +#define LOONGSON_CANFD_CMD		0x10	/* Command Register */
-> +#define LOONGSON_CANFD_INT_STAT		0x14	/* Interrupt Status Register */
-> +#define LOONGSON_CANFD_INT_ENA		0x18	/* Interrupt Enable Register */
-> +#define LOONGSON_CANFD_INT_MASK		0x1c	/* Interrupt Mask Register */
-> +#define LOONGSON_CANFD_BTR_NORM		0x20	/* Normal Rate Configuration Register */
-> +#define LOONGSON_CANFD_BTR_FD		0x24	/* FD Data Rate Configuration Register */
-> +#define LOONGSON_CANFD_ERL		0x28	/* Error Threshold Configuration Register */
-> +#define LOONGSON_CANFD_FSTAT		0x2c	/* Error Status Register */
-> +#define LOONGSON_CANFD_ERC		0x30	/* Error Count Register */
-> +#define LOONGSON_CANFD_BRE		0x34	/* Rate Error Count Register */
-> +#define LOONGSON_CANFD_CTR_PRES		0x38	/* Error Count Debug Register */
-> +#define LOONGSON_CANFD_ERR_CAPT		0x3c	/* Error Capture Status Register */
-> +#define LOONGSON_CANFD_RETX_CNT		0x40	/* Retransmission Count Register */
-> +#define LOONGSON_CANFD_ALC		0x44	/* Lost Arbitration Capture Register */
-> +#define LOONGSON_CANFD_TRV_DLY		0x48	/* Transmission Delay Measurement Register */
-> +#define LOONGSON_CANFD_SSP_CFG		0x4c	/* Second Sampling Point Configuration Register */
-> +#define LOONGSON_CANFD_RX_FR_CNT	0x50	/* Receive Message Count Register */
-> +#define LOONGSON_CANFD_TX_FR_CNT	0x54	/* Transmit Message Count Register */
-> +#define LOONGSON_CANFD_DEBUG		0x58	/* Debug Register */
-> +#define LOONGSON_CANFD_TS		0x5c	/* Timestamp Register */
-> +#define LOONGSON_CANFD_TX_FRM_TST	0x60	/* Transmit Message Debug Register */
-> +#define LOONGSON_CANFD_FRC_DIV		0x64	/* Fractional Divider Ratio Register */
-> +#define LOONGSON_CANFD_FLT_A_MASK	0x68	/* Filter A Mask Register */
-> +#define LOONGSON_CANFD_FLT_A_VAL	0x6c	/* Filter A value Register */
-> +#define LOONGSON_CANFD_FLT_B_MASK	0x70	/* Filter B Mask Register */
-> +#define LOONGSON_CANFD_FLT_B_VAL	0x74	/* Filter B value Register */
-> +#define LOONGSON_CANFD_FLT_C_MASK	0x78	/* Filter C Mask Register */
-> +#define LOONGSON_CANFD_FLT_C_VAL	0x7c	/* Filter C value Register */
-> +#define LOONGSON_CANFD_FLT_R_LOW	0x80	/* Range Filter Low Threshold Register */
-> +#define LOONGSON_CANFD_FLT_R_HI		0x84	/* Range Filter High Threshold Register */
-> +#define LOONGSON_CANFD_FLT_CTRL		0x88	/* Filter Control Register */
-> +#define LOONGSON_CANFD_RX_MEM_INFO	0x8c	/* Receive Buffer Information Register */
-> +#define LOONGSON_CANFD_RX_PRT		0x90	/* Receive Buffer Pointer Register */
-> +#define LOONGSON_CANFD_RX_STAT		0x94	/* Receive Buffer Status Register */
-> +#define LOONGSON_CANFD_RX_DATA		0x98	/* Receive Data Register */
-> +#define LOONGSON_CANFD_TX_STAT		0x9c	/* Transmit Buffer Status Register */
-> +#define LOONGSON_CANFD_TX_CMD		0xa0	/* Transmit Command Register */
-> +#define LOONGSON_CANFD_TX_SEL		0xa4	/* Transmit Buffer Selection Register */
-> +#define LOONGSON_CANFD_TX_DATA_1	0xb0
-> +#define LOONGSON_CANFD_TX_DATA_2	0xb4
-> +#define LOONGSON_CANFD_TX_DATA_3	0xb8
-> +#define LOONGSON_CANFD_TX_DATA_4	0xbc
-> +#define LOONGSON_CANFD_TX_DATA_5	0xc0
-> +#define LOONGSON_CANFD_TX_DATA_6	0xc4
-> +#define LOONGSON_CANFD_TX_DATA_7	0xc8
-> +#define LOONGSON_CANFD_TX_DATA_8	0xcc
-> +#define LOONGSON_CANFD_TX_DATA_9	0xd0
-> +#define LOONGSON_CANFD_TX_DATA_10	0xd4
-> +#define LOONGSON_CANFD_TX_DATA_11	0xd8
-> +#define LOONGSON_CANFD_TX_DATA_12	0xdc
-> +#define LOONGSON_CANFD_TX_DATA_13	0xe0
-> +#define LOONGSON_CANFD_TX_DATA_14	0xe4
-> +#define LOONGSON_CANFD_TX_DATA_15	0xe8
-> +#define LOONGSON_CANFD_TX_DATA_16	0xec
-> +#define LOONGSON_CANFD_TX_DATA_17	0xf0
-> +#define LOONGSON_CANFD_TX_DATA_18	0xf4
-> +
-> +/* Bitfields of CANFD controller ID register */
-> +#define REG_ID_MASK			GENMASK(15, 0)
-> +#define REG_ID_VER_MIN			GENMASK(23, 16)
-> +#define REG_ID_VER_MAJ			GENMASK(31, 24)
-> +
-> +/* Bitfields of Mode Configuration register */
-> +#define REG_MODE_RST			BIT(0)
-> +#define REG_MODE_BMM			BIT(1)
-> +#define REG_MODE_STM			BIT(2)
-> +#define REG_MODE_AFM			BIT(3)
-> +#define REG_MODE_FDE			BIT(4)
-> +#define REG_MODE_TTTM			BIT(5)
-> +#define REG_MODE_ROM			BIT(6)
-> +#define REG_MODE_ACF			BIT(7)
-> +#define REG_MODE_TSTM			BIT(8)
-> +#define REG_MODE_RXBAM			BIT(9)
-> +#define REG_MODE_ITSM			BIT(10)
-> +#define REG_MODE_RTSOP			BIT(12)
-> +#define REG_MODE_BUFM			BIT(13)
-> +
-> +/* Bitfields of Configure register */
-> +#define REG_CONF_RTRLE			BIT(0)
-> +#define REG_CONF_RTRTH			GENMASK(4, 1)
-> +#define REG_CONF_ILBP			BIT(5)
-> +#define REG_CONF_ENA			BIT(6)
-> +#define REG_CONF_NISOFD			BIT(7)
-> +#define REG_CONF_PEX			BIT(8)
-> +#define REG_CONF_FDRF			BIT(10)
-> +
-> +/* Bitfields of Status register */
-> +#define REG_STAT_RXNE			BIT(0)
-> +#define REG_STAT_DOR			BIT(1)
-> +#define REG_STAT_TXNF			BIT(2)
-> +#define REG_STAT_EFT			BIT(3)
-> +#define REG_STAT_RXS			BIT(4)
-> +#define REG_STAT_TXS			BIT(5)
-> +#define REG_STAT_EWL			BIT(6)
-> +#define REG_STAT_IDLE			BIT(7)
-> +#define REG_STAT_PEXS			BIT(8)
-> +#define REG_STAT_STCNT			BIT(16)
-> +
-> +/* Bitfields of Command register */
-> +#define REG_CMD_RXRPMV			BIT(1)
-> +#define REG_CMD_RRB			BIT(2)
-> +#define REG_CMD_CDO			BIT(3)
-> +#define REG_CMD_ERCRST			BIT(4)
-> +#define REG_CMD_RXFCRST			BIT(5)
-> +#define REG_CMD_TXFCRST			BIT(6)
-> +#define REG_CMD_CPEXS			BIT(7)
-> +
-> +/* Bitfields of Interrupt Status register */
-> +#define REG_INT_STAT_RXI		BIT(0)
-> +#define REG_INT_STAT_TXI		BIT(1)
-> +#define REG_INT_STAT_EWLI		BIT(2)
-> +#define REG_INT_STAT_DOI		BIT(3)
-> +#define REG_INT_STAT_FCSI		BIT(4)
-> +#define REG_INT_STAT_ALI		BIT(5)
-> +#define REG_INT_STAT_BEI		BIT(6)
-> +#define REG_INT_STAT_RXFI		BIT(7)
-> +#define REG_INT_STAT_BSI		BIT(8)
-> +#define REG_INT_STAT_RBNEI		BIT(9)
-> +#define REG_INT_STAT_TXBHCI		BIT(10)
-> +#define REG_INT_STAT_OFI		BIT(11)
-> +#define REG_INT_STAT_DMADI		BIT(12)
-> +
-> +#define REG_INT_STAT_ERRORI	(REG_INT_STAT_EWLI | REG_INT_STAT_FCSI | REG_INT_STAT_ALI)
-> +
-> +/* Bitfields of Interrupt Enable register */
-> +#define REG_INT_ENA_CLR			GENMASK(28, 16)
-> +#define REG_INT_ENA_SET			GENMASK(12, 0)
-> +
-> +/* Bitfields of Interrupt Mask register */
-> +#define REG_INT_MASK_SET		GENMASK(12, 0)
-> +#define REG_INT_MASK_CLR		GENMASK(28, 16)
-> +
-> +/* Bitfields of Normal Rate Configuration register */
-> +#define REG_BTR_PROP			GENMASK(6, 0)
-> +#define REG_BTR_PH1			GENMASK(12, 7)
-> +#define REG_BTR_PH2			GENMASK(18, 13)
-> +#define REG_BTR_BRP			GENMASK(22, 19)
-> +#define REG_BTR_SJW			GENMASK(31, 27)
-> +
-> +/* Bitfields of FD Data Rate Configuration register */
-> +#define REG_BTR_FD_PROP			GENMASK(6, 0)
-> +#define REG_BTR_FD_PH1			GENMASK(11, 7)
-> +#define REG_BTR_FD_PH2			GENMASK(17, 13)
-> +#define REG_BTR_FD_BRP			GENMASK(26, 19)
-> +#define REG_BTR_FD_SJW			GENMASK(31, 27)
-> +
-> +/* Bitfields of Error Threshold Configuration register */
-> +#define REG_ERL_ERP			GENMASK(7, 0)
-> +#define REG_ERL_EW			GENMASK(23, 16)
-> +
-> +/* Bitfields of Error Status register */
-> +#define REG_FSTAT_ERA			BIT(0)
-> +#define REG_FSTAT_ERP			BIT(1)
-> +#define REG_FSTAT_BOF			BIT(2)
-> +
-> +#define REG_FSTAT_MASK			GENMASK(2, 0)
-> +
-> +/* Bitfields of Error Count register */
-> +#define REG_ERC_TEC			GENMASK(8, 0)
-> +#define REG_ERC_REC			GENMASK(24, 16)
-> +
-> +/* Bitfields of Rate Error Count register */
-> +#define REG_BRE_NORM			GENMASK(15, 0)
-> +#define REG_BRE_FD_DATA			GENMASK(31, 16)
-> +
-> +/* Bitfields of Error Count Debug register */
-> +#define REG_CTR_PRES_CTPV		GENMASK(8, 0)
-> +#define REG_CTR_PRES_PTX		BIT(9)
-> +#define REG_CTR_PRES_PRX		BIT(10)
-> +
-> +/* Bitfields of Error Capture Status register */
-> +#define REG_ERR_CAPT_POS		GENMASK(4, 0)
-> +#define REG_ERR_CAPT_TYPE		GENMASK(7, 5)
-> +
-> +/* Bitfields of Retransmission Count register */
-> +#define REG_RETX_CNT_VAL		GENMASK(3, 0)
-> +
-> +/* Bitfields of Lost Arbitration Capture register */
-> +#define REG_ALC_BIT_POS			GENMASK(4, 0)
-> +#define REG_ALC_ID_FIELD		GENMASK(7, 5)
-> +
-> +/* Bitfields of Transmission Delay Measurement register */
-> +#define REG_TRV_DLY_VAL			GENMASK(6, 0)
-> +
-> +/* Bitfields of Second Sampling Point Configuration register */
-> +#define REG_SSP_CFG_OFF			GENMASK(7, 0)
-> +#define REG_SSP_CFG_SRC			GENMASK(9, 8)
-> +#define REG_SSP_CFG_SAT			BIT(10)
-> +
-> +/* Bitfields of Receive Message Count register */
-> +#define REG_RX_FR_CNT_VAL		GENMASK(31, 0)
-> +
-> +/* Bitfields of Transmit Message Count register */
-> +#define REG_TX_FR_CNT_VAL		GENMASK(31, 0)
-> +
-> +/* Bitfields of Debug register */
-> +#define REG_DEBUG_STF_CNT		GENMASK(2, 0)
-> +#define REG_DEBUG_DSTF_CNT		GENMASK(5, 3)
-> +#define REG_DEBUG_PC_ARB		BIT(6)
-> +#define REG_DEBUG_PC_CON		BIT(7)
-> +#define REG_DEBUG_PC_DAT		BIT(8)
-> +#define REG_DEBUG_PC_STC		BIT(9)
-> +#define REG_DEBUG_PC_CRC		BIT(10)
-> +#define REG_DEBUG_PC_CRCD		BIT(11)
-> +#define REG_DEBUG_PC_ACK		BIT(12)
-> +#define REG_DEBUG_PC_ACKD		BIT(13)
-> +#define REG_DEBUG_PC_EOF		BIT(14)
-> +#define REG_DEBUG_PC_INT		BIT(15)
-> +#define REG_DEBUG_PC_SUSP		BIT(16)
-> +#define REG_DEBUG_PC_OVR		BIT(17)
-> +#define REG_DEBUG_PC_SOF		BIT(18)
-> +
-> +/* Bitfields of Timestamp register */
-> +#define REG_TS_TIMESTAMP		GENMASK(15, 0)
-> +#define REG_TS_PSC			GENMASK(24, 16)
-> +
-> +/* Bitfields of Fractional Divider Ratio register */
-> +#define REG_FRC_FRC_DBT			GENMASK(15, 8)
-> +#define REG_FRC_FRC_NBT			GENMASK(7, 0)
-> +
-> +/* Bitfields of Filter A Mask register */
-> +#define REG_FIL_A_MASK			GENMASK(28, 0)
-> +
-> +/* Bitfields of Filter A value register */
-> +#define REG_FIL_A_VAL			GENMASK(28, 0)
-> +
-> +/* Bitfields of Filter B Mask register */
-> +#define REG_FIL_B_MASK			GENMASK(28, 0)
-> +
-> +/* Bitfields of Filter B value register */
-> +#define REG_FIL_B_VAL			GENMASK(28, 0)
-> +
-> +/* Bitfields of Filter C Mask register */
-> +#define REG_FIL_C_MASK			GENMASK(28, 0)
-> +
-> +/* Bitfields of Filter C value register */
-> +#define REG_FIL_C_VAL			GENMASK(28, 0)
-> +
-> +/* Bitfields of Range Filter Low Threshold register */
-> +#define REG_FIL_R_LOW_VAL		GENMASK(28, 0)
-> +
-> +/* Bitfields of Range Filter High Threshold register */
-> +#define REG_FIL_R_HI_VAL		GENMASK(28, 0)
-> +
-> +/* Bitfields of Filter Control register */
-> +#define REG_FIL_CTRL_FANB		BIT(0)
-> +#define REG_FIL_CTRL_FANE		BIT(1)
-> +#define REG_FIL_CTRL_FAFB		BIT(2)
-> +#define REG_FIL_CTRL_FAFE		BIT(3)
-> +#define REG_FIL_CTRL_FBNB		BIT(4)
-> +#define REG_FIL_CTRL_FBNE		BIT(5)
-> +#define REG_FIL_CTRL_FBFB		BIT(6)
-> +#define REG_FIL_CTRL_FBFE		BIT(7)
-> +#define REG_FIL_CTRL_FCNB		BIT(8)
-> +#define REG_FIL_CTRL_FCNE		BIT(9)
-> +#define REG_FIL_CTRL_FCFB		BIT(10)
-> +#define REG_FIL_CTRL_FCFE		BIT(11)
-> +#define REG_FIL_CTRL_FRNB		BIT(12)
-> +#define REG_FIL_CTRL_FRNE		BIT(13)
-> +#define REG_FIL_CTRL_FRFB		BIT(14)
-> +#define REG_FIL_CTRL_FRFE		BIT(15)
-> +#define REG_FIL_CTRL_SFA		BIT(16)
-> +#define REG_FIL_CTRL_SFB		BIT(17)
-> +#define REG_FIL_CTRL_SFC		BIT(18)
-> +#define REG_FIL_CTRL_SFR		BIT(19)
-> +
-> +/* Bitfields of Receive Buffer Information register */
-> +#define REG_RX_MEM_INFO_BUFF_SIZE	GENMASK(12, 0)
-> +#define REG_RX_MEM_INFO_MEM_FREE	GENMASK(28, 16)
-> +
-> +/* Bitfields of Receive Buffer Pointer register */
-> +#define REG_RX_PTR_WPP			GENMASK(11, 0)
-> +#define REG_RX_PTR_RPP			GENMASK(27, 16)
-> +
-> +/* Bitfields of Receive Buffer Status register */
-> +#define REG_RX_STAT_RXE			BIT(0)
-> +#define REG_RX_STAT_RXF			BIT(1)
-> +#define REG_RX_STAT_RXMOF		BIT(2)
-> +#define REG_RX_STAT_RXFRC		GENMASK(14, 4)
-> +#define REG_RX_STAT_RTSOP		BIT(16)
-> +
-> +/* Bitfields of Receive Data register */
-> +#define REG_RX_DATA_VAL			GENMASK(31, 0)
-> +
-> +/* Bitfields of Transmit Buffer Status register */
-> +#define REG_TX_STAT_BRP			GENMASK(7, 0)
-> +#define REG_TX_STAT_TXS			GENMASK(10, 8)
-> +#define REG_TX_STAT_BS			GENMASK(31, 16)
-> +
-> +#define REG_TX_STAT_BS_TX0		GENMASK(17, 16)
-> +#define REG_TX_STAT_BS_TX1		GENMASK(19, 18)
-> +#define REG_TX_STAT_BS_TX2		GENMASK(21, 20)
-> +#define REG_TX_STAT_BS_TX3		GENMASK(23, 22)
-> +#define REG_TX_STAT_BS_TX4		GENMASK(25, 24)
-> +#define REG_TX_STAT_BS_TX5		GENMASK(27, 26)
-> +#define REG_TX_STAT_BS_TX6		GENMASK(29, 28)
-> +#define REG_TX_STAT_BS_TX7		GENMASK(31, 30)
-> +
-> +/* Bitfields of Transmit Command register */
-> +#define REG_TX_CMD_BAR			GENMASK(7, 0)
-> +#define REG_TX_CMD_BCR			GENMASK(15, 8)
-> +#define REG_TX_CMD_BSC			GENMASK(23, 16)
-> +
-> +/* Bitfields of Transmit Buffer Selection register */
-> +#define REG_TX_SEL_BUF_SEL		GENMASK(3, 0)
-> +#define REG_TX_SEL_BUF_CNT		GENMASK(7, 4)
-> +
-> +/* Loongson CANFD Frame format */
-> +#define LOONGSON_CANFD_FRAME_META0	0x0
-> +#define LOONGSON_CANFD_FRAME_META1	0x4
-> +#define LOONGSON_CANFD_FRAME_DB_1	0x8
-> +#define LOONGSON_CANFD_FRAME_DB_2	0xc
-> +#define LOONGSON_CANFD_FRAME_DB_3	0x10
-> +#define LOONGSON_CANFD_FRAME_DB_4	0x14
-> +#define LOONGSON_CANFD_FRAME_DB_5	0x18
-> +#define LOONGSON_CANFD_FRAME_DB_6	0x1c
-> +#define LOONGSON_CANFD_FRAME_DB_7	0x20
-> +#define LOONGSON_CANFD_FRAME_DB_8	0x24
-> +#define LOONGSON_CANFD_FRAME_DB_9	0x28
-> +#define LOONGSON_CANFD_FRAME_DB_10	0x2c
-> +#define LOONGSON_CANFD_FRAME_DB_11	0x30
-> +#define LOONGSON_CANFD_FRAME_DB_12	0x34
-> +#define LOONGSON_CANFD_FRAME_DB_13	0x38
-> +#define LOONGSON_CANFD_FRAME_DB_14	0x3c
-> +#define LOONGSON_CANFD_FRAME_DB_16	0x40
-> +#define LOONGSON_CANFD_FRAME_DB_17	0x44
-> +
-> +/* Bitfields of FRAME META0 */
-> +#define REG_FRAME_META0_ID_EXT		GENMASK(17, 0)
-> +#define REG_FRAME_META0_ID_BASE		GENMASK(28, 18)
-> +#define REG_FRAME_META0_RTR		BIT(29)	/* Remote Transmission Request, only in CAN2.0 */
-> +/* Extended Identifier Type. 1: 29 bits ID, 0: 11 bits ID. */
-> +#define REG_FRAME_META0_XDT		BIT(30)
-> +#define REG_FRAME_META0_ESI		BIT(31)	/* Error State Indicator, only in CAN-FD */
-> +
-> +/* Bitfields of FRAME META1 */
-> +#define REG_FRAME_META1_TIMESTAMP	GENMASK(15, 0)
-> +#define REG_FRAME_META1_DLC		GENMASK(19, 16)	/* Data Length Code */
-> +#define REG_FRAME_META1_BRS		BIT(20)	/* Bit Rate Shift, Only in CANFD */
-> +/* Flexible Data-rate Format. 1: CANFD, 0: CAN2.0 */
-> +#define REG_FRAME_META1_FDF		BIT(21)
-> +#define REG_FRAME_META1_RWCNT		GENMASK(28, 24)	/* Read Word Counter */
-> +
-> +/* Bitfields of FRAME TEST */
-> +#define REG_FRAME_TEST_FSTC		BIT(0)
-> +#define REG_FRAME_TEST_FCRC		BIT(1)
-> +#define REG_FRAME_TEST_SDLC		BIT(2)
-> +#define REG_FRAME_TEST_TPRM		GENMASK(12, 8)
-> +
-> +#define DEV_NAME			"loongson_canfd"
-> +#define LOONGSON_CANFD_ID		0xBABE
-> +#define LOONGSON_CANFD_DW_BYTE		4
-> +#define LOONGSON_CANFD_TXBUF_NUM	8
-> +#define LOONGSON_CANFD_MAX_RTXTH	0xf
-> +
-> +/**
-> + * struct loongson_canfd_priv - This definition define CAN driver instance
-> + * @can: CAN private data structure.
-> + * @napi: NAPI structure
-> + * @regmap: regmap of the CAN device
-> + * @res: Pointer to the CAN device respurce
-> + * @tx_lock: Lock for synchronizing TX interrupt handling
-> + */
-> +struct loongson_canfd_priv {
-> +	struct can_priv		can;		/* must be first member! */
-> +	struct napi_struct	napi;
-> +	struct regmap		*regmap;
-> +	struct resource		*res;
-> +	spinlock_t		tx_lock;	/* protect the sending queue */
-> +};
-> +
-> +/**
-> + * enum loongson_canfd_txbuf_sts - status of TX buffer
-> + * @TX_BS_IDLE: Status processed or not sent.
-> + * @TX_BS_VALID: Sending successful.
-> + * @TX_BS_FAIL: Sending failed.
-> + * @TX_BS_CANCEL: Sending cancelled.
-> + */
-> +enum loongson_canfd_txbuf_sts {
-> +	TX_BS_IDLE	= 0x0,
-> +	TX_BS_VALID	= 0x1,
-> +	TX_BS_FAIL	= 0x2,
-> +	TX_BS_CANCEL	= 0x3
-> +};
-> +
-> +/**
-> + * enum loongson_canfd_txbuf_cmd - command of TX buffer
-> + * @TXT_CMD_ADD: Buffer add request.
-> + * @TXT_CMD_CANCEL: Buffer cancel request.
-> + * @TXT_CMD_SR_CLEAN: Buffer send record clear.
-> + *     1: to clear the send completion record (LOONGSON_CANFD_TX_STAT[BS]).
-> + */
-> +enum loongson_canfd_txbuf_cmd {
-> +	TXT_CMD_ADD		= 0x01,
-> +	TXT_CMD_CANCEL		= 0x02,
-> +	TXT_CMD_SR_CLEAN	= 0x03
-> +};
-> +
-> +static const struct can_bittiming_const loongson_canfd_bit_timing = {
-> +	.name		= DEV_NAME,
-> +	.tseg1_min	= 2,
-> +	.tseg1_max	= 190,
-> +	.tseg2_min	= 2,
-> +	.tseg2_max	= 63,
-> +	.sjw_max	= 31,
-> +	.brp_min	= 1,
-> +	.brp_max	= 15,
-> +	.brp_inc	= 1,
-> +};
-> +
-> +static const struct can_bittiming_const loongson_canfd_bit_timing_data = {
-> +	.name		= DEV_NAME,
-> +	.tseg1_min	= 2,
-> +	.tseg1_max	= 190,
-> +	.tseg2_min	= 2,
-> +	.tseg2_max	= 63,
-> +	.sjw_max	= 31,
-> +	.brp_min	= 1,
-> +	.brp_max	= 255,
-> +	.brp_inc	= 1,
-> +};
-> +
-> +/* CAN FD Transmission Delay Compensation constants */
-> +static const struct can_tdc_const loongson_canfd_tdc_data = {
-> +	.tdcv_min	= 0,
-> +	.tdcv_max	= 0,
-> +	.tdco_min	= 1,
-> +	.tdco_max	= 127,
-> +	.tdcf_min	= 0,	/* Filter window not supported */
-> +	.tdcf_max	= 0,
-> +};
-> +
-> +/**
-> + * loongson_canfd_enabled() - Gets the controller is enabled
-> + * @priv: Pointer to private data
-> + *
-> + * Return: True - the controller is enabled.
-> + *	   False - the controller is disabled.
-> + */
-> +static bool loongson_canfd_enabled(struct loongson_canfd_priv *priv)
-> +{
-> +	return !!regmap_test_bits(priv->regmap, LOONGSON_CANFD_CONF, REG_CONF_ENA);
-> +}
-> +
-> +/**
-> + * loongson_canfd_txbuf_freed() - Gets the flag for TX buffer to be sent
-> + * @priv: Pointer to private data
-> + *
-> + * Return: True - TX buffer is empty.
-> + *	   False - TX buffer is processing
-> + */
-> +static bool loongson_canfd_txbuf_freed(struct loongson_canfd_priv *priv)
-> +{
-> +	return !regmap_test_bits(priv->regmap, LOONGSON_CANFD_TX_STAT, REG_TX_STAT_BRP);
-> +}
-> +
-> +/**
-> + * loongson_canfd_get_txbuf_sts() - Gets status of TX buffer
-> + * @priv: Pointer to private data
-> + * @buf_id: Buffer index (0-based)
-> + *
-> + * Return: Status of TX buffer
-> + */
-> +static enum loongson_canfd_txbuf_sts
-> +loongson_canfd_get_txbuf_sts(struct loongson_canfd_priv *priv, u8 buf_id)
-> +{
-> +	u32 sts, mask;
-> +
-> +	switch (buf_id) {
-> +	case 0:
-> +		mask = REG_TX_STAT_BS_TX0;
-> +		break;
-> +	case 1:
-> +		mask = REG_TX_STAT_BS_TX1;
-> +		break;
-> +	case 2:
-> +		mask = REG_TX_STAT_BS_TX2;
-> +		break;
-> +	case 3:
-> +		mask = REG_TX_STAT_BS_TX3;
-> +		break;
-> +	case 4:
-> +		mask = REG_TX_STAT_BS_TX4;
-> +		break;
-> +	case 5:
-> +		mask = REG_TX_STAT_BS_TX5;
-> +		break;
-> +	case 6:
-> +		mask = REG_TX_STAT_BS_TX6;
-> +		break;
-> +	case 7:
-> +		mask = REG_TX_STAT_BS_TX7;
-> +		break;
-> +	}
-> +
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_TX_STAT, &sts);
-> +
-> +	return field_get(mask, sts);
-> +}
+> Tested-by: Enric Balletbo i Serra <eballetb@.redhat.com>
+> 
+> Tested on the NXP S32G399A-RDB3 with loopback and high-rate traffic.
+> No regressions observed:
+>    CAN frames transmit and receive correctly, with no duplicates.
+>    Frame reception showed no errors during stress testing.
+> 
+> Regards,
+>    Enric Balletbo
+> 
+>>>
+>>> This is a resend of v4 with no changes.
+>>>
+>>> v4 -> v3
+>>> - flexcan_chip_interrupts_enable(): disable/enable all IRQ lines
+>>>    (not just dev->irq) during IMASK register writes
+>>> - Split rx/tx masks per mailbox IRQ line (struct flexcan_mb_irq) so
+>>>    each handler on S32G2 only processes its own MB range
+>>> - Added received Acked-by tag on DT bindings patch
+>>>
+>>> v3 -> v2
+>>> - Split flexcan_irq() into dedicated handlers (flexcan_irq_mb,
+>>>    flexcan_irq_boff, flexcan_irq_berr) to fix duplicate event
+>>>    processing when multiple IRQ lines run concurrently (new patch).
+>>> - Added flexcan_irq_esr() handler composing state + berr for S32N79
+>>> - Ordered quirks used by s32n devtype data by value.
+>>>
+>>> v2 -> v1
+>>> - Renamed FLEXCAN_QUIRK_NR_IRQ_2 to FLEXCAN_QUIRK_IRQ_BERR to better
+>>> describe the actual hardware feature
+>>> - Appended new quirk at the end
+>>> - Switched from platform_get_irq to platform_get_irq_byname usage
+>>> - Updated interrupt description in dt-bindings
+>>>
+>>> Ciprian Marian Costea (8):
+>>>    can: flexcan: use dedicated IRQ handlers for multi-IRQ platforms
+>>>    can: flexcan: disable all IRQ lines in
+>>>      flexcan_chip_interrupts_enable()
+>>>    can: flexcan: split rx/tx masks per mailbox IRQ line
+>>>    dt-bindings: can: fsl,flexcan: add NXP S32N79 SoC support
+>>>    can: flexcan: add FLEXCAN_QUIRK_IRQ_BERR quirk
+>>>    can: flexcan: add NXP S32N79 SoC support
+>>>    arm64: dts: s32n79: add FlexCAN nodes
+>>>    arm64: dts: s32n79: enable FlexCAN devices
+>>>
+>>>   .../bindings/net/can/fsl,flexcan.yaml         |  30 ++-
+>>>   arch/arm64/boot/dts/freescale/s32n79-rdb.dts  |  12 +
+>>>   arch/arm64/boot/dts/freescale/s32n79.dtsi     |  50 ++++
+>>>   drivers/net/can/flexcan/flexcan-core.c        | 249 +++++++++++++++---
+>>>   drivers/net/can/flexcan/flexcan.h             |  12 +-
+>>>   5 files changed, 316 insertions(+), 37 deletions(-)
+>>>
+>>> --
+>>> 2.43.0
+>>>
+>>
+> 
 
-I think it is easier to compute the mask than doing this switch
-case. Maybe something like this:
-
-	#define REG_TX_STAT_BS_TX_BASE 16
-
-	/* ... */
-
-	static enum loongson_canfd_txbuf_sts
-	loongson_canfd_get_txbuf_sts(struct loongson_canfd_priv *priv, u8 buf_id)
-	{
-		u32 mask, sts;
-
-		mask = GENMASK(REG_TX_STAT_BS_TX_BASE + 2 * buf_id + 1,
-			       REG_TX_STAT_BS_TX_BASE + 2 * buf_id);
-		regmap_read(priv->regmap, LOONGSON_CANFD_TX_STAT, &sts);
-	
-		return field_get(mask, sts);
-	}
-
-Or equivalent:
-
-	#define REG_TX_STAT_BS_TX_MASK_BASE GENMASK(17, 16)
-
-	/* ... */
-
-	static enum loongson_canfd_txbuf_sts
-	loongson_canfd_get_txbuf_sts(struct loongson_canfd_priv *priv, u8 buf_id)
-	{
-		u32 mask, sts;
-
-		mask = REG_TX_STAT_BS_TX_MASK_BASE << 2 * buf_id;
-		regmap_read(priv->regmap, LOONGSON_CANFD_TX_STAT, &sts);
-	
-		return field_get(mask, sts);
-	}
-
-> +/**
-> + * loongson_canfd_get_txbuf_id() - Gets the index of a non-idle TX buffer
-> + * @priv: Pointer to private data
-> + * @sts: Status of TXT buffer to outside
-> + *
-> + * Return: Buffer index (0-based)
-> + */
-> +static unsigned int loongson_canfd_get_txbuf_id(struct loongson_canfd_priv *priv,
-> +						enum loongson_canfd_txbuf_sts *sts)
-> +{
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < LOONGSON_CANFD_TXBUF_NUM; i++) {
-> +		if (loongson_canfd_get_txbuf_sts(priv, i)) {
-> +			*sts = loongson_canfd_get_txbuf_sts(priv, i);
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (i == LOONGSON_CANFD_TXBUF_NUM)
-> +		*sts = TX_BS_IDLE;
-> +
-> +	return i;
-> +}
-> +
-> +/**
-> + * loongson_canfd_txbuf_is_writable() - Checks if frame can be inserted to TX Buffer
-> + * @priv: Pointer to private data
-> + * @buf_id: Buffer index (0-based)
-> + *
-> + * Return: True - Frame can be inserted to TXT Buffer,
-> + *	   False - If attempted, frame will not be inserted to TX Buffer
-> + */
-> +static bool loongson_canfd_txbuf_is_writable(struct loongson_canfd_priv *priv, u8 buf_id)
-> +{
-> +	enum loongson_canfd_txbuf_sts bs;
-> +
-> +	bs = loongson_canfd_get_txbuf_sts(priv, buf_id);
-> +	if (bs)
-> +		return false;
-> +
-> +	return !regmap_test_bits(priv->regmap, LOONGSON_CANFD_TX_STAT, BIT(buf_id));
-> +}
-> +
-> +/**
-> + * loongson_canfd_set_txbuf_cmd() - Applies command on TX buffer
-> + * @ndev: Pointer to net_device structure
-> + * @cmd: Command to set
-> + * @buf_id: Buffer index (0-based)
-> + */
-> +static void loongson_canfd_set_txbuf_cmd(struct net_device *ndev,
-> +					 enum loongson_canfd_txbuf_cmd cmd, u8 buf_id)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	u32 mask;
-> +
-> +	switch (cmd) {
-> +	case TXT_CMD_ADD:
-> +		mask = REG_TX_CMD_BAR;
-> +		break;
-> +	case TXT_CMD_CANCEL:
-> +		mask = REG_TX_CMD_BCR;
-> +		break;
-> +	case TXT_CMD_SR_CLEAN:
-> +		mask = REG_TX_CMD_BSC;
-> +		break;
-> +	default:
-> +		netdev_err(ndev, "Unknown command id: %x\n", cmd);
-> +		return;
-> +	}
-> +
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_TX_CMD, field_prep(mask, 0x1 << buf_id));
-                                                                           ^^^^^^^^^^^^^
-Nitpick:
-	regmap_write(priv->regmap, LOONGSON_CANFD_TX_CMD, field_prep(mask, BIT(buf_id)));
-
-> +}
-> +
-> +/**
-> + * loongson_canfd_reset() - Issues software reset request to Loongson CANFD
-> + * @ndev: Pointer to net_device structure
-> + *
-> + * Return: 0 for success, -%ETIMEDOUT if CAN controller does not leave reset
-                             ^^^^^^^^^^^
-This part of the documentation does not match the code.
-
-> + */
-> +static int loongson_canfd_reset(struct net_device *ndev)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_MODE, REG_MODE_RST);
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_MODE, REG_MODE_RXBAM | REG_MODE_BUFM);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * loongson_canfd_set_btr() - Sets CAN bus bit timing in Loongson CANFD
-> + * @ndev: Pointer to net_device structure
-> + * @bt: Pointer to Bit timing structure
-> + * @nominal: True - Nominal bit timing, False - Data bit timing
-> + *
-> + * Return: 0 - OK, -%EPERM if controller is enabled
-> + */
-> +static int loongson_canfd_set_btr(struct net_device *ndev, struct can_bittiming *bt, bool nominal)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	u32 phase_seg1 = bt->phase_seg1;
-> +	u32 prop_seg = bt->prop_seg;
-
-No need for those phase_seg1 and prop_seg variables. Directly do the
-math on bt->phase_seg1 and bt->prop_seg.
-
-> +	int max_ph1_len = 31;
-
-Replace this magic value by a macro. If I understand correctly your
-intent, this 31 value correspond to the maximum value which can be
-taken by your phase 1 register. So the correct code is:
-
-	int max_ph1_len = FIELD_MAX(REG_BTR_FD_PH1);
-
-> +	u32 btr = 0;
-> +
-> +	if (loongson_canfd_enabled(priv)) {
-> +		netdev_err(ndev, "BUG! Cannot set bittiming - CAN is enabled\n");
-> +		return -EPERM;
-> +	}
-
-The framework should already prevent this from occuring. You can drop
-this check (and other similar checks) and change the return type to
-such functions to void.
-
-If you were somehow able to reach trigger this function while the CAN
-device is enabled, let us know!
-
-> +	if (nominal)
-> +		max_ph1_len = 63;
-
-It is disturbing to have the data bittiming value and the nominal
-bittiming value separated. Group them together. With the magic number
-replaced by the adequate macros, this gives you something like:
-
-	int ph1_max;
-
-	/* ... */
-
-	if (nominal)
-		ph1_max = FIELD_MAX(REG_BTR_PH1);
-	else
-		ph1_max = FIELD_MAX(REG_BTR_FD_PH1);
-
-(while at it, I renamed to ph1_max because the this is not a length,
-so I am not sure why you put a _len suffix).
-
-> +	/*
-> +	 * The timing calculation functions have only constraints on tseg1,
-> +	 * which is prop_seg + phase1_seg combined.
-> +	 * tseg1 is then split in half and stored into prog_seg and phase_seg1.
-> +	 * In Loongson CAN-FD, PROP is 6/7 bits wide but PH1 only 6/5, so we must
-> +	 * re-distribute the values here.
-> +	 */
-> +	if (phase_seg1 > max_ph1_len) {
-> +		prop_seg += phase_seg1 - max_ph1_len;
-> +		phase_seg1 = max_ph1_len;
-> +		bt->prop_seg = prop_seg;
-> +		bt->phase_seg1 = phase_seg1;
-> +	}
-> +
-> +	if (nominal) {
-> +		btr = FIELD_PREP(REG_BTR_PROP, prop_seg) |
-> +		      FIELD_PREP(REG_BTR_PH1, phase_seg1) |
-> +		      FIELD_PREP(REG_BTR_PH2, bt->phase_seg2) |
-> +		      FIELD_PREP(REG_BTR_BRP, bt->brp) |
-> +		      FIELD_PREP(REG_BTR_SJW, bt->sjw);
-> +
-> +		regmap_write(priv->regmap, LOONGSON_CANFD_BTR_NORM, btr);
-> +	} else {
-> +		btr = FIELD_PREP(REG_BTR_FD_PROP, prop_seg) |
-> +		      FIELD_PREP(REG_BTR_FD_PH1, phase_seg1) |
-> +		      FIELD_PREP(REG_BTR_FD_PH2, bt->phase_seg2) |
-> +		      FIELD_PREP(REG_BTR_FD_BRP, bt->brp) |
-> +		      FIELD_PREP(REG_BTR_FD_SJW, bt->sjw);
-> +
-> +		regmap_write(priv->regmap, LOONGSON_CANFD_BTR_FD, btr);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * loongson_canfd_set_bittiming() - CAN set nominal bit timing routine
-> + * @ndev: Pointer to net_device structure
-> + *
-> + * Return: 0 on success, -%EPERM on error
-> + */
-> +static int loongson_canfd_set_bittiming(struct net_device *ndev)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	struct can_bittiming *bt = &priv->can.bittiming;
-> +
-> +	/* Note that bt may be modified here */
-> +	return loongson_canfd_set_btr(ndev, bt, true);
-> +}
-> +
-> +/**
-> + * loongson_canfd_set_data_bittiming() - CAN set data bit timing routine
-> + * @ndev: Pointer to net_device structure
-> + *
-> + * Return: 0 on success, -%EPERM on error
-> + */
-> +static int loongson_canfd_set_data_bittiming(struct net_device *ndev)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	struct can_bittiming *dbt = &priv->can.fd.data_bittiming;
-> +
-> +	/* Note that dbt may be modified here */
-> +	return loongson_canfd_set_btr(ndev, dbt, false);
-> +}
-> +
-> +/**
-> + * loongson_canfd_get_auto_tdcv - Get Transmitter Delay Compensation Value
-> + * @ndev: Pointer to net_device structure
-> + * @tdcv: Pointer to TDCV value
-> + *
-> + * Return: 0 on success
-> + */
-> +static int loongson_canfd_get_auto_tdcv(const struct net_device *ndev, u32 *tdcv)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	u32 val;
-> +
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_TRV_DLY, &val);
-> +	*tdcv = FIELD_GET(REG_TRV_DLY_VAL, val);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * loongson_canfd_set_secondary_sample_point() - Set secondary sample point in Loongson CANFD
-> + * @ndev: Pointer to net_device structure
-> + *
-> + * Return: 0 on success, -%EPERM if controller is enabled
-> + */
-> +static int loongson_canfd_set_secondary_sample_point(struct net_device *ndev)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	u32 ssp_cfg;
-> +
-> +	if (loongson_canfd_enabled(priv)) {
-> +		netdev_err(ndev, "BUG! Cannot set SSP - CAN is enabled\n");
-> +		return -EPERM;
-> +	}
-> +
-> +	if (can_fd_tdc_is_enabled(&priv->can))
-> +		ssp_cfg = FIELD_PREP(REG_SSP_CFG_OFF, priv->can.fd.tdc.tdco) |
-> +			  FIELD_PREP(REG_SSP_CFG_SRC, 0x0);
-> +	else
-> +		ssp_cfg = FIELD_PREP(REG_SSP_CFG_SRC, 0x1);
-> +
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_SSP_CFG, ssp_cfg);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * loongson_canfd_set_mode() - Sets Loongson CANFD mode
-> + * @priv: Pointer to private data
-> + * @ctrlmode: Pointer to controller modes to be set
-> + */
-> +static void loongson_canfd_set_mode(struct loongson_canfd_priv *priv,
-> +				    const struct can_ctrlmode *ctrlmode)
-
-Rename this to loongson_canfd_set_ctrlmode(). Otherwhise there is a
-risk of confusion with loongson_canfd_do_set_mode()
-
-> +{
-> +	u32 mode, conf;
-> +
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_MODE, &mode);
-> +
-> +	if (ctrlmode->flags & CAN_CTRLMODE_LISTENONLY)
-> +		mode |= REG_MODE_BMM;
-> +	else
-> +		mode &= ~REG_MODE_BMM;
-> +
-> +	if (ctrlmode->flags & CAN_CTRLMODE_FD)
-> +		mode |= REG_MODE_FDE;
-> +	else
-> +		mode &= ~REG_MODE_FDE;
-> +
-> +	if (ctrlmode->flags & CAN_CTRLMODE_PRESUME_ACK)
-> +		mode |= REG_MODE_ACF;
-> +	else
-> +		mode &= ~REG_MODE_ACF;
-> +
-> +	/*
-> +	 * Some bits fixed:
-> +	 * TSTM - Off, User shall not be able to change REC/TEC by hand
-> +	 * during operation
-> +	 */
-> +	mode &= ~REG_MODE_TSTM;
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_MODE, mode);
-> +
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_CONF, &conf);
-> +
-> +	if (ctrlmode->flags & CAN_CTRLMODE_LOOPBACK)
-> +		conf |= REG_CONF_ILBP;
-> +	else
-> +		conf &= ~REG_CONF_ILBP;
-> +
-> +	if (ctrlmode->flags & CAN_CTRLMODE_FD_NON_ISO)
-> +		conf |= REG_CONF_NISOFD;
-> +	else
-> +		conf &= ~REG_CONF_NISOFD;
-> +
-> +	/* One shot mode supported indirectly via Retransmit limit */
-> +	conf &= ~FIELD_PREP(REG_CONF_RTRTH, LOONGSON_CANFD_MAX_RTXTH);
-> +
-> +	if (ctrlmode->flags & CAN_CTRLMODE_ONE_SHOT)
-> +		conf |= REG_CONF_RTRLE;
-> +	else
-> +		conf |= REG_CONF_RTRLE | FIELD_PREP(REG_CONF_RTRTH, LOONGSON_CANFD_MAX_RTXTH);
-> +
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_CONF, conf);
-> +}
-> +
-> +/**
-> + * loongson_canfd_chip_start() - This routine starts the driver
-> + * @ndev: Pointer to net_device structure
-> + *
-> + * Return: 0 on success and failure value on error
-> + */
-> +static int loongson_canfd_chip_start(struct net_device *ndev)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	struct can_ctrlmode mode;
-> +	u16 int_ena, int_msk;
-> +	int ret;
-> +
-> +	/* Configure bit-rates and ssp */
-> +	ret = loongson_canfd_set_bittiming(ndev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = loongson_canfd_set_data_bittiming(ndev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = loongson_canfd_set_secondary_sample_point(ndev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Configure modes */
-> +	mode.flags = priv->can.ctrlmode;
-> +	mode.mask = 0xFFFFFFFF;
-> +	loongson_canfd_set_mode(priv, &mode);
-
-Why do you need to set the mask to 0xFFFFFFFF? It seems that you are
-not even using it in loongson_canfd_set_mode(). Isn't it possible to
-directly pass priv->can.ctrlmode?
-
-> +	/* Configure interrupts */
-> +	int_ena = REG_INT_STAT_RBNEI | REG_INT_STAT_TXBHCI |
-> +		  REG_INT_STAT_EWLI | REG_INT_STAT_FCSI;
-> +
-> +	/* Bus error reporting */
-> +	if (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)
-> +		int_ena |= REG_INT_STAT_ALI | REG_INT_STAT_BEI;
-> +
-> +	int_msk = ~int_ena; /* Mask all disabled interrupts */
-> +
-> +	/* It's after reset, so there is no need to clear anything */
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK, int_msk);
-
-Nitpick: you can directly do:
-
-	regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK, ~int_ena);
-
-and remove your int_msk variable.
-
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_INT_ENA, int_ena);
-> +
-> +	/* Controller enters ERROR_ACTIVE on initial FCSI */
-> +	priv->can.state = CAN_STATE_STOPPED;
-> +
-> +	/* Enable the controller */
-> +	regmap_update_bits(priv->regmap, LOONGSON_CANFD_CONF, REG_CONF_ENA, REG_CONF_ENA);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * loongson_canfd_do_set_mode() - Sets mode of the driver
-> + * @ndev: Pointer to net_device structure
-> + * @mode: Tells the mode of the driver
-> + *
-> + * This check the drivers state and calls the corresponding modes to set.
-> + *
-> + * Return: 0 on success and failure value on error
-> + */
-> +static int loongson_canfd_do_set_mode(struct net_device *ndev, enum can_mode mode)
-> +{
-> +	int ret;
-> +
-> +	switch (mode) {
-> +	case CAN_MODE_START:
-> +		ret = loongson_canfd_reset(ndev);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		ret = loongson_canfd_chip_start(ndev);
-> +		if (ret < 0) {
-> +			netdev_err(ndev, "loongson_canfd_chip_start failed!\n");
-> +			return ret;
-> +		}
-> +
-> +		netif_wake_queue(ndev);
-> +		break;
-> +	default:
-> +		ret = -EOPNOTSUPP;
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +/**
-> + * loongson_canfd_insert_frame() - Inserts frame to TXT buffer
-> + * @priv: Pointer to private data
-> + * @cf:	 Pointer to CAN frame to be inserted
-> + * @buf: TXT Buffer index to which frame is inserted (0-based)
-> + * @isfdf: True - CAN FD Frame, False - CAN 2.0 Frame
-> + *
-> + * Return:
-> + * * True - Frame inserted successfully
-> + * * False - Frame was not inserted due to one of:
-> + *	1. TXT Buffer is not writable (it is in wrong state)
-> + *	2. Invalid TXT buffer index
-> + *	3. Invalid frame length
-> + */
-> +static bool loongson_canfd_insert_frame(struct loongson_canfd_priv *priv,
-> +					const struct canfd_frame *cf, u8 buf, bool isfdf)
-> +{
-> +	u32 meta0, meta1;
-> +
-> +	if (buf >= LOONGSON_CANFD_TXBUF_NUM)
-> +		return false;
-> +
-> +	if (!loongson_canfd_txbuf_is_writable(priv, buf))
-> +		return false;
-> +
-> +	/* Prepare identifier */
-> +	if (cf->can_id & CAN_EFF_FLAG) {
-> +		meta0 = cf->can_id & CAN_EFF_MASK;
-> +		meta0 |= REG_FRAME_META0_XDT;
-> +	} else {
-> +		meta0 = FIELD_PREP(REG_FRAME_META0_ID_BASE, cf->can_id & CAN_SFF_MASK);
-> +	}
-> +
-> +	/* Prepare Frame format */
-> +	if (cf->can_id & CAN_RTR_FLAG)
-> +		meta0 |= REG_FRAME_META0_RTR;
-> +
-> +	if (isfdf) {
-> +		meta1 = REG_FRAME_META1_FDF;
-> +
-> +		if (cf->flags & CANFD_BRS)
-> +			meta1 |= REG_FRAME_META1_BRS;
-> +	}
-> +
-> +	meta1 |= FIELD_PREP(REG_FRAME_META1_DLC, can_fd_len2dlc(cf->len));
-> +
-> +	/* TXT buffer select */
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_TX_SEL, buf);
-> +
-> +	/* Write ID, Frame format */
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_TX_DATA_1 + LOONGSON_CANFD_FRAME_META0, meta0);
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_TX_DATA_1 + LOONGSON_CANFD_FRAME_META1, meta1);
-> +
-> +	/* Write Data payload */
-> +	if (!(cf->can_id & CAN_RTR_FLAG)) {
-> +		for (unsigned int i = 0; i < cf->len; i += LOONGSON_CANFD_DW_BYTE) {
-> +			regmap_write(priv->regmap,
-> +				     LOONGSON_CANFD_TX_DATA_1 + LOONGSON_CANFD_FRAME_DB_1 + i,
-> +				     le32_to_cpu(*(__le32 *)(cf->data + i)));
-                                                  ^^^^^^^^^^
-This cast is just wrong. What if the code is run on a big endian
-machine?
-
-To begin with, here, you are writing to your registers. So it should
-be the other way around: cpu_to_le32(). And to add to it, if you need
-endian conversion, populate regmap_config.val_format_endian.
-
-Also, why do you need some endian conversion only here and not on the
-other registers?
-
-> +		}
-> +	}
-> +
-> +	return true;
-> +}
-> +
-> +/**
-> + * loongson_canfd_start_xmit() - Starts the transmission
-> + * @skb: sk_buff pointer that contains data to be Txed
-> + * @ndev: Pointer to net_device structure
-> + *
-> + * Invoked from upper layers to initiate transmission. Uses the next available free TX Buffer and
-> + * populates its fields to start the transmission.
-> + *
-> + * Return: %NETDEV_TX_OK on success,
-> + *         %NETDEV_TX_BUSY when no free TX buffer is available, negative return values reserved
-> + *         for error cases.
-> + */
-> +static netdev_tx_t loongson_canfd_start_xmit(struct sk_buff *skb, struct net_device *ndev)
-> +{
-> +	struct canfd_frame *cf = (struct canfd_frame *)skb->data;
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	u32 buf_id, tx_stat, i = 0;
-> +	unsigned long tx_brp;
-> +	u16 tx_bs;
-> +
-> +	if (can_dropped_invalid_skb(ndev, skb))
-> +		return NETDEV_TX_OK;
-> +
-> +	if (unlikely(!loongson_canfd_txbuf_freed(priv))) {
-> +		netif_stop_queue(ndev);
-> +		netdev_err(ndev, "BUG!, no TXB free when queue awake!\n");
-> +		return NETDEV_TX_BUSY;
-> +	}
-> +
-> +	guard(spinlock_irqsave)(&priv->tx_lock);
-> +
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_TX_STAT, &tx_stat);
-> +	tx_brp = FIELD_GET(REG_TX_STAT_BRP, tx_stat);
-> +	tx_bs = FIELD_GET(REG_TX_STAT_BS, tx_stat);
-> +
-> +	for_each_clear_bit(i, &tx_brp, LOONGSON_CANFD_TXBUF_NUM) {
-> +		u32 transmission_complete_mask = 0x3 << (i * 2);
-> +
-> +		if (!(tx_bs & transmission_complete_mask)) {
-> +			buf_id = i;
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (!loongson_canfd_insert_frame(priv, cf, buf_id, can_is_canfd_skb(skb))) {
-> +		netdev_err(ndev, "TXNF set but cannot insert frame into TXTB! HW Bug?");
-> +		kfree_skb(skb);
-> +		ndev->stats.tx_dropped++;
-> +		return NETDEV_TX_OK;
-> +	}
-> +
-> +	can_put_echo_skb(skb, ndev, buf_id, 0);
-> +
-> +	loongson_canfd_set_txbuf_cmd(ndev, TXT_CMD_ADD, buf_id);
-> +
-> +	/* Check if all TX buffers are full */
-> +	if (!loongson_canfd_txbuf_freed(priv))
-> +		netif_stop_queue(ndev);
-> +
-> +	return NETDEV_TX_OK;
-> +}
-> +
-> +/**
-> + * loongson_canfd_read_rx_frame() - Reads frame from RX FIFO
-> + * @priv: Pointer to  private data
-> + * @cf:	 Pointer to CAN frame struct
-> + * @meta0: The first `frame format` read previously
-> + * @meta1: The second `frame format` read previously
-> + */
-> +static void loongson_canfd_read_rx_frame(struct loongson_canfd_priv *priv, struct canfd_frame *cf,
-> +					 u32 meta0, u32 meta1)
-> +{
-> +	u32 data, i, wc, len;
-> +
-> +	/* Extended Identifier Type */
-> +	if (meta0 & REG_FRAME_META0_XDT)
-> +		cf->can_id = (meta0 & CAN_EFF_MASK) | CAN_EFF_FLAG;
-> +	else
-> +		cf->can_id = FIELD_GET(REG_FRAME_META0_ID_BASE, meta0) & CAN_SFF_MASK;
-> +
-> +	/* BRS, ESI, RTR Flags */
-> +	cf->flags = 0;
-> +
-> +	if (meta1 & REG_FRAME_META1_FDF) {
-> +		if (meta1 & REG_FRAME_META1_BRS)
-> +			cf->flags |= CANFD_BRS;
-> +
-> +		if (meta0 & REG_FRAME_META0_ESI)
-> +			cf->flags |= CANFD_ESI;
-> +	} else if (meta0 & REG_FRAME_META0_RTR) {
-> +		cf->can_id |= CAN_RTR_FLAG;
-> +	}
-> +
-> +	/* Timesamp */
-           ^^^^^^^^
-Typo: timestamp.
-
-> +	cf->__res0 = meta1;
-> +	cf->__res1 = meta1 >> 8;
-
-No, you can not use the canfd_frame->__res0 and canfd_frame->__res1
-fields at all. These are *reserved*. Refer to what the other CAN
-drivers are doing for the hardware timestamps and use the existing
-framework.
-
-> +	wc = FIELD_GET(REG_FRAME_META1_RWCNT, meta1) - 2;
-> +
-> +	/* Data Length Code */
-> +	len = FIELD_GET(REG_FRAME_META1_DLC, meta1);
-> +	if (len > 8) {
-> +		if (meta1 & REG_FRAME_META1_FDF)
-> +			len = wc << 2;
-> +		else
-> +			len = 8;
-> +	}
-> +
-> +	cf->len = len;
-> +	if (unlikely(len > wc * LOONGSON_CANFD_DW_BYTE))
-> +		len = wc * LOONGSON_CANFD_DW_BYTE;
-> +
-> +	/* Data */
-> +	for (i = 0; i < len; i += LOONGSON_CANFD_DW_BYTE) {
-> +		regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &data);
-> +		*(__le32 *)(cf->data + i) = cpu_to_le32(data);
-> +	}
-> +
-> +	while (unlikely(i < wc * LOONGSON_CANFD_DW_BYTE)) {
-> +		regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &data);
-> +		i += LOONGSON_CANFD_DW_BYTE;
-> +	}
-> +}
-> +
-> +/**
-> + * loongson_canfd_rx() -  Called from CAN ISR to complete the received frame processing
-> + * @ndev: Pointer to net_device structure
-> + *
-> + * This function is invoked from the CAN isr to process the Rx frames. It does minimal
-> + * processing and invokes "netif_receive_skb" to complete further processing.
-> + * Return: 1 when frame is passed to the network layer, 0 when the first frame word is read but
-> + *	   system is out of free SKBs temporally and left code to resolve SKB allocation later,
-> + *         -%EAGAIN in a case of empty Rx FIFO.
-> + */
-> +static int loongson_canfd_rx(struct net_device *ndev)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	struct canfd_frame *cf;
-> +	struct sk_buff *skb;
-> +	u32 meta0, meta1;
-> +
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &meta0);
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &meta1);
-> +
-> +	/* Number of characters received */
-> +	if (!FIELD_GET(REG_FRAME_META1_RWCNT, meta1))
-> +		return -EAGAIN;
-> +
-> +	/* Flexible Data-rate Format */
-> +	if (meta1 & REG_FRAME_META1_FDF)
-> +		skb = alloc_canfd_skb(ndev, &cf);
-> +	else
-> +		skb = alloc_can_skb(ndev, (struct can_frame **)&cf);
-> +	if (unlikely(!skb))
-> +		return -ENOMEM;
-> +
-> +	loongson_canfd_read_rx_frame(priv, cf, meta0, meta1);
-> +
-> +	netif_receive_skb(skb);
-> +
-> +	return 1;
-> +}
-> +
-> +/**
-> + * loongson_canfd_read_fault_state() - Reads Loongson CANFD fault state.
-> + * @ndev: Pointer to net_device structure
-> + *
-> + * Returns: Fault confinement state of controller
-> + */
-> +static enum can_state loongson_canfd_read_fault_state(struct net_device *ndev)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	enum can_state sts = CAN_STATE_ERROR_PASSIVE;
-> +	u32 fstat;
-> +
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_FSTAT, &fstat);
-> +
-> +	switch (FIELD_GET(REG_FSTAT_MASK, fstat)) {
-> +	case REG_FSTAT_ERA:
-> +		u32 ewl, erl, rec_tec, max_tec;
-> +
-> +		regmap_read(priv->regmap, LOONGSON_CANFD_ERL, &erl);
-> +		regmap_read(priv->regmap, LOONGSON_CANFD_ERC, &rec_tec);
-> +
-> +		ewl = FIELD_GET(REG_ERL_EW, erl);
-> +		max_tec = max(FIELD_GET(REG_ERC_REC, rec_tec), FIELD_GET(REG_ERC_TEC, rec_tec));
-> +
-> +		if (ewl > max_tec)
-> +			sts = CAN_STATE_ERROR_ACTIVE;
-> +		else
-> +			sts = CAN_STATE_ERROR_WARNING;
-> +		break;
-> +	case REG_FSTAT_ERP:
-> +		sts = CAN_STATE_ERROR_PASSIVE;
-> +		break;
-> +	case REG_FSTAT_BOF:
-> +		sts = CAN_STATE_BUS_OFF;
-> +		break;
-> +	default:
-> +		netdev_err(ndev, "Invalid error state.\n");
-> +		break;
-> +	}
-> +
-> +	return sts;
-> +}
-> +
-> +/**
-> + * loongson_canfd_get_bec() - Reads REC/TEC counter values from controller
-> + * @priv: Pointer to private data
-> + * @bec: Pointer to Error counter structure
-> + */
-> +static void loongson_canfd_get_bec(struct loongson_canfd_priv *priv, struct can_berr_counter *bec)
-> +{
-> +	u32 erc;
-> +
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_ERC, &erc);
-> +	bec->rxerr = FIELD_GET(REG_ERC_REC, erc);
-> +	bec->txerr = FIELD_GET(REG_ERC_TEC, erc);
-> +}
-> +
-> +/**
-> + * loongson_canfd_get_berr_counter() - error counter routine
-> + * @ndev: Pointer to net_device structure
-> + * @bec: Pointer to can_berr_counter structure
-> + *
-> + * Return: 0 always
-> + */
-> +static int loongson_canfd_get_berr_counter(const struct net_device *ndev,
-> +					   struct can_berr_counter *bec)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +
-> +	loongson_canfd_get_bec(priv, bec);
-> +	return 0;
-> +}
-> +
-> +/**
-> + * loongson_canfd_err_interrupt() - Error frame ISR
-> + * @ndev: net_device pointer
-> + * @isr: interrupt status register value
-> + *
-> + * This is the CAN error interrupt and it will check the type of error and forward the error
-> + * frame to upper layers.
-> + */
-> +static void loongson_canfd_err_interrupt(struct net_device *ndev, u32 isr)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	struct net_device_stats *stats = &ndev->stats;
-> +	struct can_berr_counter bec;
-> +	enum can_state state;
-> +	struct can_frame *cf;
-> +	struct sk_buff *skb;
-> +	u32 err_capt, alc;
-> +
-> +	loongson_canfd_get_bec(priv, &bec);
-> +
-> +	state = loongson_canfd_read_fault_state(ndev);
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_ERR_CAPT, &err_capt);
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_ALC, &alc);
-> +
-> +	netdev_dbg(ndev, "%s: ISR 0x%08x, rxerr %d, txerr %d, error type %lu, pos %lu, ALC id_field %lu, bit %lu\n",
-> +		   __func__, isr, bec.rxerr, bec.txerr,
-> +		   FIELD_GET(REG_ERR_CAPT_TYPE, err_capt),
-> +		   FIELD_GET(REG_ERR_CAPT_POS, err_capt),
-> +		   FIELD_GET(REG_ALC_ID_FIELD, alc),
-> +		   FIELD_GET(REG_ALC_BIT_POS, alc));
-> +
-> +	skb = alloc_can_err_skb(ndev, &cf);
-> +
-> +	/*
-> +	 * EWLI: error warning limit condition met
-> +	 * FCSI: fault confinement state changed
-> +	 * ALI:  arbitration lost (just informative)
-> +	 * BEI:  bus error interrupt
-> +	 */
-> +	if ((isr & REG_INT_STAT_FCSI) || (isr & REG_INT_STAT_EWLI)) {
-> +		netdev_info(ndev, "state changes from %s to %s\n",
-> +			    can_get_state_str(priv->can.state), can_get_state_str(state));
-> +
-> +		if (priv->can.state == state)
-> +			netdev_warn(ndev, "cur and pre state is the same!(miss intr?)\n");
-> +
-> +		isr = REG_INT_STAT_FCSI | REG_INT_STAT_EWLI;
-> +		priv->can.state = state;
-> +		switch (state) {
-> +		case CAN_STATE_BUS_OFF:
-> +			priv->can.can_stats.bus_off++;
-> +			if (priv->can.restart_ms)
-> +				regmap_write(priv->regmap, LOONGSON_CANFD_CMD,
-> +					     REG_CMD_ERCRST);
-> +
-> +			can_bus_off(ndev);
-> +			if (skb)
-> +				cf->can_id |= CAN_ERR_BUSOFF;
-> +			break;
-> +		case CAN_STATE_ERROR_PASSIVE:
-> +			priv->can.can_stats.error_passive++;
-> +			if (skb) {
-> +				cf->can_id |= CAN_ERR_CRTL | CAN_ERR_CNT;
-> +				if (bec.rxerr >= CAN_ERROR_PASSIVE_THRESHOLD)
-> +					cf->data[1] = CAN_ERR_CRTL_RX_PASSIVE;
-> +				else
-> +					cf->data[1] = CAN_ERR_CRTL_TX_PASSIVE;
-> +				cf->data[6] = bec.txerr;
-> +				cf->data[7] = bec.rxerr;
-> +			}
-> +			break;
-> +		case CAN_STATE_ERROR_WARNING:
-> +			priv->can.can_stats.error_warning++;
-> +			if (skb) {
-> +				cf->can_id |= CAN_ERR_CRTL | CAN_ERR_CNT;
-> +				if (bec.txerr > bec.rxerr)
-> +					cf->data[1] |= CAN_ERR_CRTL_TX_WARNING;
-> +				else
-> +					cf->data[1] |= CAN_ERR_CRTL_RX_WARNING;
-> +				cf->data[6] = bec.txerr;
-> +				cf->data[7] = bec.rxerr;
-> +			}
-> +			break;
-> +		case CAN_STATE_ERROR_ACTIVE:
-> +			cf->can_id |= CAN_ERR_CNT;
-> +			cf->data[1] = CAN_ERR_CRTL_ACTIVE;
-> +			cf->data[6] = bec.txerr;
-> +			cf->data[7] = bec.rxerr;
-> +			break;
-> +		default:
-> +			netdev_err(ndev, "Unexpected state: %d, %s!\n", state,
-> +				   can_get_state_str(state));
-> +			break;
-> +		}
-> +	}
-> +
-> +	/* Check for Arbitration Lost interrupt */
-> +	if (isr & REG_INT_STAT_ALI) {
-> +		isr = REG_INT_STAT_ALI;
-> +		netdev_err(ndev, "Arbitration Lost interrupt\n");
-> +		priv->can.can_stats.arbitration_lost++;
-> +		if (skb) {
-> +			cf->can_id |= CAN_ERR_LOSTARB;
-> +			cf->data[0] = CAN_ERR_LOSTARB_UNSPEC;
-> +		}
-> +	}
-> +
-> +	/* Check for Bus Error interrupt */
-> +	if (isr & REG_INT_STAT_BEI) {
-> +		isr = REG_INT_STAT_BEI;
-> +		netdev_err(ndev, "Bus Error interrupt\n");
-> +		priv->can.can_stats.bus_error++;
-> +		stats->rx_errors++;
-> +		if (skb) {
-> +			cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
-> +			cf->data[2] = CAN_ERR_PROT_UNSPEC;
-> +			cf->data[3] = CAN_ERR_PROT_LOC_UNSPEC;
-> +		}
-> +	}
-> +
-> +	if (skb)
-> +		netif_rx(skb);
-> +
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, isr);
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK, isr << 16);
-> +}
-> +
-> +static int loongson_canfd_rx_napi(struct napi_struct *napi, int quota)
-> +{
-> +	struct net_device *ndev = napi->dev;
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	int work_done = 0, ret = 1;
-> +	u32 sts, rx_frc, rx_sts;
-> +
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_RX_STAT, &rx_sts);
-> +	rx_frc = FIELD_GET(REG_RX_STAT_RXFRC, rx_sts);
-> +
-> +	while (rx_frc && work_done < quota && ret > 0) {
-> +		ret = loongson_canfd_rx(ndev);
-> +		work_done++;
-> +		regmap_read(priv->regmap, LOONGSON_CANFD_RX_STAT, &rx_sts);
-> +		rx_frc = FIELD_GET(REG_RX_STAT_RXFRC, rx_sts);
-> +	}
-> +
-> +	/* Check for RX FIFO Overflow */
-> +	regmap_read(priv->regmap, LOONGSON_CANFD_STAT, &sts);
-> +	if (sts & REG_STAT_DOR) {
-> +		struct net_device_stats *stats = &ndev->stats;
-> +		struct can_frame *cf;
-> +		struct sk_buff *skb;
-> +
-> +		netdev_info(ndev, "Loongson canfd RX overflow\n");
-> +		stats->rx_over_errors++;
-> +		stats->rx_errors++;
-> +
-> +		skb = alloc_can_err_skb(ndev, &cf);
-> +		if (skb) {
-> +			cf->can_id |= CAN_ERR_CRTL;
-> +			cf->data[1] |= CAN_ERR_CRTL_RX_OVERFLOW;
-> +			stats->rx_packets++;
-> +			stats->rx_bytes += cf->can_dlc;
-
-The socket CAN error frames do not correspond to actual frames on the
-bus. Do not increase stats->rx_packets and stats->rx_bytes.
-
-> +			netif_rx(skb);
-> +		}
-> +
-> +		/* Clear Data Overrun */
-> +		regmap_write(priv->regmap, LOONGSON_CANFD_CMD, REG_CMD_CDO);
-> +	}
-> +
-> +	if (!rx_frc && ret != 0) {
-> +		if (napi_complete_done(napi, work_done)) {
-> +			/*
-> +			 * Clear and enable RBNEI. It is level-triggered, so
-> +			 * there is no race condition.
-> +			 */
-> +			regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT,
-> +				     REG_INT_STAT_RBNEI);
-> +			regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK,
-> +				     (REG_INT_STAT_RBNEI << 16));
-> +		}
-> +	}
-> +
-> +	return work_done;
-> +}
-> +
-> +static void loongson_canfd_tx_interrupt(struct net_device *ndev)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	struct net_device_stats *stats = &ndev->stats;
-> +	enum loongson_canfd_txbuf_sts sts;
-> +	u32 buf_id;
-> +
-> +	guard(spinlock_irqsave)(&priv->tx_lock);
-> +
-> +	while ((buf_id = loongson_canfd_get_txbuf_id(priv, &sts)) < LOONGSON_CANFD_TXBUF_NUM) {
-> +		switch (sts) {
-> +		case TX_BS_VALID:
-> +			stats->tx_bytes += can_get_echo_skb(ndev, buf_id, NULL);
-> +			stats->tx_packets++;
-> +			break;
-> +		case TX_BS_FAIL:
-> +			u32 cnt;
-> +			/*
-> +			 * This indicated that retransmit limit has been reached.
-> +			 * Obviously we should not echo the frame, but also not indicate any
-> +			 * kind of error. If desired, it was already reported (possible
-> +			 * multiple times) on each arbitration lost.
-> +			 */
-> +			regmap_read(priv->regmap, LOONGSON_CANFD_TX_FR_CNT, &cnt);
-> +			netdev_warn(ndev, "TXB in FAIL state, TX frame count: %d\n", cnt);
-> +			can_free_echo_skb(ndev, buf_id, NULL);
-> +			stats->tx_dropped++;
-> +			break;
-> +		case TX_BS_CANCEL:
-> +			/*
-> +			 * We *could* re-queue the frame, but multiqueue/abort is
-> +			 * not supported yet anyway.
-> +			 */
-> +			netdev_warn(ndev, "TXB in CANCEL state\n");
-> +			can_free_echo_skb(ndev, buf_id, NULL);
-> +			stats->tx_dropped++;
-> +			break;
-> +		default:
-> +			break;
-> +		}
-> +
-> +		loongson_canfd_set_txbuf_cmd(ndev, TXT_CMD_SR_CLEAN, buf_id);
-> +	}
-> +
-> +	/*
-> +	 * Clear the interrupt again. We do not want to receive again interrupt
-> +	 * for the buffer already handled. If it is the last finished one then
-> +	 * it would cause log of spurious interrupt.
-> +	 */
-> +	regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, REG_INT_STAT_TXBHCI);
-> +
-> +	/* Check if at least one TX buffer is free */
-> +	if (loongson_canfd_txbuf_freed(priv))
-> +		netif_wake_queue(ndev);
-> +}
-> +
-> +/**
-> + * loongson_canfd_interrupt() - CAN Isr
-> + * @irq: irq number
-> + * @dev_id: device id pointer
-> + *
-> + * This is the Loongson CANFD ISR. It checks for the type of interrupt
-> + * and invokes the corresponding ISR.
-> + *
-> + * Return:
-> + * IRQ_NONE - If CAN device is in sleep mode, IRQ_HANDLED otherwise
-> + */
-> +static irqreturn_t loongson_canfd_interrupt(int irq, void *dev_id)
-> +{
-> +	struct net_device *ndev = (struct net_device *)dev_id;
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	u32 isr, imask;
-> +
-> +	for (unsigned int irq_loops = 0; irq_loops < 10000; irq_loops++) {
-> +		/* Get the interrupt status */
-> +		regmap_read(priv->regmap, LOONGSON_CANFD_INT_STAT, &isr);
-> +		if (!isr)
-> +			return irq_loops ? IRQ_HANDLED : IRQ_NONE;
-
-			if (irq_loops)
-				return IRQ_HANDLED;
-			else
-				return IRQ_NONE;
-
-> +
-> +		/* Receive Buffer Not Empty Interrupt */
-> +		if (isr & REG_INT_STAT_RBNEI) {
-> +			/*
-> +			 * Mask RXBNEI the first, then clear interrupt and schedule NAPI.
-> +			 * Even if another IRQ fires, RBNEI will always be 0 (masked).
-> +			 */
-> +			regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK, REG_INT_STAT_RBNEI);
-> +			regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, REG_INT_STAT_RBNEI);
-> +			napi_schedule(&priv->napi);
-> +		}
-> +
-> +		/* TX Buffer HW Command Interrupt */
-> +		if (isr & REG_INT_STAT_TXBHCI)
-> +			loongson_canfd_tx_interrupt(ndev);
-> +
-> +		/* Error interrupts */
-> +		imask = isr & REG_INT_STAT_ERRORI;
-> +		if (imask) {
-> +			regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK, imask);
-> +			regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, imask);
-> +			loongson_canfd_err_interrupt(ndev, isr);
-> +		}
-> +
-> +		/* Ignore RI, TI, LFI, RFI, BSI */
-> +	}
-> +
-> +	netdev_err(ndev, "Intterupt state: 0x%x.\n", isr);
-> +
-> +	if (isr & REG_INT_STAT_TXBHCI) {
-> +		for (unsigned int i = 0; i < LOONGSON_CANFD_TXBUF_NUM; i++) {
-> +			u32 sts = loongson_canfd_get_txbuf_sts(priv, i);
-> +
-> +			netdev_err(ndev, "TX buf %d status: 0x%x.\n", i, sts);
-> +		}
-> +	}
-> +
-> +	regmap_update_bits(priv->regmap, LOONGSON_CANFD_INT_ENA, REG_INT_ENA_CLR, REG_INT_ENA_CLR);
-> +	regmap_update_bits(priv->regmap, LOONGSON_CANFD_INT_MASK,
-> +			   REG_INT_MASK_SET, REG_INT_MASK_SET);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +/**
-> + * loongson_canfd_chip_stop() - Driver stop routine
-> + * @ndev: Pointer to net_device structure
-> + *
-> + * This is the drivers stop routine. It will disable the interrupts and
-> + * disable the controller.
-> + */
-> +static void loongson_canfd_chip_stop(struct net_device *ndev)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +
-> +	/* Disable interrupts and disable CAN */
-> +	regmap_update_bits(priv->regmap, LOONGSON_CANFD_INT_ENA, REG_INT_ENA_CLR, REG_INT_ENA_CLR);
-> +	regmap_update_bits(priv->regmap, LOONGSON_CANFD_INT_MASK,
-> +			   REG_INT_MASK_SET, REG_INT_MASK_SET);
-> +	regmap_update_bits(priv->regmap, LOONGSON_CANFD_CONF, REG_CONF_ENA, 0);
-> +
-> +	priv->can.state = CAN_STATE_STOPPED;
-> +}
-> +
-> +/**
-> + * loongson_canfd_open() - Driver open routine
-> + * @ndev: Pointer to net_device structure
-> + *
-> + * This is the driver open routine.
-> + * Return: 0 on success and failure value on error
-> + */
-> +static int loongson_canfd_open(struct net_device *ndev)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +	int ret;
-> +
-> +	ret = loongson_canfd_reset(ndev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Common open */
-> +	ret = open_candev(ndev);
-> +	if (ret) {
-> +		netdev_warn(ndev, "open_candev failed!\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = request_irq(ndev->irq, loongson_canfd_interrupt, IRQF_SHARED, ndev->name, ndev);
-> +	if (ret < 0) {
-> +		netdev_err(ndev, "irq allocation for CAN failed\n");
-> +		goto err_irq;
-> +	}
-> +
-> +	ret = loongson_canfd_chip_start(ndev);
-> +	if (ret < 0) {
-> +		netdev_err(ndev, "loongson_canfd_chip_start failed!\n");
-> +		goto err_chip_start;
-> +	}
-> +
-> +	netdev_info(ndev, "loongson_canfd_device registered\n");
-> +	napi_enable(&priv->napi);
-> +	netif_start_queue(ndev);
-> +
-> +	return 0;
-> +
-> +err_chip_start:
-> +	free_irq(ndev->irq, ndev);
-> +err_irq:
-> +	close_candev(ndev);
-> +	return ret;
-> +}
-> +
-> +/**
-> + * loongson_canfd_close() - Driver close routine
-> + * @ndev: Pointer to net_device structure
-> + *
-> + * Return: 0 always
-> + */
-> +static int loongson_canfd_close(struct net_device *ndev)
-> +{
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +
-> +	netif_stop_queue(ndev);
-> +	napi_disable(&priv->napi);
-> +	loongson_canfd_chip_stop(ndev);
-> +	free_irq(ndev->irq, ndev);
-> +	close_candev(ndev);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct net_device_ops loongson_canfd_netdev_ops = {
-> +	.ndo_open       = loongson_canfd_open,
-> +	.ndo_stop       = loongson_canfd_close,
-> +	.ndo_start_xmit = loongson_canfd_start_xmit,
-> +};
-
-Also add a struct ethtool_ops and populate
-ethtool_ops.get_ts_info. Something like:
-
-	static const struct ethtool_ops es58x_ethtool_ops = {
-		.get_ts_info = can_ethtool_op_get_ts_info_hwts,
-	};
-
-Refer to what the other CAN drivers with hardware timestamps are
-doing.
-
-> +static const struct regmap_range loongson_canfd_reg_table_wr_range[] = {
-> +	regmap_reg_range(LOONGSON_CANFD_DEVICE_ID, LOONGSON_CANFD_CONF),
-> +	regmap_reg_range(LOONGSON_CANFD_CMD, LOONGSON_CANFD_CMD),
-> +	regmap_reg_range(LOONGSON_CANFD_INT_STAT, LOONGSON_CANFD_ERL),
-> +	regmap_reg_range(LOONGSON_CANFD_CTR_PRES, LOONGSON_CANFD_CTR_PRES),
-> +	regmap_reg_range(LOONGSON_CANFD_SSP_CFG, LOONGSON_CANFD_SSP_CFG),
-> +	regmap_reg_range(LOONGSON_CANFD_TS, LOONGSON_CANFD_FLT_CTRL),
-> +	regmap_reg_range(LOONGSON_CANFD_TX_CMD, LOONGSON_CANFD_TX_DATA_18),
-> +};
-> +
-> +static const struct regmap_range loongson_canfd_reg_table_rd_range[] = {
-> +	regmap_reg_range(LOONGSON_CANFD_DEVICE_ID, LOONGSON_CANFD_STAT),
-> +	regmap_reg_range(LOONGSON_CANFD_INT_STAT, LOONGSON_CANFD_BRE),
-> +	regmap_reg_range(LOONGSON_CANFD_ERR_CAPT, LOONGSON_CANFD_TX_STAT),
-> +	regmap_reg_range(LOONGSON_CANFD_TX_SEL, LOONGSON_CANFD_TX_DATA_18),
-> +};
-> +
-> +static const struct regmap_access_table loongson_canfd_reg_table_wr = {
-> +	.yes_ranges = loongson_canfd_reg_table_wr_range,
-> +	.n_yes_ranges = ARRAY_SIZE(loongson_canfd_reg_table_wr_range),
-> +};
-> +
-> +static const struct regmap_access_table loongson_canfd_reg_table_rd = {
-> +	.yes_ranges = loongson_canfd_reg_table_rd_range,
-> +	.n_yes_ranges = ARRAY_SIZE(loongson_canfd_reg_table_rd_range),
-> +};
-> +
-> +static bool loongson_canfd_volatile_reg(struct device *dev, unsigned int reg)
-> +{
-> +	switch (reg) {
-> +	case LOONGSON_CANFD_MODE:
-> +	case LOONGSON_CANFD_CONF:
-> +	case LOONGSON_CANFD_STAT:
-> +	case LOONGSON_CANFD_INT_STAT:
-> +	case LOONGSON_CANFD_INT_ENA:
-> +	case LOONGSON_CANFD_INT_MASK:
-> +	case LOONGSON_CANFD_ERL:
-> +	case LOONGSON_CANFD_FSTAT:
-> +	case LOONGSON_CANFD_ERC:
-> +	case LOONGSON_CANFD_ERR_CAPT:
-> +	case LOONGSON_CANFD_ALC:
-> +	case LOONGSON_CANFD_TX_FR_CNT:
-> +	case LOONGSON_CANFD_RX_STAT:
-> +	case LOONGSON_CANFD_RX_DATA:
-> +	case LOONGSON_CANFD_TX_STAT:
-> +	case LOONGSON_CANFD_TX_SEL:
-> +		return true;
-> +	default:
-> +		return false;
-> +	};
-> +}
-> +
-> +static const struct regmap_config loongson_cangfd_regmap = {
-> +	.reg_bits	= 32,
-> +	.reg_stride	= 4,
-> +	.val_bits	= 32,
-> +	.wr_table	= &loongson_canfd_reg_table_wr,
-> +	.rd_table	= &loongson_canfd_reg_table_rd,
-> +	.volatile_reg	= loongson_canfd_volatile_reg,
-> +	.max_register	= LOONGSON_CANFD_TX_DATA_18,
-> +	.cache_type	= REGCACHE_MAPLE,
-> +};
-> +
-> +static int loongson_canfd_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct loongson_canfd_priv *priv;
-> +	struct net_device *ndev;
-> +	struct regmap *regmap;
-> +	struct resource *res;
-> +	void __iomem *base;
-> +	u32 clk_rate;
-> +	int ret, irq;
-> +
-> +	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	regmap = devm_regmap_init_mmio(dev, base, &loongson_cangfd_regmap);
-> +	if (IS_ERR(regmap))
-> +		return PTR_ERR(regmap);
-> +
-> +	device_property_read_u32(dev, "clock-frequency", &clk_rate);
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-> +		return irq;
-> +
-> +	/* Create a CAN device instance */
-> +	ndev = alloc_candev(sizeof(*priv), LOONGSON_CANFD_TXBUF_NUM);
-> +	if (!ndev)
-> +		return -ENOMEM;
-> +
-> +	priv = netdev_priv(ndev);
-> +	spin_lock_init(&priv->tx_lock);
-> +	priv->regmap = regmap;
-> +	priv->res = res;
-> +
-> +	priv->can.clock.freq = clk_rate;
-> +	priv->can.bittiming_const = &loongson_canfd_bit_timing;
-> +	priv->can.fd.data_bittiming_const = &loongson_canfd_bit_timing_data;
-> +	priv->can.fd.tdc_const = &loongson_canfd_tdc_data;
-> +
-> +	priv->can.fd.do_set_data_bittiming = loongson_canfd_set_data_bittiming;
-> +	priv->can.fd.do_get_auto_tdcv = loongson_canfd_get_auto_tdcv;
-> +	priv->can.do_set_mode = loongson_canfd_do_set_mode;
-> +	priv->can.do_set_bittiming = loongson_canfd_set_bittiming;
-> +	priv->can.do_get_berr_counter = loongson_canfd_get_berr_counter;
-> +
-> +	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK | CAN_CTRLMODE_LISTENONLY |
-> +				       CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_ONE_SHOT |
-> +				       CAN_CTRLMODE_BERR_REPORTING | CAN_CTRLMODE_FD |
-> +				       CAN_CTRLMODE_PRESUME_ACK | CAN_CTRLMODE_FD_NON_ISO |
-> +				       CAN_CTRLMODE_TDC_AUTO;
-
-Does your device allow to send and receive Classical CAN frames with a
-DLC greater than 8? c.f. CAN_CTRLMODE_CC_LEN8_DLC.
-
-> +	ndev->irq = irq;
-> +	ndev->flags |= IFF_ECHO;	/* We support local echo */
-> +	platform_set_drvdata(pdev, ndev);
-> +	ndev->netdev_ops = &loongson_canfd_netdev_ops;
-> +	SET_NETDEV_DEV(ndev, dev);
-> +
-> +	ret = loongson_canfd_reset(ndev);
-> +	if (ret < 0)
-> +		goto err_candev_free;
-> +
-> +	netif_napi_add(ndev, &priv->napi, loongson_canfd_rx_napi);
-> +
-> +	ret = register_candev(ndev);
-> +	if (ret) {
-> +		dev_err(dev, "register_candev failed with %d\n", ret);
-> +		goto err_candev_free;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_candev_free:
-> +	free_candev(ndev);
-> +	return ret;
-> +}
-> +
-> +static void loongson_canfd_remove(struct platform_device *pdev)
-> +{
-> +	struct net_device *ndev = platform_get_drvdata(pdev);
-> +	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-> +
-> +	unregister_candev(ndev);
-> +	netif_napi_del(&priv->napi);
-> +	free_candev(ndev);
-> +}
-> +
-> +static const struct acpi_device_id loongson_canfd_acpi_match[] = {
-> +	{ "LOON0015" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, loongson_canfd_acpi_match);
-> +
-> +static struct platform_driver loongson_canfd_driver = {
-> +	.probe  = loongson_canfd_probe,
-> +	.remove = loongson_canfd_remove,
-> +	.driver = {
-> +		.name = DEV_NAME,
-> +		.acpi_match_table = loongson_canfd_acpi_match,
-> +	},
-> +};
-> +module_platform_driver(loongson_canfd_driver);
-> +
-> +MODULE_AUTHOR("Loongson Technology Corporation Limited");
-> +MODULE_DESCRIPTION("Loongson CAN-FD Controller driver");
-> +MODULE_LICENSE("GPL");
-
-
-Yours sincerely,
-Vincent Mailhol
 
