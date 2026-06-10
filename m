@@ -1,63 +1,64 @@
-Return-Path: <linux-can+bounces-7812-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7813-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 32blKUIzKWodSQMAu9opvQ
-	(envelope-from <linux-can+bounces-7812-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 11:49:54 +0200
+	id Q7U8BqJ0KWp8XAMAu9opvQ
+	(envelope-from <linux-can+bounces-7813-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 16:28:50 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DA42667FEB
-	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 11:49:54 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0D1466A372
+	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 16:28:49 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=NyEn65n1;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7812-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-can+bounces-7812-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="KEZNJm/H";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7813-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7813-lists+linux-can=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id CCBFC306C5A8
-	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 09:47:46 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7DA2F304F2FE
+	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 14:27:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DEA33E7151;
-	Wed, 10 Jun 2026 09:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197F2334692;
+	Wed, 10 Jun 2026 14:27:27 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368353E8351
-	for <linux-can@vger.kernel.org>; Wed, 10 Jun 2026 09:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3B833D4F8;
+	Wed, 10 Jun 2026 14:27:25 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781084816; cv=none; b=M7jabeocsu2RCPNCiSy5rReh8UTu7HynwMkKMQrQ8iBzKCzzLDq4zVrC+5gZ0eCANbhuUj6Pf7aV+3uV1C4JY7cf7/lLKN6NqRSCOsSz92XzuEM0UYWwKjIpdwBhSuhny9qm4oRoRKaSlZaaigcA93tYDTVbxVD5YjHdv9UzPUk=
+	t=1781101647; cv=none; b=RwQi6yCWkNw118Ja3SoFuRFLkZ8TEZxODXN2749Smecs9IX98ovApA618FvNg92pkcRCOpvW89I4gWOYSfyAexAuQYRJOWXqF451ssMvgosWUmSOwsh6i4i5XKwldCnsXdtPmiWx2gT7pPIkzny9fdhXJXGzyMuK3XRz807U1zI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781084816; c=relaxed/simple;
-	bh=oN6y2VhZL5I0W7zzx+SRvcL/iLQ3Qt4FGVD2sow/8v4=;
+	s=arc-20240116; t=1781101647; c=relaxed/simple;
+	bh=5kuBP7fMBbqE/iet64062XGawrA4JhbZ5hy8hly7DuY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HDDKOvnxUFXVIyI1Rw/tc3MXAVyzhcwFk296tC0d8Q38tSAhHgERJjO8gKJW8N4fet+9hes3u9e9HA8y6mGTqj4Bbexuy1G3XHxlxGWKCIY4PoMKcdlUi2cRF4deqBBmgg5teCsfHrAllDfpQAEYwGJrlwJ7EGAgtPUqk5IJ/Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NyEn65n1; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1FFE1F00893;
-	Wed, 10 Jun 2026 09:46:54 +0000 (UTC)
+	 Message-Id; b=m2NI1GN2fOCH3Af0Rx0f4ID+/hmcMczD+Hu9FxJpWTMf0DU5fTmrfuh4v2IMEFVHy2JziWbr/kRig6HxxftVbjxij9gWiWL7FxhVP/51GWA4GbhtF5vU8VJQiI5cMpYOmtyYFLwjS8aZEqlk3G8qC7Pen/w9HAb8jFwQQMK7D5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KEZNJm/H; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 031C31F0089A;
+	Wed, 10 Jun 2026 14:27:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781084814;
-	bh=4nyaFPRhHo+Pmk6lDR4EN0tqaE7vd0mASwVMCYrHv1M=;
+	s=k20260515; t=1781101645;
+	bh=I4K33T+MFgkZ1eCFBa4fDJZ3fDYXQ+2gTF11A6ENEgI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=NyEn65n1XUAf3d//FnFknXUHD94CFMI8fM2p+jt76hShQI5kYbNS9rKWtopAOcjRR
-	 k1Ur44FvWdvpU87LfT2PoV+EYTwv6zdeCMCUufYenxs0qSlU1ikWgdWRvWxH/qdF7z
-	 SrKvwH3FvlNlpSjJyNYQy/vcu9YatfrbVG5Ujrnro0LNFNMtYXs/UE1W2eehSBcW+p
-	 +0zoi4wrvMKa6J5s3AajRwDUrieOfAsHzGnfnAsTAw0gUsD0PXasgRqVA2o02W0h26
-	 LZs8X5YE5S3NzQ8FlnUrhOFRj2V/sGBOFtgrUnKJw2auh9mEPNke6j92+to55gXPZv
-	 slguZ78s+x8EQ==
+	b=KEZNJm/HUC25JcxV99QcToXilHwCL6tW3GoQls/NYnc4Vy/AKb8FxwmTMkQinVa+D
+	 038LXHRj5EYLngzavVNqSn5hJcHGtQwCsrnG3xeD/gQSvvFmr42w9SSF1SUHB2Z9pj
+	 2mddxrkQijJePnvDmV19ZPIGLN194nxakx85oTu0PSno9caVwtFlRwprdMGrL6tcFI
+	 RgEZiI8J7EX2sQhcmxxbXjxZgeCEqfQXpDQtBBtVRfWP15tYzOELCybNN3i2msVszI
+	 aXYi28eQjlXiKRJvPi6rwfsfTHbBSKlFkb5Il6oIr0r7ZYKxhvWilvUfZHzX5wnKNq
+	 gYVkFJn8xUlnw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] can: bcm: fix CAN frame rx/tx statistics
+Subject: Re: [PATCHv2 4/4] m68k: coldfire: fix non-standard readX()/writeX()
+ functions
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Oliver Hartkopp" <socketcan@hartkopp.net>
-Cc: "Oleksij Rempel" <o.rempel@pengutronix.de>, linux-can@vger.kernel.org, "Vincent
- Mailhol" <mailhol@kernel.org>, "Marc Kleine-Budde" <mkl@pengutronix.de>
-In-Reply-To: <20260610093422.39847-1-socketcan@hartkopp.net>
-References: <20260610093422.39847-1-socketcan@hartkopp.net>
+To: "Greg Ungerer" <gerg@linux-m68k.org>
+Cc: "Oliver Hartkopp" <socketcan@hartkopp.net>, "Vincent Mailhol" <mailhol@kernel.org>, linux-can@vger.kernel.org, Frank.Li@kernel.org, "Oleksij
+ Rempel" <o.rempel@pengutronix.de>, "Marc Kleine-Budde" <mkl@pengutronix.de>, imx@lists.linux.dev
+In-Reply-To: <20260609142139.1563360-6-gerg@linux-m68k.org>
+References: <20260609142139.1563360-6-gerg@linux-m68k.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 10 Jun 2026 09:46:54 +0000
-Message-Id: <20260610094654.A1FFE1F00893@smtp.kernel.org>
+Date: Wed, 10 Jun 2026 14:27:24 +0000
+Message-Id: <20260610142725.031C31F0089A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -69,174 +70,169 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7812-lists,linux-can=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-7813-lists,linux-can=lfdr.de];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[hartkopp.net:email,sashiko.dev:url,vger.kernel.org:from_smtp,lists.linux.dev:replyto,smtp.kernel.org:mid,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,m:mailhol@kernel.org,m:mkl@pengutronix.de,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:gerg@linux-m68k.org,m:socketcan@hartkopp.net,m:mailhol@kernel.org,m:linux-can@vger.kernel.org,m:Frank.Li@kernel.org,m:o.rempel@pengutronix.de,m:mkl@pengutronix.de,m:imx@lists.linux.dev,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FROM_NO_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp,smtp.kernel.org:mid,lists.linux.dev:replyto,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4DA42667FEB
+X-Rspamd-Queue-Id: A0D1466A372
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
 
 New issues:
-- [Medium] Logic flaw in statistics overflow handling breaks invariant and =
-causes negative reduction percentages.
+- [High] The transition to asm-generic readX()/writeX() changes the endiann=
+ess of ColdFire internal IO accesses, breaking unpatched ColdFire drivers.
 
 Pre-existing issues:
-- [High] Data race on CAN message payloads, timestamps, and interface indic=
-es during concurrent frame reception.
-- [High] Use-After-Free due to a timer teardown race during BCM RX op delet=
-ion.
-- [High] Missing RCU memory barriers when modifying operation lists lead to=
- potential uninitialized memory accesses.
+- [High] Undefined behavior when shifting 1 by 32 or more using `BIT(ch)` i=
+n `mcf_edma_tx_handler`.
+- [High] The error interrupt handler incorrectly skips handling high channe=
+ls and returns `IRQ_NONE` after servicing low channels.
 --
 
-commit 6493cba39cc176386238cda012e3d42c9808c07e
-Author: Oliver Hartkopp <socketcan@hartkopp.net>
+commit 25193db3eba89f780b6dc534f2f72e16f3429571
+Author: Greg Ungerer <gerg@linux-m68k.org>
 
-can: bcm: fix CAN frame rx/tx statistics
+m68k: coldfire: fix non-standard readX()/writeX() functions
 
-This commit fixes a KCSAN-detected data race in bcm_rx_handler() when
-multiple CPUs process CAN frames simultaneously. It converts the
-statistics to atomic types and centralizes the overflow handling.
+Remove the local ColdFire definitions of readb()/readw()/readl() and
+writeb()/writew()/writel() and use the asm-generic versions of them.
 
-> diff --git a/net/can/bcm.c b/net/can/bcm.c
-> index a4bef2c48a559..a8b914e862798 100644
-> --- a/net/can/bcm.c
-> +++ b/net/can/bcm.c
-[ ... ]
-> @@ -224,10 +224,13 @@ static int bcm_proc_show(struct seq_file *m, void *=
-v)
-> =20
->  	list_for_each_entry_rcu(op, &bo->rx_ops, list) {
-> =20
-> -		unsigned long reduction;
-> +		long reduction, frames_filtered, frames_abs;
-
-[Severity: High]
-This is a pre-existing issue, but does bcm_rx_setup() use list_add()
-instead of list_add_rcu() when inserting into bo->rx_ops?
-
-If so, could lockless readers like bcm_proc_show() observe uninitialized
-memory due to missing store-release memory barriers?
-
-Similarly, does bcm_proc_show() traverse bo->tx_ops locklessly while
-bcm_tx_setup() inserts using list_add()?
+> diff --git a/arch/m68k/include/asm/io_no.h b/arch/m68k/include/asm/io_no.h
+> index 4f0f34b06e37c..2f12f4ed0da54 100644
+> --- a/arch/m68k/include/asm/io_no.h
+> +++ b/arch/m68k/include/asm/io_no.h
 
 [ ... ]
-> @@ -285,6 +289,15 @@ static int bcm_proc_show(struct seq_file *m, void *v)
->  }
->  #endif /* CONFIG_PROC_FS */
-> =20
-> +static void bcm_update_stats(struct bcm_op *op)
-> +{
-> +	/* prevent statistics overflow */
-> +	if (atomic_long_inc_return(&op->frames_abs) > LONG_MAX / 100) {
-> +		atomic_long_set(&op->frames_filtered, 0);
-> +		atomic_long_set(&op->frames_abs, 0);
-> +	}
-> +}
-> +
 
-[Severity: Medium]
-When bcm_rx_handler() calls bcm_update_stats(), frames_abs is incremented
-first. If it overflows, both frames_abs and frames_filtered are reset to 0.
+> -#define writel writel
+> -static inline void writel(u32 value, volatile void __iomem *addr)
+> -{
+> -	if (cf_internalio(addr))
+> -		__raw_writel(value, addr);
+> -	else
+> -		__raw_writel(swab32(value), addr);
+> -}
 
-If the packet passes the filter, bcm_rx_changed() is called next and
-increments frames_filtered:
+[Severity: High]
+Does replacing the local readX()/writeX() with the asm-generic versions
+change the endianness of unpatched ColdFire drivers?
 
-net/can/bcm.c:bcm_rx_changed() {
-    ...
-    atomic_long_inc(&op->frames_filtered);
-    ...
-}
+The old ColdFire implementation detected internal IO memory using
+cf_internalio() and bypassed byte-swapping to provide native big-endian
+access. The asm-generic accessors always assume little-endian devices and
+perform byte-swapping.
 
-Could this order cause frames_filtered to become 1 while frames_abs is 0?
-
-Since frames_abs increments by 1 per packet, would frames_filtered remain
-strictly greater than frames_abs, causing the reduction calculation in
-bcm_proc_show() to persistently yield a negative percentage?
+Will unpatched drivers relying on readX()/writeX() for internal IO
+(such as spi-coldfire-qspi.c, sdhci-esdhc-mcf.c, or fec_main.c) now read
+and write byte-swapped values and malfunction?
 
 [ ... ]
-> @@ -723,7 +732,7 @@ static void bcm_rx_handler(struct sk_buff *skb, void =
-*data)
->  	/* save originator for recvfrom() */
->  	op->rx_ifindex =3D skb->dev->ifindex;
 
-[Severity: High]
-This is a pre-existing issue, but since the patch addresses data races in
-concurrent frame reception, does this concurrent execution also race on
-writing to op->rx_stamp and op->rx_ifindex here?
-
-More significantly, could multiple CPUs concurrently execute memcpy() on
-the shared op->last_frames array in bcm_rx_update_and_send():
-
-net/can/bcm.c:bcm_rx_update_and_send() {
-    ...
-    memcpy(lastdata, rxdata, op->cfsiz);
-    ...
-}
-
-Could this non-atomic memory copy corrupt the CAN frame payload sent
-to userspace?
-
-[Severity: High]
-This is a pre-existing issue, but does unregistering the handler in
-bcm_delete_rx_op() properly synchronize with a concurrent bcm_rx_handler()?
-
-If bcm_delete_rx_op() unregisters the handler and cancels timers:
-
-net/can/bcm.c:bcm_delete_rx_op() {
-    ...
-    can_rx_unregister(sock_net(op->sk), NULL, op->can_id, ...);
-    ...
-    hrtimer_cancel(&op->thrtimer);
-}
-
-Could a concurrent bcm_rx_handler() still be executing and call
-hrtimer_start(&op->thrtimer) in bcm_rx_update_and_send() after the cancel?
-
-Since op is freed after an RCU grace period, could this re-armed timer
-fire later and cause a use-after-free?
-
->  	/* update statistics */
-> -	op->frames_abs++;
-> +	bcm_update_stats(op);
+> diff --git a/drivers/dma/mcf-edma-main.c b/drivers/dma/mcf-edma-main.c
+> index 9e1c6400c77be..4ed0ce644e37e 100644
+> --- a/drivers/dma/mcf-edma-main.c
+> +++ b/drivers/dma/mcf-edma-main.c
+> @@ -21,9 +21,9 @@ static irqreturn_t mcf_edma_tx_handler(int irq, void *d=
+ev_id)
+>  	unsigned int ch;
+>  	u64 intmap;
 > =20
->  	if (op->flags & RX_RTR_FRAME) {
->  		/* send reply for RTR-request (placed in op->frames[0]) */
+> -	intmap =3D ioread32(regs->inth);
+> +	intmap =3D ioread32be(regs->inth);
+>  	intmap <<=3D 32;
+> -	intmap |=3D ioread32(regs->intl);
+> +	intmap |=3D ioread32be(regs->intl);
+>  	if (!intmap)
+>  		return IRQ_NONE;
+
+[Severity: High]
+This is a pre-existing issue, but does this shift invoke undefined behavior
+for higher channels?
+
+Looking at the loop immediately following this in mcf_edma_tx_handler():
+
+	for (ch =3D 0; ch < mcf_edma->n_chans; ch++) {
+		if (intmap & BIT(ch)) {
+			...
+
+On a 32-bit architecture like m68k, BIT(ch) expands to a 32-bit unsigned
+long. Since ch can be up to 64, shifting by 32 or more would be undefined,
+potentially causing channels 32-63 to be improperly processed or missing
+their interrupts entirely.
+
+Should this use BIT_ULL(ch) when testing against the 64-bit intmap?
+
+[ ... ]
+
+> @@ -43,7 +43,7 @@ static irqreturn_t mcf_edma_err_handler(int irq, void *=
+dev_id)
+>  	struct edma_regs *regs =3D &mcf_edma->regs;
+>  	unsigned int err, ch;
+> =20
+> -	err =3D ioread32(regs->errl);
+> +	err =3D ioread32be(regs->errl);
+>  	if (!err)
+>  		return IRQ_NONE;
+
+[Severity: High]
+This is a pre-existing issue, but does this early return incorrectly skip
+handling high channels?
+
+If regs->errl is zero, it returns IRQ_NONE immediately, ignoring any errors
+in regs->errh. This could leave errors in higher channels uncleared.
+
+[ ... ]
+
+> @@ -55,7 +55,7 @@ static irqreturn_t mcf_edma_err_handler(int irq, void *=
+dev_id)
+>  		}
+>  	}
+> =20
+> -	err =3D ioread32(regs->errh);
+> +	err =3D ioread32be(regs->errh);
+>  	if (!err)
+>  		return IRQ_NONE;
+
+[Severity: High]
+This is a pre-existing issue, but does this return the wrong IRQ status if
+low channel errors were already handled?
+
+If errl was non-zero (so some errors were handled) but errh is zero,
+returning IRQ_NONE here instead of IRQ_HANDLED might incorrectly signal
+to the IRQ subsystem that the interrupt wasn't handled at all.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610093422.3984=
-7-1-socketcan@hartkopp.net?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260609142139.1563=
+360-6-gerg@linux-m68k.org?part=3D1
 
