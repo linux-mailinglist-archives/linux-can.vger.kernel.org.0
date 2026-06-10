@@ -1,90 +1,90 @@
-Return-Path: <linux-can+bounces-7803-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7804-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 87C9J4kSKWrIPwMAu9opvQ
-	(envelope-from <linux-can+bounces-7803-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 09:30:17 +0200
+	id u29uE2sWKWpKQQMAu9opvQ
+	(envelope-from <linux-can+bounces-7804-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 09:46:51 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 967E1666A50
-	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 09:30:16 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6A69666C09
+	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 09:46:50 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0002 header.b=N6miYyio;
-	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0003 header.b=WrdfveS+;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7803-lists+linux-can=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-can+bounces-7803-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0002 header.b=pVKY3l0f;
+	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0003 header.b=6BP2pCkQ;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7804-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7804-lists+linux-can=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=hartkopp.net;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7AB2C3006209
-	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 07:30:07 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4362230022FE
+	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 07:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C1038E8BE;
-	Wed, 10 Jun 2026 07:30:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F271393DF0;
+	Wed, 10 Jun 2026 07:46:42 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C6438AC6E
-	for <linux-can@vger.kernel.org>; Wed, 10 Jun 2026 07:30:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3624940D579
+	for <linux-can@vger.kernel.org>; Wed, 10 Jun 2026 07:46:39 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781076605; cv=pass; b=TS2XldE2C9mVN8Fp9VVElTzdOF2p4e5I8zl72Ca0HEhpyuMQK0+1eppDJ1chZivDtFD3ieWIEnUDOEPWX9ugUMlnSw6Pq7d8kzmDqkem5sBRoczPx4ei2VnPfAsi9hsBUJ28KVc4/xs5cujSsR/ThbQfdaTbvwRyTo2oWaN+pSg=
+	t=1781077602; cv=pass; b=c2Tv/hj6Ya5wNTk2bOMsNYFNh7hscCIm/1j8dcxXf5EQeOnbhv6Gfsw4oTGkTKcK1ifDaV1hIcFNp6ByLOdwJGFC2r0tpdPr6rydvge7VD1qgLRWuCAVm+aBhBVJpC05XfXjcsthl9oLvl3LbtUK934ct9XPM4RurdLFjXlWEz4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781076605; c=relaxed/simple;
-	bh=mlCSh0uFdoni/BKpAm4b0aat1vCgx3b0XfXpsdBArvU=;
+	s=arc-20240116; t=1781077602; c=relaxed/simple;
+	bh=o7FURnSktLhHtEfqsY9K1anzDJIfOBZs8bi+OH29um4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QTztJp48xjGHMTl3YVd1IH65hYkassaZVOij58HKCD4vzq2TGG5QLY/FGAgJuC0xU6XLv6stWfCybEdZ8PQ42caH7uP2N7+xK4peZ/WyAJ3QITFDEj04/VjnHRVI75K42FSPIB8atNwyV065Kugw2CKsIB+VtW1sfj4y8Fbn7kY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=N6miYyio; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=WrdfveS+; arc=pass smtp.client-ip=85.215.255.52
-ARC-Seal: i=1; a=rsa-sha256; t=1781076553; cv=none;
+	 In-Reply-To:Content-Type; b=CVFWwYFb1KlhIudpZCbj/v431LhVydkRKYtl+zdq06aoGOzU3y7xK9fj5zrQM8DBksDkvCeKEd/p6cAwzROuuV6NfiYeXsx0nLi4CpUgH0mPqtdBFxvf63Po8CrPaBd3h4Fubssw/mf48PYU7EilBFEbHelt7/zpv5aHi/m6IGw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=pVKY3l0f; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=6BP2pCkQ; arc=pass smtp.client-ip=85.215.255.51
+ARC-Seal: i=1; a=rsa-sha256; t=1781076872; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=s/2x8XRSdocn6ckz+y4BgNTY+1Gl4sTfwnuNfU3A6PekTsVkJcGRhFqzmCOfWlFOpR
-    xfQOrIWXK6O7cN6PoYwsPN+kZTAd0ggR7S68z/HDKUUWrx79eru4OR5IEVqvEafBZepE
-    B1jWD8E4awGXCyggIbwhNHB/yknSkLW4OIJ37I0njmoEtDD7UgaO/etxaQgrMzgD9Im9
-    JGpOFK5cedLFys24uF7VgNTVgEP5kKMVnhkkutn3yRtSaIB/IA3OsqdjmqLwkzzIOJJ1
-    Dv7Y/Das/91qE7nCNKBoRW1Zq5oDXARvWi+j+lCe2yde7H1QLmsA0SDWdQWGfQx4gdbI
-    hoXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1781076553;
+    b=ma5YKUeH+73cPEw7wyxIeRVxhUnvdi75E9oCQR92wLahdQpNjU2eorGXKtYTOmVGx3
+    OUAZkuqI9vrZ18x13Ko6s+Trq8JDVJJN/cjsIISHQ1A/WO4S2Ns863H8WkpcyCm9e5Ll
+    9jsqzDUzQgBNMJSb5JxZICUO4bpmQaUFmMCgAh8QvZR1snlk5BA9PqxsTD6xgjK6qQgI
+    0zBjRXB1uNrMpXu6/X0C+0LEJoTHnum1EOLmvRl9ZJ0k4mECZaMNAYvB0X+i1eNFs4R1
+    3usDysnfY4B7BESG3WGIe5ay07bYFlFVLJ3RLNFAV6idg8zPbmJ8s+K6ZSRspcJzAEDc
+    I06A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1781076872;
     s=strato-dkim-0002; d=strato.com;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=5XTe0Fwpf5wEssSLn6p7izES+JmQBOHzjrazoZhl8rQ=;
-    b=JZmLJNfrCFmf9qPXeXGtA1EKTaEEuh6uIEO694wD68qmYxlLpAmxRCwBtfYAEeOdob
-    5FO++PwqfygRnLNNEkEDQzlzA0s2QgalAluqxuPj11wyMSDzBOZqbZxUmwgy0VKUUcUP
-    bcYs02/GFv/W5NDpPs02Fr9wbFZPbQIgyFoF141afiCm0b5Tp+8wG35ADonb5D0BLoCg
-    nuN1uPaY+1JZSBp57iSC6OIQSqhqqfOaUmtVjjU25SwRMIlCir/0maBWMnUAPdDJqbNv
-    ykpxu1lVay4kE54hFoa1nFwlwMvATYh7RU167uPp0dCg5tzTA6YouBkSOs7bjsPpigTH
-    EYDA==
+    bh=FbmbWX4P52oBfXTOG1yQekYMpshcDC+1bZt9a+Lkt84=;
+    b=d3kS63bdCkkQzeSaOvtS+MzrhDOJ8WoAi8p4BirpOsWTZKVRjaxBPwhNCRFuU8J6u9
+    fjBt1h8iyQ3LOknp9VZwTTyYbPl1TpOFFsFa+C3Jkw5NbwjuQLaNJ8+rzZVV7lt2ljvp
+    7sFWuufSwK8oAaKCa1hTXYPocheq/ltIjjVJxUneLZfXOIN9KdsJdhJXNbyXz/MdkQ7T
+    +C9fYYiIUM9Nqc+F6B8jZavXQ5b8mbuDcqKZCz09emTK9YhtEAfNZ/Ng9EBXMcDc206V
+    +A0KeSXuGzljrBACJOqb8EX5E0JWO7P32rfN5DbEHzCtooUBvMc7wFiuQPNS0xn+HFu8
+    pKKQ==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1781076553;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1781076872;
     s=strato-dkim-0002; d=hartkopp.net;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=5XTe0Fwpf5wEssSLn6p7izES+JmQBOHzjrazoZhl8rQ=;
-    b=N6miYyiop3J6t0FW1CJG3S0rZxohZbIT8vCXf2S0no/lDppOp9FW1S/LdlHtpg+EqT
-    TtS3czcc29LWIhSw9/f/RNpuodMjp3g+zTa/+QRO0T+uIIgI6JVjZCCQgsyvCp+hueyM
-    MbQLovEMXK2bm1nXv00SNU2zN1I+hpwrTXPxdP3e0Qp5AEZq8MNfICijutL/6mD/sIol
-    J/c0lsyEFs3pSfHqIbnLpxmHFfOFX8Qc/5jLKn23QQRHLU3QxZjd76afLSOKXqzcDbmE
-    hw+lDAg8yxlzV0Jbln80kpxTDBgDJN4ZA5bxUEK3/kIrtGNBS746tx6HxfjyoJrYHTB3
-    uqPQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1781076553;
+    bh=FbmbWX4P52oBfXTOG1yQekYMpshcDC+1bZt9a+Lkt84=;
+    b=pVKY3l0fPE/c8Z0FmCQC1KZXW9+n1BW3vjorvClfMu3rLOSwJQbV1mUPhwSVaO8/bE
+    iKvQ7rHYcIvm44qax/x1tggf0ceQWP3gMOQlpipqaRQRMrradvo/ZmsvUk0eX/Q9pnU1
+    /o53NyHsuWdYagtwQaIF0Ik584wPkVh2ZlqzGKK9r5jVeB7ZRTNcyM8ULCciP/T9tGt7
+    UhCnZ2Fe3tRHMrGN0wJ22SBGd073pQIkEgjyUNNzo6LYHPYgnOnUPwbRVHOiSQrG8lo7
+    tj70/8MVsgckNCrnrXTFm0lakLJZHhFLq+XPMr1I4AXQw9d/HaeZApztgnh2qjsFCljn
+    kPxw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1781076872;
     s=strato-dkim-0003; d=hartkopp.net;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=5XTe0Fwpf5wEssSLn6p7izES+JmQBOHzjrazoZhl8rQ=;
-    b=WrdfveS+qpr3ijxyu0J2PrMDk7z0u58sqlkdL3BeH6jo8QTqMS+ezMtUkNchOtPvDc
-    +k555nvR1/L99sSKU+DQ==
+    bh=FbmbWX4P52oBfXTOG1yQekYMpshcDC+1bZt9a+Lkt84=;
+    b=6BP2pCkQV0ro4AeP89oJoz4aNKvqAPgZYD4ss/M8GKZqDIDep8jFVniJa5N7uCf3Wn
+    rNtgm4TXJ+4OQxw9UUBQ==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bDup0Q=="
 Received: from [IPV6:2a00:6020:4a38:6810::989]
     by smtp.strato.de (RZmta 55.0.1 AUTH)
-    with ESMTPSA id Kba96d25A7TDhI1
+    with ESMTPSA id Kba96d25A7YWhJr
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Wed, 10 Jun 2026 09:29:13 +0200 (CEST)
-Message-ID: <6e6b52f2-b5ce-43d3-a340-295a179ba817@hartkopp.net>
-Date: Wed, 10 Jun 2026 09:29:13 +0200
+    Wed, 10 Jun 2026 09:34:32 +0200 (CEST)
+Message-ID: <4345af11-bf74-4e19-9ded-174a7fa8be02@hartkopp.net>
+Date: Wed, 10 Jun 2026 09:34:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -92,40 +92,40 @@ List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH can] can: bcm: add synchronize_rcu() in bcm_delete_rx_op()
- to fix UAF
-To: sashiko-reviews@lists.linux.dev, Zhenghang Xiao <kipreyyy@gmail.com>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, linux-can@vger.kernel.org,
- Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>
-References: <20260526102349.94074-1-kipreyyy@gmail.com>
- <20260609185258.4F3E41F00898@smtp.kernel.org>
+Subject: Re: [PATCH can-next] can: bcm: mark intentional lockless read of
+ bo->bound for KCSAN
+To: sashiko-reviews@lists.linux.dev
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>,
+ Vincent Mailhol <mailhol@kernel.org>,
+ Oleksij Rempel <o.rempel@pengutronix.de>, linux-can@vger.kernel.org
+References: <20260601181915.71862-1-socketcan@hartkopp.net>
+ <20260609185138.E76CE1F00893@smtp.kernel.org>
 Content-Language: en-US
 From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20260609185258.4F3E41F00898@smtp.kernel.org>
+In-Reply-To: <20260609185138.E76CE1F00893@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:sashiko-reviews@lists.linux.dev,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,s:lists@lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:sashiko-reviews@lists.linux.dev,m:kipreyyy@gmail.com,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,m:mkl@pengutronix.de,m:mailhol@kernel.org,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-7803-lists,linux-can=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_TO(0.00)[lists.linux.dev,gmail.com];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7804-lists,linux-can=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
@@ -134,115 +134,110 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,hartkopp.net:dkim,hartkopp.net:mid,hartkopp.net:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[hartkopp.net:dkim,hartkopp.net:email,hartkopp.net:mid,hartkopp.net:from_mime,vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 967E1666A50
+X-Rspamd-Queue-Id: E6A69666C09
 
-The patch already has been rejected in favor of:
 
-[PATCH v3 1/1] can: bcm: defer rx_op deallocation to workqueue to fix 
-thrtimer UAF
 
-https://lore.kernel.org/linux-can/20260526165257.3705239-1-lee@kernel.org/
-
-On 09.06.26 20:52, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+On 09.06.26 20:51, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
 > 
 > Pre-existing issues:
-> - [High] Skipping `bcm_rx_unreg()` when `dev_get_by_index()` returns NULL leaves the CAN receiver registered in the core, leading to a memory leak and Use-After-Free.
-> - [High] Incorrect list primitives used for RCU-traversed lists (`rx_ops` and `tx_ops`), leading to list corruption and crashes.
-> - [High] Concurrent modification of an existing RX operation in `bcm_rx_setup()` races with `bcm_rx_handler()`, allowing readers to see partially-written data.
+> - [High] Lockless TOCTOU race in bcm_sendmsg() leads to unintended Global CAN Filter Leak.
 > --
 > 
-> commit 27083d45b99681b318907aa96e90787a12c08a58
-> Author: Zhenghang Xiao <kipreyyy@gmail.com>
+> commit 7f7ce41fd35425d40c8342127156c8195ff2363e
+> Author: Oliver Hartkopp <socketcan@hartkopp.net>
 > 
-> can: bcm: add synchronize_rcu() in bcm_delete_rx_op() to fix UAF
+> can: bcm: mark intentional lockless read of bo->bound for KCSAN
 > 
-> This commit adds synchronize_rcu() in bcm_delete_rx_op() before
-> bcm_remove_op() to ensure all in-flight handlers complete before timers
-> are cancelled. This prevents a use-after-free where a timer could be
-> re-armed by a concurrent bcm_rx_handler after being cancelled.
+> The commit marks the lockless read of bo->bound in bcm_sendmsg() and the
+> corresponding write in bcm_notify() with READ_ONCE() and WRITE_ONCE() to
+> resolve KCSAN warnings. It asserts this lockless read is functionally safe
+> and will safely drop downstream operations.
 > 
-> Fixes: f1b4e32aca08 ("can: bcm: use call_rcu() instead of costly synchronize_rcu()")
+> Closes: https://lore.kernel.org/linux-can/CAGp+u1aBK8QVjsvAxM2Ldzep4rEbsP9x_pV3At4g=h1kVEtyhA@mail.gmail.com/
+> 
+>> Once the lock is acquired, any subsequent attempts to configure BCM
+>> jobs (like RX_SETUP) will safely fail because bcm_notify() has
+>> already cleared bo->ifindex to 0. While a user-defined ifindex of 0
+>> is normally a valid feature to listen on "all" CAN interfaces,
+>> bcm_notify() only triggers for specific real CAN devices. In this
+>> unregister context, the combination of bound=0 and ifindex=0 effectively
+>> invalidates the socket binding. This prevents the registration of
+>> stale CAN filters and drops downstream operations safely without any
+>> memory corruption or stale state exploitation.
+> 
+> [Severity: High]
+> Is this description accurate regarding safely failing and preventing the
+> registration of stale CAN filters?
+> 
+> This is a pre-existing issue, but if bcm_notify() unregisters the device
+> concurrently, couldn't a race occur where bcm_sendmsg() caches ifindex == 0
+> while still observing bo->bound == 1?
+
+No. bcm_notify() can only be invoked for real interfaces which have an 
+ifindex > 0
+
+> 
+> Since bo->ifindex is a plain read at the top of bcm_sendmsg(), the compiler
+> can defer it until after the volatile read of bo->bound and the potentially
+> sleeping memcpy_from_msg().
+> 
+> If this happens, bcm_sendmsg() could observe bo->bound == 1, but cache
+> bo->ifindex == 0.
 > 
 >> diff --git a/net/can/bcm.c b/net/can/bcm.c
->> index a4bef2c48a559..ae083f59a9ef5 100644
+>> index fd9fa072881e2..6c93c57212b49 100644
 >> --- a/net/can/bcm.c
 >> +++ b/net/can/bcm.c
->> @@ -870,6 +870,7 @@ static int bcm_delete_rx_op(struct list_head *ops, struct bcm_msg_head *mh,
->>   						  bcm_rx_handler, op);
+>> @@ -1379,7 +1379,8 @@ static int bcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+>>   	int cfsiz;
+>>   	int ret; /* read bytes or error codes as return value */
 >>   
->>   			list_del_rcu(&op->list);
+>> -	if (!bo->bound)
+>> +	/* Lockless fast-path check for bound socket */
+>> +	if (!READ_ONCE(bo->bound))
+>>   		return -ENOTCONN;
+>>   
+>>   	/* check for valid message length from userspace */
 > 
 > [Severity: High]
-> This isn't a bug introduced by this patch, but looking at the code just
-> above this addition in bcm_delete_rx_op():
+> This isn't a bug introduced by this patch, but doesn't bcm_sendmsg() then
+> pass the cached ifindex == 0 to bcm_rx_setup() under the socket lock?
 > 
->      dev = dev_get_by_index(sock_net(op->sk), op->ifindex);
->      if (dev) {
->              bcm_rx_unreg(dev, op);
->              dev_put(dev);
->      }
+> net/can/bcm.c:bcm_sendmsg() {
+>      ...
+>      lock_sock(sk);
 > 
-> During device unregistration, unlist_netdevice() makes dev_get_by_index()
-> return NULL before the NETDEV_UNREGISTER notifier is dispatched.
+>      switch (msg_head.opcode) {
+>      ...
+>      case RX_SETUP:
+>          ret = bcm_rx_setup(&msg_head, msg, ifindex, sk);
+>          break;
+>      ...
+> }
 > 
-> If user space concurrently closes the socket in bcm_release() or deletes
-> the RX filter in bcm_delete_rx_op(), these functions check
-> dev_get_by_index(), see NULL, and bypass calling bcm_rx_unreg().
+> Does bcm_rx_setup() ever re-validate bo->bound while holding the lock?
 > 
-> Does this leave the CAN receiver registered in the core, leaking the
-> struct receiver and causing a use-after-free when queued frames process
-> the already freed op pointer?
+> If it doesn't, wouldn't bcm_rx_setup() interpret ifindex == 0 as an explicit
+> request to listen on all CAN interfaces?
 > 
->> +			synchronize_rcu();
->>   			bcm_remove_op(op);
->>   			return 1; /* done */
->>   		}
+> net/can/bcm.c:bcm_rx_setup() {
+>      ...
+>      } else
+>          err = can_rx_register(sock_net(sk), NULL, op->can_id,
+>                                REGMASK(op->can_id),
+>                                bcm_rx_handler, op, "bcm", sk);
+>      ...
+> }
 > 
-> [Severity: High]
-> This is a pre-existing issue, but I noticed a potential problem with the
-> list primitives used for rx_ops and tx_ops in net/can/bcm.c.
-> 
-> In bcm_rx_setup() and bcm_tx_setup(), the code uses list_add():
-> 
->      list_add(&op->list, &bo->tx_ops);
-> 
-> However, in bcm_proc_show(), the tx_ops list is traversed locklessly:
-> 
->      list_for_each_entry(op, &bo->tx_ops, list) {
-> 
-> Because list_add() lacks the smp_store_release() memory barriers of
-> list_add_rcu(), and the traversal doesn't use list_for_each_entry_rcu(),
-> could this result in readers seeing partially initialized list pointers
-> and dereferencing a NULL pointer on weakly ordered architectures?
-> 
-> [Severity: High]
-> This is another pre-existing issue, but there appears to be a race
-> condition between bcm_rx_setup() and bcm_rx_handler() in net/can/bcm.c.
-> 
-> When bcm_rx_setup() updates an existing RX operation under lock_sock(sk),
-> it modifies the frames locklessly:
-> 
->      err = memcpy_from_msg(op->frames, msg, msg_head->nframes * op->cfsiz);
->      if (err < 0)
->              return err;
->      memset(op->last_frames, 0, msg_head->nframes * op->cfsiz);
->      op->nframes = msg_head->nframes;
-> 
-> Meanwhile, bcm_rx_handler() accesses these fields in softirq context:
-> 
->      for (i = 1; i < op->nframes; i++) {
->              if ((get_u64(op->frames, 0) & get_u64(rxframe, 0)) ==
->                  (get_u64(op->frames, 0) &
->                   get_u64(op->frames + op->cfsiz * i, 0))) {
-> 
-> Since memcpy_from_msg() can sleep on page faults, could bcm_rx_handler()
-> read torn or partially overwritten CAN filters, leading to incorrect
-> message delivery or spurious timer scheduling?
+> Could this actively register a global filter on an unbound socket, leaking
+> traffic from all CAN buses into a process that was only authorized to
+> monitor a specific, now-deleted interface?
 > 
 
 
