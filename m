@@ -1,91 +1,98 @@
-Return-Path: <linux-can+bounces-7815-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7814-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ekc7IVuVKWpsaAMAu9opvQ
-	(envelope-from <linux-can+bounces-7815-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 18:48:27 +0200
+	id GWyXJhmVKWpWaAMAu9opvQ
+	(envelope-from <linux-can+bounces-7814-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 18:47:21 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB16066BAB0
-	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 18:48:26 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B6F866BA74
+	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 18:47:21 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0002 header.b=iYBrPTb4;
-	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0003 header.b=7dmc+qM4;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7815-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7815-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0002 header.b=fN0YnURR;
+	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0003 header.b="Vcy1/ZmX";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7814-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7814-lists+linux-can=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=reject) header.from=hartkopp.net;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1341031526FD
-	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 16:41:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 072EF305B235
+	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2026 16:38:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 930731A683E;
-	Wed, 10 Jun 2026 16:41:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF8633D6CA;
+	Wed, 10 Jun 2026 16:38:25 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.22])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC270165F1A
-	for <linux-can@vger.kernel.org>; Wed, 10 Jun 2026 16:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19F933344A
+	for <linux-can@vger.kernel.org>; Wed, 10 Jun 2026 16:38:21 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781109661; cv=pass; b=R2is15OnJKI/DJPfT0pY1LW4Zv6HNeubozYocQzb9E58in1PCMa7N81rAsa/E8xj20W0HTpzTgN3cOnj2Cc2nr1jEhjztemolu7UEowclXLQX6SP9a/UD6AzihP1yMjQacF/bWrOEX0BFRmZt5YR/GX41RAuQDEIhOwIn98PZ1M=
+	t=1781109504; cv=pass; b=Rw28nEyi4b13p9prIakw0yV8NdZQTEHhRYquLmgcyNLrLCoYnAiSM8AmbirQu7S+/UGbj0WizkBDZT9mHXJGRodYSqqd6quLn9VXaxzAi8N33F5UH+TdOMfE/8pRwwz5ft9BBeOLKhvVyozi2gJ0sMfFxYtemYs46ACnL0g5nyQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781109661; c=relaxed/simple;
-	bh=wYqNqeOnViQHwQ14UVqcaF9YNT0VbK/yoBm8yddmSOw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=acd+hjHd77hw3CPoh4+Ef3G01fPz2ciOdYNXKrRptwzQxQeYFFcN+lDccOi/+lq5Ju3yCZnOuTI0LL5W1JYJvjnTCECddKo0X1wR373gHhagswvjm5rdRIdPjZcvlgXAJItbUyWvTFfgo18jzFeDYF3ilv0tJt2JWUA1dVUvFbY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=iYBrPTb4; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=7dmc+qM4; arc=pass smtp.client-ip=85.215.255.22
-ARC-Seal: i=1; a=rsa-sha256; t=1781109471; cv=none;
+	s=arc-20240116; t=1781109504; c=relaxed/simple;
+	bh=aCSBqIFmOS+0t1PvbmHCMB6+khCj3ctP2l9Onk0vNS4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=H0E+e+UMtBmZnwubIWv7PAOrI3qndUjYajFriEkZOu2gHcxuGeRDcFo8F4myzo1oAvSpKcCVKHKUOJfx8AeWgKuCkakMm5XGMiZ18OFVLkdCEOaxks3vPOdYgZB1iBwa71bDkuf/C1tq3w/9pSS1hrZCm68yrjVnCS9yCsPbWQQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=fN0YnURR; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=Vcy1/ZmX; arc=pass smtp.client-ip=81.169.146.216
+ARC-Seal: i=1; a=rsa-sha256; t=1781109489; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=nI1EmVl9pcGRdNuwFZrN2kdNM/sZwAO90pQt2M/qVA3VMcIK/bfb8wQ6tVCqxVVQnW
-    lAM/EehMsCJ/ITdWdyetUSZ2MPBdF4ycII6+ui/zxu422qFheLZ8bDv7+3eM73ejYpU/
-    ounMySY+SQ2U+MK+SuU2ZcdC1vNEo0TSuNs+mepk/9Qg2eKht367rENfykrVKMkUTcua
-    dA5FyJtZlTttBFwGU9feClTSuz/UmWCfqoPPzLF3fevGPRZgHJk95gfZbBdorzvJNukn
-    wtpe1HY/+ydmBdX/qbKFsrrVz7CXIx049KFh+XKY7liiAYAgtlJLwQcD2TAp+kYPw4Tj
-    tiWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1781109471;
+    b=k8eYWcOF2E4f8vQahyfSBQhZAkkCUWVtn/ddqL2RUiPbqknnq42CeSNvrwPWIWwLcf
+    joLpgBRP/J8XJG1EKWFwDr3G7toqP8K7qeNV6GMTf5r2IKJc5Y/Dvzcs4ZRslQpBimZV
+    orni/Dhg1XLq7zYIwFjN4f4FOQysSXBVsOIvkAgZDBUuWNExvmF9Qqu6diCiZ52s2J7S
+    St337bLhyeNMMKjm0KUO/WTwgdxRJiC47/xpIqn3o0xvIvbsReRTL3zxDn7bjRvcFugI
+    pNYFgTwXYa1e5RXSB00NXqUnnFj2X7upR5RlozIm9UM55SLdRhBL28+9syEw0CYI/UD8
+    sqag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1781109489;
     s=strato-dkim-0002; d=strato.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=tjgVwi4FNaxJJViF/7FBEpHu/xIqa/70y4+kgnq3xvY=;
-    b=Bq0mRuyEuibYFqLGJeQPVvzcdZcvz765TyXwdbUC2+/ly0R+NqhBkHmVTT+eehyYsR
-    FzMiD+nK6nWIDSLmtOfOTC4OeBBqWzyJ9yTdq9ZeXEYBXnr7PzIuLUd6rJxH41TrC4OY
-    GmkT+dN1fgUqeOp5vgI3wSL5eQzkfZzCVPh7WHs8kcIcoRPjMdXxAk+ObytTQw5DPt1q
-    Z0kPULQLRk9ZVRPGuEQRsrSdeO5PoBqJRylF2z2GzguErxDx2dY+9JqsJLoCC1NEjP06
-    bej4baW1h31MgWMhG8B2mcxoRxgOHtaqHIu3T+S0ANNWKLM5Gxdu9Log1dCRLjGWYs5p
-    Fmiw==
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=YGa0+GcGPpO532H5Nd3/Pe429emU/ohbvkYX9EZDdTo=;
+    b=RPbbm2JUeB8C07aR0LOKigYA3GiAJ9shPwMIh5kC5L4yOeGoGciD4snT5ZSwJUjqvq
+    ZTrO8w/TSSIR36wzvG7n2ocp8wSMPtll9yt5zx57EvNqWZxk5wQog5OF8cyTmIBk70FP
+    1zeDk5v90oGMwFDi/XHkR+xzzvk3VWpIT9DxTSvA+YexCq+LKWAimCLSsuMenh8xJDAy
+    0asmp2XWNGTaLFrJkb4u2cOS2PH0vt/Q1jHgq0GYQ0+ZFGyyrvGY4LBJDbSx14fk5i5K
+    X6H2thXnXz7y17eI1Mt4R+MT1ZoKbTMsipEIKAbZJoRxKdBuoETw0QZo8cb/4P5Y/3VR
+    n55w==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1781109471;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1781109489;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=tjgVwi4FNaxJJViF/7FBEpHu/xIqa/70y4+kgnq3xvY=;
-    b=iYBrPTb4HM0DFZwg7JFHY0Mprl4FnPJYQDFgO7kQc4csJz/6e/Xa4Me1vRFNxB49JV
-    BRr1EeALbIRu/mU6E0awC45Y5Isj7U3wINaFxETAXk4s3X6ta1vT7r5b2JYHVZkVJNER
-    HqJpA9valEcexQ1Nb2qskKt1NQvCBzA9VLkZoJaVTd99HU/vekeGcHRPdImrrkCG/5rh
-    iCKJk7m/DYOplIrRkAsrOqDB8e6IWlrOs7kFCCW/kbOCsAU8eVOt4FdMitGY6H1wc0KE
-    pED19InJqkFPhI/evBfEWh66QeRjkhq5w5Dxu/9Asm7K2LkXf+2I+6XkThSJWn0E5e9r
-    wqxQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1781109471;
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=YGa0+GcGPpO532H5Nd3/Pe429emU/ohbvkYX9EZDdTo=;
+    b=fN0YnURRckULG5s0CXARezmMGUSXUHZASwf9IhMkrhGe6igRwxPw4WPkxQOEmEnhsR
+    RPMdLYfibzehEJBWFbe8QR7rXu/GPGa/7v8SnfCaF3mry/dxvVgI1cGgUncU8TFgk66b
+    5V3BbjKIP012E2+5nT36UVy4yldnL/MXps9mqHJM5czbMlirOfrYxD7enk7SKiH8/SQx
+    tMnDWWLOsiFa4W0cwanhmJD38tJAXqjtM2sio6iEKxy72/iJTLSrwoCaiO6rJPFJtww4
+    blQ0zTqnzeEPER16wjd57o1qBKWMK9F3nGObVVQeBKD4sRiDVyjtMykp0AaSIY5uGq1p
+    pKwA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1781109489;
     s=strato-dkim-0003; d=hartkopp.net;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=tjgVwi4FNaxJJViF/7FBEpHu/xIqa/70y4+kgnq3xvY=;
-    b=7dmc+qM4VzxFOcFGWufrHKcB9rOAyGQswY62jjWBE3QxKBoJCin8WiiEzLq3Ggk7Gw
-    m9lvHp2m/SiJ2gv4pcAg==
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=YGa0+GcGPpO532H5Nd3/Pe429emU/ohbvkYX9EZDdTo=;
+    b=Vcy1/ZmXs67DV+KTTq1DH19oj0ETUnE5thI4jgtwBfeUqZKiRZ6acVX2UPfp/uJPod
+    5QkLOpBzO89njkNbp0BA==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tTUsMrZpkO3Mw3lZ/t54cFxeEQ7s8bDup0Q=="
 Received: from vivo.lan
     by smtp.strato.de (RZmta 55.0.1 AUTH)
-    with ESMTPSA id Kba96d25AGbprfm
+    with ESMTPSA id Kba96d25AGc9rfo
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Wed, 10 Jun 2026 18:37:51 +0200 (CEST)
+    Wed, 10 Jun 2026 18:38:09 +0200 (CEST)
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH v2] can: bcm: fix CAN frame rx/tx statistics
-Date: Wed, 10 Jun 2026 18:37:43 +0200
-Message-ID: <20260610163744.51980-1-socketcan@hartkopp.net>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+	sashiko-reviews@lists.linux.dev
+Subject: [PATCH] can: bcm: use list_add_rcu() in bcm_[rx|tx]_setup()
+Date: Wed, 10 Jun 2026 18:37:44 +0200
+Message-ID: <20260610163744.51980-2-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260610163744.51980-1-socketcan@hartkopp.net>
+References: <20260610163744.51980-1-socketcan@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -100,21 +107,21 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
 	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-7814-lists,linux-can=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7815-lists,linux-can=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,s:lists@lfdr.de];
-	RCPT_COUNT_TWO(0.00)[2];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS(0.00)[m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:sashiko-reviews@lists.linux.dev,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
@@ -123,159 +130,104 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,hartkopp.net:dkim,hartkopp.net:email,hartkopp.net:mid,hartkopp.net:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: DB16066BAB0
+X-Rspamd-Queue-Id: 0B6F866BA74
 
-KCSAN detected a data race within the bcm_rx_handler() when two CAN frames
-have been simultaneously received and processed in a single rx op by two
-different CPUs.
+sashiko-bot remarked the missing use of list_add_rcu() in
+bcm_[rx|tx]_setup() to have a proper initialized bcm_op structure
+when bcm_proc_show() traverses the bcm_op's under rcu_read_lock().
 
-Use atomic operations with (signed) long data types to access the
-statistics in the hot path to fix the KCSAN complaint.
+To cover all initial settings of the bcm_op's the list_add_rcu() calls
+are moved to the end of the setup code.
 
-Additionally simplify the update and check of statistics overflow by
-using the atomic operations in a separate bcm_update_stats() function.
-
-Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
+Reported-by: sashiko-reviews@lists.linux.dev
+Closes: https://lore.kernel.org/linux-can/20260610094654.A1FFE1F00893@smtp.kernel.org/
+Fixes: dac5e6249159 ("can: bcm: add missing rcu read protection for procfs content")
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- net/can/bcm.c | 38 ++++++++++++++++++++++++--------------
- 1 file changed, 24 insertions(+), 14 deletions(-)
+ net/can/bcm.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 658c4a7a55df..e5db4dca8d5a 100644
+index e5db4dca8d5a..76d1e067e156 100644
 --- a/net/can/bcm.c
 +++ b/net/can/bcm.c
-@@ -106,11 +106,11 @@ struct bcm_op {
- 	struct list_head list;
- 	struct rcu_head rcu;
- 	int ifindex;
- 	canid_t can_id;
- 	u32 flags;
--	unsigned long frames_abs, frames_filtered;
-+	atomic_long_t frames_abs, frames_filtered;
- 	struct bcm_timeval ival1, ival2;
- 	struct hrtimer timer, thrtimer;
- 	ktime_t rx_stamp, kt_ival1, kt_ival2, kt_lastmsg;
- 	int rx_ifindex;
- 	int cfsiz;
-@@ -223,14 +223,17 @@ static int bcm_proc_show(struct seq_file *m, void *v)
- 
- 	rcu_read_lock();
- 
- 	list_for_each_entry_rcu(op, &bo->rx_ops, list) {
- 
--		unsigned long reduction;
-+		long reduction, frames_filtered, frames_abs;
-+
-+		frames_filtered = atomic_long_read(&op->frames_filtered);
-+		frames_abs = atomic_long_read(&op->frames_abs);
- 
- 		/* print only active entries & prevent division by zero */
--		if (!op->frames_abs)
-+		if (!frames_abs)
- 			continue;
- 
- 		seq_printf(m, "rx_op: %03X %-5s ", op->can_id,
- 			   bcm_proc_getifname(net, ifname, op->ifindex));
- 
-@@ -248,13 +251,13 @@ static int bcm_proc_show(struct seq_file *m, void *v)
- 		if (op->kt_ival2)
- 			seq_printf(m, "thr=%lld ",
- 				   (long long)ktime_to_us(op->kt_ival2));
- 
- 		seq_printf(m, "# recv %ld (%ld) => reduction: ",
--			   op->frames_filtered, op->frames_abs);
-+			   frames_filtered, frames_abs);
- 
--		reduction = 100 - (op->frames_filtered * 100) / op->frames_abs;
-+		reduction = 100 - (frames_filtered * 100) / frames_abs;
- 
- 		seq_printf(m, "%s%ld%%\n",
- 			   (reduction == 100) ? "near " : "", reduction);
- 	}
- 
-@@ -274,20 +277,30 @@ static int bcm_proc_show(struct seq_file *m, void *v)
- 
- 		if (op->kt_ival2)
- 			seq_printf(m, "t2=%lld ",
- 				   (long long)ktime_to_us(op->kt_ival2));
- 
--		seq_printf(m, "# sent %ld\n", op->frames_abs);
-+		seq_printf(m, "# sent %ld\n",
-+			   atomic_long_read(&op->frames_abs));
- 	}
- 	seq_putc(m, '\n');
- 
- 	rcu_read_unlock();
- 
- 	return 0;
- }
- #endif /* CONFIG_PROC_FS */
- 
-+static void bcm_update_stats(struct bcm_op *op)
-+{
-+	/* prevent statistics overflow */
-+	if (atomic_long_inc_return(&op->frames_abs) > LONG_MAX / 100) {
-+		atomic_long_set(&op->frames_filtered, 0);
-+		atomic_long_set(&op->frames_abs, 0);
-+	}
-+}
-+
- /*
-  * bcm_can_tx - send the (next) CAN frame to the appropriate CAN interface
-  *              of the given bcm tx op
-  */
- static void bcm_can_tx(struct bcm_op *op)
-@@ -334,11 +347,11 @@ static void bcm_can_tx(struct bcm_op *op)
- 
- 	/* update currframe and count under lock protection */
- 	spin_lock_bh(&op->bcm_tx_lock);
- 
- 	if (!err)
--		op->frames_abs++;
-+		bcm_update_stats(op);
- 
- 	op->currframe++;
- 
- 	/* reached last frame? */
- 	if (op->currframe >= op->nframes)
-@@ -487,16 +500,13 @@ static enum hrtimer_restart bcm_tx_timeout_handler(struct hrtimer *hrtimer)
-  */
- static void bcm_rx_changed(struct bcm_op *op, struct canfd_frame *data)
+@@ -954,10 +954,11 @@ static int bcm_tx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+ 			int ifindex, struct sock *sk)
  {
- 	struct bcm_msg_head head;
+ 	struct bcm_sock *bo = bcm_sk(sk);
+ 	struct bcm_op *op;
+ 	struct canfd_frame *cf;
++	bool add_op_to_list = false;
+ 	unsigned int i;
+ 	int err;
  
--	/* update statistics */
--	op->frames_filtered++;
--
--	/* prevent statistics overflow */
--	if (op->frames_filtered > ULONG_MAX/100)
--		op->frames_filtered = op->frames_abs = 0;
-+	/* update statistics (frames_filtered <= frames_abs) */
-+	if (atomic_long_read(&op->frames_abs))
-+		atomic_long_inc(&op->frames_filtered);
+ 	/* we need a real device to send frames */
+ 	if (!ifindex)
+@@ -1094,12 +1095,11 @@ static int bcm_tx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
  
- 	/* this element is not throttled anymore */
- 	data->flags &= ~RX_THR;
+ 		/* currently unused in tx_ops */
+ 		hrtimer_setup(&op->thrtimer, hrtimer_dummy_timeout, CLOCK_MONOTONIC,
+ 			      HRTIMER_MODE_REL_SOFT);
  
- 	memset(&head, 0, sizeof(head));
-@@ -733,11 +743,11 @@ static void bcm_rx_handler(struct sk_buff *skb, void *data)
- 	/* save rx timestamp */
- 	op->rx_stamp = skb->tstamp;
- 	/* save originator for recvfrom() */
- 	op->rx_ifindex = skb->dev->ifindex;
- 	/* update statistics */
--	op->frames_abs++;
-+	bcm_update_stats(op);
+-		/* add this bcm_op to the list of the tx_ops */
+-		list_add(&op->list, &bo->tx_ops);
++		add_op_to_list = true;
  
- 	if (op->flags & RX_RTR_FRAME) {
- 		/* send reply for RTR-request (placed in op->frames[0]) */
+ 	} /* if ((op = bcm_find_op(&bo->tx_ops, msg_head->can_id, ifindex))) */
+ 
+ 	if (op->flags & SETTIMER) {
+ 		/* set timer values */
+@@ -1117,10 +1117,14 @@ static int bcm_tx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+ 		hrtimer_cancel(&op->timer);
+ 		/* spec: send CAN frame when starting timer */
+ 		op->flags |= TX_ANNOUNCE;
+ 	}
+ 
++	/* add this bcm_op to the list of the tx_ops? */
++	if (add_op_to_list)
++		list_add_rcu(&op->list, &bo->tx_ops);
++
+ 	if (op->flags & TX_ANNOUNCE)
  		bcm_can_tx(op);
- 		return;
+ 
+ 	if (op->flags & STARTTIMER)
+ 		bcm_tx_start_timer(op);
+@@ -1278,13 +1282,10 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+ 		hrtimer_setup(&op->timer, bcm_rx_timeout_handler, CLOCK_MONOTONIC,
+ 			      HRTIMER_MODE_REL_SOFT);
+ 		hrtimer_setup(&op->thrtimer, bcm_rx_thr_handler, CLOCK_MONOTONIC,
+ 			      HRTIMER_MODE_REL_SOFT);
+ 
+-		/* add this bcm_op to the list of the rx_ops */
+-		list_add(&op->list, &bo->rx_ops);
+-
+ 		/* call can_rx_register() */
+ 		do_rx_register = 1;
+ 
+ 	} /* if ((op = bcm_find_op(&bo->rx_ops, msg_head->can_id, ifindex))) */
+ 
+@@ -1359,14 +1360,16 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+ 			err = can_rx_register(sock_net(sk), NULL, op->can_id,
+ 					      REGMASK(op->can_id),
+ 					      bcm_rx_handler, op, "bcm", sk);
+ 		if (err) {
+ 			/* this bcm rx op is broken -> remove it */
+-			list_del_rcu(&op->list);
+ 			bcm_remove_op(op);
+ 			return err;
+ 		}
++
++		/* add this bcm_op to the list of the rx_ops */
++		list_add_rcu(&op->list, &bo->rx_ops);
+ 	}
+ 
+ 	return msg_head->nframes * op->cfsiz + MHSIZ;
+ }
+ 
 -- 
 2.53.0
 
