@@ -1,151 +1,132 @@
-Return-Path: <linux-can+bounces-7844-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7846-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id yRLlJyn3MGpwZgUAu9opvQ
-	(envelope-from <linux-can+bounces-7844-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 09:11:37 +0200
+	id Q2rCM2EPMWrlawUAu9opvQ
+	(envelope-from <linux-can+bounces-7846-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 10:54:57 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12A8068CBBC
-	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 09:11:37 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20DB168D534
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 10:54:57 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7844-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7844-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=163.com header.s=s110527 header.b=IOGnqxDr;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7846-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-7846-lists+linux-can=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=163.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3248F301412B
-	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 07:10:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 05A7A303FDFF
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 08:54:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA2033D6D8;
-	Tue, 16 Jun 2026 07:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B8B30AD0A;
+	Tue, 16 Jun 2026 08:54:51 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896BD316192
-	for <linux-can@vger.kernel.org>; Tue, 16 Jun 2026 07:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544F7409608
+	for <linux-can@vger.kernel.org>; Tue, 16 Jun 2026 08:54:48 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781593841; cv=none; b=NH7xPB1k5yvY/w8jyUrNC4Foqe6P5BNKK4ie6u1iKq9kfdm9KdqsLiqh8aZKx06/CDJFwE2tsxYHxW/kzGg7cA2W+CcRIaBFoC94Pt4htawOdPR24J3NGYtPSmKZ+8znjoqBJy1m4St+XuKaU07vt9U9rxh89uERdTmrUBDiQ34=
+	t=1781600091; cv=none; b=hGmFt3m4fzcC9VBny4HkOsTowbEsbi1up9ODZd8AQOpXwUv30ur9ENcmef66xZEBkM4wVxlsulaq1+GWic5AsWJcqGQVnP9Lk1ay66JX0YxEJtVjQ8/UoS+GoXQoIsSroqyz+t+UqZArnvJsgLZYhu6H766jLhjdBwlOliXARes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781593841; c=relaxed/simple;
-	bh=Jafx1DDWkA1svLKy8axEt8Ve1pVmzkZtqmosXBsTxb4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gW8XRuWgPav6YoqmFJDCXpDaYKwahPGGjTETv45e/esk7zO0D1q1wyLEN1BfcS9wmCCNtGPiaj7yBWdqZMKE6AzhLQvbk3BHlG2cGjwmb7gg1wpFDFyMYOXigeMFpZ1KX6aHnfxCWPj3yKlv16nJufNZfC+BnUJf8N24IAPCFxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1wZNwG-00026X-0n; Tue, 16 Jun 2026 09:10:24 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1wZNwC-002zbf-2f;
-	Tue, 16 Jun 2026 09:10:20 +0200
-Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 7E1225516BF;
-	Tue, 16 Jun 2026 07:10:20 +0000 (UTC)
-Date: Tue, 16 Jun 2026 09:10:20 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: guoqi0226 <guoqi0226@163.com>
-Cc: Vincent Mailhol <mailhol@kernel.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Thomas Kopp <thomas.kopp@microchip.com>, 
-	linux-can@vger.kernel.org, cuiguoqi <cuiguoqi@kylinos.cn>
-Subject: Re: [PATCH 1/2] can: mcp251x: Add ACPI device ID table for MCP2515
-Message-ID: <20260616-teal-wrasse-of-conversion-348af0-mkl@pengutronix.de>
-X-AI: stop_reason: "refusal"
-References: <20260616030019.35845-1-guoqi0226@163.com>
+	s=arc-20240116; t=1781600091; c=relaxed/simple;
+	bh=C9tICqSQnhcG0dcsD7D6jEAO4/apcu/YfiUFPbavmSw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=hcYnFoL6g3sQsu87krz5dCEf/WpCZdhg2lUZ5rwBvEdBXZnfruyANPjVl0RLbju0ifLgIwKlHpnV2DbUtmeniLNAjC91BKEfnxpwpMwt601yr7esHKJcdndji5LN0PIItMHalbt9vO+4k4NXr/zgHuFioVkPZsrbc75Nn77ufmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=IOGnqxDr; arc=none smtp.client-ip=220.197.31.5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=uY
+	5Q5jA4eHj9zzllHhFDtqrHcbMnu37U6FBHIvB8mOw=; b=IOGnqxDrY3QnCJWNUT
+	cWAgYjbnPSGtsKzQBu3Ps8QW3JoH5/S7kU2Cv+qFcSIU+ADQpCO3V1CnO+EIv2Hm
+	votVLxnn0iYvlh2EyuAHHk2G8Zxk/aK5PD7QOYFDUwoBucmiquh8m3QLLNWe0JRz
+	T/Yscm/J/Tt0ZCI9DIdzJ7LQU=
+Received: from rlk.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wDnEpYsDzFqEuHvDg--.40923S2;
+	Tue, 16 Jun 2026 16:54:06 +0800 (CST)
+From: guoqi0226 <guoqi0226@163.com>
+To: mkl@pengutronix.de,
+	sashiko-bot@kernel.org
+Cc: cuiguoqi@kylinos.cn,
+	linux-can@vger.kernel.org,
+	mailhol@kernel.org,
+	mani@kernel.org,
+	thomas.kopp@microchip.com,
+	o.rempel@pengutronix.de,
+	sashiko-reviews@lists.linux.dev,
+	socketcan@hartkopp.net,
+	guoqi0226 <guoqi0226@163.com>
+Subject: [PATCH v2 0/1] can: mcp251x: Add ACPI device ID table for MCP2515
+Date: Tue, 16 Jun 2026 16:53:58 +0800
+Message-Id: <20260616085359.89406-1-guoqi0226@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260616031332.0F34C1F000E9@smtp.kernel.org 20260616-teal-wrasse-of-conversion-348af0-mkl@pengutronix.de>
+References: <20260616031332.0F34C1F000E9@smtp.kernel.org 20260616-teal-wrasse-of-conversion-348af0-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qmt6cbqrmgc6o4zy"
-Content-Disposition: inline
-In-Reply-To: <20260616030019.35845-1-guoqi0226@163.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDnEpYsDzFqEuHvDg--.40923S2
+X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvj4RCsjjDUUUU
+X-CM-SenderInfo: 5jxr1xaqsslqqrwthudrp/xtbC-g61HmoxDy6oXgAA3X
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.56 / 15.00];
-	SIGNED_PGP(-2.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[pengutronix.de];
-	TAGGED_FROM(0.00)[bounces-7844-lists,linux-can=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:guoqi0226@163.com,m:mailhol@kernel.org,m:mani@kernel.org,m:thomas.kopp@microchip.com,m:linux-can@vger.kernel.org,m:cuiguoqi@kylinos.cn,s:lists@lfdr.de];
-	FREEMAIL_TO(0.00)[163.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FREEMAIL_CC(0.00)[kylinos.cn,vger.kernel.org,kernel.org,microchip.com,pengutronix.de,lists.linux.dev,hartkopp.net,163.com];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7846-lists,linux-can=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:sashiko-bot@kernel.org,m:cuiguoqi@kylinos.cn,m:linux-can@vger.kernel.org,m:mailhol@kernel.org,m:mani@kernel.org,m:thomas.kopp@microchip.com,m:o.rempel@pengutronix.de,m:sashiko-reviews@lists.linux.dev,m:socketcan@hartkopp.net,m:guoqi0226@163.com,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[guoqi0226@163.com,linux-can@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FREEMAIL_FROM(0.00)[163.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[guoqi0226@163.com,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[163.com:+];
 	ALIAS_RESOLVED(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-can];
-	R_DKIM_NA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,pengutronix.de:mid,pengutronix.de:url,pengutronix.de:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 12A8068CBBC
+X-Rspamd-Queue-Id: 20DB168D534
 
+Changes in v2:
+1. MCP2515 is verified, but MCP251XFD has not been tested.
+   When testing MCP2515, MCP251XFD was found missing ACPI support, hence this addition.
+   Reference the validated MCP2515 ACPI node as template:
+   Device(CAN0){
+         Name(_HID, "MCP2515")
+         Name(_UID, 0)
+         Name (_DSD, Package() {
+2. The original 9-character HID "MCP251XFD" violates ACPI format rules; 
+   redefine it to standard compliant ACPI ID MCHP15FD.
 
---qmt6cbqrmgc6o4zy
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/2] can: mcp251x: Add ACPI device ID table for MCP2515
-MIME-Version: 1.0
+guoqi0226 (1):
+  can: mcp251xfd: Add ACPI device ID table for MCP251XFD
 
-On 16.06.2026 11:00:18, guoqi0226 wrote:
-> This patch adds an ACPI match table for the MCP2515 CAN controller,
-> enabling driver binding on ACPI-enumerated SPI platforms.
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Thanks for your contribution. Have you successfully tested both drivers
-(mcp251x and mcp251xfd) on real hardware with these ACPI bindings?
+-- 
+2.25.1
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---qmt6cbqrmgc6o4zy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCajD2zAAKCRDMOmT6rpmt
-0ni1AP4nRRqnsn4yj7H8KEUgj4MOSsO5YeimLyC8KTwIkR4ycAD8CGlCAL34a/xS
-7SiojBr4nWAYLPxCs/345s4SI7Zr7Ao=
-=YGkB
------END PGP SIGNATURE-----
-
---qmt6cbqrmgc6o4zy--
 
