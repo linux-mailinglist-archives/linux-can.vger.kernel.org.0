@@ -1,226 +1,174 @@
-Return-Path: <linux-can+bounces-7863-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7864-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id vr9ZCmVkMWqniQUAu9opvQ
-	(envelope-from <linux-can+bounces-7863-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 16:57:41 +0200
+	id a/Y8CM+SMWp9nAUAu9opvQ
+	(envelope-from <linux-can+bounces-7864-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 20:15:43 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6F64690B48
-	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 16:57:40 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 157BC693F70
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 20:15:42 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b="U/Coqgx1";
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7863-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7863-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=dpBerd18;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7864-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7864-lists+linux-can=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0330A301ECC1
-	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 14:57:40 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 241D63001CCE
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 18:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8553B71D8;
-	Tue, 16 Jun 2026 14:57:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A25F47AF6E;
+	Tue, 16 Jun 2026 18:15:38 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88EFA35201E
-	for <linux-can@vger.kernel.org>; Tue, 16 Jun 2026 14:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BD447AF5F
+	for <linux-can@vger.kernel.org>; Tue, 16 Jun 2026 18:15:35 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781621857; cv=none; b=IuU8MSmpmX4cBM/1l9xSyaCnat324FdvF2PDE1/2mEfNMYCi1en47sYXgHnrcn+L0oi3Mw77JYx5yabY5eEtkLW1t9vkpkT7G45RxZmpOUuLQXDeA8afLecavUALDwlZt8RRv7o/PE0qUpJFfx4ehNAAkwH3hyZJtUCUzL73Xns=
+	t=1781633738; cv=none; b=sCsvJ/+XRrI8kMb7C8mO5Bntq4No1jrIWut6qKu5NW4/Y6ZSea6DJ8gj9Qbuz98waKL4mlUL7Kj1dknv+RV1rroSzj2/o9uARNcZaNz64xsY9hlBYewfupIKUsHBGWWEbdaN3NCHPHYfin13U6WjCaod6A8BT/FzmwtDGh5rgRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781621857; c=relaxed/simple;
-	bh=VLW9/TMGyN5UPEP8rmOjNnUTBMcUDk592XQ8GQC/dTQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J9TrYbtvdX2cTMr8tgROsnLWekE+3ogDiZFdPcEqGvzT/Z+o5oQdXks8Gh3mjinEMNZg9Jn5O7uwmDlPCQPgg5qcUEqZNF1UiYum/0a7l2MFSETOOhMfeVeVv+GYXL6Imcd0IOj8/yl/+Z2WCHLSdEtQqjllImGPHwLew4Na3Ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U/Coqgx1; arc=none smtp.client-ip=209.85.221.50
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-4600ddc4017so3539594f8f.0
-        for <linux-can@vger.kernel.org>; Tue, 16 Jun 2026 07:57:35 -0700 (PDT)
+	s=arc-20240116; t=1781633738; c=relaxed/simple;
+	bh=LwUjBCnRuhBhAVA007wGKMdFcjOoYCHu8co1Nbm+o4w=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=MX/aHOC6ics1zg/OuQRFfq15yM6PqbubT9eswb7IKqxAVWqFZwdiFy/csMO38Jjifk2k44+ink0VcjVp/jYoYq++OMgmmsFwSpMBcGY62x0RBlchZUyjL/FNenvV3GJWCW3znktFAD+E/CrKjdfJZgpTaHaYBq3ax3PtNRgGfDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dpBerd18; arc=none smtp.client-ip=209.85.216.43
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-37c5b9d42efso73818a91.1
+        for <linux-can@vger.kernel.org>; Tue, 16 Jun 2026 11:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781621854; x=1782226654; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E7jptHSgz5KByLhlfc5GhmGAlIi/z/XUa5yhD10TU3Y=;
-        b=U/Coqgx1M4ITwq+W/aZSFfyV2D1ARnEZ/ogx6pziWlaqCOgoc9Iaoe/rK4y3huY2ZM
-         9TAK3WVTT0AMsMmQHvVFf0X3CvS4lgRAjUdN4y6ewT+Z//53qoWyK1fKmSqpRfSdk2zb
-         xUVJc6zw5gNS3++DIqjyF5VFLoGdyOhGl38DKoDvojv6pdqGwk0FZ3dKbcAB8+Tv5uRm
-         tI4bPIgfP+Apl2cwT3rTBUvXWaPiJ2p++IQld6yKb5b3F20RcPCG6DFGjsT0dHNTGRw6
-         KNb39s/cnILb1zEwzC1wRSbOpnfv686lOVRbLz+BuNDRH4Z5WNJ5iEYJJ2kayrKNNv1l
-         9reg==
+        d=gmail.com; s=20251104; t=1781633735; x=1782238535; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f2CbO6xVE8ge/BW9bwE8msWNErqe+u3t/mZz4ScB7rc=;
+        b=dpBerd18k4xbc6sIGCoDGKz1uhxfX4iiUt89Nezt/7lhIN9o0sG0UsYSFPI/c/ezkE
+         rMdGsLeaMduur9esdNQkoFPbCPv2jmRWAHa01Xtopj5R4AovLYSQW27IbqJ3sV9QnR5p
+         KXkrJ38Kk4yUpnLdUKxTX5Bp5PRjNLTbhgud3HE2WMrtrPrwxOc9Vgp7mMbVOt4we1N9
+         OcPyeL7IAUCI5jUvMCPijppKF8yCXyWLAZ9yZ1/7LZoJKZFg8Ct6fXrE0LwG3xGUtaHF
+         2PjcZ9q60WT51OaeqsKlyP8tk8z34xfiqiugFCdDhDMUqQpPWRpXLRFgBYjrb8pcg0D2
+         Hnsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781621854; x=1782226654;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E7jptHSgz5KByLhlfc5GhmGAlIi/z/XUa5yhD10TU3Y=;
-        b=TyU2yAYGZ0TiTpqnFx6ybXE8Eg0nc0lssa9zLBlVUfI7TOG0ux/n78JKbZyUhiwT7l
-         dZlZEH6RRR0peYS0ZFdRWNnsI2FNrptZSahtKqLhj7dFGQMNqmrPS1pV8qOW1Lcn5ME9
-         QH7DetREr71+62mtjBypwoUFueicJf3Vwy4QCvCxfZvM5M/Xg02I5uMRYyoiV7WQHaZR
-         DTjzHSv88yM3HcbvZ5f0zAIz56iS2JE46BpDbk1SLVD90ZDUdJsAHhcO3u7cCNixQRby
-         GNaYk8ClmqdznurQJ3NAF1IGy3scYRGjMGx4NBDG09YTZObuXl0LVHCt0bcTmO10bk8X
-         vPUQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+Muk1Edcm9zHls2MzxK9sBE+fVLmu1Ayx8uMwj/WiiqMjGsdDZ2cexQK3GF4vbT7j5aGzIyPQp/Tg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzJmSnqrm2Rvl+DTQDmltt4GoOQ/hJeUwgZOVNZM4xqjaoQ5TW
-	7i/xJP0jK7DkLjv+PXCb+v+VIuLHFHnGgYounYLB7B/6mtWZh3CjhFQTZNbd8DYMOuc=
-X-Gm-Gg: Acq92OHmDqxxR1xyezmJ/MmyepDwkvwMT7AiHfbaA9Qg/mDwn6/pGbV6XgOxuTrKPqN
-	fij6X5kf6Au9to9h4fLb1yUblBepfjGYUvWrcJOrrgK4Nw9qYr300ldzNr/IFN9Gi2L5t8C8KHg
-	FauyysiCYLVWnpNaCQEGiWIIU1AVX/u5GJfIU9Syz34zeQbsvAsfsSMIiiwKWBF5/6FzqG3tnAv
-	/0x3WUcmLoLV9QskqCJRPRkONAtj+bSNzj2IM8RORUZA84yxaGLrYOT55faKeDfWCFVC5nAWxx4
-	JfHvn8lw3K0cAUXV4Ihs0/pu3DCLMmRUD1E/i7BjueK5X7pANdxCgtx2nC3QVrIcZmCFYfuTRTa
-	5yuf5+WeDxQaClyR8OA0bPR/Mp/0NLrZ7DV8aSCpU3JNp/KseNXaEu5ZIueSsxc7AKCZK9y5smG
-	M6Tg6wxOxC0xcWKjVf4R/GHdT8oacb+Rt7ygeLiwMtzjYE19oMbquceCvhxAgEzMqAXsLhLyKec
-	5xRdRT2SQwwiB1nCw==
-X-Received: by 2002:a05:6000:41f8:b0:461:f237:ebc2 with SMTP id ffacd0b85a97d-461f237ee93mr1837167f8f.29.1781621853866;
-        Tue, 16 Jun 2026 07:57:33 -0700 (PDT)
-Received: from [192.168.178.24] (cgn-195-14-216-63.nc.de. [195.14.216.63])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4606f2e6a8fsm45654287f8f.37.2026.06.16.07.57.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2026 07:57:33 -0700 (PDT)
-Message-ID: <18f16dc5-a61d-4499-849e-7f1f7c8364c0@gmail.com>
-Date: Tue, 16 Jun 2026 16:57:32 +0200
+        d=1e100.net; s=20251104; t=1781633735; x=1782238535;
+        h=mime-version:content-transfer-encoding:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f2CbO6xVE8ge/BW9bwE8msWNErqe+u3t/mZz4ScB7rc=;
+        b=EZFZh+F3QGShA9cwFjBtJKq5z5xfH7wd1jkU1553eh+PkeMWc/g0HUyzbP1vyqqRRx
+         BYHg99YyNPPjbmgh48tmFkV+vxFIqUCmlwVxEgL2ALguENqQN50x6Y2/JB+tgMd8nCio
+         1fCfNWMGWrGyQj62qukxlPSxcKWEuRipkLypmCQ6k6XhT7MXF0sODM1eXXVGLphX0yHF
+         qEWjZN6hkANhrOoX9b/dJVT4DDhnYpNKXHXq+xehfNdscZ1lTxPMpBl02GNVsFk1gJ2u
+         HmxxMHKD3Lq0AuHgsAhKdtJSbcDaey/MeA4KBa9VTAdpSitx0hfUNc80KyFGVbobJ4nj
+         +6DA==
+X-Forwarded-Encrypted: i=1; AFNElJ9rzIX1sSI/8QXzzV5S1YZsG+hKqG9hDxDugFAO1RhGhN5SC4KcgXbHYQbryrmfgliaPI4iKL0Q0OY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/mN3BAzdB8uY7tqDXpp1czOF9muybxEZw0J2lUrNwCZB7myI/
+	UjDjI5hjrDdF/evkQmoZZIxZpE5sxUnlJ0s1aP2dJ2LDvX7dnHCMSvwa
+X-Gm-Gg: Acq92OFKGWPOGrWnNiH1JwZVA6Jsbzzwl7R+A9fuSpGUDKmO97+CyEMc+iL0LWklu8c
+	Hnlltt/tac27nEpzZ3N3LYuUsPAo84MLjCvdszA53dW0Gq9s3H5hTB4wq0kt2QNlwvhjXinT6Ib
+	0jTN5+txQ/2pbHSj/d/WzOMrhSxca/QEG1JrLiPzy2tOhl8vprvr3nIC/f83a3jm0vzT8q+ws5m
+	baMaGCAsotr4sTWeTSdKkjJTNlUqk20qH2fv7U3wREAd9zeyXj9B7C6m2IMgV4tQMfhh/nDMA/2
+	bNucPhWs4SsBtGYF39jE0MvCNIkI2xxRu/jq4RgAcqJKk7WpJYndVjf+ynivPMfoPcNSGvx1KTP
+	KIUpwnrDeN70uWyXeb/+gv7prwO8pll7UEjOgNY89IaNsUu/ZWOLRK/YXegIqcipEHDsrIFo+kY
+	Rq3wHkOQPLsK5SFYRc9JECp6/tXhEn3egqnX2Y8o5l2s7DyVcR
+X-Received: by 2002:a17:90b:3b8d:b0:35f:b9f1:fded with SMTP id 98e67ed59e1d1-37c8e7ebc02mr498888a91.12.1781633735182;
+        Tue, 16 Jun 2026 11:15:35 -0700 (PDT)
+Received: from csl-conti-dell7858.ntu.edu.sg ([155.69.195.57])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37c521ae78csm3578034a91.4.2026.06.16.11.15.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2026 11:15:34 -0700 (PDT)
+From: Maoyi Xie <maoyixie.tju@gmail.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+ Vincent Mailhol <mailhol@kernel.org>,
+ =?utf-8?q?St=C3=A9phane?= Grosjean <stephane.grosjean@hms-networks.com>
+Cc: Vadim Fedorenko <vadim.fedorenko@linux.dev>, linux-can@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: [PATCH net] can: peak_usb: fix double free of transfer buffer on URB
+ submit error
+Date: Wed, 17 Jun 2026 02:15:31 +0800
+Message-ID: <178163373110.2507866.216458825145756798@maoyixie.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] can: isotp: hold a reference to the bound netdevice
-To: sashiko-reviews@lists.linux.dev
-Cc: Vincent Mailhol <mailhol@kernel.org>,
- Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
- Oliver Hartkopp <socketcan@hartkopp.net>,
- Oleksij Rempel <o.rempel@pengutronix.de>
-References: <20260616123915.674534-1-vasilisalmpanis@gmail.com>
- <20260616125350.B7A371F000E9@smtp.kernel.org>
-Content-Language: en-US
-From: Vasileios Almpanis <vasilisalmpanis@gmail.com>
-In-Reply-To: <20260616125350.B7A371F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7863-lists,linux-can=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:sashiko-reviews@lists.linux.dev,m:mailhol@kernel.org,m:mkl@pengutronix.de,m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:o.rempel@pengutronix.de,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7864-lists,linux-can=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:mailhol@kernel.org,m:stephane.grosjean@hms-networks.com,m:vadim.fedorenko@linux.dev,m:linux-can@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	FORGED_SENDER(0.00)[vasilisalmpanis@gmail.com,linux-can@vger.kernel.org];
+	FORGED_SENDER(0.00)[maoyixietju@gmail.com,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[6];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[vasilisalmpanis@gmail.com,linux-can@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[maoyixietju@gmail.com,linux-can@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,trigger.sh:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B6F64690B48
+X-Rspamd-Queue-Id: 157BC693F70
 
+In peak_usb_start(), each RX URB transfer buffer is allocated with kmalloc()
+and the URB is flagged URB_FREE_BUFFER so that the final usb_free_urb() also
+frees the transfer buffer.
 
-On 6/16/26 2:53 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
->
-> New issues:
-> - [High] Calling synchronize_rcu() while holding rtnl_lock() introduces severe latency spikes and potential denial of service system-wide.
->
-> Pre-existing issues:
-> - [Critical] Skipping synchronize_rcu() in isotp_release() when the socket is unbound leads to a use-after-free of the socket structure by re-armed hrtimers.
-> --
->
-> commit da93bcd8877d85ffe0b043e3045c3374b10e38e5
-> Author: Vasileios Almpanis<vasilisalmpanis@gmail.com>
->
-> can: isotp: hold a reference to the bound netdevice
->      
-> isotp_release() looked up the bound netdevice with
-> dev_get_by_index(so->ifindex) and only unregistered the socket's CAN
-> receivers if that lookup succeeded. This is unreliable while the device
-> is going away.
->
-> Cc:stable@vger.kernel.org
-> Closes:https://syzkaller.appspot.com/bug?id=58676a0f698531996a42612c552e894a55b9732b
->
->> diff --git a/net/can/isotp.c b/net/can/isotp.c
->> index c48b4a818297e..308d18040b6db 100644
->> --- a/net/can/isotp.c
->> +++ b/net/can/isotp.c
->> @@ -1219,27 +1222,22 @@ static int isotp_release(struct socket *sock)
->>   	list_del(&so->notifier);
->>   	spin_unlock(&isotp_notifier_lock);
->>   
->> +	rtnl_lock();
->>   	lock_sock(sk);
->>   
->>   	/* remove current filters & unregister */
->> -	if (so->bound) {
-> [ ... ]
->> +	if (so->bound && so->dev) {
->> +		if (isotp_register_rxid(so))
->> +			can_rx_unregister(net, so->dev, so->rxid,
->> +					  SINGLE_MASK(so->rxid),
->> +					  isotp_rcv, sk);
->> +
->> +		can_rx_unregister(net, so->dev, so->txid,
->> +				  SINGLE_MASK(so->txid),
->> +				  isotp_rcv_echo, sk);
->> +		netdev_put(so->dev, &so->dev_tracker);
->> +		so->dev = NULL;
->> +		synchronize_rcu();
-> [Severity: High]
-> Does holding rtnl_lock() in isotp_release() (net/can/isotp.c) across
-> synchronize_rcu() cause severe latency spikes and potential denial of
-> service system-wide?
->
-> synchronize_rcu() blocks until all currently active RCU read-side critical
-> sections across the system finish, which stalls all other network
-> configuration operations while rtnl_lock() is held.
-Okay this is indeed true. rtnl_lock/unlock is not really necessary as 
-now receivers will be tracked
-through *dev_tracker*. I wanted to mimic *raw_release() *but maybe too 
-faithfully. Just dropping rtnl_lock/unlock from
-*isotp_release* and *isotp_bind* will be enough since they are 
-serialized under *lock_sock.*
-> *[*Severity: Critical]
-> This is a pre-existing issue, but skipping synchronize_rcu() when the socket
-> is already unbound (e.g., by NETDEV_UNREGISTER where isotp_notify() sets
-> so->bound = 0) appears to allow a use-after-free.
->
-> If synchronize_rcu() is bypassed, isotp_release() proceeds to cancel the
-> socket's hrtimers and drop the user reference without waiting for concurrent
-> receive operations to complete.
->
-> Could a concurrent CAN receive operation like isotp_rcv_ff() or
-> isotp_rcv_echo() executing within an RCU read-side critical section
-> unconditionally re-arm the hrtimer after isotp_release() has cancelled it,
-> leading to a use-after-free when the timer later fires on the freed socket
-> memory?
-This is a pre-existing issue that is not touched by my changes so it's 
-out of scope of this patch. Its true that timers could potentially be 
-rearmed after being canceled and *synchronize_rcu *should be called 
-unconditionally but I would do that in a separate patch for it to be 
-fully bisectable.
-Looking forward to any comment reviewers might have before sending v2.
->>   	}
->>   
->>   	hrtimer_cancel(&so->txfrtimer);
+If usb_submit_urb() fails, the error path frees the buffer explicitly with
+kfree(buf) and then calls usb_free_urb(urb). Because URB_FREE_BUFFER is set,
+usb_free_urb() -> urb_destroy() frees the same buffer a second time, a double
+free of the transfer buffer.
+
+  BUG: KASAN: double-free in usb_free_urb.part.0+0x91/0xb0
+  Free of addr ffff8881069ccb80 by task trigger.sh/285
+
+  Call Trace:
+   kfree+0x113/0x3c0
+   usb_free_urb.part.0+0x91/0xb0
+
+Drop the redundant kfree(buf); usb_free_urb() already releases the transfer
+buffer. This mirrors commit 03819abbeb11 ("net: usb: lan78xx: Fix double free
+issue with interrupt buffer allocation").
+
+Fixes: bb4785551f64 ("can: usb: PEAK-System Technik USB adapters driver core")
+Closes: https://lore.kernel.org/linux-can/178159320216.2154888.16953451793788581739@maoyixie.com/T/#u
+Cc: stable@vger.kernel.org
+Signed-off-by: Maoyi Xie <maoyixie.tju@gmail.com>
+---
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+index cf48bb26d46d..079b23dd74f0 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -470,7 +470,6 @@ static int peak_usb_start(struct peak_usb_device *dev)
+ 				netif_device_detach(dev->netdev);
+ 
+ 			usb_unanchor_urb(urb);
+-			kfree(buf);
+ 			usb_free_urb(urb);
+ 			break;
+ 		}
+-- 
+2.34.1
+
 
