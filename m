@@ -1,260 +1,155 @@
-Return-Path: <linux-can+bounces-7839-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7840-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id nxH8GVq6L2rfFAUAu9opvQ
-	(envelope-from <linux-can+bounces-7839-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 15 Jun 2026 10:39:54 +0200
+	id jSCUMHi8MGonWwUAu9opvQ
+	(envelope-from <linux-can+bounces-7840-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 05:01:12 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD4BF684A1E
-	for <lists+linux-can@lfdr.de>; Mon, 15 Jun 2026 10:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C35BA68B970
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 05:01:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=DHx4Egmk;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7839-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7839-lists+linux-can=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=163.com header.s=s110527 header.b=O4b8lmSL;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7840-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7840-lists+linux-can=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=163.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5910D3013727
-	for <lists+linux-can@lfdr.de>; Mon, 15 Jun 2026 08:37:29 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7CB1B3015A7A
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 03:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A98C3CF1E8;
-	Mon, 15 Jun 2026 08:35:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30C7A37A498;
+	Tue, 16 Jun 2026 03:01:08 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235983D0C1C;
-	Mon, 15 Jun 2026 08:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F555DDCD
+	for <linux-can@vger.kernel.org>; Tue, 16 Jun 2026 03:01:05 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781512528; cv=none; b=bP0VUhuXw9IuGdGJILJlPn+xD11C3XBRVD2WRq6abKDyhruV/4LiO4rvLD4Qy8hGJFcwKvpRcPXD/biMIeXw2SqqTH+yUAqQolkYulU8wU/+n5lzsG8oMytlj/x6dxP72ECtBT4F64Q1hvlUurbdSbls6wwYxCFjwRgE4GXca30=
+	t=1781578868; cv=none; b=g79Z8bfmv8aaKduLtn+0/VFqa7RnLkurHDCGnj6Bl3fwdmINrn4ki8oyUwAkCe82l5tJRw+K1wNCtRjx4Weq2rufdWW6ryTGhnkvPPkAjWV9RLzEylGv/uRmbWhbFHaK64yX1hohej1d/O7PiMb2CiZHJfqhVOPy1bBwx278MY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781512528; c=relaxed/simple;
-	bh=zXrYO5vMbWIQaRpm6C4Na4L2gLkO1PmEeCbpHHul3IA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CDw+XKU92T70x/hc+HFF3Nlpfj+ok2kbuWdTp16qUXtsaVRqaA/8/CmDEatyiRChBf42FbmK/6c9ONnuOc6Fhli0DnpaC6RZzVhyjJK7EoQ42vRqm41c/vVoxC93JnCNrWxwKkzp2J9VHWrK38M4QwUnkoGw3z8/k8OsxjqBKw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DHx4Egmk; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A6E61F000E9;
-	Mon, 15 Jun 2026 08:35:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781512524;
-	bh=YVOrQAv74TqwYH6NvuxkRgGldcsF+veBZEKO4rbxm7E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=DHx4EgmksXmmSYl/TmCMpS6Vl3hV+J/xCu6746Xi8CaLWr1PVlOfCwBhCAs4ApNSF
-	 8SSWOkm0lJFvfIe0J00bAnbn+4ysKbR8bPRYwQTko46j8F3b+QU5pQspr/fSIozjR1
-	 q3Tt2eP8kJvLUjsVRNoiObpk1fSg7Hws2Kf/Nx4gNm+ByP5lLPvywULVcSpTKLMQMe
-	 5ORfo4bMQfCD7ASNoX/hBz0I6plocbMrlFOtiN8zhoMIRbrJbjcUOrcKKg4yyHRJnm
-	 UYR3ZYCNe8UiYbXcKHV4fvmSPxLRaAvkJ9AorN6yG+hrwiAzzInCxF/vYo6VswRUxk
-	 CSCZEi8cWqOyw==
-Message-ID: <e69f520d-3b19-40fd-9be9-5df6d2b71763@kernel.org>
-Date: Mon, 15 Jun 2026 10:35:20 +0200
+	s=arc-20240116; t=1781578868; c=relaxed/simple;
+	bh=rJKFaIFofheaOWbiicYKQwQg80/bnxLcxkMPmb7qwIA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Xklm0mH1B4SXgnxNBjCG4Tpjdy9qE/n0W+sBvsJ+ti/bempUazMRNtteJaUO7q+QUl2sKqhJs5lAd1AiOoBHw4IN4q0gTpwnJuIYkOjTAUyB687aN2evvpJDsYtGzCzj4uQah0y0SByFBozooHcCIVyp75K/XMOPc3jmufw32GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=O4b8lmSL; arc=none smtp.client-ip=220.197.31.4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=1f
+	AY+znJ5mW+Y74xezKFKE9HYJ9hz0Htpjn1G98NNDU=; b=O4b8lmSLVH3koA3la5
+	0hEN0dusyWkFC2Qrs8gNAdN+21nInlA7g/CiM9RLdQITylldjed1mTcZTGOcudZV
+	Gl7enm+n+NufR3jIYaTRacR9MABFbV3IeaYs8mwmQyj41Ny+9/xs1V/voY25flJH
+	1k/Bt873IzPo0u8RhtNFzfVhE=
+Received: from rlk.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wD319lKvDBq7apADw--.36791S2;
+	Tue, 16 Jun 2026 11:00:28 +0800 (CST)
+From: guoqi0226 <guoqi0226@163.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>
+Cc: Thomas Kopp <thomas.kopp@microchip.com>,
+	linux-can@vger.kernel.org,
+	guoqi0226 <guoqi0226@163.com>,
+	cuiguoqi <cuiguoqi@kylinos.cn>
+Subject: [PATCH 1/2] can: mcp251x: Add ACPI device ID table for MCP2515
+Date: Tue, 16 Jun 2026 11:00:18 +0800
+Message-Id: <20260616030019.35845-1-guoqi0226@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] can: loongson_canfd: Add RXDMA support
-To: Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen
- <chenhuacai@loongson.cn>, Marc Kleine-Budde <mkl@pengutronix.de>,
- Bingxiong Li <libingxiong@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
- Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
- linux-can@vger.kernel.org, jeffbai@aosc.io
-References: <cover.1780908445.git.zhoubinbin@loongson.cn>
- <9af2c912e0afd439ea9562ea8aa72ee0af3f2ed3.1780908445.git.zhoubinbin@loongson.cn>
- <11d8ceff-d05a-4446-96cc-f9f97538d12e@kernel.org>
- <CAMpQs4Kpas0qB=_h3KEJW3WL5i=mZjX53szAhhPrOCo8YKLAYA@mail.gmail.com>
-From: Vincent Mailhol <mailhol@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=mailhol@kernel.org; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- JFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbEBrZXJuZWwub3JnPsKZBBMWCgBBFiEE7Y9wBXTm
- fyDldOjiq1/riG27mcIFAmdfB/kCGwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcC
- F4AACgkQq1/riG27mcKBHgEAygbvORJOfMHGlq5lQhZkDnaUXbpZhxirxkAHwTypHr4A/joI
- 2wLjgTCm5I2Z3zB8hqJu+OeFPXZFWGTuk0e2wT4JzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrb
- YZzu0JG5w8gxE6EtQe6LmxKMqP6EyR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDl
- dOjiq1/riG27mcIFAmceMvMCGwwFCQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8V
- zsZwr/S44HCzcz5+jkxnVVQ5LZ4BANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <CAMpQs4Kpas0qB=_h3KEJW3WL5i=mZjX53szAhhPrOCo8YKLAYA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD319lKvDBq7apADw--.36791S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tw45trWkCr4xGryxGryxGrg_yoW8Xr1rpF
+	sFyFy0krZ5WF4UGa13G3Wjva4Yg3WkZryIgrW7Ka4a9asrAw1DZFZ29Fyayrs3XrW5Gw13
+	ZrWftryUCrZ8C37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziFdg_UUUUU=
+X-CM-SenderInfo: 5jxr1xaqsslqqrwthudrp/xtbC4g3oUWowvE1IEgAA3n
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.66 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7839-lists,linux-can=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[microchip.com,vger.kernel.org,163.com,kylinos.cn];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:zhoubb.aaron@gmail.com,m:zhoubinbin@loongson.cn,m:chenhuacai@loongson.cn,m:mkl@pengutronix.de,m:libingxiong@loongson.cn,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:loongarch@lists.linux.dev,m:linux-can@vger.kernel.org,m:jeffbai@aosc.io,m:zhoubbaaron@gmail.com,s:lists@lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER(0.00)[mailhol@kernel.org,linux-can@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-7840-lists,linux-can=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[guoqi0226@163.com,linux-can@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:mailhol@kernel.org,m:mani@kernel.org,m:thomas.kopp@microchip.com,m:linux-can@vger.kernel.org,m:guoqi0226@163.com,m:cuiguoqi@kylinos.cn,s:lists@lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	FREEMAIL_FROM(0.00)[163.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mailhol@kernel.org,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TAGGED_RCPT(0.00)[linux-can];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[guoqi0226@163.com,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[163.com:+];
+	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp,loongson.cn:email]
+	TAGGED_RCPT(0.00)[linux-can];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,kylinos.cn:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: CD4BF684A1E
+X-Rspamd-Queue-Id: C35BA68B970
 
-On 15/06/2026 at 03:35, Binbin Zhou wrote:
-> Hi Vincent:
-> 
-> Thanks for your detailed review and sorry for my late reply.
-> 
-> On Mon, Jun 8, 2026 at 8:13 PM Vincent Mailhol <mailhol@kernel.org> wrote:
->>
->> On 08/06/2026 at 10:49, Binbin Zhou wrote:
->>> Add optional DMA support for RX path using the Loongson APB CMC DMA
->>> engine. When a DMA channel is successfully requested, the driver:
->>>
->>> - Uses DMA cyclic transfers to write incoming CAN frames directly to
->>>   a coherent DMA buffer
->>> - Replaces RXBNEI (RX buffer not empty interrupt) with DMADI (DMA
->>>   done interrupt)
->>> - Dynamically switches between DMA and PIO modes based on channel
->>>   availability
->>>
->>> This significantly reduces CPU intervention under high RX load,
->>> especially beneficial for CAN FD at higher data rates.
->>>
->>> Co-developed-by: Bingxiong Li <libingxiong@loongson.cn>
->>> Signed-off-by: Bingxiong Li <libingxiong@loongson.cn>
->>> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
->>> ---
->>
->> Please check the W=2 warnings:
-> 
-> OK. I usually compile with `W=1` and didn't notice these issues.
+This patch adds an ACPI match table for the MCP2515 CAN controller,
+enabling driver binding on ACPI-enumerated SPI platforms.
 
-The W=2 used to be too spammy and people simply ignored it. I went
-through a quest to reduce that noise. See
+Signed-off-by: cuiguoqi <cuiguoqi@kylinos.cn>
+Signed-off-by: guoqi0226 <guoqi0226@163.com>
+---
+ drivers/net/can/spi/mcp251x.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-  660e899103e2 ("kbuild: remove gcc's -Wtype-limits")
+diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
+index 0d0190ae094a..58495d7639b4 100644
+--- a/drivers/net/can/spi/mcp251x.c
++++ b/drivers/net/can/spi/mcp251x.c
+@@ -41,6 +41,7 @@
+ #include <linux/slab.h>
+ #include <linux/spi/spi.h>
+ #include <linux/uaccess.h>
++#include <linux/acpi.h>
+ 
+ /* SPI interface instruction set */
+ #define INSTRUCTION_WRITE	0x02
+@@ -1328,6 +1329,15 @@ static const struct spi_device_id mcp251x_id_table[] = {
+ };
+ MODULE_DEVICE_TABLE(spi, mcp251x_id_table);
+ 
++#ifdef CONFIG_ACPI
++static const struct acpi_device_id mcp251x_acpi_match[] = {
++	{ "MCP2515", (kernel_ulong_t)CAN_MCP251X_MCP2515 },
++	{ }
++};
++
++MODULE_DEVICE_TABLE(acpi, mcp251x_acpi_match);
++#endif
++
+ static int mcp251x_can_probe(struct spi_device *spi)
+ {
+ 	struct net_device *net;
+@@ -1558,6 +1568,7 @@ static struct spi_driver mcp251x_can_driver = {
+ 	.driver = {
+ 		.name = DEVICE_NAME,
+ 		.of_match_table = mcp251x_of_match,
++		.acpi_match_table = ACPI_PTR(mcp251x_acpi_match),
+ 		.pm = &mcp251x_can_pm_ops,
+ 	},
+ 	.id_table = mcp251x_id_table,
+-- 
+2.25.1
 
-with this, the output is less bloated and I think a bit more useful. Not
-that you need to systematically address all warnings, but at least,
-review the list.
-
->>   $ make W=12 drivers/net/can/loongson_canfd.o
->>     DESCEND objtool
->>     INSTALL libsubcmd_headers
->>     CC      drivers/net/can/loongson_canfd.o
->>   drivers/net/can/loongson_canfd.c:1917:9: warning: missing initializer for field 'driver_data' of 'const struct acpi_device_id' [-Wmissing-field-initializers]
->>    1917 |         { "LOON0015" },
->>         |         ^
->>   In file included from ./include/linux/acpi.h:16,
->>                    from drivers/net/can/loongson_canfd.c:8:
->>   ./include/linux/mod_devicetable.h:219:24: note: 'driver_data' declared here
->>     219 |         kernel_ulong_t driver_data;
->>         |                        ^~~~~~~~~~~
->>   drivers/net/can/loongson_canfd.c: In function 'loongson_canfd_start_xmit':
->>   drivers/net/can/loongson_canfd.c:1116:13: warning: 'buf_id' may be used uninitialized [-Wmaybe-uninitialized]
->>    1116 |         u32 buf_id, tx_stat, i = 0;
->>         |             ^~~~~~
->>   drivers/net/can/loongson_canfd.c:1116:13: note: 'buf_id' was declared here
->>    1116 |         u32 buf_id, tx_stat, i = 0;
->>         |             ^~~~~~
->>   In function 'loongson_canfd_insert_frame',
->>       inlined from 'loongson_canfd_start_xmit' at drivers/net/can/loongson_canfd.c:1144:7:
->>   drivers/net/can/loongson_canfd.c:1079:15: warning: 'meta1' may be used uninitialized [-Wmaybe-uninitialized]
->>    1079 |         meta1 |= FIELD_PREP(REG_FRAME_META1_DLC, can_fd_len2dlc(cf->len));
->>         |               ^~
->>   drivers/net/can/loongson_canfd.c: In function 'loongson_canfd_start_xmit':
->>   drivers/net/can/loongson_canfd.c:1052:20: note: 'meta1' was declared here
->>    1052 |         u32 meta0, meta1;
->>         |                    ^~~~~
->>   drivers/net/can/loongson_canfd.c: In function 'loongson_canfd_probe':
->>   drivers/net/can/loongson_canfd.c:1807:13: warning: 'ret' may be used uninitialized [-Wmaybe-uninitialized]
->>    1807 |         int ret, irq;
->>         |             ^~~
->>   drivers/net/can/loongson_canfd.c:1807:13: note: 'ret' was declared here
->>    1807 |         int ret, irq;
->>         |             ^~~
->>   drivers/net/can/loongson_canfd.c: At top level:
->>   drivers/net/can/loongson_canfd.c:47:9: warning: macro 'LOONGSON_CANFD_RX_FR_CNT' is not used [-Wunused-macros]
->>      47 | #define LOONGSON_CANFD_RX_FR_CNT        0x50    /* Receive Message Count Register */
->>         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Regarding the definitions of these controller registers, even though
-> they aren’t currently referenced, can they be retained to make the
-> code seem more complete?
-
-Only keep the registers for features which are not yet implemented. For
-the register which are already handled in a different way without
-relying on the macro, please remove.
-
-I can think, for example, of:
-
-  LOONGSON_CANFD_TX_DATA_10
-
-You handled the tx data in a for loop and this macro is purely dead and
-do not serve anymore documentation purpose. The only thing it does now
-is to add confusion.
-
-(...)
-
->>>  config CAN_LOONGSON_CANFD
->>>       tristate "Loongson CAN-FD controller"
->>> -     depends on HAS_IOMEM || COMPILE_TEST
->>> +     depends on HAS_IOMEM && (LOONGSON2_APB_CMC_DMA || COMPILE_TEST)
->>
->> The logic is odd here. If your driver can be COMPILE_TESTed without
->> HAS_IOMEM, then patch 1 should be:
->>
->>         depends on HAS_IOMEM || COMPILE_TEST
->>
->> and patch 2 should be:
->>
->>         depends on (HAS_IOMEM && LOONGSON2_APB_CMC_DMA) || COMPILE_TEST
->>
->> If your driver need HAS_IOMEM even for a compile test, then patch 1
->> should be:
->>
->>         depends on HAS_IOMEM
->>
->> and patch 2 should be:
->>
->>         depends on HAS_IOMEM && (LOONGSON2_APB_CMC_DMA || COMPILE_TEST)
-> 
-> For me, the 2nd way is correct.
-
-Ack.
-
-Just for confirmation, do you think that your device will ever be used
-in production on a board which would not have LOONGSON2_APB_CMC_DMA? If
-yes, it could make sense to add the RXDMA as a separate module.
-Otherwise, it is good as-is.
-
->>
->> Here, you are doing a weird mix.
->>
->>>       select REGMAP_MMIO
->>>       help
->>>         This is a canfd driver switch for the Loongson platform,
-
-
-Yours sincerely,
-Vincent Mailhol
 
