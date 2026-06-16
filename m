@@ -1,64 +1,61 @@
-Return-Path: <linux-can+bounces-7855-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7856-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id hwzZOUAnMWpVcwUAu9opvQ
-	(envelope-from <linux-can+bounces-7855-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 12:36:48 +0200
+	id 8suHKlInMWpdcwUAu9opvQ
+	(envelope-from <linux-can+bounces-7856-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 12:37:06 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B6DF68E5F7
-	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 12:36:48 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12CCF68E60A
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 12:37:06 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=163.com header.s=s110527 header.b=KrLLQWKb;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7855-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-7855-lists+linux-can=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=163.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=gZKvuAqm;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7856-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7856-lists+linux-can=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AC9B1316E88D
-	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 10:31:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A8DFF304A6AA
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2026 10:35:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E4D24279F9;
-	Tue, 16 Jun 2026 10:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48CDE42E009;
+	Tue, 16 Jun 2026 10:35:48 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBF14183BF;
-	Tue, 16 Jun 2026 10:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B5C42B74A;
+	Tue, 16 Jun 2026 10:35:47 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781605875; cv=none; b=M2ZSYA1jTC/MVQSymu3nT5HZnVlybvZpZfNIMtA4yV5pwbjiDD3Kh3X4HjMT6I4eQGwiR2Gc0WbL1b/7Ezc5fsW6LNuXagd3v7/EBiPzUHA8KZi3n8KorSNv+jO+Oha9ZYFnwuf+0fJ3605ltMReogZS/4JaK7ijg7GDo92tOJQ=
+	t=1781606148; cv=none; b=uRYZmykZJ/zQPI94sSc9S3sZEQAGASmwG4g1UnU16HMn0Ct/en4IxUbvG2XxvQT/tjWyNlehB9aQXjkd+6h5x0l2T07NHKe1VP33h2V/qGbfrlAdSIxpyfPbTAUThvRjYGv09UHRUUh1MHrcD53HgyWeo9AopGaomraMTRFi+Xs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781605875; c=relaxed/simple;
-	bh=Na/0hInjZlFy+f86HfBHZHKRIRVzmWQctb3rA9JSGr8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KyiulCbeWpdVspaQxf8mcPeQVuEagh5nTJ3vSV0Oakbyn5CdNz3QSWERK2S4W/mwklEA9yn2Vj8+o5QvVwlF0wgWpd/5+buzDbkbrRM5osnQetrhNdpBN0b6H8mZeg64uwcLiZQjiMYU3wyAKkoLNseIJLAOIL2BnSDx7VtbmGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KrLLQWKb; arc=none smtp.client-ip=117.135.210.4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=4A
-	lWpfHRD20svlbvEuxneUYoPiBFZmx61S/n6SJjTfA=; b=KrLLQWKbSC4EUqbFNj
-	Une4N1qJJ7UlCGpaaQoNLkaR7OtAatgExQqm2EGXyRuGtlJc4z3cUGqTdjQW7sBq
-	hH43OEKnW+4GiAap1XL10P0ca3PeDNfA0n7Y/TB1peovChqbWGlITU67XYee0ILF
-	8/cliWWjnC+vZGOdcOOA5oK6g=
-Received: from rlk.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wDnrK69JTFqGSqCDw--.29972S4;
-	Tue, 16 Jun 2026 18:30:29 +0800 (CST)
-From: guoqi0226 <guoqi0226@163.com>
-To: sashiko-bot@kernel.org,
-	mkl@pengutronix.de,
-	Mark Brown <broonie@kernel.org>
-Cc: guoqi0226@163.com,
-	linux-can@vger.kernel.org,
-	mailhol@kernel.org,
-	o.rempel@pengutronix.de,
-	sashiko-reviews@lists.linux.dev,
-	socketcan@hartkopp.net,
+	s=arc-20240116; t=1781606148; c=relaxed/simple;
+	bh=q6GMZ8l6dmAW9qA/mMYBaPem5kkLiWzFwyAP7rClnxk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uQTfO9MhJg9ygkJTWW4ppg2KAGZ8NjDKcG3XlCEyuO7hm273L8529U0l0RRW4aDWHpM2vSxPnKixg2kaDWO4jSSH0d1/+xcC8iGhJYEUtyb7hmdJ/+Hbuqwe+vxGN5IWCxI4Of/66ZLy+KhC8shEtG7QYBwGAmdEcnsWvYtg7QI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gZKvuAqm; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 295AB1F000E9;
+	Tue, 16 Jun 2026 10:35:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781606146;
+	bh=XJRIemPytV1aguctNVZZ7Efd5w5Kogtqo/i30RRjt0Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=gZKvuAqmubQT8pWMQdfmuJz4HqNW46GbKO74ppRYG1KaAyHsYESgJkp+o7Lt81Dk5
+	 +0BIplzvolOB85QK49K9ssXVvKuw58FJdV4nVX+0bVj8zBeJwL6pNmvd1czu8SFTgc
+	 5mE9eu7fqqdcIBtA5qLVJ++3ywCKFnDkNikUSXIEcfIsYrSVoyWUNol18qik7xmIRQ
+	 m57AWP8eLozyWm5SSQ/CaNkLL+Qr+VtZZEh8tGPQIxCKnb+1+I2rEs/v/Zi4f9prOn
+	 6HOIpCcb730w/dH52JS6ZbP5qdDYp4iOJ7cWYIwVz9cb8W73F2uPn+X1h77fl5SXOk
+	 uXE/umqtZ96bA==
+Date: Tue, 16 Jun 2026 11:35:42 +0100
+From: Mark Brown <broonie@kernel.org>
+To: guoqi0226 <guoqi0226@163.com>
+Cc: sashiko-bot@kernel.org, mkl@pengutronix.de, linux-can@vger.kernel.org,
+	mailhol@kernel.org, o.rempel@pengutronix.de,
+	sashiko-reviews@lists.linux.dev, socketcan@hartkopp.net,
 	linux-spi@vger.kernel.org
-Subject: [PATCH v4 2/2] spi: Add NULL check for spi_get_device_id() in spi_get_device_match_data()
-Date: Tue, 16 Jun 2026 18:30:18 +0800
-Message-Id: <20260616103018.105612-3-guoqi0226@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260616103018.105612-1-guoqi0226@163.com>
+Subject: Re: [PATCH v4 0/2] can: mcp251xfd: Add ACPI device ID table for
+ MCP251XFD
+Message-ID: <997991e6-0e09-47eb-a6ac-5f455ddc250a@sirena.org.uk>
 References: <20260616092614.00ED51F00A3D@smtp.kernel.org>
  <20260616103018.105612-1-guoqi0226@163.com>
 Precedence: bulk
@@ -67,81 +64,78 @@ List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnrK69JTFqGSqCDw--.29972S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Gry5Gry5GFWruF4ftrW7XFb_yoWftFb_ur
-	15ZryxWr1fKr97JF1Fqr1avryfKF4YyrZYvr4vqF9aqws8ur47AFWvvrn8AayDuFy0yr1D
-	WFn3Xay3Ar43ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUj8pntUUUUU==
-X-CM-SenderInfo: 5jxr1xaqsslqqrwthudrp/xtbC-gVhyWoxJcVajgAA38
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="yFb1XlutYJnaVOoW"
+Content-Disposition: inline
+In-Reply-To: <20260616103018.105612-1-guoqi0226@163.com>
+X-Cookie: Password:
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-7.26 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[163.com,vger.kernel.org,kernel.org,pengutronix.de,lists.linux.dev,hartkopp.net];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7855-lists,linux-can=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:sashiko-bot@kernel.org,m:mkl@pengutronix.de,m:broonie@kernel.org,m:guoqi0226@163.com,m:linux-can@vger.kernel.org,m:mailhol@kernel.org,m:o.rempel@pengutronix.de,m:sashiko-reviews@lists.linux.dev,m:socketcan@hartkopp.net,m:linux-spi@vger.kernel.org,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[guoqi0226@163.com,linux-can@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_RECIPIENTS(0.00)[m:guoqi0226@163.com,m:sashiko-bot@kernel.org,m:mkl@pengutronix.de,m:linux-can@vger.kernel.org,m:mailhol@kernel.org,m:o.rempel@pengutronix.de,m:sashiko-reviews@lists.linux.dev,m:socketcan@hartkopp.net,m:linux-spi@vger.kernel.org,s:lists@lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[163.com];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[guoqi0226@163.com,linux-can@vger.kernel.org];
+	FREEMAIL_TO(0.00)[163.com];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[broonie@kernel.org,linux-can@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-7856-lists,linux-can=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[163.com:+];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,sirena.org.uk:mid,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7B6DF68E5F7
+X-Rspamd-Queue-Id: 12CCF68E60A
 
-Prevent NULL pointer dereference when spi_get_device_id() returns NULL,
-which can happen when using driver_override without matching SPI ID entry.
 
-Signed-off-by: guoqi0226 <guoqi0226@163.com>
----
- drivers/spi/spi.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+--yFb1XlutYJnaVOoW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 104279858f56..079ac01a2229 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -355,12 +355,16 @@ EXPORT_SYMBOL_GPL(spi_get_device_id);
- const void *spi_get_device_match_data(const struct spi_device *sdev)
- {
- 	const void *match;
-+	const struct spi_device_id *id;
- 
- 	match = device_get_match_data(&sdev->dev);
- 	if (match)
- 		return match;
- 
--	return (const void *)spi_get_device_id(sdev)->driver_data;
-+	id = spi_get_device_id(sdev);
-+	if (!id)
-+		return NULL;
-+	return (const void *)id->driver_data;
- }
- EXPORT_SYMBOL_GPL(spi_get_device_match_data);
- 
--- 
-2.25.1
+On Tue, Jun 16, 2026 at 06:30:16PM +0800, guoqi0226 wrote:
+> hanges in v4:
+> - Split into two separate patches:
+>   1. SPI core: add internal NULL guard for spi_get_device_match_data()
+>   2. mcp251xfd driver: cache and validate match data pointer in probe
+> - Remove duplicate spi_get_device_match_data() invocation and unsafe dereference
 
+Why is this a series, are there any dependencies between these two
+patches?
+
+--yFb1XlutYJnaVOoW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoxJv0ACgkQJNaLcl1U
+h9BVAQf+LlIoxb9QviU7zuSrpS6s2Qar3R7TbO12N2S/XcjwYnU7kEYRqBCgYaxh
+2SGHOFcfkUu7pmIVDHXFA0K2DX0BDHDoah3LPH5CtfCHU8XJfWoqu5YMlk5P5eni
+wSyc/IlDO02PzXAIwFXN2i3fcqtmtBLD1Gn1UHtyrmtT5fcN+VNXK+dczDuOxH6g
+fpT+WZfpz/Zq0E/FOmTgk2Ntf27kyzHuHWSd3/AdFYCPrZ01RQJVIOtuvJVCaoF8
+NTViKsVfgcm9KNAloZlXuM5ZiaDTEAkwjrj50w+VQOuwCxCIBcTDGnxSLN2Uk20m
+gR1vF+4R+QjFa7fmWiXoKub3WThYRQ==
+=nd1y
+-----END PGP SIGNATURE-----
+
+--yFb1XlutYJnaVOoW--
 
