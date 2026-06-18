@@ -1,136 +1,125 @@
-Return-Path: <linux-can+bounces-7879-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7880-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id l9goApX7M2qXKAYAu9opvQ
-	(envelope-from <linux-can+bounces-7879-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 18 Jun 2026 16:07:17 +0200
+	id BTXwAMD8M2oKKQYAu9opvQ
+	(envelope-from <linux-can+bounces-7880-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 18 Jun 2026 16:12:16 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 843776A0CDB
-	for <lists+linux-can@lfdr.de>; Thu, 18 Jun 2026 16:07:16 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D8B16A0D4F
+	for <lists+linux-can@lfdr.de>; Thu, 18 Jun 2026 16:12:15 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=baylibre.com header.s=google header.b=pt1Lllqf;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7879-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7879-lists+linux-can=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="DYU/ujIQ";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7880-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-can+bounces-7880-lists+linux-can=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 68E6B30D127F
-	for <lists+linux-can@lfdr.de>; Thu, 18 Jun 2026 14:03:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E3D163013EE4
+	for <lists+linux-can@lfdr.de>; Thu, 18 Jun 2026 14:12:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C15643FAE00;
-	Thu, 18 Jun 2026 14:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E08883B2FC2;
+	Thu, 18 Jun 2026 14:12:11 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CB03B6346
-	for <linux-can@vger.kernel.org>; Thu, 18 Jun 2026 14:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C595C3F58F6
+	for <linux-can@vger.kernel.org>; Thu, 18 Jun 2026 14:12:10 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781791391; cv=none; b=qR7kBmp3eHeZl3AYPuMyjlcZP9Py3vySM4KgIyfiy5oS5ACKp5voR99r4mhVAprFKc6ivPVxAXV23RaYV9ybMAvv4IlSuSpCRJxvkrYaANbV2FYbnfoyHyPNG7t3dAssJ64bJZ3BdBaCh2MfNdnLawDEyOaUFxO5unWCAmT9CwU=
+	t=1781791931; cv=none; b=A+ZhtBEFkoTCn66Tpdh625zJtFu4IU8XsI16IoGdMXnXhptnB876MRco0mUa6EiWJ+FFXmlhvydeqUDKXgrotMypPZY9MWN6qEmwHzY2Jej5aP6KDq4QNU4DVbILEE96aFuzWUy+naeO2TPbZQABt3VexwWC+FKpAl7pd+IwaVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781791391; c=relaxed/simple;
-	bh=263UnQqT7FgRjQmrIuWnRIN9Xzmjzy5Zozx+IEZgAgM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kYAzX3fSmEmzh7f3uT1a0mZxoY1avMhiO68/U3pXm/A2hXoLTfFHbPqh5cC3E+FiDVhKNi032bPlziZslYXbX0jAEvWwTsBj0AHb+0+TYVbxn6hi4Vcl2OEOLyypK+HrODec+punSgGKwSqtum6nscFad7RUee9EaogFve5Flr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=pt1Lllqf; arc=none smtp.client-ip=209.85.221.52
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-462ebd5d37dso1167594f8f.1
-        for <linux-can@vger.kernel.org>; Thu, 18 Jun 2026 07:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1781791387; x=1782396187; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jos76VU9rUcfTgCENKyUN1lsrrQ63yv55cXHCv1GV14=;
-        b=pt1Lllqfz1DR5lS4hxUiGsQrthAzYZWCVFMOsUeERbgGrWTzXfKYxy0AIkSQzkhFAo
-         H3Np4gA1A6ZHufF1UoiqaNQcs4usnBEC6d0fdBteYemOLjunU7q+qH3lnLAcM0MnsMrM
-         nxqYTs18z+EHLx2380LEFg3XbH4cCC6hq3tmtgQm46KEJv5hBrAKuKjfKMNmcUh/Lb4V
-         zIgZmCggCD6xisEF59/evzGLbzTuifT1HG81MOVxGcoSNIMR7BBtimzwZ1wnsG3z3itN
-         FcKNNRjTK9wYB1pV496DHEqZ7FexcOWOSyny5GYeUUlr8uGrz7IvvsP+AqT9xz7XRpLx
-         OHLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781791387; x=1782396187;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jos76VU9rUcfTgCENKyUN1lsrrQ63yv55cXHCv1GV14=;
-        b=G3os4eg89zTkV0MScaxB4jpNZlRNfZLYsE0rAhUPP+d1LAPcwn/ktJQTW2ABzhFXmD
-         RYo+7bALXpDAuXDsCZk2ZYOe4Vu/i+EjB/XmjXOynAO1tFiAy6QjYl5YNlX4qldFQfpD
-         N8b7zjjIGMfLFDNGnO6CkaDFhbiAjs2NWhmJGO/CThUOZVlVlnLsDLxQMbhANmOP3Bql
-         bKUPPj/0XYIYxEA6H3SV6Ep2zzHzujjKu3MjOwcKN7BNNr0aaebSNKKeavER1GtTWDmH
-         Kk+dihkRQHGaXr6vbALS8bm1uciImakzpD1yG57sssiKgKLDdep3KmsFPuSpPyOd8An/
-         vJCg==
-X-Forwarded-Encrypted: i=1; AFNElJ+1PkJxlW8wv7sqTAuVY62T2g5e6EEKRR5albqmC1XBNdkDxnZQ9KJUGm9Vp00mjzzTZPKX4ZPHx+o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxe/m9KfnnlV/0FcKIIReJnszXsAAIneOtm0S9GL4tDqR+DEqW6
-	5JiNv8LnoLvYb3uzWziAmpdFqlw42AxGgRbWAR8YkaALDhygq0Q9EkoiX+aiAhDVcWE=
-X-Gm-Gg: AfdE7cnOUzUaBw3PV0PfgysxnqAV4AOKCAfs2gsNmsAWrqWFpkLehz4gTNEymnZRcop
-	D9ALppRCZCCUTWum1wws9diiLgP94CVfqjuTgBKP0C7fLQ0D6BRXWa44IkSZ1uaddkzhwkEJdBz
-	kWpgqcGnOPqeAuMh21qHq2YmgNmcgAfYiHgDDRHyCbuNV3zyv9LNkvCPHG/PjstDgit6wmJpWeQ
-	Iu/wAvPs4e97s4d37S8LOyAjJAHPcmwV47eV/B76KJtW33Gk8X2tEsKphIjhbbOJY31xffzUiny
-	o9hi4zKtc32o2hQQ6rka0o6B2uzoqZtMzuY+zeyrO/WdbI4nSHa0c6qRe632r4I+Qcv4w7TZ+1h
-	ynb9vTLMMLkGCVn7HxJYBOxNkbFWYGgjOEGWcbdxYMdZ5T3G/+roK7cDjlrAHWcP++oqhhU0i53
-	DYYCCw9ddXKly8sFV3gfej+42U/vZqRBFJLDhS/vYyUSqsiD62II5k3yK/gpt3Npek7h6Z2X37a
-	5Vq
-X-Received: by 2002:a05:6000:4687:b0:464:6ee:4fe1 with SMTP id ffacd0b85a97d-46406ee51d8mr3568612f8f.33.1781791386660;
-        Thu, 18 Jun 2026 07:03:06 -0700 (PDT)
-Received: from localhost (p200300f65f47db04cea0a59ab11cac9f.dip0.t-ipconnect.de. [2003:f6:5f47:db04:cea0:a59a:b11c:ac9f])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-46289c3b3a3sm15325402f8f.30.2026.06.18.07.03.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2026 07:03:05 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?= <u.kleine-koenig@baylibre.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Rob Herring <robh@kernel.org>
-Cc: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH net] can: flexcan: Fix probing for m68k/coldfire
-Date: Thu, 18 Jun 2026 16:01:47 +0200
-Message-ID: <20260618140147.142489-2-u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1781791931; c=relaxed/simple;
+	bh=KVNX1CLx21/EnMNl5c0knbbb35TPJoePH/C5HSx1vOE=;
+	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=RhnAo/zHMUjh+lp+XvAnA5KzWi+Ta4Su6KtvzEdDFLwsiD2J1wAoyrLsaivXy/drDSwc+jD2g74oxQ+GiIPsXxS0DjoxFOZFOby5guzZkPykoeYd5pF9GkYtEh4uzMooT0v6jKRWetFUN2FT8IjQ4jN34onwLEFihdxxb5qOgdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DYU/ujIQ; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11C001F000E9;
+	Thu, 18 Jun 2026 14:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781791930;
+	bh=yatM9sUc9kmV5xZFxhihWjNWNExh3lBIsDvAFiTL8lo=;
+	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date;
+	b=DYU/ujIQ1h0e1rhCu65Bazv4glOVrJTjnxlg8uW+WfRIzr+I7iORMzUqz2q7aSOCN
+	 o47J3K4U4Ne/xqaMjELGbuMbp2hFsETea7RbqGMBP3glztifjs/jLv6lwwO1pZeG2A
+	 RW65U8Hra4hssAIj5k7YRfhdoRR2yh4JdMUh9fwGsb/w3P26Es+Kcu9cfL7qagjvhG
+	 vI0kIcC8eKqza4mbppogjaQeLyf5uAMl0v9VseuN01Z7L2ea1pUGA0veIycpJLWcrG
+	 N4aSo0j3eFTsjmLGnD3DtF3UglbMLbPIA21aLr5UIyPaI505OZLVZZqWMDSib8GsFK
+	 FcO93/i++dSTw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net] can: flexcan: Fix probing for m68k/coldfire
+Reply-To: sashiko-reviews@lists.linux.dev
+Cc: "Oleksij Rempel" <o.rempel@pengutronix.de>, linux-can@vger.kernel.org, "Vincent
+ Mailhol" <mailhol@kernel.org>, "Oliver Hartkopp" <socketcan@hartkopp.net>, "Marc
+ Kleine-Budde" <mkl@pengutronix.de>
+In-Reply-To: <20260618140147.142489-2-u.kleine-koenig@baylibre.com>
+References: <20260618140147.142489-2-u.kleine-koenig@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 18 Jun 2026 14:12:09 +0000
+Message-Id: <20260618141210.11C001F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2611; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=263UnQqT7FgRjQmrIuWnRIN9Xzmjzy5Zozx+IEZgAgM=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBqM/pML1hFap/UgihwRJNb3DQPM0zusq3sfUm27 yKUYXEx1neJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCajP6TAAKCRCPgPtYfRL+ TqY2B/wPSLflQcf6bhsX8LkcflcqNm7174taCwQLa0R9I1TrLZQqw/AOowkuL/pwpTwGLrs84gR relE5J0uazE683Zv3i/JkOrMkiymyZUx5T5sOuunNvGrQhIRwJsk3fDxlfYrdQnPTf1O6wNk7TC Ev8kds36RmxGDCSzbhsYfvatVmoRtESYRP7bNPJ0j0xB9bmZpzM6Occ09QFN9eDgsYKsX2loH7d z30fZLMFcjkIVq2pglGw9xHrVAK695hDQ1TGxr1kbNzrgm6HVnxbgksjSI4m9H/hNSGOspTCKk/ IgD7zCruvvHll+ZJLNTAEsx2Xo+TASyfNvsOTuxJzxi0n0hl
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
+	MISSING_TO(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7880-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS(0.00)[m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,m:mailhol@kernel.org,m:socketcan@hartkopp.net,m:mkl@pengutronix.de,s:lists@lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,baylibre.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,smtp.kernel.org:mid,sashiko.dev:url,lists.linux.dev:replyto];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:mailhol@kernel.org,m:robh@kernel.org,m:jeanmichel.hautbois@yoseli.org,m:linux-can@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:stable@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[u.kleine-koenig@baylibre.com,linux-can@vger.kernel.org];
-	DMARC_NA(0.00)[baylibre.com];
-	TAGGED_FROM(0.00)[bounces-7879-lists,linux-can=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[baylibre.com:+];
-	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	TO_DN_SOME(0.00)[];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-can];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,baylibre.com:dkim,baylibre.com:email,baylibre.com:mid,baylibre.com:from_mime,vger.kernel.org:from_smtp]
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 843776A0CDB
+X-Rspamd-Queue-Id: 3D8B16A0D4F
+
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+
+Pre-existing issues:
+- [High] Network device is registered and exposed to userspace before hardw=
+are and state initialization are complete, leading to race conditions and a=
+ PM runtime underflow on probe failure.
+--
+
+commit 3c3a1287a919f302aebc8b9802a583cf3a9bb1c9
+Author: Uwe Kleine-K=C3=B6nig (The Capable Hub) <u.kleine-koenig@baylibre.c=
+om>
+
+can: flexcan: Fix probing for m68k/coldfire
 
 When determining the device details was reworked in commit 5e6c3454b405
 ("net: can: Use device_get_match_data()") there was no replacement for
@@ -138,69 +127,87 @@ the previous handling of non-of instantiated devices via the device's
 id_entry which then results in a NULL pointer exception. The only
 in-tree provider of such a device is arch/m68k/coldfire/device.c.
 
-Given the id_table only contains a single entry just hardcode the result
-of `platform_get_device_id(pdev)->driver_data` and drop the unused
-assignment to .driver_data from the table.
-
-While touching the id table, drop the unusual comma after the terminator
-entry.
-
-Fixes: 5e6c3454b405 ("net: can: Use device_get_match_data()")
 Cc: stable@vger.kernel.org
-Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
----
-Hello,
 
-this is essentially v2 of
-https://lore.kernel.org/all/20260528094540.1867783-2-u.kleine-koenig@baylibre.com/,
-but that patch was intended to be a cleanup, while the discussion then
-revealed that there is a crash to be fixed.
+> diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/fle=
+xcan/flexcan-core.c
+> index f5d22c61503fa..05b8ca72ca2ad 100644
+> --- a/drivers/net/can/flexcan/flexcan-core.c
+> +++ b/drivers/net/can/flexcan/flexcan-core.c
 
-Jean-Michel Hautbois confirmed (off-list) that Marc's and my suspicion
-is true and probing the flexcan device provided by
-arch/m68k/coldfire/device.c indeed crashes.
+[ ... ]
 
-Best regards
-Uwe
+> @@ -2148,6 +2147,15 @@ static int flexcan_probe(struct platform_device *p=
+dev)
+>  		return PTR_ERR(regs);
+> =20
+>  	devtype_data =3D device_get_match_data(&pdev->dev);
+> +	if (!devtype_data)
+> +		/*
+> +		 * If the device was instantiated via the traditional platform
+> +		 * mechanisms (i.e. not by device tree), device_get_match_data()
+> +		 * returns NULL. The only remaining such device is mcf_flexcan0
+> +		 * (defined in arch/m68k/coldfire/device.c). Pick the right
+> +		 * device type for that.
+> +		 */
+> +		devtype_data =3D &fsl_mcf5441x_devtype_data;
+> =20
+>  	if ((devtype_data->quirks & FLEXCAN_QUIRK_SUPPORT_FD) &&
+>  	    !((devtype_data->quirks &
 
- drivers/net/can/flexcan/flexcan-core.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+[Severity: High]
+This isn't a bug introduced by this patch, but later in this same function
+flexcan_probe(), the network device is registered and exposed to userspace
+before hardware and state initialization are complete.
 
-diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
-index f5d22c61503f..05b8ca72ca2a 100644
---- a/drivers/net/can/flexcan/flexcan-core.c
-+++ b/drivers/net/can/flexcan/flexcan-core.c
-@@ -2077,10 +2077,9 @@ MODULE_DEVICE_TABLE(of, flexcan_of_match);
- static const struct platform_device_id flexcan_id_table[] = {
- 	{
- 		.name = "flexcan-mcf5441x",
--		.driver_data = (kernel_ulong_t)&fsl_mcf5441x_devtype_data,
- 	}, {
- 		/* sentinel */
--	},
-+	}
- };
- MODULE_DEVICE_TABLE(platform, flexcan_id_table);
- 
-@@ -2148,6 +2147,15 @@ static int flexcan_probe(struct platform_device *pdev)
- 		return PTR_ERR(regs);
- 
- 	devtype_data = device_get_match_data(&pdev->dev);
-+	if (!devtype_data)
-+		/*
-+		 * If the device was instantiated via the traditional platform
-+		 * mechanisms (i.e. not by device tree), device_get_match_data()
-+		 * returns NULL. The only remaining such device is mcf_flexcan0
-+		 * (defined in arch/m68k/coldfire/device.c). Pick the right
-+		 * device type for that.
-+		 */
-+		devtype_data = &fsl_mcf5441x_devtype_data;
- 
- 	if ((devtype_data->quirks & FLEXCAN_QUIRK_SUPPORT_FD) &&
- 	    !((devtype_data->quirks &
+Specifically, flexcan_probe() calls register_flexcandev(), which exposes the
+interface to userspace via register_netdev(). Then register_flexcandev()
+alters the hardware state and drops the PM runtime count:
 
-base-commit: e2cae00c05d196491c318196792297f2dfbaa02c
--- 
-2.47.3
+register_flexcandev() {
+	err =3D register_candev(dev);
+	if (err)
+		goto out_chip_disable;
 
+	/* Disable core and let pm_runtime_put() disable the clocks. */
+	flexcan_chip_disable(priv);
+	pm_runtime_put(priv->dev);
+}
+
+Because the device is already visible, userspace can concurrently bring the
+interface up, invoking flexcan_open() and flexcan_chip_start(). Doesn't this
+race with the unlocked flexcan_chip_disable() call, potentially leaving the
+hardware disabled while the network core considers it up?
+
+Also in flexcan_probe(), if flexcan_setup_stop_mode() fails after the device
+is registered, it goes to the failed_setup_stop_mode cleanup path:
+
+flexcan_probe() {
+	err =3D register_flexcandev(dev);
+	...
+	err =3D flexcan_setup_stop_mode(pdev);
+	if (err < 0) {
+		goto failed_setup_stop_mode;
+	}
+
+	of_can_transceiver(dev);
+	...
+ failed_setup_stop_mode:
+	unregister_flexcandev(dev);
+ failed_register:
+	pm_runtime_put_noidle(&pdev->dev);
+	pm_runtime_disable(&pdev->dev);
+}
+
+Since pm_runtime_put() was already called on success inside
+register_flexcandev(), does the call to pm_runtime_put_noidle() in the
+failed_register path cause a PM runtime usage counter underflow?
+
+Finally, of_can_transceiver() is called after device registration to
+initialize priv->can.bitrate_max. Could userspace configure the CAN bitrate
+before these maximum limits are enforced?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260618140147.1424=
+89-2-u.kleine-koenig@baylibre.com?part=3D1
 
