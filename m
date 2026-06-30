@@ -1,244 +1,185 @@
-Return-Path: <linux-can+bounces-7920-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7921-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id lb//BF7KQ2o9iAoAu9opvQ
-	(envelope-from <linux-can+bounces-7920-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 15:53:34 +0200
+	id HJqlDs/LQ2o5iQoAu9opvQ
+	(envelope-from <linux-can+bounces-7921-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 15:59:43 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4B8F6E515B
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 15:53:33 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33CAC6E5274
+	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 15:59:42 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=ARi0YgVd;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7920-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7920-lists+linux-can=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=gmail.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=aw0dVj9k;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7921-lists+linux-can=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-can+bounces-7921-lists+linux-can=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 778A130D4C28
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 13:51:45 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 521693000BB8
+	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 13:59:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72DBA3655CF;
-	Tue, 30 Jun 2026 13:51:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FBF33822A1;
+	Tue, 30 Jun 2026 13:59:38 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95EE419303
-	for <linux-can@vger.kernel.org>; Tue, 30 Jun 2026 13:51:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E684366052
+	for <linux-can@vger.kernel.org>; Tue, 30 Jun 2026 13:59:36 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782827489; cv=none; b=BJxxCsK6GZqvUlzLQU8jFbSGiYS97qD46gZ94lC4PiW+zX2J3mu2ota6m4velhUm5ckc0dp1NVkYghKTb7JDf3ZxAi/ImhaGkHh4po8PQhEUy0CDfcAkue8VF68+z7lL71sWMjRBcjSqFH4o189FAtQm6/GuOXqssDcxAQdbEdM=
+	t=1782827978; cv=none; b=hdfDGxTACwj/kl8dDx3/DJ7nzU2SDvfZgIq2yd5mOw5l8GIew1ay17ybo4Wych71lZMidnloLM/L9Q7ARALFtdG/CG6jYW6k2ANpyKwdO71H7zuu85EAkWIIyTs7sykaRP6AkQstbY4oNmuSgB9MOuGpQySLKZ+8vbqjZvbmFkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782827489; c=relaxed/simple;
-	bh=N+KcMg3YdW3ZGEXV2ewZVcvhA1hOWZZyP9K83y3H7iU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rfe6RrXUzR7+rYCagzH5wi+E0mnqigFe3XUOtODVVTUlGo/g4IhYeU//G+hU/7Xh2N4yc8+Y9Iyuh+VSYW779UlHANU3aF1ME2C0u5BBX4LvvHizdNDzYsmKtL6YoD/kICQcIZMrr4F7HaYcih/lmYZoonp9mARfFZsys2KbU3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ARi0YgVd; arc=none smtp.client-ip=209.85.221.50
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-473dc4cf238so1374818f8f.3
-        for <linux-can@vger.kernel.org>; Tue, 30 Jun 2026 06:51:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782827486; x=1783432286; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bWvTJIR6MW/9Fk0B89sOeEZGZXWK7HW1VK3cCDHNi6Y=;
-        b=ARi0YgVdWvXZVy5FnRbpjSXlkhj954J4nCIiPgGl5bHeQ3vqYc6eYRLP4WRMBdShZv
-         G/2U8e5yQPN9zzjexD9Shvq51mOKQIKphXWvY9baELy7cPEAt1sWNp/cM7xQ2P6RO87h
-         7/UM4V+qUvkzeqPRib3qaPNC8HkGioab7CpA4ftYfKpu93z08QBhIg8Jeg6wt0gCVsD7
-         Iwte2xBbOl2IOa5bYr6ziLe0PzGZMDGZDywVIXQTLxBCT446VGTIAZ4Rr+5dXlmsSTCH
-         SeDFrKH3It/OtF9AiP/RS6/aVbTkW7W3j8TaMoY+0hvuch+UsedIFVzfFh2qQnGrYoIk
-         PXhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782827486; x=1783432286;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=bWvTJIR6MW/9Fk0B89sOeEZGZXWK7HW1VK3cCDHNi6Y=;
-        b=B0ILkMA0b9IhwBAOP+yp+8IjzWlCUWChyO/q4qQiZlW+oe7jU8oNUDFF3wgYdd0+P0
-         NkmuRKz8jBQQCGSsYWBF+gZvYRZG5kUUWgfKYjiolpfQZTlEbkdCL3JoLIMVXO9FVAnU
-         eF2/KoEgpuV92TYWyUajgb8cL4MUs433RecmpfQmVlKvzaN721tKD/pSXzGpYmDnxzdD
-         me3qen5zVrQCaGvQ+bSrzD2y44pOaIFZeN4JGEI34TDbDDdTMm40BdFnjb0ZlnZt7QKu
-         Z4kvkreCQNX5hze66qdXjUVFfEcx6GmzvrX6Xs46ckbNtBbBoENVIbUXHJeg2r8CNK6n
-         zZwQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqiEn/LcCfVItY1OjIFiRg24pV5jVonNkznweebG/4SkEfdY/5TNyCxBZjYHmYVB1N8xex6yepo6uo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg4C5b7e9mz0vUbW4B6iqacnjX+XVx19Rr2mL94x635Mqcvp1s
-	4YsqZRl2mzcdQOKcMuS3Dg0YQaWZ50JV2RliQ+mHIIUKWUjledccf0IZ
-X-Gm-Gg: AfdE7ckrEGp0JQy/+KigIoNMgOWv5BlipBURlS2ETtwjFVQ2dASqmn3kNiowDph6QSG
-	TkmZOhFpW3D32Z7KryPT4MoD/el7CFUoE1MDy0cJrH+vZI4uP4+5BMLsIxhqqGZ6Fdy3bdJjvC4
-	m4t9bQpLnKEB4VP2HTvRa5sIG3ZrcvgyCWJMfJYfPDGzTlR/ckN8sUfTk5ekKaJfG/jcHWTlzA2
-	oofeM9XeMinIPj5Z67rnFq5RpVBIJopFxhzTDtB1IlU1QHjZVzbV21HlmugfrpT8k/3JBxNyjgg
-	O2me/B8cw4WZXymfR5c52DIDvWRAOvUwH1mWoLGIK8464SOhitdUNJIGRIuFLdSmaPH6qC+Fn8b
-	pIRjl+/5dsrBlsEHcmrO8+Z+UgFF6fzKraP6RAYGM/Fuo88mDE8SA7EC5xUWJ+yDY8IqPAAAXba
-	MEi8O00s0XqFsXhQ/zjDjn0U8jbosOLQClp6v9Z72cYJqGsqGr
-X-Received: by 2002:a05:6000:2304:b0:46d:8695:f49d with SMTP id ffacd0b85a97d-47552789722mr5212640f8f.34.1782827485983;
-        Tue, 30 Jun 2026 06:51:25 -0700 (PDT)
-Received: from localhost.localdomain ([2a00:23c4:a702:d301:3f6d:4f26:2d9c:ab4f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4756636cf26sm7216964f8f.19.2026.06.30.06.51.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 06:51:25 -0700 (PDT)
-From: Biju <biju.das.au@gmail.com>
-X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Tu Nguyen <tu.nguyen.xg@renesas.com>,
-	Rob Herring <robh@kernel.org>,
-	Ulrich Hecht <ulrich.hecht+renesas@gmail.com>,
-	linux-can@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH 3/3] can: rcar_canfd: Fix interrupt registration order
-Date: Tue, 30 Jun 2026 14:51:16 +0100
-Message-ID: <20260630135119.104774-4-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260630135119.104774-1-biju.das.jz@bp.renesas.com>
+	s=arc-20240116; t=1782827978; c=relaxed/simple;
+	bh=e63Ur68Lv+vfeQ8XNXteXmmCEhY25UBSoPtwkxFFV/8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=u1R9r27FcOLmI8iVf/FnaQiUWKqAIO2E65kmTUWzpE9bb4Tz/gvjIZMTNPdyDIDAMAN4QikVVpSbLkDkVL0usN45FcgyttL+tqWIZJyZUWD+yS2wAzCHqP99c2tBEbB203rOcitfMBsmcItejEDiRK63cpn+1erXJVYa9blEscA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aw0dVj9k; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 558A51F000E9;
+	Tue, 30 Jun 2026 13:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782827976;
+	bh=nB8/dl4PLMZucg18RU9rXFF0A6PsemIbYRSiiVEhIpk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=aw0dVj9k/kmD8cDbucNCwWkjxeeD3pCUvY6l5djzy+Fa+i1Y7dXi9coxizF5EqZOf
+	 +zRH++h/WkUlFp/zca3xGaxj3p+YEkllD4hRRrHujmNlZb69knjFiAUbxV8mqvF47H
+	 x2PHGRZ01OYaAA3yTPma3GZoPM+01S+RzEyQ0k1cUPRi5oiFChpAb+qL+sP7hwQ/Sw
+	 DNJpasDl6RFhVIn4+oU0AgLzqQdB+JjqApAF06I7r3bcE14CnjsliJlYk118lQJkB/
+	 p+DN/roba0/5eox9fu26E0j7br2LOwvjvrVppbdHl1MeGLoz7u1KJk1BDPA0njO6rO
+	 Ov5A4L014upRw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 1/3] can: rcar_canfd: Fix dangling pointer on channel
+ probe failure
+Reply-To: sashiko-reviews@lists.linux.dev
+To: Biju <biju.das.au@gmail.com>
+Cc: "Vincent Mailhol" <mailhol@kernel.org>, "Marc Kleine-Budde" <mkl@pengutronix.de>, wsa+renesas@sang-engineering.com, "Oleksij
+ Rempel" <o.rempel@pengutronix.de>, "Oliver Hartkopp" <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+In-Reply-To: <20260630135119.104774-2-biju.das.jz@bp.renesas.com>
 References: <20260630135119.104774-1-biju.das.jz@bp.renesas.com>
+ <20260630135119.104774-2-biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 30 Jun 2026 13:59:35 +0000
+Message-Id: <20260630135936.558A51F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7920-lists,linux-can=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:mailhol@kernel.org,m:wsa+renesas@sang-engineering.com,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:biju.das.jz@bp.renesas.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,m:tu.nguyen.xg@renesas.com,m:robh@kernel.org,m:ulrich.hecht+renesas@gmail.com,m:linux-can@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:biju.das.au@gmail.com,m:wsa@sang-engineering.com,m:geert@glider.be,m:magnusdamm@gmail.com,m:ulrichhecht@gmail.com,m:bijudasau@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[bijudasau@gmail.com,linux-can@vger.kernel.org];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[pengutronix.de,kernel.org,sang-engineering.com,glider.be,gmail.com];
-	FREEMAIL_CC(0.00)[bp.renesas.com,renesas.com,kernel.org,gmail.com,vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7921-lists,linux-can=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:biju.das.au@gmail.com,m:mailhol@kernel.org,m:mkl@pengutronix.de,m:wsa+renesas@sang-engineering.com,m:o.rempel@pengutronix.de,m:socketcan@hartkopp.net,m:linux-can@vger.kernel.org,m:bijudasau@gmail.com,m:wsa@sang-engineering.com,s:lists@lfdr.de];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can,renesas];
+	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bijudasau@gmail.com,linux-can@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	ALIAS_RESOLVED(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp,bp.renesas.com:mid,renesas.com:email]
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[renesas.com:email,vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,smtp.kernel.org:mid,sashiko.dev:url,lists.linux.dev:replyto]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B4B8F6E515B
+X-Rspamd-Queue-Id: 33CAC6E5274
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-In rcar_canfd_probe(), global interrupts are requested via
-devm_request_irq() before rcar_canfd_global_init() enables the clocks
-and before the per-channel structures in gpriv->ch[] are allocated.
+New issues:
+- [High] The patch introduces a Use-After-Free by dereferencing `priv` imme=
+diately after it has been freed, which can lead to an Out-Of-Bounds NULL wr=
+ite primitive.
 
-If the interrupt is shared and fires immediately, the handler
-rcar_canfd_global_err_interrupt() will invoke
-rcar_canfd_handle_global_err(), leading to a NULL pointer
-dereference.
+Pre-existing issues:
+- [High] The lifecycle of the dynamically allocated `priv` is shorter than =
+the `devm`-managed IRQ handlers, leading to a potential use-after-free if a=
+n interrupt occurs during teardown.
+--
 
-Move the rcar_canfd_global_init() and per-channel probe calls ahead
-of the devm_request_irq() calls so that clocks are enabled and
-gpriv->ch[] is fully populated before any global interrupt can be
-delivered. The IRQ failure paths now jump to fail_channel instead of
-fail_dev, since channels are allocated earlier and must be torn down
-on this path too.
+commit e7cd96500f76ea63fe797db226dd1a89ff157846
+Author: Biju Das <biju.das.jz@bp.renesas.com>
 
-Fixes: dd3bd23eb438 ("can: rcar_canfd: Add Renesas R-Car CAN FD driver")
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
- drivers/net/can/rcar/rcar_canfd.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+can: rcar_canfd: Fix dangling pointer on channel probe failure
+   =20
+In rcar_canfd_channel_probe(), the channel pointer is saved globally
+via gpriv->ch[priv->channel] =3D priv. If register_candev() fails
+shortly after, the error path uses free_candev(ndev) to release the
+memory but leaves the pointer in the global array.
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index e88554388553..4ee108abffb8 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -2216,6 +2216,17 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	gpriv->base = addr;
- 	gpriv->fcbase = addr + gpriv->info->regs->coffset;
- 
-+	err = rcar_canfd_global_init(gpriv);
-+	if (err)
-+		goto fail_dev;
-+
-+	for_each_set_bit(ch, &gpriv->channels_mask, info->max_channels) {
-+		err = rcar_canfd_channel_probe(gpriv, ch, fcan_freq,
-+					       transceivers[ch]);
-+		if (err)
-+			goto fail_channel;
-+	}
-+
- 	/* Request IRQ that's common for both channels */
- 	if (info->shared_global_irqs) {
- 		err = devm_request_irq(dev, ch_irq,
-@@ -2224,7 +2235,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 		if (err) {
- 			dev_err(dev, "devm_request_irq %d failed: %pe\n",
- 				ch_irq, ERR_PTR(err));
--			goto fail_dev;
-+			goto fail_channel;
- 		}
- 
- 		err = devm_request_irq(dev, g_irq, rcar_canfd_global_interrupt,
-@@ -2232,7 +2243,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 		if (err) {
- 			dev_err(dev, "devm_request_irq %d failed: %pe\n",
- 				g_irq, ERR_PTR(err));
--			goto fail_dev;
-+			goto fail_channel;
- 		}
- 	} else {
- 		err = devm_request_irq(dev, g_recc_irq,
-@@ -2242,7 +2253,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 		if (err) {
- 			dev_err(dev, "devm_request_irq %d failed: %pe\n",
- 				g_recc_irq, ERR_PTR(err));
--			goto fail_dev;
-+			goto fail_channel;
- 		}
- 
- 		err = devm_request_irq(dev, g_err_irq,
-@@ -2251,19 +2262,8 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 		if (err) {
- 			dev_err(dev, "devm_request_irq %d failed: %pe\n",
- 				g_err_irq, ERR_PTR(err));
--			goto fail_dev;
--		}
--	}
--
--	err = rcar_canfd_global_init(gpriv);
--	if (err)
--		goto fail_dev;
--
--	for_each_set_bit(ch, &gpriv->channels_mask, info->max_channels) {
--		err = rcar_canfd_channel_probe(gpriv, ch, fcan_freq,
--					       transceivers[ch]);
--		if (err)
- 			goto fail_channel;
-+		}
- 	}
- 
- 	platform_set_drvdata(pdev, gpriv);
--- 
-2.43.0
+> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rca=
+r_canfd.c
+> index eaf8cac780387..5aafbab85da67 100644
+> --- a/drivers/net/can/rcar/rcar_canfd.c
+> +++ b/drivers/net/can/rcar/rcar_canfd.c
+> @@ -1982,6 +1982,7 @@ static int rcar_canfd_channel_probe(struct rcar_can=
+fd_global *gpriv, u32 ch,
+>  	netif_napi_del(&priv->napi);
+>  fail:
+>  	free_candev(ndev);
 
+[Severity: High]
+This is a pre-existing issue, but does the use of devm_request_irq() earlier
+in rcar_canfd_channel_probe() create a lifetime mismatch with this
+free_candev() call?
+
+The driver requests channel interrupts using devm_request_irq() with priv
+(which is allocated via alloc_candev()) as the dev_id. If a failure occurs
+and we hit this fail path, or during teardown in rcar_canfd_channel_remove(=
+),
+the memory for priv is synchronously freed by free_candev().
+
+However, because the IRQ was allocated with the devm_ API, free_irq() is not
+called until the device's devres cleanup phase, which executes later.
+
+If a spurious hardware interrupt fires during the vulnerable window between
+free_candev() and devres cleanup, could the handler
+(rcar_canfd_channel_err_interrupt) execute with and dereference the freed
+priv pointer?
+
+> +	gpriv->ch[priv->channel] =3D NULL;
+
+[Severity: High]
+Does this cause a use-after-free?
+
+The free_candev(ndev) call immediately above synchronously frees the memory
+block containing both ndev and the inline private data priv. Evaluating
+gpriv->ch[priv->channel] directly dereferences the newly freed priv pointer.
+
+If memory debugging is enabled (like SLUB poisoning), the freed memory might
+be filled with poison bytes, which could lead to an out-of-bounds write here
+when it reads a poison value for priv->channel.
+
+>  	return err;
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630135119.1047=
+74-1-biju.das.jz@bp.renesas.com?part=3D1
 
