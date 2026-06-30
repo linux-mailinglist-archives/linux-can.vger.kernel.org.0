@@ -1,48 +1,48 @@
-Return-Path: <linux-can+bounces-7926-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7931-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id GV7AD1bzQ2oZmAoAu9opvQ
-	(envelope-from <linux-can+bounces-7926-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 18:48:22 +0200
+	id LiO9F8fzQ2o6mAoAu9opvQ
+	(envelope-from <linux-can+bounces-7931-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 18:50:15 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7A786E699E
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 18:48:21 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACACF6E69F0
+	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 18:50:14 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=sntech.de header.s=gloria202408 header.b=JdHD6w+W;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7926-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-7926-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=sntech.de header.s=gloria202408 header.b=ra4IZzyc;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7931-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7931-lists+linux-can=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=sntech.de;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B867A311730E
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 16:44:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 59CF23159426
+	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 16:44:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35D8F3D6682;
-	Tue, 30 Jun 2026 16:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340533DA7C2;
+	Tue, 30 Jun 2026 16:44:11 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA1D3D649D;
-	Tue, 30 Jun 2026 16:44:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548063D6692;
+	Tue, 30 Jun 2026 16:44:05 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782837848; cv=none; b=N6OGi9iYIerru2U+Fa/RfPDIbCBJcovPvQSGw62GHIG4I4YJC+/9pmNv26jJ5HVI4mDegF/T/9gYiInZfeEsQWdmGpfQ9d0YpDmyahlqAY1Fpq/nmomH/EcM1vAE+0cKj51u95lLpLWsp3K1uq3kS+c8/RceqcZL2xzNM0WvgbM=
+	t=1782837851; cv=none; b=tTBNPHuLG53dJJjjPFwSS/EZOAq3Ay8thAvbO4Iji1M0bze7dmIXpGXJJnWqVkB722ijSy+8lKHwPaE908HkMV4nfaN0/i2p/K3pTbAKgqV1XeWu7AnbBfEtxpMsdGp+hsYkLaiV4Cd+6mE7vxnaZAvbCDII6AMBAZR+H2Jg19w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782837848; c=relaxed/simple;
-	bh=cL/qlUg1wkXPDzymqEP/9h5OI57tZzvr4cSKCtMXvng=;
+	s=arc-20240116; t=1782837851; c=relaxed/simple;
+	bh=xPTKnjYhG/klSu1C/iRiS52JiMJTkVUQXtrZFmc9eZ8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KeiyGZi8oFNFWjFHuxxqgPGQ4tYF+9JB4QrZXF9dRau8xaJMSV0h4xE99UG1Ce21Kn6ctP+enhxSxY2LDj/YjEImqF6ZT3VJZHX+3BIAsaSDU9gwjEtq7BuNlAGvBF06vExNNyQYhbzHZv6ssTYZhOdBFLsPcak1YzQ5ox20l+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=JdHD6w+W; arc=none smtp.client-ip=185.11.138.130
+	 MIME-Version; b=X4xPC9HWXfXzuy1828rVQghg2ntZvpugTqog3aKLYhHm1zFlSEESMsb5XCyeJZvdCytWxrRXRb9Tit/LtmKlnk8pqUmMBdPkzUNZh5/vS45Sa8c0RZ0K4jZWYYRJZPExNiBVyJixSxZMvlcdxiRtdAdN5ye5pjlqmH55yfpyD3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=ra4IZzyc; arc=none smtp.client-ip=185.11.138.130
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
 	s=gloria202408; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type;
-	bh=Hc28g7vpWVux2YAwXkS9a5h14xHv2zGqzwm/FemriIM=; b=JdHD6w+Wqy9VksFAbRDbEizRds
-	HcOoPowR5rNidLnnN2fynfvv8gWrSZrK57jkirfXvLhDFx4FADGvS+NTrnFDjEa72a1/GoWW1Vyh+
-	67Z0oEurLs7ilhxNXpKd2nHj9dn93elW+L2XeogBA9KlrCIHfmVD1zycy0qgEgxt/PJt2Uh1o0bU9
-	I8vAeObhCmU/YFI6PXu/zOtdp7HSEcOJQp/ALx2KqF0bwg/uf1a+C0aD+QvAEbHuldlezjFPrxKDI
-	BLnv3YmiysKYjFB6ISXD6akkE8l/xVV3NDH0UrKtmxVAKRTGWKTa4J+fC9GY1/ce1cw+fOmw1mnuw
-	nZSrTpyw==;
+	bh=iQBy/o37l9sudMeWSCTCpjVQ/V1ougLIUohroSPHPK0=; b=ra4IZzycLMlAALjhjKyzC+Wy0q
+	41zyiJleGla0koqeyiUVgLfeYR86pfv5TZyE/8orGe3kdgLl1NiYkWj2KAMUvHstoBhcA7mquLB33
+	D/x935HbO+vobPy6KV4bNyNokvmpSWgiErM78FO2IwPrYRTucLaZxD+8NhAqPjyKI8QWdF33h73eL
+	PwD0PEwVCFxVoTu2IfvZgeiTEPz51mynoc4frt8rNET0MOlWkqD2ZA4O9KgokITRk37MBqp48ASJ3
+	Co7Fk23AyHDtntqMsy4M0aon264qT8X+1U6KXJIRFwSGaEtjEp83G6NhtSCTQEYEh61swonUVC6/e
+	+4z5AsbQ==;
 From: Heiko Stuebner <heiko@sntech.de>
 To: mkl@pengutronix.de,
 	mailhol@kernel.org
@@ -60,9 +60,9 @@ Cc: kernel@pengutronix.de,
 	quentin.schulz@cherry.de,
 	zhangqing@rock-chips.com,
 	Heiko Stuebner <heiko.stuebner@cherry.de>
-Subject: [PATCH 2/6] can: rockchip-canfd: add support for the RK3588 variant
-Date: Tue, 30 Jun 2026 18:43:32 +0200
-Message-ID: <20260630164336.3444550-3-heiko@sntech.de>
+Subject: [PATCH 3/6] can: rockchip-canfd: enable erratum 6 on RK3588
+Date: Tue, 30 Jun 2026 18:43:33 +0200
+Message-ID: <20260630164336.3444550-4-heiko@sntech.de>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260630164336.3444550-1-heiko@sntech.de>
 References: <20260630164336.3444550-1-heiko@sntech.de>
@@ -75,102 +75,79 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[sntech.de,quarantine];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[sntech.de:s=gloria202408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:mailhol@kernel.org,m:kernel@pengutronix.de,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:heiko@sntech.de,m:shawn.lin@rock-chips.com,m:linux-can@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:quentin.schulz@cherry.de,m:zhangqing@rock-chips.com,m:heiko.stuebner@cherry.de,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER(0.00)[heiko@sntech.de,linux-can@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[16];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7931-lists,linux-can=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:mailhol@kernel.org,m:kernel@pengutronix.de,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:heiko@sntech.de,m:shawn.lin@rock-chips.com,m:linux-can@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:quentin.schulz@cherry.de,m:zhangqing@rock-chips.com,m:heiko.stuebner@cherry.de,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
 	RCVD_COUNT_THREE(0.00)[3];
-	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-7926-lists,linux-can=lfdr.de];
-	DKIM_TRACE(0.00)[sntech.de:+];
+	FORGED_SENDER(0.00)[heiko@sntech.de,linux-can@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[heiko@sntech.de,linux-can@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can,dt];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[sntech.de:+];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_HAS_DN(0.00)[]
+	ALIAS_RESOLVED(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-can,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,sntech.de:dkim,sntech.de:mid,sntech.de:from_mime,cherry.de:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: C7A786E699E
+X-Rspamd-Queue-Id: ACACF6E69F0
 
 From: Heiko Stuebner <heiko.stuebner@cherry.de>
 
-The RK3588 SoC uses a variant of this controller.
+Sending extended CAN frames from the RK3588's CAN controller, sometimes
+sends standard frames, as explained in the erratum's description:
 
-From the start it does not claim to support can-fd in any part of the
-documentation, so it seems that is still broken.
+  can0  00001234   [4]  DE AD BE EF
+  can0  00000001   [4]  DE AD BE EF
+  can0  000007FF   [4]  DE AD BE EF
+  can0  00000800   [4]  DE AD BE EF
+  can0  1FFFFFFF   [4]  DE AD BE EF
+  can0  12345678   [4]  DE AD BE EF
+  can0       234   [4]  DE AD BE EF
+  can0  00000001   [4]  DE AD BE EF
 
-Further errata will be enabled in subsequent patches, with more
-in-depth explanation.
+Enabling the erratum, introduces the correct behaviour in re-sending the
+frame:
+
+  can0  1FFFFFFF   [4]  DE AD BE EF
+  can0  12345678   [4]  DE AD BE EF
+  can0       234   [4]  DE AD BE EF
+  can0  00001234   [4]  DE AD BE EF
+  can0  00000001   [4]  DE AD BE EF
 
 Signed-off-by: Heiko Stuebner <heiko.stuebner@cherry.de>
 ---
- drivers/net/can/rockchip/rockchip_canfd-core.c | 11 +++++++++++
- drivers/net/can/rockchip/rockchip_canfd.h      |  1 +
- 2 files changed, 12 insertions(+)
+ drivers/net/can/rockchip/rockchip_canfd-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/can/rockchip/rockchip_canfd-core.c b/drivers/net/can/rockchip/rockchip_canfd-core.c
-index 29de0c01e4ed..707f387e7cf4 100644
+index 707f387e7cf4..105ca4d5cbef 100644
 --- a/drivers/net/can/rockchip/rockchip_canfd-core.c
 +++ b/drivers/net/can/rockchip/rockchip_canfd-core.c
-@@ -50,6 +50,12 @@ static const struct rkcanfd_devtype_data rkcanfd_devtype_data_rk3568v3 = {
+@@ -53,6 +53,7 @@ static const struct rkcanfd_devtype_data rkcanfd_devtype_data_rk3568v3 = {
+ static const struct rkcanfd_devtype_data rkcanfd_devtype_data_rk3588 = {
+ 	.model = RKCANFD_MODEL_RK3588,
+ 	.quirks =  /* Possible more Errata */
++		RKCANFD_QUIRK_RK3568_ERRATUM_6,
  		RKCANFD_QUIRK_CANFD_BROKEN,
  };
  
-+static const struct rkcanfd_devtype_data rkcanfd_devtype_data_rk3588 = {
-+	.model = RKCANFD_MODEL_RK3588,
-+	.quirks =  /* Possibly more errata */
-+		RKCANFD_QUIRK_CANFD_BROKEN,
-+};
-+
- static const char *__rkcanfd_get_model_str(enum rkcanfd_model model)
- {
- 	switch (model) {
-@@ -57,6 +63,8 @@ static const char *__rkcanfd_get_model_str(enum rkcanfd_model model)
- 		return "rk3568v2";
- 	case RKCANFD_MODEL_RK3568V3:
- 		return "rk3568v3";
-+	case RKCANFD_MODEL_RK3588:
-+		return "rk3588";
- 	}
- 
- 	return "<unknown>";
-@@ -846,6 +854,9 @@ static const struct of_device_id rkcanfd_of_match[] = {
- 	}, {
- 		.compatible = "rockchip,rk3568v3-canfd",
- 		.data = &rkcanfd_devtype_data_rk3568v3,
-+	}, {
-+		.compatible = "rockchip,rk3588-canfd",
-+		.data = &rkcanfd_devtype_data_rk3588,
- 	}, {
- 		/* sentinel */
- 	},
-diff --git a/drivers/net/can/rockchip/rockchip_canfd.h b/drivers/net/can/rockchip/rockchip_canfd.h
-index 93131c7d7f54..92566822e141 100644
---- a/drivers/net/can/rockchip/rockchip_canfd.h
-+++ b/drivers/net/can/rockchip/rockchip_canfd.h
-@@ -434,6 +434,7 @@
- enum rkcanfd_model {
- 	RKCANFD_MODEL_RK3568V2 = 0x35682,
- 	RKCANFD_MODEL_RK3568V3 = 0x35683,
-+	RKCANFD_MODEL_RK3588 = 0x3588,
- };
- 
- struct rkcanfd_devtype_data {
 -- 
 2.47.3
 
