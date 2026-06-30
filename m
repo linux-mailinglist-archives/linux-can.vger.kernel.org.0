@@ -1,48 +1,48 @@
-Return-Path: <linux-can+bounces-7927-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7928-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id soSWD1/zQ2obmAoAu9opvQ
-	(envelope-from <linux-can+bounces-7927-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 18:48:31 +0200
+	id U8kWBWrzQ2ohmAoAu9opvQ
+	(envelope-from <linux-can+bounces-7928-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 18:48:42 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D2906E69A4
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 18:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 71D716E69B1
+	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 18:48:41 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=sntech.de header.s=gloria202408 header.b=Py9ZKJST;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7927-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-7927-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=sntech.de header.s=gloria202408 header.b=qXRwduQk;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7928-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-7928-lists+linux-can=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=sntech.de;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 156FE311E0EC
+	by sea.lore.kernel.org (Postfix) with ESMTP id A567F31237F9
 	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 16:44:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8947C3D6CD7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDEEC3D7D94;
 	Tue, 30 Jun 2026 16:44:09 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D3283D669A;
-	Tue, 30 Jun 2026 16:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C30D3D667D;
+	Tue, 30 Jun 2026 16:44:04 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782837849; cv=none; b=jD+IrTnkCzP/pFrPb4+vq9kejqZWyHzzJeX7JMCjxHkljDM0eNxNRk0gcKKVxihzZLDa+0djvGuVdtexpv7WLRoBhR/tTZn/YbDXR/j1V5MM+4afTL6QWlwMEr6H6xr8bbVdC/SQorZzBiozHBP7Gtk6P2xsdXxkGpoFXgU5p68=
+	t=1782837849; cv=none; b=lU5p+jLVbKHFGUq+Ka3UqJdkmuiOMPAQnKd5xkfmh3UnKAk5g95cZVHXTn2Vl+Z3Xr6nhlQ7NZT9/8CWQzTl9QqGHMZkJNh5zi2HEetrIFZkG2DGjbMgnira2af67VkSyH8kUAWurFPgUWeS4P+0mZO+GALTHbqTSgDl2of45Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782837849; c=relaxed/simple;
-	bh=TUL1+g4A7kmyO+fIiG3kRf5secXWBOg+HDORnAnp41U=;
+	bh=TUeEks+aAoUeUvvBgRJnu8qgxRKPdjvvzCb4ddzTcVI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iwyhrvt5Vv+FGqfM8bWZkz05LDabpYHJsDOYQzSwnQ+rw5qi7vWwlghK/WxtIo6b/v1stcDaZNveagg+/F6PGduAiNjURQeCZOvHAczcGAg1Wzous8JwBP8DY5E18rGvj5J1UKvjrFTJGxPgyzvuz0PdhZDChY2CLKNv3hgvBE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Py9ZKJST; arc=none smtp.client-ip=185.11.138.130
+	 MIME-Version; b=mUK7tV5aB1wW/z8gRYboQuC0mQRSwJJ1ZOKg+VAjVSrieE/NXXjm5h+goMyb4xirhCxju5XljE31KC5DvzWSnKqJK6SgiatgBTrsGzrjstrScyGUImRmGE62QCKv+i8YIK9L9TwORuugHt3Su6cO9KRLpqv7WBQtmmTwzWNej/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=qXRwduQk; arc=none smtp.client-ip=185.11.138.130
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
 	s=gloria202408; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type;
-	bh=0edmQyMBBF2hDdlkMaDXaRUizb6MbyZ6wLi7kRGWNho=; b=Py9ZKJSTYGWf14Y3hLq1HyDniJ
-	eECGhrovt+szZmIU73s0cN7R7wEmF7A8Mw6oHb4/1kAfyNEZwfmh2VRkDSEf+yNcSAN0SSOf0EB/M
-	FubDPVLZRBoRSpmkx+LdiP9BLF+yKSiIus3vRAZi+QDfo9Pltq21ZzklaYpJLuedFyi2PK98bvZrx
-	pJ2irClMv7l3WxIQe8UAmHSjMNU7oI2ORD2nWsRVKHNTlLXei75fAFvbYC9QfYWgM2KjN3gTstVTg
-	7a6dAXt04JhSeqeAtD/1Gm3AO8JuBIP9D0mYpPH9/ERET0CqwUnMFEsJHwYOP19uJcefSJdYpZe7V
-	mq1LMRng==;
+	bh=52PHcV9omVEm3bSV/8oo19lgyN28ujPP92D8HygTz8M=; b=qXRwduQkyhCanl9khpEV3tX2R4
+	nx3N+M6659TkzEg/FULsjdst8z0TRxMRCzvXfjmZGS34Q/ASvN7Mh58AEfdEXZXx+jhBZ4+wWKWKB
+	64TUOwqhUfXGjS3UibZG1bzIU/UtayJtpusOUzR1E63RwajuwKA9YA9ueMmgyZRxlhiFTOCTYCqjN
+	xV2zf+VyqJPjL81C5XsD2SROR3BGdiW4eZDMizPdVju68CvT8SJ5QFqMe2jj8tjuUOFKYfO2e3HF/
+	ADWWMPTQiax6WtFvcm6tnFcl1nYG2AvPc/iTsqe8DF8606QNJpvVWXI1F/zAJ8VqpKLMbgBp2g7hi
+	2M/qn2Qw==;
 From: Heiko Stuebner <heiko@sntech.de>
 To: mkl@pengutronix.de,
 	mailhol@kernel.org
@@ -60,9 +60,9 @@ Cc: kernel@pengutronix.de,
 	quentin.schulz@cherry.de,
 	zhangqing@rock-chips.com,
 	Heiko Stuebner <heiko.stuebner@cherry.de>
-Subject: [PATCH 4/6] can: rockchip-canfd: enable erratum 5 on RK3588
-Date: Tue, 30 Jun 2026 18:43:34 +0200
-Message-ID: <20260630164336.3444550-5-heiko@sntech.de>
+Subject: [PATCH 5/6] arm64: dts: rockchip: Add RK3588 CAN controller nodes
+Date: Tue, 30 Jun 2026 18:43:35 +0200
+Message-ID: <20260630164336.3444550-6-heiko@sntech.de>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260630164336.3444550-1-heiko@sntech.de>
 References: <20260630164336.3444550-1-heiko@sntech.de>
@@ -92,7 +92,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_COUNT_THREE(0.00)[3];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-7927-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7928-lists,linux-can=lfdr.de];
 	DKIM_TRACE(0.00)[sntech.de:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -105,32 +105,67 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FROM_HAS_DN(0.00)[]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8D2906E69A4
+X-Rspamd-Queue-Id: 71D716E69B1
 
 From: Heiko Stuebner <heiko.stuebner@cherry.de>
 
-Lowering the clock-frequency as described in the erratum, also
-leads to empty RX-fifos immediately, indicating that the
-erratum is also present on the RK3588 variant.
+The RK3588 has 3 CAN controllers, so add the core nodes for them.
 
 Signed-off-by: Heiko Stuebner <heiko.stuebner@cherry.de>
 ---
- drivers/net/can/rockchip/rockchip_canfd-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk3588-base.dtsi | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/drivers/net/can/rockchip/rockchip_canfd-core.c b/drivers/net/can/rockchip/rockchip_canfd-core.c
-index 105ca4d5cbef..f3c8b54a9f02 100644
---- a/drivers/net/can/rockchip/rockchip_canfd-core.c
-+++ b/drivers/net/can/rockchip/rockchip_canfd-core.c
-@@ -53,7 +53,7 @@ static const struct rkcanfd_devtype_data rkcanfd_devtype_data_rk3568v3 = {
- static const struct rkcanfd_devtype_data rkcanfd_devtype_data_rk3588 = {
- 	.model = RKCANFD_MODEL_RK3588,
- 	.quirks =  /* Possible more Errata */
--		RKCANFD_QUIRK_RK3568_ERRATUM_6,
-+		RKCANFD_QUIRK_RK3568_ERRATUM_5 | RKCANFD_QUIRK_RK3568_ERRATUM_6,
- 		RKCANFD_QUIRK_CANFD_BROKEN,
- };
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
+index fc1fdbfd3162..ba82e2f057d2 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
+@@ -2648,6 +2648,45 @@ dmac1: dma-controller@fea30000 {
+ 		#dma-cells = <1>;
+ 	};
  
++	can0: can@fea50000 {
++		compatible = "rockchip,rk3588-canfd";
++		reg = <0x0 0xfea50000 0x0 0x1000>;
++		interrupts = <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru CLK_CAN0>, <&cru PCLK_CAN0>;
++		clock-names = "baud", "pclk";
++		pinctrl-names = "default";
++		pinctrl-0 = <&can0m0_pins>;
++		resets = <&cru SRST_CAN0>, <&cru SRST_P_CAN0>;
++		reset-names = "can", "apb";
++		status = "disabled";
++	};
++
++	can1: can@fea60000 {
++		compatible = "rockchip,rk3588-canfd";
++		reg = <0x0 0xfea60000 0x0 0x1000>;
++		interrupts = <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru CLK_CAN1>, <&cru PCLK_CAN1>;
++		clock-names = "baud", "pclk";
++		pinctrl-names = "default";
++		pinctrl-0 = <&can1m0_pins>;
++		resets = <&cru SRST_CAN1>, <&cru SRST_P_CAN1>;
++		reset-names = "can", "apb";
++		status = "disabled";
++	};
++
++	can2: can@fea70000 {
++		compatible = "rockchip,rk3588-canfd";
++		reg = <0x0 0xfea70000 0x0 0x1000>;
++		interrupts = <GIC_SPI 343 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru CLK_CAN2>, <&cru PCLK_CAN2>;
++		clock-names = "baud", "pclk";
++		pinctrl-names = "default";
++		pinctrl-0 = <&can2m0_pins>;
++		resets = <&cru SRST_CAN2>, <&cru SRST_P_CAN2>;
++		reset-names = "can", "apb";
++		status = "disabled";
++	};
++
+ 	i2c1: i2c@fea90000 {
+ 		compatible = "rockchip,rk3588-i2c", "rockchip,rk3399-i2c";
+ 		reg = <0x0 0xfea90000 0x0 0x1000>;
 -- 
 2.47.3
 
