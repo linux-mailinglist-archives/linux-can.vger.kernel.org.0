@@ -1,230 +1,335 @@
-Return-Path: <linux-can+bounces-7924-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7932-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 06AWBQnzQ2oPmAoAu9opvQ
-	(envelope-from <linux-can+bounces-7924-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 18:47:05 +0200
+	id aqCoFm2PRGq0wwoAu9opvQ
+	(envelope-from <linux-can+bounces-7932-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 01 Jul 2026 05:54:21 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 662206E6971
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 18:47:04 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7BB86E9918
+	for <lists+linux-can@lfdr.de>; Wed, 01 Jul 2026 05:54:20 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=baylibre.com header.s=google header.b=EQ0HU7Vf;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7924-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-7924-lists+linux-can=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=JHBwfLGv;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7932-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7932-lists+linux-can=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E9460308CE5A
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jun 2026 16:43:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6D6EB313EDC7
+	for <lists+linux-can@lfdr.de>; Wed,  1 Jul 2026 03:50:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFEA93CA4B6;
-	Tue, 30 Jun 2026 16:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 479172D7D2E;
+	Wed,  1 Jul 2026 03:50:47 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C471F3BED19
-	for <linux-can@vger.kernel.org>; Tue, 30 Jun 2026 16:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9CE82D3220
+	for <linux-can@vger.kernel.org>; Wed,  1 Jul 2026 03:50:45 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782837830; cv=none; b=uPGGZ+hbJN+XW5TvoZCyqG7dK+3h8tl9wpLSmyppNSDZl6RxF6tlAbyIothXyQfljouIexl3lTQoqJJ9gP+O6yDfSOB4Ycsg60mlbUsow6nfaapNuDbwNjaHK9s67cXQm5CfuXA1Os9GJ1JIjZfQlaR1VsMb+IukKsC9OSqqmwI=
+	t=1782877847; cv=none; b=nhvhPRGfEjmagel6rCgrx+O7IaPfIX1CS+i2/3FxE5d78Loswe+crrZ8TeTw3lBMdGywO8tMjdkoG1lzbDckAfwZ82TWxj/CYgRgMgpVjeCia6LRtMGhUnHXbbL07lTVATIlR/Rj0X+riM2CtPBkXWILbU2Z9IaBD1J0/rXrtn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782837830; c=relaxed/simple;
-	bh=p2PeC0nQIU8XGKa3S/8y6V/3/TZusI1x27XJWhQGfSA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UC3InY6rghqIwa0C05ZMmrxAfB5IstuQ+RXtWVZR+WtsDIvca+9o091Or+OZaNkiwH0qfTVTdsW/fJqtuUQXrkHVr2t61PHKYqd1rtoPfKBVwuTJNMEV4dk3XtYp2ZP9RZqQYzX3nNcz9f0SxbJG5tsmme/tfIbDDFLuSGdWhH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=EQ0HU7Vf; arc=none smtp.client-ip=209.85.128.52
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-493be1b9564so1457705e9.2
-        for <linux-can@vger.kernel.org>; Tue, 30 Jun 2026 09:43:47 -0700 (PDT)
+	s=arc-20240116; t=1782877847; c=relaxed/simple;
+	bh=QHLfq0+01isNj1yrq9v2QkM6WgJjPQHUV4X0GxdiE/o=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=r9ixg4g5+dilQVWhbFLvLykS1vOvyrpKc/IGwFkrHiFFh/xAxG05raeRssFZfmMGcZH7gEDGXQyi0JgmjkRN8+96cVUEh5v09Gwb9IKUz3kl90nEg5Ate6auUi04dOG8tpWRd9dsBtAA+wKUkD74oSgIZTy+2mS3zlQw1vK6JU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JHBwfLGv; arc=none smtp.client-ip=209.85.215.175
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c99eaa1f020so124743a12.2
+        for <linux-can@vger.kernel.org>; Tue, 30 Jun 2026 20:50:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1782837826; x=1783442626; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uGD+GAgzuwfHMyCvb0nP+s7ICmE38JS3rDHMHE5/jc0=;
-        b=EQ0HU7Vfu2P0a4q0Xlu2Yl4zBmffwyGvvYkhZ5fRBTokS52WI1kaCFeNc3WoyZkN4y
-         yh0Bqp6yvIXYu9zF0mkI5wzXMlhUYUWuTdaQs3UYBHa8LK84Iz7UslbUsmgoQGpK1b08
-         H/3X9X9544cClBvnbs1Au//xr0SFKqG18a05whZUHBIvv47C0qYbzSYMH6X8Fiv9aoEM
-         90WvKezdE0Deu6joBjQpbhfhrzXHnaw+biA7OcP8BDThVRQbABVU8SnmqySGzOvolwG0
-         JZk1UkKH7rxI3IMXkhVPAS1q7QMDOEchT7R5+4BejVBuhwiPZKKpBTmIEQi1e9aho50T
-         cRNw==
+        d=gmail.com; s=20251104; t=1782877845; x=1783482645; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4X7pzfCTXPwMbRd3JbENOoVc0U1qKMgH+pMjUvhfKbY=;
+        b=JHBwfLGvdvWV0U+2BmS7u1KrGPFlDXA9X5HyKKP8sIOF64hZxKBrCK8IXbhfeLW+eK
+         YcVyNfgWvs+pnDsoNKKTGLSNfth3zSoNsBpSK2Re2i1fu30FyLlj2e8cOMAbmWdRg0j+
+         1NLczPbs0R5UjbjSI/at0OMoZ/GeWtfNMSrND2pP2/iqdUqm5uaOXdGmnqB5m6gqZdns
+         Bx0Lycvnpuy9f4Ken/zQ0ozRfRVy30eUNdNQMt4ONwdYWczW8XGOL8kVHtReqthqZjwd
+         P2uOwR3ELhv/Xx+gewJPxnHmYYhT99gKxjDk2jqloVOW41pauS/kgYx6el0xuw2G0Dwa
+         GpWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782837826; x=1783442626;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uGD+GAgzuwfHMyCvb0nP+s7ICmE38JS3rDHMHE5/jc0=;
-        b=rSH3yKLsUxgByiQX9QvKs2gDK1CVGAgDyQA4vz4LI0DYO0F26xwS0wXJb0/wVG1L5X
-         fyFE/utJe7nZsLl6r0Rc4/dfOcVNYUP7GIldNzB4rGZvC03SyW3vaLE2VzsL76uyvU7v
-         w0rrFY49ck3mYW0bCGT0mTkRcmPpxx82mTrsznDFGQp8hVu2xNAy++JcvjQqsCKm7dkm
-         9w4vcuJjCDJRPuPC3uyyER/Xw5nes8qNH9St95k/AJeMwjNFzvr1xVfP765mSYvaSZGD
-         dWjydm/Xt3Y1KIPvDN8tpgzeiPkOb4EqLxgRGQTu2lfGHQJLIdw9l24IyHnfhiSciu7h
-         PBLw==
-X-Forwarded-Encrypted: i=1; AFNElJ8XU47/QobORy75eqmXd+qAHjTKyht+XI8Ul2vCcSci6eeS4iAGCzj0SA/w8YqvtVsT1PwON6GuCBA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzradvaHHFa4V6GerGvdpE7gBp3Y87MK7oWleVzBm7d6+dbskxh
-	SYxW1jfZd8deFNEznXgsuNcQ1lSMs7EgkohP6PLT9RjBj76+K82rEmpeHAg0TUwnc2A=
-X-Gm-Gg: AfdE7ckltZilUEJOJIWakLgnzxE+07WawtzjVEikgVjaL4dW9nIFwyT5ubR/a0Xbw7E
-	9+7s/47UX1VJot26lozZsObx7hq6DJZCevtrkOmQY8dVwn4/AiljC/IZFqatIauYwMzCpI7s1nW
-	qGuCRtoRgu8Gr5nHTQonOMFZA3nM50bWoR7qCl/yr06IlgTcsSR+Rr+1d9RM4HDM9C3myogZM4j
-	N83AzMr5yTXDsCzz4QT4PFsUd135G4Z/mir4O3wRumigPY2iqpOtgF9/EuT2ypdvojmo62ukluf
-	Bm0SZBgtRjtkJuKxcm+QlmaUcrSaGKYtGtrT1TBDEgHR8WPC1TkYcxmlgPTc1B+u++U2+uPabAw
-	7fOydrWXaPiXAKvxXnVuxOsMw8eo/gg3EPSnWg8zijmZIcv7C3EYHEEc8ekqCGH+OUYHL9sCrwk
-	DFADl5vtfZwJ6HDbfsxuQ+cVayWWNJRXcJEW0cEoL1RXORuFSGOrgeasaoM72OiHQQ9iI5vlPsa
-	c0V09e8WVSjvN4=
-X-Received: by 2002:a05:600c:3acf:b0:493:be37:df11 with SMTP id 5b1f17b1804b1-493be37e0bamr9516005e9.16.1782837826181;
-        Tue, 30 Jun 2026 09:43:46 -0700 (PDT)
-Received: from localhost (p200300f65f47db042a9b551def0a6b94.dip0.t-ipconnect.de. [2003:f6:5f47:db04:2a9b:551d:ef0a:6b94])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-493be4c8080sm9026455e9.1.2026.06.30.09.43.44
+        d=1e100.net; s=20251104; t=1782877845; x=1783482645;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=4X7pzfCTXPwMbRd3JbENOoVc0U1qKMgH+pMjUvhfKbY=;
+        b=TBmcmVSFL9AD+j+ec0/TnDsATnchjLqoJq103Abf89kcq1ob1Fx2A1lhea1G7/B0HH
+         o5kmVI3lH0MGbmRPw40inV2jKN1Q3vMEHzw6V3z534ExQqe66v0wV814K1YfYh6zvqrj
+         /VCkugxolY4E1edqHQYAqDORnoMz0ZvmtE8UD7ESl+QBKfzoK4nalNp/CIDEYGLa4ekl
+         HECPaBqfFJ7s91At8aBcJIXkRlc2i2CE4YFpohm4vrT+1VNfkL/wyRQX44dAnkEl/L1N
+         8f9LQHjSh87F+lJ/KY9e93wfPjcLRR/4ug8984VTAK91m7+XAxbfPonyZjSHxZlJ2JIU
+         KLEQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoQQNtwZOKXDsdmuBh9u6rjwYIafTeFtpHRRvM/gCiazrSbh5virZxbFpgsd1YPBjMDXL+mktSFEA4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynFSVEepT+6j20rfVkpSfY+c6AzmmXwXBxB8H0O25GAaP2JEqf
+	J+3GF4nCUPafVahyAOqG0zNys3xCif0xjdB/Qh9K8lZPT9ic0kjMzQFQ
+X-Gm-Gg: AfdE7ckA9sas+7tN3nobJY3oUm2XBdYgT44szEfVICUpgNPNLcGsPzz34skDDtM5kC2
+	JDQB12Yj1mzQLgs1gzKjWq/wl1g20IFL2342xOsO5LFGoh0VcZ37YBvC7cwfiMGzQI4L8vB6Jmb
+	TrA3tsHJw3qynEsh8YxNguUxKSCQ2I69MxzC/rDuIVWqSWdtas/PI0w9A+Asd9jZYbDG6kDNnwa
+	FqmlMNjwUH9jawozqJtu845HGd7NvZG8oke85QHr6IsXMVqLZf6GFFXMYyLL91p/JaqruBubVOI
+	0s+kyGOS+K4RotDtqY0u3rJ4me1QIt1P5TTClOD9dH4Z0hBVI2iJUx4K9nA2qybih1CeclcXUNl
+	w9tSCgykubuoU8E49/U6ZpOsnjq+RWZuv3FQakVCwvfvRSyBZ8DUN0oIql1FHqZEfcRzZpZfOmr
+	73qMkKubDMP26GajyTjbKBKhNT4E0Va9FndgIq8+RFjUwROq7RDOxlZXw=
+X-Received: by 2002:a05:6a20:a121:b0:3b3:fdb0:2295 with SMTP id adf61e73a8af0-3bfc505bcc1mr5294388637.6.1782877845029;
+        Tue, 30 Jun 2026 20:50:45 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c9bbd27a924sm2429089a12.14.2026.06.30.20.50.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 09:43:45 -0700 (PDT)
-Date: Tue, 30 Jun 2026 18:43:43 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Pengpeng Hou <pengpeng@iscas.ac.cn>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, 
-	Vincent Mailhol <mailhol@kernel.org>, Rob Herring <robh@kernel.org>, linux-can@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] can: c_can: Use platform id data when OF data is
- absent
-Message-ID: <akPwf-nq2vTAlITA@monoceros>
-References: <20260624054927.22851-1-pengpeng@iscas.ac.cn>
- <20260625054152.68413-1-pengpeng@iscas.ac.cn>
+        Tue, 30 Jun 2026 20:50:44 -0700 (PDT)
+From: a0282524688@gmail.com
+To: lee@kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-kernel@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>,
+	linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org
+Subject: [PATCH v6 1/7] mfd: nct6694: Move module type macros to shared header
+Date: Wed,  1 Jul 2026 11:50:19 +0800
+Message-Id: <20260701035025.3082927-2-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260701035025.3082927-1-a0282524688@gmail.com>
+References: <20260701035025.3082927-1-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6qvnggh7oh747mz6"
-Content-Disposition: inline
-In-Reply-To: <20260625054152.68413-1-pengpeng@iscas.ac.cn>
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:lee@kernel.org,m:tmyu0@nuvoton.com,m:linusw@kernel.org,m:brgl@kernel.org,m:linux@roeck-us.net,m:andi.shyti@kernel.org,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:alexandre.belloni@bootlin.com,m:wim@linux-watchdog.org,m:linux-kernel@vger.kernel.org,m:a0282524688@gmail.com,m:linux-gpio@vger.kernel.org,m:linux-hwmon@vger.kernel.org,m:linux-i2c@vger.kernel.org,m:linux-can@vger.kernel.org,m:linux-rtc@vger.kernel.org,m:linux-watchdog@vger.kernel.org,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7932-lists,linux-can=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:pengpeng@iscas.ac.cn,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:robh@kernel.org,m:linux-can@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:stable@vger.kernel.org,s:lists@lfdr.de];
-	DMARC_NA(0.00)[baylibre.com];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-7924-lists,linux-can=lfdr.de];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[u.kleine-koenig@baylibre.com,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[baylibre.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER(0.00)[a0282524688@gmail.com,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-can@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[a0282524688@gmail.com,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	TAGGED_RCPT(0.00)[linux-can];
-	TO_DN_SOME(0.00)[]
+	FROM_NO_DN(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 662206E6971
+X-Rspamd-Queue-Id: A7BB86E9918
 
+From: Ming Yu <a0282524688@gmail.com>
 
---6qvnggh7oh747mz6
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] can: c_can: Use platform id data when OF data is
- absent
-MIME-Version: 1.0
+Move NCT6694_XXX_MOD macro definitions from individual sub-device
+drivers into the shared header include/linux/mfd/nct6694.h.
 
-Hello,
+This is a prerequisite for supporting multiple transport interfaces
+(USB, HIF) without duplicating these definitions.
 
-On Thu, Jun 25, 2026 at 01:41:52PM +0800, Pengpeng Hou wrote:
-> The platform driver keeps controller metadata in both the OF match table
-> and the platform id table. Probe reads the metadata with
-> device_get_match_data(), which does not fall back to platform id-table
-> driver_data.
->=20
-> When the device is matched through the platform id table, drvdata can
-> therefore be NULL before it is dereferenced for msg_obj_num and the
-> controller type. Fall back to platform_get_device_id() when firmware
-> match data is not available.
->=20
-> Fixes: 5e6c3454b405 ("net: can: Use device_get_match_data()")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Vincent Mailhol <mailhol@kernel.org>
-> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
-> ---
-> Changes in v2:
-> - Add the Fixes tag requested by Vincent.
-> - Scope the platform id variable inside the fallback block.
-> - Carry Vincent's Reviewed-by for the requested v2 shape.
->=20
->  drivers/net/can/c_can/c_can_platform.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/drivers/net/can/c_can/c_can_platform.c b/drivers/net/can/c_c=
-an/c_can_platform.c
-> index 19c86b94a40e..8a0c88839d24 100644
-> --- a/drivers/net/can/c_can/c_can_platform.c
-> +++ b/drivers/net/can/c_can/c_can_platform.c
-> @@ -267,6 +267,14 @@ static int c_can_plat_probe(struct platform_device *=
-pdev)
->  	struct device_node *np =3D pdev->dev.of_node;
-> =20
->  	drvdata =3D device_get_match_data(&pdev->dev);
-> +	if (!drvdata) {
-> +		const struct platform_device_id *id;
-> +
-> +		id =3D platform_get_device_id(pdev);
-> +		if (!id)
-> +			return -ENODEV;
-> +		drvdata =3D (const struct c_can_driver_data *)id->driver_data;
-> +	}
+No functional change.
 
-Given that there are no devices probed via the platform_driver's
-id_table (or my grep misses it:
+Signed-off-by: Ming Yu <a0282524688@gmail.com>
+---
+Changes in v6:
 
-	$ git grep -E '"(c_can_platform|c_can|d_can)"'
-	drivers/net/can/c_can/c_can_platform.c:         .name =3D "c_can",
-	drivers/net/can/c_can/c_can_platform.c:         .name =3D "d_can",
-)
+Changes in v5:
+- Split from the monolithic v4 patch to follow the single logical change
+  principle.
 
-just do:
+ drivers/gpio/gpio-nct6694.c         |  7 -------
+ drivers/hwmon/nct6694-hwmon.c       | 21 ---------------------
+ drivers/i2c/busses/i2c-nct6694.c    |  7 -------
+ drivers/net/can/usb/nct6694_canfd.c |  6 ------
+ drivers/rtc/rtc-nct6694.c           |  7 -------
+ drivers/watchdog/nct6694_wdt.c      |  7 -------
+ include/linux/mfd/nct6694.h         |  9 +++++++++
+ 7 files changed, 9 insertions(+), 55 deletions(-)
 
-	if (!drvdata)
-		return -ENODEV;
+diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
+index a8607f0d9915..53bfc5983648 100644
+--- a/drivers/gpio/gpio-nct6694.c
++++ b/drivers/gpio/gpio-nct6694.c
+@@ -13,13 +13,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 GPIO controller.
+- * This defines the module type used for communication with the NCT6694
+- * GPIO controller over the USB interface.
+- */
+-#define NCT6694_GPIO_MOD	0xFF
+-
+ #define NCT6694_GPIO_VER	0x90
+ #define NCT6694_GPIO_VALID	0x110
+ #define NCT6694_GPI_DATA	0x120
+diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
+index 6dcf22ca5018..581451875f2c 100644
+--- a/drivers/hwmon/nct6694-hwmon.c
++++ b/drivers/hwmon/nct6694-hwmon.c
+@@ -15,13 +15,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 report channel
+- * This defines the module type used for communication with the NCT6694
+- * report channel over the USB interface.
+- */
+-#define NCT6694_RPT_MOD			0xFF
+-
+ /* Report channel */
+ /*
+  * The report channel is used to report the status of the hardware monitor
+@@ -38,13 +31,6 @@
+ #define NCT6694_TIN_STS(x)		(0x6A + (x))
+ #define NCT6694_FIN_STS(x)		(0x6E + (x))
+ 
+-/*
+- * USB command module type for NCT6694 HWMON controller.
+- * This defines the module type used for communication with the NCT6694
+- * HWMON controller over the USB interface.
+- */
+-#define NCT6694_HWMON_MOD		0x00
+-
+ /* Command 00h - Hardware Monitor Control */
+ #define NCT6694_HWMON_CONTROL		0x00
+ #define NCT6694_HWMON_CONTROL_SEL	0x00
+@@ -53,13 +39,6 @@
+ #define NCT6694_HWMON_ALARM		0x02
+ #define NCT6694_HWMON_ALARM_SEL		0x00
+ 
+-/*
+- * USB command module type for NCT6694 PWM controller.
+- * This defines the module type used for communication with the NCT6694
+- * PWM controller over the USB interface.
+- */
+-#define NCT6694_PWM_MOD			0x01
+-
+ /* PWM Command - Manual Control */
+ #define NCT6694_PWM_CONTROL		0x01
+ #define NCT6694_PWM_CONTROL_SEL		0x00
+diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nct6694.c
+index 1413ab6f9462..ef3329f34246 100644
+--- a/drivers/i2c/busses/i2c-nct6694.c
++++ b/drivers/i2c/busses/i2c-nct6694.c
+@@ -12,13 +12,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 I2C controller.
+- * This defines the module type used for communication with the NCT6694
+- * I2C controller over the USB interface.
+- */
+-#define NCT6694_I2C_MOD			0x03
+-
+ /* Command 00h - I2C Deliver */
+ #define NCT6694_I2C_DELIVER		0x00
+ #define NCT6694_I2C_DELIVER_SEL		0x00
+diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nct6694_canfd.c
+index e5f7f8849a73..262b4c26c9d4 100644
+--- a/drivers/net/can/usb/nct6694_canfd.c
++++ b/drivers/net/can/usb/nct6694_canfd.c
+@@ -18,12 +18,6 @@
+ 
+ #define DEVICE_NAME "nct6694-canfd"
+ 
+-/* USB command module type for NCT6694 CANfd controller.
+- * This defines the module type used for communication with the NCT6694
+- * CANfd controller over the USB interface.
+- */
+-#define NCT6694_CANFD_MOD			0x05
+-
+ /* Command 00h - CAN Setting and Initialization */
+ #define NCT6694_CANFD_SETTING			0x00
+ #define NCT6694_CANFD_SETTING_ACTIVE_CTRL1	BIT(0)
+diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
+index 35401a0d9cf5..c06902f150c9 100644
+--- a/drivers/rtc/rtc-nct6694.c
++++ b/drivers/rtc/rtc-nct6694.c
+@@ -14,13 +14,6 @@
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 RTC controller.
+- * This defines the module type used for communication with the NCT6694
+- * RTC controller over the USB interface.
+- */
+-#define NCT6694_RTC_MOD		0x08
+-
+ /* Command 00h - RTC Time */
+ #define NCT6694_RTC_TIME	0x0000
+ #define NCT6694_RTC_TIME_SEL	0x00
+diff --git a/drivers/watchdog/nct6694_wdt.c b/drivers/watchdog/nct6694_wdt.c
+index bc3689bd4b6b..4c06ac105562 100644
+--- a/drivers/watchdog/nct6694_wdt.c
++++ b/drivers/watchdog/nct6694_wdt.c
+@@ -20,13 +20,6 @@
+ 
+ #define NCT6694_WDT_MAX_DEVS		2
+ 
+-/*
+- * USB command module type for NCT6694 WDT controller.
+- * This defines the module type used for communication with the NCT6694
+- * WDT controller over the USB interface.
+- */
+-#define NCT6694_WDT_MOD			0x07
+-
+ /* Command 00h - WDT Setup */
+ #define NCT6694_WDT_SETUP		0x00
+ #define NCT6694_WDT_SETUP_SEL(idx)	(idx ? 0x01 : 0x00)
+diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+index 6eb9be2cd4a0..3c683e317aa3 100644
+--- a/include/linux/mfd/nct6694.h
++++ b/include/linux/mfd/nct6694.h
+@@ -8,6 +8,15 @@
+ #ifndef __MFD_NCT6694_H
+ #define __MFD_NCT6694_H
+ 
++#define NCT6694_HWMON_MOD	0x00
++#define NCT6694_PWM_MOD		0x01
++#define NCT6694_I2C_MOD		0x03
++#define NCT6694_CANFD_MOD	0x05
++#define NCT6694_WDT_MOD		0x07
++#define NCT6694_RTC_MOD		0x08
++#define NCT6694_RPT_MOD		0xFF
++#define NCT6694_GPIO_MOD	NCT6694_RPT_MOD
++
+ #define NCT6694_VENDOR_ID	0x0416
+ #define NCT6694_PRODUCT_ID	0x200B
+ #define NCT6694_INT_IN_EP	0x81
+-- 
+2.34.1
 
-and drop c_can_id_table[].
-
-An error message would be nice, but the other error exits don't have one
-either.
-
-Unless I missed something a backport to stable isn't needed then,
-either.
-
-Best regards
-Uwe
-
---6qvnggh7oh747mz6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmpD8jsACgkQj4D7WH0S
-/k6YJgf+PebwvZJFAFdp9ZHI6Q+yYUJRHUrdUo3ouDB/rABWQQhmiHzuIcHqqFYU
-cKvY/0eH+Fjp0C7wlSGYvbItKyefUNEXT7w+FvkBQVZR4saZw1v2AS8un3YBWq1c
-dtkYlQkOizhIHNXtHW/CdBsfjggE66fwWlIL4kLmf/yNdqMNwnVYlWII008iDxFW
-lr7ytQPRaoo7DU3pmQcEq86dzTbW4SBZaZocVRznSgl3JI8WWQkDlyYzzIpP+lYp
-hVvA4Szln0XbvaHwsX0Ln//Ni9nioUhJby97P74yCkQX7ioGjp6MK1OUsIqQD+ve
-rs49kviGKJ/3AGJSjPoajmGNct3/lQ==
-=68X8
------END PGP SIGNATURE-----
-
---6qvnggh7oh747mz6--
 
