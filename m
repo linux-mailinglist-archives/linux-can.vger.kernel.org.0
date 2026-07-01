@@ -1,131 +1,167 @@
-Return-Path: <linux-can+bounces-7933-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7934-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Hw86K7qRRGo8xAoAu9opvQ
-	(envelope-from <linux-can+bounces-7933-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 01 Jul 2026 06:04:10 +0200
+	id PnbUIGi7RGr8zgoAu9opvQ
+	(envelope-from <linux-can+bounces-7934-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 01 Jul 2026 09:02:00 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4523D6E99C9
-	for <lists+linux-can@lfdr.de>; Wed, 01 Jul 2026 06:04:10 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CF396EA6A9
+	for <lists+linux-can@lfdr.de>; Wed, 01 Jul 2026 09:02:00 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=En1Qet40;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7933-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-7933-lists+linux-can=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=qq.com header.s=s201512 header.b=FxeBYoB6;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7934-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-can+bounces-7934-lists+linux-can=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=qq.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DA47030AFEE1
-	for <lists+linux-can@lfdr.de>; Wed,  1 Jul 2026 03:57:31 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8B40E3017476
+	for <lists+linux-can@lfdr.de>; Wed,  1 Jul 2026 07:01:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC40369D5C;
-	Wed,  1 Jul 2026 03:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E3DB3B1EFC;
+	Wed,  1 Jul 2026 07:01:58 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out203-205-221-245.mail.qq.com (out203-205-221-245.mail.qq.com [203.205.221.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBBB36604B;
-	Wed,  1 Jul 2026 03:56:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A28F132AAC5;
+	Wed,  1 Jul 2026 07:01:55 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782878171; cv=none; b=oXNAeiNm66QvJfwupl6FuAHW2O+A1V9brPL/82kZW0a35xI1SvPWnyc2wt0IynUMEi7rlmHmsBvYZtVVX2iOMFT3kZobkPZm4y6eiidp7bPqTAXtkhn2qAxeh1JxnnGsSpXhVjECoTWg57KBvgzhdcGD8+ZSK1PZVdKZ5Bo3sdU=
+	t=1782889318; cv=none; b=S8HlCgpmDG+e0/ad3lBPHy2soufWFoKzusqL1okdrBwzXO29EAq14TX4CilhSGHcaA8Foi2810kP+XRUQBZah2FLNSGQPfeacU20WDgerIHoZT2zihMgSv9Xi12HbcV+KGiUhiE+xqiBHBofscFBGfT+22DAC9DNEqBY0smJDxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782878171; c=relaxed/simple;
-	bh=V42AFfF45yW7Jm7jlo/qFOfzYwrYr3Gz33RednS3Il0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=P7cWEBLGWpbNF7BR/RlVxpec/9zrt+BPGOnp7YXTwvZwVEuA6H/AMVP+Sq2n1Z5dwuVaFsuDOnrSFfDBAbvfZTyrhu7Bu/r4s5aIX3GZRCJc6TOHDECxM3+dM7lpR8v1roa/o8iLFCuqPYgmaPEVvkI7Eida7QUgUd18UALV/Kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=En1Qet40; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 388941F000E9;
-	Wed,  1 Jul 2026 03:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782878167;
-	bh=V42AFfF45yW7Jm7jlo/qFOfzYwrYr3Gz33RednS3Il0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=En1Qet40doNOOqEFLxyMsNua1dtr3129A/21xhuq/V5smNix47YnQNP/ChJECtKhv
-	 y+GZLNz86v1mgIpVbNd6M3kWPrTztBmvldiysmRiDrySDb+U9AiKPcW2eCv9Z9adds
-	 Gtdd9DfeB7X3mq1DiHW5iCynfgMyqIgM7jQwfrmje8XpV3Q3AG3O2Dtuzwds39XJ9h
-	 YkWtKMt0N6ZACX86Jv2cfvpVR1aRDVMxXnvpVf0h2GO0bh/rBQS/Y2aSEKn7Hxl8AZ
-	 pL6gh6k+XK7wgyyaVLebmjwf3LmhTuI3MBikA9yKLuCC+Jk1UDIGZrN1l5enjnqDfR
-	 rcgsCMzaeV1wA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 1/7] mfd: nct6694: Move module type macros to shared
- header
-Reply-To: sashiko-reviews@lists.linux.dev
-To: a0282524688@gmail.com
-Cc: "Vincent Mailhol" <mailhol@kernel.org>, "Oliver Hartkopp" <socketcan@hartkopp.net>, linux-rtc@vger.kernel.org, "Alexandre
- Belloni" <alexandre.belloni@bootlin.com>, linux-hwmon@vger.kernel.org, "Marc
- Kleine-Budde" <mkl@pengutronix.de>, linux-watchdog@vger.kernel.org, "Oleksij
- Rempel" <o.rempel@pengutronix.de>, linux-can@vger.kernel.org
-In-Reply-To: <20260701035025.3082927-2-a0282524688@gmail.com>
-References: <20260701035025.3082927-1-a0282524688@gmail.com>
- <20260701035025.3082927-2-a0282524688@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 01 Jul 2026 03:56:06 +0000
-Message-Id: <20260701035607.388941F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1782889318; c=relaxed/simple;
+	bh=sjN+zSOrb+uCyCmWhfBsuqL1TU667U7SFjPwKN7eBtU=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=bFVuTp43ZRgMNSaaX751RHJZjook33sOzmAupjqPc1l5Hf4cV+bGd0QgH8KuNV2WmNapvIannFLGdtrXDyrPaqXGEqGYD7BoEhTjuDBOiWDilSkmrJAmeoMxyYXUVdWx5Wg5it+5le3XIkL0nANg+HHNbwJ8wIx4b+j9/9LGtZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=FxeBYoB6; arc=none smtp.client-ip=203.205.221.245
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1782889313; bh=QR9RBoB1Xmuk4gv9Ndt2VcbKJ9ZdwkH84K6Kq+4ROVI=;
+	h=From:To:Cc:Subject:Date;
+	b=FxeBYoB6puju4Hin+GuVVFvY0evwWhdzBR3P/8SBqH/gxVmwmgcia7CXogCppqSi9
+	 4KjUue0uxR+TXGl7ZFGShRAX2lKJQG4RRSnKYrHkiISO7b3tY4+3a0DhJEm5DXCaio
+	 aW4PMbsRBhBUqfq9/ojnUAuJxybx60Mp/esYVKxQ=
+Received: from localhost.localdomain ([2409:8d20:2a:1b57:9e54:40ff:fe02:3f0f])
+	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
+	id 71832C3; Wed, 01 Jul 2026 15:01:49 +0800
+X-QQ-mid: xmsmtpt1782889309t62leqei9
+Message-ID: <tencent_1A4614039A100DFD8A9AE2692865FE126009@qq.com>
+X-QQ-XMAILINFO: MQAOa38Yz/8/h5mNRBixUf9sGBvjbDPTpGQYlPe1/W7Je2YVdByg9DNAmYCwnu
+	 z1/Zxh4RpOppC3m6mSnmBWZc5sgV5oqdxMUxPWGscfEQ9nWr3S4nvGUI/24nXv0hzAJ/531B9K36
+	 roUixxW5N3vrXCTqW9TW9rJcH2kHkw8gGJBS03gtvLir0ls9hs0J/mL4GJaaAw92TqLYW1OYXX3Y
+	 IG3DMEhfjE/vikZrt6sxYSDKQVZ1I2aVKsgKZgePGAdhdUWP9/7A4UgiiEA4k8dJWKPmuRx3Ce+J
+	 V+1vH4tlPCcVMuJ1uuXOC75eMduywjiZ9nYvu6hXorjieuM+5p7jrhkEP7bIW62yx4jX30ROQkbG
+	 RlNqz9OFSbpaiVenuZEVaumQwB+L0SjhIiu7Mi+4Q8IRh4LHg0w/sSv+rADFVQi5Xp3ZG6My0gJE
+	 1TSd14IW/YQgnDqtwweogZWZNssn1LSzHofdhC6ZqRz3Y/9foxitDdJNxayK5yRe4pRxPfhA/lAE
+	 +rg70fBZcBIIlKX76DfekzDNZVN+wyQV56t3JrfRuoQQGjynJqmCnhlguDScea/eqmEzW7ki0n40
+	 OBdGTsZCAmVHIahs9pP5Yegx9xs54xY/oPF4YTzhTdYgc8s8uoYfTAWHtUpXqZKzvUMGFfwjCjLv
+	 NCI3RrU4obRgkZGqp57FVB6Vbp6UbmQpR7KQCVntf5PQgvEhA0DW5RTyfcMdv5BPAhhT59fR81oJ
+	 snOCZPlvw1dF38VRZ1/YyJBgBXMpC+pta5I3yBtYpuYeJjH+WWBv1juRNAGsb7AXVV7W1BnJ20zh
+	 Ws2GbDnx+dUzu+8My8RkkH9cZEdM/jXsmhUofoqO16AUf0xXLCZCr2isoJTfLALYeR5aWYyGqjU0
+	 xRC7J9FRtapIgEAwfY+XzyPYVZPzc5NSCYEBGO2TM0Z3siwt+s3hrVFwAydsQsd598WeclGD0E2h
+	 VVj5D3OEa4AKo+PUXD27ZM6daxN0kzD+iqb6+pO4BRCy9TQ2RF14VKZUh1bxSlP9lzdxG/W2xUkm
+	 AuPA31ZcCycKTHttoYgvyoB+Abtsj66Z+zOpDm7KO/5Oiiy/7cxIlB9pClCEG+QDML8aUpeEaPht
+	 HGMt4b
+X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
+From: 1579567540@qq.com
+To: Marc Kleine-Budde <mkl@pengutronix.de>,
+	linux-can@vger.kernel.org
+Cc: Vincent Mailhol <mailhol@kernel.org>,
+	kernel@pengutronix.de,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	luch00 <1579567540@qq.com>
+Subject: [PATCH 0/3] can: rockchip: add RK3588 CAN-FD support
+Date: Wed,  1 Jul 2026 15:01:25 +0800
+X-OQ-MSGID: <20260701070128.2096267-1-1579567540@qq.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[qq.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[qq.com:s=s201512];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-7933-lists,linux-can=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:a0282524688@gmail.com,m:mailhol@kernel.org,m:socketcan@hartkopp.net,m:linux-rtc@vger.kernel.org,m:alexandre.belloni@bootlin.com,m:linux-hwmon@vger.kernel.org,m:mkl@pengutronix.de,m:linux-watchdog@vger.kernel.org,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,s:lists@lfdr.de];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7934-lists,linux-can=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:linux-can@vger.kernel.org,m:mailhol@kernel.org,m:kernel@pengutronix.de,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:heiko@sntech.de,m:devicetree@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-rockchip@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:1579567540@qq.com,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_FROM(0.00)[qq.com];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[1579567540@qq.com,linux-can@vger.kernel.org];
+	DKIM_TRACE(0.00)[qq.com:+];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_NO_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[1579567540@qq.com,linux-can@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,pengutronix.de,sntech.de,vger.kernel.org,lists.infradead.org,qq.com];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can,dt];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,vger.kernel.org:from_smtp,lists.linux.dev:replyto,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,smtp.kernel.org:mid]
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,qq.com:dkim,qq.com:email,qq.com:mid,qq.com:from_mime,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4523D6E99C9
+X-Rspamd-Queue-Id: 1CF396EA6A9
 
-> From: Ming Yu <a0282524688@gmail.com>
->=20
-> Move NCT6694_XXX_MOD macro definitions from individual sub-device
-> drivers into the shared header include/linux/mfd/nct6694.h.
->=20
-> This is a prerequisite for supporting multiple transport interfaces
-> (USB, HIF) without duplicating these definitions.
->=20
-> No functional change.
->=20
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+From: luch00 <1579567540@qq.com>
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+Add initial support for the RK3588v2 CAN-FD controller.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260701035025.3082=
-927-1-a0282524688@gmail.com?part=3D1
+RK3588 integrates three CAN-FD controllers that are closely related to
+the existing Rockchip CAN-FD IP already supported in the kernel, but
+they cannot reuse the rk3568v2 description unchanged.
+
+This series therefore:
+
+- extends the existing Rockchip CAN-FD binding with the
+  rockchip,rk3588v2-canfd compatible
+- adds a dedicated RK3588v2 match entry and devtype in the driver
+- describes the three CAN-FD controller nodes in rk3588-base.dtsi
+
+The dedicated driver data is needed because RK3588v2 encodes
+RX_FIFO_CNT in bits 7:5 instead of 6:4. Runtime validation on RK3588v2
+also showed that its observed errata profile differs from rk3568v2 and
+rk3568v3, so using a fallback compatible would be misleading.
+
+Tested on an embedfire,rk3588-lubancat-5io board with can0/can1
+directly connected. Runtime testing used a 198 MHz CAN clock, nominal
+bitrate 500 kbit/s, data bitrate 1 Mbit/s, and included stress and
+error-path coverage for the existing Rockchip errata handling.
+
+luch00 (3):
+  dt-bindings: can: rockchip: add rk3588v2 CAN-FD compatible
+  can: rockchip: add RK3588 CAN-FD support
+  arm64: dts: rockchip: add CAN-FD nodes for RK3588
+
+ .../net/can/rockchip,rk3568v2-canfd.yaml      |  1 +
+ arch/arm64/boot/dts/rockchip/rk3588-base.dtsi | 39 +++++++++++++++++++
+ .../net/can/rockchip/rockchip_canfd-core.c    | 14 +++++++
+ drivers/net/can/rockchip/rockchip_canfd-rx.c  |  5 ++-
+ drivers/net/can/rockchip/rockchip_canfd.h     | 12 +++++-
+ 5 files changed, 69 insertions(+), 2 deletions(-)
+
+-- 
+2.34.1
 
 
