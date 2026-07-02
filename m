@@ -1,65 +1,66 @@
-Return-Path: <linux-can+bounces-7958-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-7959-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id KKuWEyVxRmqdVAsAu9opvQ
-	(envelope-from <linux-can+bounces-7958-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 02 Jul 2026 16:09:41 +0200
+	id hgmpBahwRmp1VAsAu9opvQ
+	(envelope-from <linux-can+bounces-7959-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 02 Jul 2026 16:07:36 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCF5C6F8B7A
-	for <lists+linux-can@lfdr.de>; Thu, 02 Jul 2026 16:09:40 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6604F6F8B18
+	for <lists+linux-can@lfdr.de>; Thu, 02 Jul 2026 16:07:35 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=qq.com header.s=s201512 header.b=wVvJgs6P;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7958-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-7958-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=qq.com header.s=s201512 header.b=le88ryaI;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-7959-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-7959-lists+linux-can=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=qq.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CF25F307D7EB
-	for <lists+linux-can@lfdr.de>; Thu,  2 Jul 2026 14:07:29 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 39B48301833A
+	for <lists+linux-can@lfdr.de>; Thu,  2 Jul 2026 14:07:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 758794C6EE7;
-	Thu,  2 Jul 2026 14:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9DBF3C1979;
+	Thu,  2 Jul 2026 14:07:31 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
+Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FAB4ADD9D
-	for <linux-can@vger.kernel.org>; Thu,  2 Jul 2026 14:07:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F9D4C6EF4
+	for <linux-can@vger.kernel.org>; Thu,  2 Jul 2026 14:07:29 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783001249; cv=none; b=n7Dya3uvARN416o6ta84JpYQ2JsbQBWQmzWZt0U5YNXs3e0sM9ktgYfNNf7e7cVNQn25JuNv/mXc6nDoFq9dL7RR1sS4rXYfgspmBots8rjmXIRbeljxYm0UFBj6C2wgKrkJZXtp7tyyhjhyl0A4FbhdBFs+D8qOulr33sjriqQ=
+	t=1783001251; cv=none; b=to1EA/3onBi6JISW2Pi3R7YAtaP9tc+RgqFhx8HFzUU675ulS6BcMAowdJQAyWI3rpbT8Zmu4aj4uzjdHoUaIacp2qTh1YQpX75w8m0dYyN9DXz8SjP5GXNusjxEmcYBpr4dPXY2WFjNjuTlE5f7zf7ekKxMuzG3sYLpdfoIF5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783001249; c=relaxed/simple;
-	bh=OZpymQHp32k8XyuUHmZpqssFrS+HWFNNhOffeFK995g=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=jev6CThNUgGDUXdQl2sjAnOclbjsKd4Rtu+pigRR0t33omxEnC+onke3Cl+0TA5FOa6/MXttLS9c9fccCM4ykG93WUxDGXLqTmgZDpih5zf9rCIm8pY+m8GL8jBwDOJecbcP3r9F5Yqe5bn1ami/DHf+7Ypo4Jieh7Xe3O1L7FY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=wVvJgs6P; arc=none smtp.client-ip=162.62.57.210
+	s=arc-20240116; t=1783001251; c=relaxed/simple;
+	bh=IdvGTt/N3RyEHNIIN0Ci2nl3TBvehqz56QEruhnSMNc=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=UkyZRK4u+eXCOwBOt5vRP0ePqJHAvvG7+v4ecWtICYQHsUGY2yrcbleGFW8MpgA9wC9JmTs1pK4acfMWaBN3I0Lq7svPTWcJq++0hsGsRacDh6RceKAM9wdxMhahyxntaazislQ9x7A4/yNTu3JArp3bFxFF9u76AnwA128N8Ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=le88ryaI; arc=none smtp.client-ip=162.62.57.64
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1783001241; bh=/7XOl3w91hOUbQxmzIR2m5YIz3vbahuHJqb9BRaXCj0=;
-	h=From:To:Cc:Subject:Date;
-	b=wVvJgs6PeVibewGukVv6ROeFdxW964IpTzNl5KXqKOfnkCN6/TJPXIxjY9s07zLU1
-	 tvsjPYCQtqWnSwlZq+IwMCidFZxX3p0ZDy+xPAx5NoTs/qcmFmcbP24SV13pnOmblT
-	 R7YX+AGKcCYk0oYZbkAuQEyns3bQ6GqFB2prxyWU=
+	t=1783001246; bh=68umrRJwjcSl0SyHmvSITSEjDGeABNfJiVRzgwyCTsw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=le88ryaITlbvOvp8ujEE3d1I6zilgHtpx/0cHQt74gp+V1c1Qv3WtucayYsbMfyGH
+	 pwLiUTG7YzkvJczv1I71B1itLfY0VvL/HCv87mWNLJNSxk1Jq/6ZzRz8IfxTPBIKkK
+	 xmEGE9DLg93OfHqSCqUfa0ZMa9TE2pNkCuzqXJTk=
 Received: from localhost.localdomain ([218.4.149.66])
 	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
 	id 1D09A800; Thu, 02 Jul 2026 22:07:16 +0800
-X-QQ-mid: xmsmtpt1783001236tk28nalud
-Message-ID: <tencent_87CB2824608F3C06B4229EF99D3609D00C0A@qq.com>
-X-QQ-XMAILINFO: N8W06kCOZCa5FMwEcpxJJHVidSk1vAQDcjFuBk+i1xLcvE7AwoAWrF++TN0smv
-	 Gr3j9IxC0UQ391iXGpPWSkN4JYX0zKhJO7OQb6bQWhKxrqDrXHM0EPB+KiAKzx0IwzBvAEF/K9R2
-	 2NurbZc1zi470K+bSeczhW3BZeTcOgNAOqoVE3ldSeTSdVQtIS+PuLOQrFMHewM+URGU2AGJcEMk
-	 6+EujMyIJ5o9rGNzCr8nL64pe56ysvOTjXGzVTdDQydXwM1W2Sbfk9fAAThmjHOPaYYkpkBwSFBd
-	 y8xQIOp0D6tzECChyMK/6lAy14Emj5fnkGuv1EAAjIZuX+BqnaDOZqs6zKvlmHwE0HTDshnu9Xdb
-	 1swkq53h7WCdr+4heDN259cyT/vBnn0xlAh0knCBNcaa9H6EGqwTAEHNGG23e1M/PYx85b+S5Pzm
-	 ttUUK5QLqMBLkB1XaxWvVXTidpuyHghtXzlO2bRBEf2VeJIvc0HfvKk/JyPxtK9+sOor+W6d+2U8
-	 MOQiKXpg214JPFWbAye8ZDLmr33Lk9T8wl/vQm/20dvx1+0hTjLeFodh4yTO7BTDiUp568Q+SHS3
-	 JldRy6StxtbG8FUrZ/I8s/nAeDRrKCnZOkYWA9kTgpQ/aMLNNLWZTyu5Wo26tYnXiZQNEeDVJoPf
-	 UM6hkzYc10IF9VvCjJEpxoFR/6QmJBv6omPiXZWZ23ar77vVd3GCZBRPN1DY07CCnQL6qCKIwUgT
-	 1bHf3Vg9H6XGtjYZr1IXnIxcjNtb/vQIw0jpM0O7nAkdRmnQNXhLXvNiny/j5Qb+w/ACbHIthTAw
-	 GHOgRKZgwyTBm31xB2An0HeDWQO6ZhUqzBX1qOrrY+PVUEBTOvRjsIHyHg1sH7+kBN9QbNsnhdWp
-	 K4F0u9N7c8R8BL1zlYGyY5qmq2VVwgP7QF7R5+SB6EtFy3YsJpMNs8xEhH2R6D/wFcafogzmAKrP
-	 eQ4ZEm6ioTvpMjzTSTbuBn1RB52DIoiWxtrjrANPFav4yhV9/7jZKWEcTgIHhhIzmRKvZonrTBj2
-	 L3jkVvRzq0zCd2QWjy
-X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+X-QQ-mid: xmsmtpt1783001239tb38rpwa1
+Message-ID: <tencent_3B2B6003D1DE4FB7A984665A062581766405@qq.com>
+X-QQ-XMAILINFO: Nb+v+bm9wQoUq/DtgdEc2I6YSo1drC1SRiyFXoRlMe3SZ7e9S1Q7m64zPQrKNh
+	 zfpmuPrQiI8OZMGlgvYnz2a5ECWNVj+ivr5ZYWZ+jZ18XHRpc9M8RiiOh+weZ/DEi9KX8FYa6HY7
+	 BcJso5jkk4gr4Z4mp9bMZg10L4I42xhIOw0I+c8OvlJisgTeSLJbwzQT9FWCoxQhFcUKTBKT7dAj
+	 3SRkxL9a256tr0130WsEJGmlpAv/wzIBMjQunth+rDCrOn5173vbRrxvMVexx4jcgy+4GgGbFOCR
+	 K0Y9lHud2/G5noA5lL/HnSyOmHOtdcZeDE1q2hzlUHMtzCL5/DcZt5VcE+AGnmoECT9PAu9C2YBq
+	 Qeqhp1UYVSkjwRWjGtg8w9NyxhMYDxFhnL9Y1LPifGwgnkjs37QGGNnO2tiYxKa2+/wodq8QDipp
+	 S+JkojC4NngqzDsUwclJsYh7zS4MD2R5UDizIG4DNmblSNDXb40QYrlxzbWBgTXikikUdjqgPMJ2
+	 F5BtoLOH6FYx+7jEDc0pFgN4QEsRyo7j6uv9A1JtsQyf5lzk4QuoDgPXDWvm0SFRMdl3o/x8vK5O
+	 Fie1jpl7h87MRn/27Dh4rvRYbrGEwYNC1JzwlI9uGhpGqERjnaUp/NbxIFjSa5eBDIQ73u0UPMe+
+	 iVi8XKRKhla30f3zmTLw1ChdOIHZkxvx+JuKZjbb7HPhEsO1g/j0TR1EndxqYLmU8m1fqURR2jb3
+	 Eaf6ZHl2eH+D5IhyDwhjQCSXBUS1/CTyCtTCkyC6aj+3oLy17c/eTR1vnD99uy1XvKJoEO8DWKuP
+	 NSmBSSAYxW4J/4JVtrHFE1kD1bTLAm6x0LotZI3CN7XDyJQ8HEt1au/Hr+oF7hEglYQoj1hfOT9v
+	 9vwNNYNtYPK+xwBWBPdR8b0QUU39ob3paKWqeNgu2d705K0nDt/akqWTzhjezGpOFYpoxQOziEl4
+	 8sthCSyceMKdfjmRMgsthVcpTpQlPbJWemDhzvQbd2tH17ZxJJ4HRaDyDyiUgSaTVGb7jxk3v7rL
+	 tKHiEsn823HEO4/RD0TKXN3WaRggs=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
 From: 1579567540@qq.com
 To: Marc Kleine-Budde <mkl@pengutronix.de>,
 	linux-can <linux-can@vger.kernel.org>
@@ -83,10 +84,12 @@ Cc: Vincent Mailhol <mailhol@kernel.org>,
 	linux-rockchip <linux-rockchip@lists.infradead.org>,
 	linux-kernel <linux-kernel@vger.kernel.org>,
 	Cunhao Lu <1579567540@qq.com>
-Subject: [PATCH v2 0/4] can: rockchip: add RK3588 CAN support
-Date: Thu,  2 Jul 2026 22:06:50 +0800
-X-OQ-MSGID: <20260702140654.2961561-1-1579567540@qq.com>
+Subject: [PATCH v2 1/4] dt-bindings: can: rockchip: add rk3588 CAN-FD compatible
+Date: Thu,  2 Jul 2026 22:06:51 +0800
+X-OQ-MSGID: <20260702140654.2961561-2-1579567540@qq.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260702140654.2961561-1-1579567540@qq.com>
+References: <20260702140654.2961561-1-1579567540@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -100,7 +103,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[qq.com,quarantine];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[qq.com:s=s201512];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -108,7 +111,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
 	TO_DN_ALL(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7958-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7959-lists,linux-can=lfdr.de];
 	FORGED_SENDER(0.00)[1579567540@qq.com,linux-can@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -127,73 +130,46 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FROM_NO_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qq.com:dkim,qq.com:email,qq.com:mid,qq.com:from_mime,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,qq.com:dkim,qq.com:email,qq.com:mid,qq.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: BCF5C6F8B7A
+X-Rspamd-Queue-Id: 6604F6F8B18
 
 From: Cunhao Lu <1579567540@qq.com>
 
-Add support for the RK3588 CAN controller.
+RK3588 integrates a Rockchip CAN-FD controller variant that is not
+fully compatible with RK3568v2. The RX FIFO count register field is
+encoded in bits 7:5 on RK3588, while RK3568v2 uses bits 6:4.
 
-RK3588 integrates three CAN-FD controllers that are closely related to
-the existing Rockchip CAN-FD IP already supported in the kernel. The
-RK3588 variant is not fully compatible with RK3568v2 because the RX
-FIFO count register field has a different layout.
-
-This series therefore:
-
-- extends the existing Rockchip CAN-FD binding with the
-  rockchip,rk3588-canfd compatible
-- adds a dedicated RK3588 match entry and devtype in the driver
-- describes the three CAN controller nodes in rk3588-base.dtsi
-- enables CAN on the RK3588 Tiger Haikou board
-
-RK3588 encodes RX_FIFO_CNT in bits 7:5 instead of 6:4. This
-difference was found by comparing Rockchip's vendor kernel 6.1 CAN
-support for RK3568 and RK3588, and was also confirmed by runtime
-testing.
-
-RK3588 uses the existing erratum 5 empty-FIFO workaround. Based on
-Heiko's testing, v2 also enables the erratum 6 workaround for extended
-frames being transmitted as standard frames.
-
-RKCANFD_QUIRK_CANFD_BROKEN remains enabled for RK3588, so CAN-FD stays
-disabled for now. Local testing did not reproduce the two known CAN-FD
-trigger frames that cause Error Interrupts on RK3568 variants. Instead,
-RK3588 shows a different CAN-FD failure mode: CAN-FD frames without BRS
-work in this setup, but BRS with a data bitrate different from the
-nominal bitrate immediately drives the controller bus-off.
-
-Tested on an embedfire,rk3588-lubancat-5io board with can0/can1
-directly connected. Runtime testing used a 200 MHz CAN clock, nominal
-bitrate 500 kbit/s, data bitrate 500 kbit/s and 1 Mbit/s, and included stress and
-error-path coverage for the existing Rockchip errata handling.
+Add a dedicated rockchip,rk3588-canfd compatible to describe this
+variant. Do not use rockchip,rk3568v2-canfd as a fallback, because that
+would describe a register layout that does not match the hardware.
 
 Changes in v2:
-- use real author name
-- fold the single-compatible entries into an enum, as suggested by Krzysztof
-- enable the erratum 6 workaround for RK3588 based on Heiko's testing
-- add Heiko's RK3588 Tiger Haikou CAN enablement patch
-- keep RKCANFD_QUIRK_CANFD_BROKEN enabled for RK3588 so CAN-FD stays disabled
-- document the RK3588 CAN-FD/BRS bus-off failure mode
+- Use enum for the single-compatible entries, as suggested by Krzysztof.
+- Reword the commit message to explain the hardware difference instead
+  of referring to Linux driver match data.
 
-Cunhao Lu (3):
-  dt-bindings: can: rockchip: add rk3588 CAN-FD compatible
-  can: rockchip: add RK3588 CAN support
-  arm64: dts: rockchip: add CAN-FD nodes for RK3588
+Signed-off-by: Cunhao Lu <1579567540@qq.com>
+---
+ .../devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml  | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Heiko Stuebner (1):
-  arm64: dts: rockchip: Enable CAN controller on RK3588-Tiger-Haikou
-
- .../net/can/rockchip,rk3568v2-canfd.yaml      |  4 +-
- arch/arm64/boot/dts/rockchip/rk3588-base.dtsi | 39 +++++++++++++++++++
- .../boot/dts/rockchip/rk3588-tiger-haikou.dts |  6 +++
- .../net/can/rockchip/rockchip_canfd-core.c    | 12 ++++++
- drivers/net/can/rockchip/rockchip_canfd-rx.c  |  5 ++-
- drivers/net/can/rockchip/rockchip_canfd.h     | 26 ++++++++++++-
- 6 files changed, 89 insertions(+), 3 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml b/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
+index a077c0330013..81e2b6dfeb02 100644
+--- a/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
++++ b/Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
+@@ -16,7 +16,9 @@ allOf:
+ properties:
+   compatible:
+     oneOf:
+-      - const: rockchip,rk3568v2-canfd
++      - enum:
++          - rockchip,rk3568v2-canfd
++          - rockchip,rk3588-canfd
+       - items:
+           - const: rockchip,rk3568v3-canfd
+           - const: rockchip,rk3568v2-canfd
 -- 
 2.34.1
 
