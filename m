@@ -1,173 +1,175 @@
-Return-Path: <linux-can+bounces-8009-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8010-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Xh23JMSIS2r1UwEAu9opvQ
-	(envelope-from <linux-can+bounces-8009-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 06 Jul 2026 12:51:48 +0200
+	id Bo87BPOJS2pOVAEAu9opvQ
+	(envelope-from <linux-can+bounces-8010-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 06 Jul 2026 12:56:51 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6DF770F7D6
-	for <lists+linux-can@lfdr.de>; Mon, 06 Jul 2026 12:51:47 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80A7770F8A2
+	for <lists+linux-can@lfdr.de>; Mon, 06 Jul 2026 12:56:50 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=nlFV1iwf;
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8009-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8009-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=fel.cvut.cz header.s=felmail header.b="Fuims/1x";
+	dmarc=pass (policy=quarantine) header.from=fel.cvut.cz;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8010-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-can+bounces-8010-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0D7F3306C9A3
-	for <lists+linux-can@lfdr.de>; Mon,  6 Jul 2026 10:01:54 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 328E330262AB
+	for <lists+linux-can@lfdr.de>; Mon,  6 Jul 2026 10:55:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3C5F480336;
-	Mon,  6 Jul 2026 09:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85CA23ED5AE;
+	Mon,  6 Jul 2026 10:55:09 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtpx.fel.cvut.cz (smtpx.feld.cvut.cz [147.32.210.153])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE6838B15B
-	for <linux-can@vger.kernel.org>; Mon,  6 Jul 2026 09:41:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5D32FD681;
+	Mon,  6 Jul 2026 10:55:04 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783330916; cv=none; b=p0+77WhbAgqGvTBU1W5n/em5cZW9f9cQw6GC6QYsgW6l/V/UhmjcVw1LeuXGsDzQImmgQGbtBThf4fxw0fOnDf0jtUI4sb6Y+kXphzJ731xRPp7EIuHQN3pnM64DfDVhS9Dr1pEWHvHsGzAsbkUBMT93hFXL/9Bl3z64U+Pcww0=
+	t=1783335309; cv=none; b=HT1H541i82nENC51gxQmlKi62CYFBgeLcmIQMHIIykLK0kfbddHE3/PKK6PXngYcAjCBxMZQFwtVKiGQumuTXLI4IaOhAMlDGy194gyUP4KL3pfkjwOVkhsmzqB/dWmewCn0Jj1i0EX4t52pFs9Eh7znhD9inmBjp0soEfosxjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783330916; c=relaxed/simple;
-	bh=ocfHom/ozHyTYD1Jxu9NQi3Yh5sJ1PDwNaOnmFaWXn8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jcDWACP2ijpl3IdRUfYh3gf8vdWma/jVOmfSxKUjltskZgimp/H8y6pgr4cFCI1nE47qb9Stcr+GbKHFoHesZwpMCGfs0j7C7iPd9PacASVyCA0aL9o+/ndXBrgw6yOoT7RpplKqI7FVmIXQmmN58YTKIO76kmfmPyfbVpF1WTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nlFV1iwf; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC191F000E9;
-	Mon,  6 Jul 2026 09:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783330913;
-	bh=hy0KzDuGZZB37C9qGXdnTBXykPtlqGs6v4uFu1fqdj4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nlFV1iwf+SGbZUfv1VpehILjvwvXumTvGgD8vnU/lQXzgCYDC0nqRJovPaXDymhMN
-	 uEDmbDPjW6yI68fkoSwksD9y7Tluo++3TJw91WmBomJdJkvwjsbxZaM46cB4YdFqZh
-	 npQP1GiiCrLWRgi8r2ICsgDfW73Mm3x7HyzUuoccimhdxhTYLV4MjVN1YVoNhTvXRj
-	 rtlJraOY9Nzn3uloG7hPKxIM3tz3bB7MhmLIDlmhbsuPHBAqw16pzWhEfh0pRNr8H1
-	 4beqM//2kxpOouZCXsGCaUTkZdsRuaslHp57XKo90BHKPAqDqcQHNl/SF/Q5QzZmgg
-	 6Pj70+C/ijyMA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] can: peak_usb: validate uCAN receive record lengths
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pengpeng Hou" <pengpeng@iscas.ac.cn>
-Cc: "Oliver Hartkopp" <socketcan@hartkopp.net>, "Vincent Mailhol" <mailhol@kernel.org>, "Oleksij
- Rempel" <o.rempel@pengutronix.de>, linux-can@vger.kernel.org, "Marc
- Kleine-Budde" <mkl@pengutronix.de>
-In-Reply-To: <20260706092836.79754-1-pengpeng@iscas.ac.cn>
-References: <20260706092836.79754-1-pengpeng@iscas.ac.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 06 Jul 2026 09:41:51 +0000
-Message-Id: <20260706094152.7FC191F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1783335309; c=relaxed/simple;
+	bh=vqq1JkGYxy/RKB08y79WF4x5lCEMFhT9EAXv0WmnMrE=;
+	h=From:To:Subject:Date:Cc:References:In-Reply-To:MIME-Version:
+	 Content-Type:Content-Disposition:Message-Id; b=Q3pidH4bIzuvtTzwGOZwhsWOemmlYLtug5rYHVvTYLw1unA/5ogA8YdlU/Oc3GyKwT5jDT4mSHoCIG/mnAf/JFOTVZtDPhPqQ8pjM+pIxh/M2zuMPjPsd4iQZbgSAvhQTkk0EwJEDu+Iiv8FWbsTgizuLv8MvkPK6t5XhhVP3lM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz; spf=pass smtp.mailfrom=fel.cvut.cz; dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b=Fuims/1x; arc=none smtp.client-ip=147.32.210.153
+Received: from localhost (unknown [192.168.200.27])
+	by smtpx.fel.cvut.cz (Postfix) with ESMTP id BDF8F164A3;
+	Mon, 06 Jul 2026 12:47:12 +0200 (CEST)
+X-Virus-Scanned: IMAP STYX AMAVIS
+Received: from smtpx.fel.cvut.cz ([192.168.200.2])
+ by localhost (cerokez-250.feld.cvut.cz [192.168.200.27]) (amavis, port 10060)
+ with ESMTP id Hvd2cneyefJD; Mon,  6 Jul 2026 12:47:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fel.cvut.cz;
+	s=felmail; t=1783334831;
+	bh=9/uG2TTrMGnXgpJVhHHlBg8heshLZ+WmDANeUU0A7f8=;
+	h=From:To:Subject:Date:Cc:References:In-Reply-To:From;
+	b=Fuims/1xskgiS9MlO7zMU4E4GhlRbs0CbYss0jsfIg9/bCKX1/RlhsgeyDQa2SzWk
+	 GFZ/Gc9/UhXMWNyokkwvWCV+HYOTKOJQdCcjHTrwnpsToqQUSAZ6jyMWVRh171EWg2
+	 ktKmSomFCCcRJdxYidz8bQ01jS2vez06t0HHi8VBdacxsFnI5don++t9/PxcAAXnao
+	 3QCOO8PQIsH6yW1qp06zQenLAK+HdPqekpyjrbkS5BGPWzlSbzSrEHwJHps2hH2t+I
+	 HNRk6gYw3aqksPb4hZl3xwI/akm1LfDAU4tI/HWcumHxEm4SvJpWNhy3NZ7UgHXhXV
+	 w0ej66tgDs3Kg==
+Received: from baree.pikron.com (static-84-242-78-234.bb.vodafone.cz [84.242.78.234])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pisa)
+	by smtpx.fel.cvut.cz (Postfix) with ESMTPSA id 11D53164A2;
+	Mon, 06 Jul 2026 12:47:10 +0200 (CEST)
+From: Pavel Pisa <pisa@fel.cvut.cz>
+To: Pengpeng Hou <pengpeng@iscas.ac.cn>
+Subject: Re: [PATCH] can: ctucanfd: add missing MODULE_DEVICE_TABLE()
+Date: Mon, 6 Jul 2026 12:47:09 +0200
+User-Agent: KMail/1.9.10
+Cc: Ondrej Ille <ondrej.ille@gmail.com>,
+ "Marc Kleine-Budde" <mkl@pengutronix.de>,
+ Vincent Mailhol <mailhol@kernel.org>,
+ linux-can@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260704151957.48194-1-pengpeng@iscas.ac.cn>
+In-Reply-To: <20260704151957.48194-1-pengpeng@iscas.ac.cn>
+X-KMail-QuotePrefix: > 
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202607061247.09528.pisa@fel.cvut.cz>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[fel.cvut.cz,quarantine];
+	R_DKIM_ALLOW(-0.20)[fel.cvut.cz:s=felmail];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8009-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:replyto,iscas.ac.cn:email,sashiko.dev:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp,smtp.kernel.org:mid];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-8010-lists,linux-can=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[pisa@fel.cvut.cz,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:pengpeng@iscas.ac.cn,m:socketcan@hartkopp.net,m:mailhol@kernel.org,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,m:mkl@pengutronix.de,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:pengpeng@iscas.ac.cn,m:ondrej.ille@gmail.com,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:linux-can@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:ondrejille@gmail.com,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,pengutronix.de,kernel.org,vger.kernel.org];
+	DKIM_TRACE(0.00)[fel.cvut.cz:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pisa@fel.cvut.cz,linux-can@vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[6];
+	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_NO_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6]
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:email,vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E6DF770F7D6
+X-Rspamd-Queue-Id: 80A7770F8A2
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Dear Pengpeng Hou,
 
-Pre-existing issues:
-- [High] The decoders blindly trust the device-provided channel index to re=
-trieve the device pointer, leading to a NULL pointer dereference if the cha=
-nnel is within array bounds but uninitialized.
---
+thanks for catching out omission.
 
-commit 35cea41238e6f7cd42684d301dadde24023e663a
-Author: Pengpeng Hou <pengpeng@iscas.ac.cn>
+On Saturday 04 of July 2026 17:19:57 Pengpeng Hou wrote:
+> The driver has a match table for the pci bus wired into its driver
+> structure, but the table is not exported with MODULE_DEVICE_TABLE().
+>
+> Add the missing MODULE_DEVICE_TABLE() entry so module alias information
+> is generated for automatic module loading.
+>
+> This is a source-level fix.  It does not claim dynamic hardware
+> reproduction; the evidence is the driver-owned match table, its use by
+> the driver registration structure, and the missing module alias
+> publication.
+>
+> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
 
-can: peak_usb: validate uCAN receive record lengths
+Acked-by: Pavel Pisa <pisa@fel.cvut.cz>
 
-pcan_usb_fd_decode_buf() walks uCAN records packed in one USB
-receive buffer. Require each record to contain the fixed header for its
-type, and verify CAN payload bytes before copying them into the skb.
+> ---
+>  drivers/net/can/ctucanfd/ctucanfd_pci.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/net/can/ctucanfd/ctucanfd_pci.c
+> b/drivers/net/can/ctucanfd/ctucanfd_pci.c index 7b847b667973..c2b9bce7c2c6
+> 100644
+> --- a/drivers/net/can/ctucanfd/ctucanfd_pci.c
+> +++ b/drivers/net/can/ctucanfd/ctucanfd_pci.c
+> @@ -274,6 +274,7 @@ static const struct pci_device_id ctucan_pci_tbl[] = {
+>  		CTUCAN_WITH_CTUCAN_ID)},
+>  	{},
+>  };
+> +MODULE_DEVICE_TABLE(pci, ctucan_pci_tbl);
+>
+>  static struct pci_driver ctucan_pci_driver = {
+>  	.name = KBUILD_MODNAME,
 
-> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can=
-/usb/peak_usb/pcan_usb_fd.c
-> index eb4f5884ad735..45ae4611ae4c3 100644
-> --- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-> +++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-> @@ -566,6 +566,13 @@ static int pcan_usb_fd_decode_canmsg(struct pcan_usb=
-_fd_if *usb_if,
->  				     dev->can.ctrlmode);
->  	}
-> =20
 
-[Severity: High]
-This is a pre-existing issue, but I noticed a potential NULL pointer
-dereference just above this hunk in pcan_usb_fd_decode_canmsg().
-
-The function currently checks the channel index against the array size:
-
-	if (pucan_msg_get_channel(rm) >=3D ARRAY_SIZE(usb_if->dev))
-		return -ENOMEM;
-
-	dev =3D usb_if->dev[pucan_msg_get_channel(rm)];
-	netdev =3D dev->netdev;
-
-Does this bounds check properly validate against the number of initialized
-channels? If the adapter only has 1 channel (like the PCAN-USB FD), channel=
- 0
-is initialized but channel 1 is NULL. Since ARRAY_SIZE(usb_if->dev) is 2, a
-malicious USB device could send a message with a channel index of 1, which
-passes the bounds check but results in a crash when dev->netdev is accessed.
-
-It appears this same pattern exists in pcan_usb_fd_decode_status(),
-pcan_usb_fd_decode_error(), and pcan_usb_fd_decode_overrun() in this file.
-Should we verify if dev is NULL before dereferencing it in these decoders?
-
-> +	if (!(rx_msg_flags & PUCAN_MSG_RTR) &&
-> +	    le16_to_cpu(rx_msg->size) - offsetof(struct pucan_rx_msg, d) <
-> +	    cfd->len) {
-> +		kfree_skb(skb);
-> +		return -EBADMSG;
-> +	}
-> +
->  	cfd->can_id =3D le32_to_cpu(rm->can_id);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706092836.7975=
-4-1-pengpeng@iscas.ac.cn?part=3D1
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://control.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    social:     https://social.kernel.org/ppisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    RISC-V education: https://comparch.edu.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
 
