@@ -1,355 +1,297 @@
-Return-Path: <linux-can+bounces-8011-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8012-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id eKrHCpTUS2ohbAEAu9opvQ
-	(envelope-from <linux-can+bounces-8011-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 06 Jul 2026 18:15:16 +0200
+	id Ds4NHzUwTGoChgEAu9opvQ
+	(envelope-from <linux-can+bounces-8012-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 00:46:13 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 778B5713184
-	for <lists+linux-can@lfdr.de>; Mon, 06 Jul 2026 18:15:15 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DA8371621F
+	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 00:46:12 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=qualcomm.com header.s=qcppdkim1 header.b=ZOlsPwHz;
-	dkim=pass header.d=oss.qualcomm.com header.s=google header.b=GEAVzxHm;
-	dmarc=pass (policy=reject) header.from=qualcomm.com;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8011-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8011-lists+linux-can=lfdr.de@vger.kernel.org";
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
+	dkim=pass header.d=gmx.net header.s=s31663417 header.b=eRkZN9do;
+	dmarc=pass (policy=quarantine) header.from=gmx.net;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8012-lists+linux-can=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-can+bounces-8012-lists+linux-can=lfdr.de@vger.kernel.org";
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DB80C3677A8
-	for <lists+linux-can@lfdr.de>; Mon,  6 Jul 2026 15:47:09 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 77ECA3005164
+	for <lists+linux-can@lfdr.de>; Mon,  6 Jul 2026 22:46:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75E523AC0F8;
-	Mon,  6 Jul 2026 15:46:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E9F72F7EF5;
+	Mon,  6 Jul 2026 22:46:08 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A75740D59B
-	for <linux-can@vger.kernel.org>; Mon,  6 Jul 2026 15:46:46 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783352809; cv=pass; b=qnAqPv7GHt4WNgh/1+75if/iPhcJ9wpSdAe1NqKDufwbFL9uCbpgibj7qgt8p7c79oRU4YJRZz3CcawTqgzXk+99GAXfIuwGetux6O1trrGA7lgpSuqLUQ9xiS+5tZ/6dyQCdHzqIi+qHNJBItqSQ2odKD3YeR7FtrV2F1DThkI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783352809; c=relaxed/simple;
-	bh=OT763+765AL37S5BJLMMQbirCxNjzAlqlQVzlwCI4Ns=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AyS3t5UGdVoKSJG7nfrIphI9Ko4RmGKmFJ9TC/wLT6AZaglftzff8O95XGC0r8F21OwRat9TRLswp5u99tAqGsdH928VtPRn7SUg8zUbsbqGUgnBoU/VQHdYpnOHqeOJiVFSHzH64Lac2Hk0SD2M2J8fiRT8PH+GpF6HS99VxBQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZOlsPwHz; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=GEAVzxHm; arc=pass smtp.client-ip=205.220.168.131
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 666FFCL2762342
-	for <linux-can@vger.kernel.org>; Mon, 6 Jul 2026 15:46:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	F1tL7ezKmgwPKPnJpdHXHHXoZTxCOuZrev6KT6hfwTk=; b=ZOlsPwHzz3/nLKmD
-	mSazt2nRu9GtZ0+YjI7Krw93S8LOBlHU4p3rkx/C2yIXPJIgBIRFTlox35JOlumq
-	ltVC9qqV2Nkf0VAvnssny5+1VQXgVZo0yAtbFxWwxyJ0ztuyo5bmRLPlcgKNTPi7
-	RuFInMYyg3oAoXgywhKVuuF9IZJJHpv+5m4JLyaG8AyhOP+2+Bnxhy5fBoNHHt59
-	XlzxeDfgZ3b0/h/9/LqVm+fcQsfZH+MRJpOlS/QdAUGjlsxbKmIMzDannw7pW6cL
-	Ao5y2uvUQDeowET76q2qeK8zaXxcs3ON1S0y9FnWgr0Lf7RkvxRUbpzXNnR5I6jI
-	6M8kfw==
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4f87rxt8r0-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-can@vger.kernel.org>; Mon, 06 Jul 2026 15:46:44 +0000 (GMT)
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8ec3314f65fso34311206d6.3
-        for <linux-can@vger.kernel.org>; Mon, 06 Jul 2026 08:46:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783352804; cv=none;
-        d=google.com; s=arc-20260327;
-        b=E/Jlaj47/4MqRpr6M6zxyi/NjcXyd04m1+9lew0YZ8Cas0TRFPD9bJYY3PnB1JADTV
-         d3g3oZelaROo4nJFqKEhVkFjGlD016FgmyQifhKsLgLk6SPrnYDwLn6YIkUn8LeMt3LV
-         z+hMPat+d6LTogDj7+63wNWIFWe+AuLUkA0uWpE7pL4zn+Fl6KDVz9s6Rtryg9uzXOJm
-         hwid+JoKovvDuvIR+It9PvKCEFgPmaXtsfiebD4vIVZEo2X18WS+ciWwSfIwEa8Z0Mmg
-         /ZPgQGgmzUsf+ViVkDuhNI7vQv5vmMfdzD1/B0RuTIEsAk92VvSDwoM7YVbFlrtbFt6j
-         t2gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=F1tL7ezKmgwPKPnJpdHXHHXoZTxCOuZrev6KT6hfwTk=;
-        fh=aDUYXlJVbSGb9+FpafVYPAmE/hfMVOg1i1xM7oBKn5A=;
-        b=XgeVp3E+T19VkzwpOpMpu+Em0bc+oNqYR5tsJdZgmhQkI64nRax8MpGTUYj7/WkWpl
-         R6F9yS8cpGWurEpCrSXX3ed2ZpCu0nO4gRUxujnukCk38vkIPm8C3AjDsFkOgAGKYx3a
-         oqWNk7qZePqAaEt+oSlcwoa7UGx4/H+5aK0iiREuJO1OW2uqHNhin0ZrcrpOk/folp68
-         rAIgPPJFmTQCRFo2rEdrb5VpqVwHuYV7Ol0QWBvW/m52NJr0MbmdlT0sRZAZV1zYeNh7
-         AoIc4nvq80AOSPHn1MjFd29tv3cMtBKBIv95dsSwSJ50Rb0n0nLpNnxMLZ+TmuoOZQ+B
-         INmA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1783352804; x=1783957604; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F1tL7ezKmgwPKPnJpdHXHHXoZTxCOuZrev6KT6hfwTk=;
-        b=GEAVzxHmZT8MvGlOeA+dm3eELmrJL3uldb0hEDt6XvS4AFnYxXYJ+GWy0cTxdp8ySV
-         WNLYI9SSiF80oGvLEccx2tsxZd76V0MXkPUeSoDlS//eeoGQFxXW2E11Nk2Bg9YxAO0V
-         8w8YzakGoUY0AMCZCsS0GmcMYvZ3A9DWzDbdMFwGEMWxRX96ZEo1pHpL/U7tJg6HxHlv
-         7ldnKsH8PoDwI1vdhyJCATI5KxqwBStowIUJzcoSqjewZop1g0fpTb5gtkCDZR1/3q4q
-         XVvp6pD/T9xrD1cK8wEG0rwYxzpnFtxicgm0erDVfRMKXMgOrIUIu9oEVddgup3G9eIy
-         +hwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783352804; x=1783957604;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=F1tL7ezKmgwPKPnJpdHXHHXoZTxCOuZrev6KT6hfwTk=;
-        b=BMVd/elmZWek9Lgcl83UUeLRRm1fe02sN6NKWbuwhUPib86sodB4RKA37esB82ITfB
-         1flHqZAMRJ53rQjdtadgxihZp/l1ZoW7M5gxQ1ti0aFmH/4kqPGVmhQOWxP/9Q+1qOIk
-         y33y4aSVHkzCheBiTpCUE5PMt6Whefpq0w3FX7jRfR91VId/jD3f1fMYs82OEs8HaDGL
-         LwZlxDIL/rnt3KZKFsvRjisBLNbwOz9iU2Qvst/IYlb3BZGSFsKxp1kjeo6i+TxXsGpM
-         ySdJ4fXnlUz28ZAjRHATPMmCSIBmlETyrj+E6sRumg5VC5jT0y0Rtzh6J+jB28Wab1Rz
-         X2fA==
-X-Forwarded-Encrypted: i=1; AHgh+RooLUymUAgc4/1iZPn1WYGIFdtY35nPIguOlkysHk5fhSzvp2TGRDqN+O9wunXOo3jdW6wmnEasLkQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyj/mFlF2WadAcPkan8rRUpZ2lsOZiCMKBNCL2oIq2RYpVznq2P
-	4XB7IyHxCK85bI6WFMCHSB47Iyhg3tGrBzOFcLi4tngBHd3sE8ru/ttGSJvuIn8HNoFDZlJE1VD
-	+OtZBTbjNNlv+YB+LLw1ICJ7F85L5r2prbSAhr2ieB6M6gujLZc6H2NLLzwH5Zi3Wps3sEH3RhR
-	yT968xkayjR3jArgrfVSHUAf1Wbe1qo6gp1U3QMQ==
-X-Gm-Gg: AfdE7cmkxySuDMg/+HlFlY8Kbho1U6QY7C+I4cF30fKLjRdV3uAXY23ltSbdyee6xhq
-	UnPlyXIRCnsugaerdEZDLkw7+Pln6rziVkQv6RWRCkBFDu3B1eOd7/O/9dCexss2WUDO0PZh2ZW
-	oLm4UkAcA5h5q9WmqxGiCIwyFSIee8jEvNNQNDVR85vG9WwZmd4G2D3ud1ogPDC4kwQvh5
-X-Received: by 2002:ad4:4eac:0:b0:8ec:235c:7a66 with SMTP id 6a1803df08f44-8fcb4c00ee9mr13393896d6.27.1783352803861;
-        Mon, 06 Jul 2026 08:46:43 -0700 (PDT)
-X-Received: by 2002:ad4:4eac:0:b0:8ec:235c:7a66 with SMTP id
- 6a1803df08f44-8fcb4c00ee9mr13393296d6.27.1783352803240; Mon, 06 Jul 2026
- 08:46:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3241B1C84AB;
+	Mon,  6 Jul 2026 22:46:05 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783377968; cv=none; b=UkOIFh6+/fJ3zZJJyS+zbHyIjT1RPqoFF6W7i55xlOOD1GECSxlI0WdW3ODtoj085J7zFp1AakmzWCJnCnCGPhmLe/9LSsHBNa7cVO413ZuALMDBUdD+t2ah3NXcsf/qFfaCAfDTa4vwnzosFlQMF9RAJI9SAwP1krpZ3UeoB1Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783377968; c=relaxed/simple;
+	bh=P5VX72JfhNyXyN1aJzEHw3bYsH5xUjM/meb/7OlsvVQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LcB/wPFtc9jtgi7tJTOaKXNMZrllnxHy74YIhrYbwvVH5faZSC+/QQYnmQV9b5JgnRhSyw/b2fmrcD1nkk3HXS1NocbMLcprJ8eSaYAqYsJ+W73tHHpdjqNkoVGKPktHDGS6TWPJJ0nRe2+Ab2m25PkQK+tzFB3YWabMgWnc2CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=alexander.hoelzl@gmx.net header.b=eRkZN9do; arc=none smtp.client-ip=212.227.17.22
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1783377964; x=1783982764;
+	i=alexander.hoelzl@gmx.net;
+	bh=j47bK5IsKZZUVnHiuuPCe9ziawchsYZLoICkUe8L68o=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=eRkZN9doGLQH5rrocvGVR89vae5vLDIM9/CWO/PYrd08650PFT41RX8GViFZDlWo
+	 +E1/gNqNZGjhjBpbFCymYCLJ12q1qj5ZI2dS2RpGpLbSGltZXTX58E4vEVlwUSj9s
+	 HutkaYGrNGi4e8BY5KqcgHfrMUawjnvGALaWiSUZUXbfYkcp3HpuQShZJOaglc3L5
+	 DqpPRQ0BIWH4UrIBWip783pOkr6mjRYEbACFwn6O4A9Ic9krwtc4Cd39jUF9pUBOH
+	 W+u7WupiH2cSbtFpi5bkEIe6K1qX6ZWVOWkU91nab6+rPMX4VtOzcv6iTvBuh5upq
+	 7+jXc7SGla/mAWlSMg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MWRRT-1wb7rD0pqN-00VGj1; Tue, 07
+ Jul 2026 00:46:04 +0200
+From: =?UTF-8?q?Alexander=20H=C3=B6lzl?= <alexander.hoelzl@gmx.net>
+To: o.rempel@pengutronix.de
+Cc: robin@protonic.nl,
+	linux-kernel@vger.kernel.org,
+	kernel@pengutronix.de,
+	linux-can@vger.kernel.org,
+	=?UTF-8?q?Alexander=20H=C3=B6lzl?= <alexander.hoelzl@gmx.net>
+Subject: [PATCH v4 1/3] j1939: restrict amount of consecutive retransmission requests
+Date: Tue,  7 Jul 2026 00:41:05 +0200
+Message-ID: <20260706224548.100451-1-alexander.hoelzl@gmx.net>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260609142139.1563360-1-gerg@linux-m68k.org> <20260609142139.1563360-5-gerg@linux-m68k.org>
-In-Reply-To: <20260609142139.1563360-5-gerg@linux-m68k.org>
-From: Ulf Hansson <ulf.hansson@oss.qualcomm.com>
-Date: Mon, 6 Jul 2026 17:46:31 +0200
-X-Gm-Features: AVVi8Cfdl1DNUQnUfsfYJ-HKaMqWUP8hicUf_E8fyBBfHMErHTWhOeyxDX2mfns
-Message-ID: <CAPx+jO8YPs-B1AJA6ShZTNMapFhmQgS79h7EHL7ZWQ3rc4g+qA@mail.gmail.com>
-Subject: Re: [PATCHv2 3/4] mmc: sdhci-esdhc-mcf: do not use readl()/writel()
- on ColdFire
-To: Greg Ungerer <gerg@linux-m68k.org>
-Cc: linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        arnd@kernel.org, wei.fang@nxp.com, frank.li@nxp.com,
-        shenwei.wang@nxp.com, imx@lists.linux.dev, netdev@vger.kernel.org,
-        nico@fluxnic.net, adureghello@baylibre.com, ulfh@kernel.org,
-        linux-mmc@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-spi@vger.kernel.org, olteanv@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-ORIG-GUID: mLxJ1lsUmRjWdhED-3L5KUh9UG1UD6A_
-X-Authority-Analysis: v=2.4 cv=Hv1G3UTS c=1 sm=1 tr=0 ts=6a4bcde4 cx=c_pps
- a=UgVkIMxJMSkC9lv97toC5g==:117 a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10
- a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=DJpcGTmdVt4CTyJn9g5Z:22 a=tBb2bbeoAAAA:8 a=IpJZQVW2AAAA:8
- a=GOXD6VkAu_hHpBIGSSQA:9 a=QEXdDO2ut3YA:10 a=1HOtulTD9v-eNWfpl4qZ:22
- a=Oj-tNtZlA1e06AYgeCfH:22 a=IawgGOuG5U0WyFbmm1f5:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA2MDE2MCBTYWx0ZWRfX7Y4F5wV73rZF
- O7Oa7kp6mFL6VyucvsiulluOwZvgtQelGRF4nse7X9GyqgYiiD+4/OYXjJm80Wlr+/ksg/sNAYy
- IHDeQ0NyFbOAzDGC/5ONAT4nrfGh7Bs=
-X-Proofpoint-GUID: mLxJ1lsUmRjWdhED-3L5KUh9UG1UD6A_
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA2MDE2MCBTYWx0ZWRfX6KpRonHefkio
- z32PfFhwM4zRxhUv7hJIpxDpDO0obDk0oN7NQK/CJuca40E6fLJgIe9UtzPguCHFLkBi6TOPKhk
- zZoVLRUNdcsFy8crE9J56bAJbIMBw+LCbTEi86ePqdSnXfvYMItMZEEiaefQCucbVQ6a0FxnnBP
- 1nL/xcszudIFt8VNxuQvOrP4lLDn1R+P65wcsHIjE4AV1H0xMUyrmL+79PS/HAvCpOTo5CH44CT
- krejDv9VpCrBaf3TuWfTtaIFRHY5hM8nn7H1dd/29sRHzfETVOafNk0nsF6SGY5CVmXlwE3vL18
- lu4GjJ+pUBRm/fKgQXFICw7ASJdq024II2xC0PFnGeKyiQOnQDIAg6iEjXthBzCdWzATaw6PthK
- B0qyq2cFtpurOBmcInWHWoSuhRZJHmmTGAmTrC5nMzgIBCZhBqAJrHZyKE2YJa+hEXak0eTs7eY
- XXcOMIacepM3Bki0LjA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-06_02,2026-07-06_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 malwarescore=0 adultscore=0 priorityscore=1501
- spamscore=0 bulkscore=0 clxscore=1011 lowpriorityscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607060160
+X-Provags-ID: V03:K1:8cfDkrAUHuHEKxHAOtIuR042e4jsEFxTrMErv8wMCPs31ykUku/
+ ev5SNBhCF0q2FueJDy5vOKXbUUhlLXyI4P8hKuSBjUljy6675kkIkNzEUCWrH6YGHM36w47
+ kuh9V9+8hq9vAULnGMyYwCm/VPRwsQ8sEfjm+XL+ZCgZoaEfaW3hfEfgrJtn9IFpOUDyRgh
+ lq/yhCndQQYnl7U6Kfjlg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:hKpRV5WLjYM=;iT4pYHR/PGoTzyr28PJXNtTfYzu
+ nZjIw/Nf0r0fMf+4s8Sk6FXqKqB+uAqWrfHG4M5iTsi+528/Y18pzpyZg3ukwDal5HFhw/s2L
+ LtzfSF9j1EFPSgFzvuGN+n76eAufqQ4DJe1ESHzfLspsq0M2brE9pRdNhOvyZU0zxk9hYV0OT
+ N95drD/rMYqthONL9pvQanzTeM1gudcMsV9OJNYMUw24sk/VUrIQ/h246Hx4HF66vR7viFJ6P
+ mbPbDdJFhSmeHPIJS4X/km7zm975ScdWaGUTK9QMisS8eBWFehWIY3N9CPNPlh7HlukAPmQqY
+ /sOU1RyD9jTvwttAWmplh9Qe5s06D/sEdpEjkC/yKBo8wTG/5+6l3Wwahyy2vNbroNUgmOoXE
+ vIbJsD/7nOI/ZnJW7Th5JtC85JRnXttd/HINO3aydpQHmRXMnXyVeDYiu3dDx39ux/KsrEDq5
+ RTw1i713uT/yA/KGVxxnyFjDQy3sUqLHb1pcWaW30hiPojta1y4S78XhlbdA69rucwwmtm/yg
+ gRU5j9QgJ+pzPrKGuSD/mrAL8Nv6MlswUmW6IjuAK8D8lFwndPL94bQbQcvGkbczWuB+teGe4
+ xGHkvCfeqQS+HV6XT4WZhHKZRhGjjeqG3nTFBmcMTOLD8wZfL2DMWcR2x/eYKJznYOkK/8cI4
+ ZNnNHjYCPTH02Wz9bOjVBwuGN0PWl617y2Wm9G0+a1M5R6OXxyvXIBF4do4JWn2WDUnZQIe/Q
+ x1bY3jQkjGHUU7zmCYx63JFqGaI/FGfQJIFyqgSx+rQFTJasF1bVs/9WR7aencT66LhXp7E2Z
+ /Opu++fF1t4BQw959FmZJUvxGvPMYPkcp8zFLmxG4bc/GcBkAaYzKxE5DPZTO7VhVWcCc3B9a
+ uQCGgKk5brL9nRFveTuEaSscXGwefCJtNcQewS7Evqof+NoHLSqf1j9oCntl7wQDmIdIcGed6
+ wpK4ceB1aEfAJ4ji7EjYKAozekTyi+vVUzCPfw2wefM/1Z+XFXiS6YbTMmEMqp/+NgLz5fBTP
+ etlWtdi8oW9mwjWD1bYQKkI+yWJM3bFY0SHGxMiKo0N61eyex390GDZc2+e2yq6Td23yFXHSE
+ YZB53SkYb7fDhXQiwKnwp3Uj0ea0DMpHI+fDReY68KLytvA+JkGhKU714gT0qF4ljxxMeUAuZ
+ RXrrZZKzc3Rn6c7EenuineWbq8MXkRjU6Brs0+3uDlwluMvRzG6LwjyBANj4ba9fgQOm4X9pS
+ VyX2kHxQw9qQ2OEpmoDu7k24qe4mtAGIlGejUI5rsZwSjL6niIL2Rwm3GjWaNchoq2qtOtnE1
+ uBYnfHFkm1VJ4an48UUmTp/Vi4Dfh/6sPemDC7RczV10XJGRX7AFZo5hxblur8PL0VdbvY3kO
+ BFOZk9YdpN2Trm9OFoKh4ys9fsBGwUtU0gtQvhomFjt7omwD+d/4DxBn6yIOFWlDpvcFZZUBq
+ zBNsTchm0UUS9xiq9HqPRdq0n3Kr/c+XFpnYd5wFX97VePUJBJfZOazh2jK7Xy91pLCW6vl6B
+ binNNoAx+lOQDJ0pgPIe6Tn0Q3MvvqplSMARWuNsDo2juAU18UgRXE+w53gWTlIkYwjErVmAd
+ Ks5GMwR8oLqTn2/wNXhZlQRTGGjg8Nkr092riDBLd58g3PfgNfb1P+gMp/hHJlJE2GCezxa1u
+ OJSZ0ypycXFXW2urMI82eUxsxFrWJQCnrlESk75mbELt4+I4BDClDUh40cVHl70OYcg6FAdiK
+ mtc/QpPThVzxDKYOHnxbhwadmtMUsKxyFPBs2vgGeas68BR/224gjBwtQ1vYO5cV88WeL16KY
+ +AmTYS/qoyisJz51bsyYRMX8uE0vsSHyVVYekz5Nu0iFiFMEFWITLuPi5UI1btJDOJTb1RbO9
+ 4sfaz3qEAjqk3WY43oSnTRSmh9tmi2avpLPD4Tx8iOHXSM0skUiBKxKlnZRA6uroF+YXeXHLP
+ ywGoUI/rVP3WwpTi0REThXfR2B5CNMBpPAvc/nioe2+m2k67RfDsXScddt5BNaF88jLTdDyYA
+ E4zXCFmkSbOCP96wDI7/Ox35VrWwpUmjjjtm3N+/4lq1hr8ENt7GonrO9/zwX9kiXLprDV3aB
+ 0UO6JFqWquPlGu2bArgcIyTQPaQGTkYMOKIL8jPt3SlhdmyL6OLdInkTTRMnIWKLq9czzQG7C
+ uuKkpVZjZt2LafqrbHnD4YgUI2/1Ek/ox/ZE8vNcYql6F1u9SXtxGlBQ1dbCI+za1DXS3Zu5i
+ mm9XlS5xmfF24+VyaxccOVqJvYpLFvDhhm5osjA0w/NwRsgoBtdnB+fF94ABod+w2e5RP2YCd
+ E89bcghUjNgChpMhR31vrRMGY2b1ddp0PBsjzQd44WzzB0rrLEFQHOiszQ3Q3gE3xh+c6gbbt
+ XbRAzQsf+Pt7QNu2MTR/e9a2ci/khRAHkUtSJH3pQiAz2LozgxjE/p2WffxUbW7NZUzCS9YLZ
+ K7i8nzbRYk4+7B2mNO4pK1r0AJ6xbpNhEYv4Px/FZyDq5gzIMWZzFtcQq8HRShWdzEk4B0mvZ
+ mJYO8nRkAdokKb5IlGTHnRNeSv0Lw13E62bQDT3JyKyEHpMgPTUMm6HZoKXFQg+XGGPzTWbS6
+ mjNPdQH/wovzbENBhwUsr4bd7GuvgGjfRA0DU76nGpisUWOuI5VGUyWrp7InpC9VnrOfKfqoY
+ Pa2b9cT1R3RGHJKudlMTRB9El4Eig47GSkgNGokAO7DG3VEWP5r3sUekzCKaINzCllEQrzwLM
+ QAEUEMyV9Ytu3eHhmSFOUYuBBM6SoBSYdCC6sbiZ+wctvGqqQv19Z7c2skV94Eiqri3YaP/76
+ 7RfmjF6ua2Kkq+ErjJo8s1SlaQjtxhtEefQ+gJXuD0si16aZEBw+1vdhdJXb0v5yQWtPyXeNY
+ KS/tivzeMQkb/VGmI4f9hO18skClVhcG5MkVVxSkdALlAL2ERcyvxZBi9ZN3JEqGSzdH7LIzz
+ CE4EIr2lbuabBVk1VRAOvoASt1Tw/MvoiCuALLphVOSj0tetmpTxuWGabKjH9wsAeaWh31HON
+ fqLopqGoDGrd4WjPHLi8tJb5A8RLdg1GJhx+XhAiJJURviLnoJRf3BLGrtx8kbp8o6qMqoL31
+ NRAzxvXlct+lsnyvqsF/VG4cBhJ+NkmBnveUkqc4FsBzaZ5oZN70YNkfPVILIhDkqcil2tTyQ
+ j+UL00Yz9SfRmOYf1FFMpVA2VxpSaFrdN6MhuTOu789184yrTuYhbpJrv740IA+aeBhMQdpB9
+ jXXOzLby4MlPep7jKoWo5VvuozybxE57gtUppkjcZzd4kNSg9mYmKHRemJd+tqq1mKi2vASNV
+ iNcQv2NTteIEpEU1qsGBoDD8l2y/zjpYB0SPaMJOmUEiiDd8LrOL3AcU3EDQdif6z/ETZCf1w
+ jVwzPgt+k4nSw6Av7htCcbkYu+aRrT6KgGKwCzv2qmEOz25xA1sIsAaVMspdyODHxuB21c8y3
+ F/+JeVJRkteeiXU6I5n78iQ+b7Bdhg8vrTQi6Bjq3iuPRQk4jgmFjK17eRY+gd0dkQKDrgUKz
+ K/BBvO5yxxwnf4FCl0oY4+XyV5EBaAPOixB7AJE/AkVu3GifTUJCvjsKgJMZLYG8pGR3RsMSH
+ mZQktxoAwKirEb9Oi0Gkoh0ysCNZDcyKk+7KgZqjk8sqzja5mOBMQi4nOwiEZYJE5M+lGVA2Z
+ 5rBunekARqqZ5OB0R9f5O5oC8MfkG1FqdxZ3AmZYs2ScjQJwkBz3yOH8Puu/02fPk5SYpCmZC
+ hrOrCg8MtFiTCCwr4mu5mrOdPKLCPjWUSljTxe86h7XbemmxHoevv55sSSg1znhf3+lCLDKzA
+ ZSnbBKA4rMo+Z7N5k3dgiVNFu/JXKEpWf4wPInEM4f1+UakZhJvJtL5zIXMn1MCvAbs0HH1+5
+ +gArcbjM1RmGtXRsef6XFIQ4fAXga2csrBJvm+wxZhqiLimyOo8uMrSKW7suCFPQ7p6iHtKuX
+ 6vyv33YrciGHKbchKgid86t8YrwGxaqQKkxUGqaDs6Cu0g3BeibE5WWa2um7aHi9a9LciCFDB
+ 9M9lwG4lZN8pYDR5WG0J6HLUabaZQ7LZc69OJ33zWOHVu/1HYEKTdm7kcfrFh7aODPnydMVSo
+ ayGIqbJ5jqLZwpRCQa+wC7dlR8wkOL1nzUZcrhisHB+MxJg3B1Nr0CeWVQhiRWry47SOtNOzI
+ u3xw4J933yvq+CUzHHUpBds4Upyyf2JJ6RHNKPSAXyEhuAE97Td3mcnhpRNwIlf7eFAqS2Q9G
+ JAGsxfsPxxGf8UnjnRRChDi+X5s1Jp4s6oBos9TFcvmjknzMXXNG3OSV3rqlskUEa2rcX5Any
+ g2AGUJyItT4TX4x5GY4kMjYwiEyP1gjrejyElix2RaOnLvgdnd3x5NoNztsLfqa92XBz0LUj9
+ svy0HpnfzDtTUaEK/7cmGWIEazdRdJZNRg5Q+E/7MKEpZFL0LmSH2PzfrDhTaGCL/HQ4HwCv9
+ JWI106e+wjCrzuNidhFYBkO7vs5YJOjP11qwigy9RQNs12WnOYWqD0lkmpZE2TZG1+tB/DDjb
+ 9tLIjUqu12aiS7ZTyPyU1vcZncPXv5eeiUWPkzwDsLTdYF336O5qU+mjdsA0nBZi3o0U1oSP+
+ 2rRwqaiWAEevecVjFFrwQxTd9PTA4gG0exlZwjqCjdne0wVGCjHmav8oXZrDtV85+2xXdzY9c
+ rc44zOmNrRigskr5jbV1kV09uiyro54r0NXBPu6xtJfTaltQi6WqDCpZgySTZv9++ZgY/EXvC
+ kfctXVz3wi12z70ejgGqS2NuE3HHCPs6QfWAkUXCKiXgnNlFe/EHjw7//StmrVVx1hQQB29k4
+ uEqxTqzaug9odbOjJ9Uk86HKR0/AuM6W/cCzcjAbP5tT9tKaYeQt4nWDTjw+zSs860JIrNc2G
+ 4xTPQHB6RjQbM7rgFyuS4566u1I/bKsW1/KMbqf2rTYsPPcjgihM8GycCcJ3QNCNSC0QXsgtx
+ dll6lIx1eufJ7R4JcsVELvPldEmrgNZTXnHdvjZCJo+ge/p6LmqSuqNzPeaT5Z4zr7Gr5TgrZ
+ Vk8RA+a6cNZAuWe//TExc0dq4rMc6/NjRMXSGln2bjoLaDmNrYA2GbN5KexVZWys1DEZB5xR6
+ +DEELr+4Bfe/Q5PXRidCqzEzW7TLQFr8mEb/MA+4QLt0P+DKKwIc7qz3hY5yW8kWPzbpXAiXr
+ LAGf4oYXhVBJekyZS5VDEogTEai9YEM/3CAX8dddBSagDGEdrnHc5Pbb+GsOb9K6X1DjnAtTC
+ DYwHYh+cIsPyLFrnErrNo7UQCg0sJvB+ZjUKjHgKeMEjjKzjN5cOYAsySVHsiV4aQaIYQeNAd
+ OZ8VJjJ+4OLkAgT5ekm/RENKXPrtEPRMEB9/ksL3+hgZJgH/Bqiey+gz6UJ5BIgCjI7jqY8ZR
+ 08SZMzrH3mOcP92eJKuGSskjoYn8YPfKEIj6rCNhf3B74CpcjmXjEj8e5yRSevu0F1ucz4ANz
+ KbugG0yi+FntNtfh8jTDQEut3r1Kg3EpUuYQZr7YU+BgIbFOO5kRMahLX6Rc7n9MCoTFQmKNx
+ au8WUcqDm/qAfF3D/Jb953vXmRi2fq5ztqNc4V1TTho2JLrams31Ome0W+Mly3GyxmVSsck+5
+ NkiRAsVTmOe9Ldjij2iPbPEVmA/XcDYNjnXvlUe
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmx.net,quarantine];
+	R_DKIM_ALLOW(-0.20)[gmx.net:s=s31663417];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8011-lists,linux-can=lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:gerg@linux-m68k.org,m:linux-m68k@lists.linux-m68k.org,m:linux-kernel@vger.kernel.org,m:arnd@kernel.org,m:wei.fang@nxp.com,m:frank.li@nxp.com,m:shenwei.wang@nxp.com,m:imx@lists.linux.dev,m:netdev@vger.kernel.org,m:nico@fluxnic.net,m:adureghello@baylibre.com,m:ulfh@kernel.org,m:linux-mmc@vger.kernel.org,m:linux-can@vger.kernel.org,m:linux-spi@vger.kernel.org,m:olteanv@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[ulf.hansson@oss.qualcomm.com,linux-can@vger.kernel.org];
-	FREEMAIL_CC(0.00)[lists.linux-m68k.org,vger.kernel.org,kernel.org,nxp.com,lists.linux.dev,fluxnic.net,baylibre.com,gmail.com];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:o.rempel@pengutronix.de,m:robin@protonic.nl,m:linux-kernel@vger.kernel.org,m:kernel@pengutronix.de,m:linux-can@vger.kernel.org,m:alexander.hoelzl@gmx.net,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[alexander.hoelzl@gmx.net,linux-can@vger.kernel.org];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_FROM(0.00)[gmx.net];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-8012-lists,linux-can=lfdr.de];
+	DKIM_TRACE(0.00)[gmx.net:+];
+	RCPT_COUNT_FIVE(0.00)[6];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@oss.qualcomm.com,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alexander.hoelzl@gmx.net,linux-can@vger.kernel.org];
+	FREEMAIL_CC(0.00)[protonic.nl,vger.kernel.org,pengutronix.de,gmx.net];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oss.qualcomm.com:from_mime,oss.qualcomm.com:dkim,vger.kernel.org:from_smtp,mail.gmail.com:mid,qualcomm.com:dkim,linux-m68k.org:email]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 778B5713184
+X-Rspamd-Queue-Id: 6DA8371621F
 
-On Tue, Jun 9, 2026 at 4:27=E2=80=AFPM Greg Ungerer <gerg@linux-m68k.org> w=
-rote:
->
-> The implementation of the readX() and writeX() family of IO access
-> functions is non-standard on ColdFire platforms. They check the supplied
-> IO address and will return either big or little endian results based on
-> that check. This is non-standard, they are expected to always return
-> little-endian byte ordered data. Unfortunately this behavior also means
-> that ioreadX()/iowroteX() and their big-endian counter parts
-> ioreadXbe()/iowriteXbe() are wrong. This is now in the process of being
-> cleaned up and fixed.
->
-> Change the use of the readX() and writeX() access functions in this drive=
-r
-> to use the recently defined specific ColdFire internal SoC hardware IO
-> access functions mcf_read8()/mcf_read16()/mcf_read32() and
-> mcf_write8()/mcf_write16()/mcf_write32().
->
-> There is no functional change to the driver. Though it does have the
-> effect of making the IO access slightly more efficient, since there is
-> no longer a need to do the address check at every register access.
->
-> Acked-by: Angelo Dureghello <adureghello@baylibre.com>
-> Tested-by: Angelo Dureghello <adureghello@baylibre.com>
-> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+In J1939 segmented messages the receiver of a segmented message
+can request the retranmission of sent data frames. In the current
+implementation there was no limit on the amount of consecutive
+retransmission requests which were allowed. The standard states
+that after two retransmission requests (so three transmissions
+in total) the connection should be aborted with reason 5,
+'maximum retransmit request limit reached'.
+See SAE J1939-22 2025: 5.10.3.2 Connection Mode Clear to Send
+and 5.12.3 Device Response Time and Timeout Defaults.
 
-Applied for next, thanks!
+This commit introduces a retransmit counter and aborts the segmented
+data transfer if the retransmit limit is reached.
 
-Kind regards
-Uffe
+Signed-off-by: Alexander H=C3=B6lzl <alexander.hoelzl@gmx.net>
+=2D--
+Hello,
+sorry I was also a bit slow, I survived the heatwave now I can do
+something again :)
 
+I've added an additional commit to introduce the retransmit counting
+as discussed in the previous review. I've added additional tests to
+test the retransmit abort as well as the abort on requesting an=20
+already acked frame.
+I've also renamed the tests from cts_hold to=20
+rx_cts as they now also test other parts of the rx_cts path so I though
+they should have a more generic name.
 
-> ---
-> v2: moved from RFC to PATCH
->
->  drivers/mmc/host/sdhci-esdhc-mcf.c | 24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/mmc/host/sdhci-esdhc-mcf.c b/drivers/mmc/host/sdhci-=
-esdhc-mcf.c
-> index 375fce5639d7..6853521e8b2c 100644
-> --- a/drivers/mmc/host/sdhci-esdhc-mcf.c
-> +++ b/drivers/mmc/host/sdhci-esdhc-mcf.c
-> @@ -55,7 +55,7 @@ static inline void esdhc_clrset_be(struct sdhci_host *h=
-ost,
->         if (reg =3D=3D SDHCI_HOST_CONTROL)
->                 val |=3D ESDHC_PROCTL_D3CD;
->
-> -       writel((readl(base) & ~mask) | val, base);
-> +       mcf_write32((mcf_read32(base) & ~mask) | val, base);
->  }
->
->  /*
-> @@ -71,7 +71,7 @@ static void esdhc_mcf_writeb_be(struct sdhci_host *host=
-, u8 val, int reg)
->         if (reg =3D=3D SDHCI_HOST_CONTROL) {
->                 u32 host_ctrl =3D ESDHC_DEFAULT_HOST_CONTROL;
->                 u8 dma_bits =3D (val & SDHCI_CTRL_DMA_MASK) >> 3;
-> -               u8 tmp =3D readb(host->ioaddr + SDHCI_HOST_CONTROL + 1);
-> +               u8 tmp =3D mcf_read8(host->ioaddr + SDHCI_HOST_CONTROL + =
-1);
->
->                 tmp &=3D ~0x03;
->                 tmp |=3D dma_bits;
-> @@ -82,12 +82,12 @@ static void esdhc_mcf_writeb_be(struct sdhci_host *ho=
-st, u8 val, int reg)
->                  */
->                 host_ctrl |=3D val;
->                 host_ctrl |=3D (dma_bits << 8);
-> -               writel(host_ctrl, host->ioaddr + SDHCI_HOST_CONTROL);
-> +               mcf_write32(host_ctrl, host->ioaddr + SDHCI_HOST_CONTROL)=
-;
->
->                 return;
->         }
->
-> -       writel((readl(base) & mask) | (val << shift), base);
-> +       mcf_write32((mcf_read32(base) & mask) | (val << shift), base);
->  }
->
->  static void esdhc_mcf_writew_be(struct sdhci_host *host, u16 val, int re=
-g)
-> @@ -110,24 +110,24 @@ static void esdhc_mcf_writew_be(struct sdhci_host *=
-host, u16 val, int reg)
->                  * As for the fsl driver,
->                  * we have to set the mode in a single write here.
->                  */
-> -               writel(val << 16 | mcf_data->aside,
-> +               mcf_write32(val << 16 | mcf_data->aside,
->                        host->ioaddr + SDHCI_TRANSFER_MODE);
->                 return;
->         }
->
-> -       writel((readl(base) & mask) | (val << shift), base);
-> +       mcf_write32((mcf_read32(base) & mask) | (val << shift), base);
->  }
->
->  static void esdhc_mcf_writel_be(struct sdhci_host *host, u32 val, int re=
-g)
->  {
-> -       writel(val, host->ioaddr + reg);
-> +       mcf_write32(val, host->ioaddr + reg);
->  }
->
->  static u8 esdhc_mcf_readb_be(struct sdhci_host *host, int reg)
->  {
->         if (reg =3D=3D SDHCI_HOST_CONTROL) {
->                 u8 __iomem *base =3D host->ioaddr + (reg & ~3);
-> -               u16 val =3D readw(base + 2);
-> +               u16 val =3D mcf_read16(base + 2);
->                 u8 dma_bits =3D (val >> 5) & SDHCI_CTRL_DMA_MASK;
->                 u8 host_ctrl =3D val & 0xff;
->
-> @@ -137,7 +137,7 @@ static u8 esdhc_mcf_readb_be(struct sdhci_host *host,=
- int reg)
->                 return host_ctrl;
->         }
->
-> -       return readb(host->ioaddr + (reg ^ 0x3));
-> +       return mcf_read8(host->ioaddr + (reg ^ 0x3));
->  }
->
->  static u16 esdhc_mcf_readw_be(struct sdhci_host *host, int reg)
-> @@ -149,14 +149,14 @@ static u16 esdhc_mcf_readw_be(struct sdhci_host *ho=
-st, int reg)
->         if (reg =3D=3D SDHCI_HOST_VERSION)
->                 reg -=3D 2;
->
-> -       return readw(host->ioaddr + (reg ^ 0x2));
-> +       return mcf_read16(host->ioaddr + (reg ^ 0x2));
->  }
->
->  static u32 esdhc_mcf_readl_be(struct sdhci_host *host, int reg)
->  {
->         u32 val;
->
-> -       val =3D readl(host->ioaddr + reg);
-> +       val =3D mcf_read32(host->ioaddr + reg);
->
->         /*
->          * RM (25.3.9) sd pin clock must never exceed 25Mhz.
-> @@ -245,7 +245,7 @@ static void esdhc_mcf_pltfm_set_clock(struct sdhci_ho=
-st *host,
->          * fvco =3D fsys * outdvi1 + 1
->          * fshdc =3D fvco / outdiv3 + 1
->          */
-> -       temp =3D readl(pll_dr);
-> +       temp =3D mcf_read32(pll_dr);
->         fsys =3D pltfm_host->clock;
->         fvco =3D fsys * ((temp & 0x1f) + 1);
->         fesdhc =3D fvco / (((temp >> 10) & 0x1f) + 1);
-> --
-> 2.54.0
->
+I've added the comments and fixed the spelling mistakes, I hope I did
+not add any new ones.
+
+ net/can/j1939/j1939-priv.h |  2 ++
+ net/can/j1939/transport.c  | 22 ++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+
+diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
+index 81f58924b4ac..16867d803092 100644
+=2D-- a/net/can/j1939/j1939-priv.h
++++ b/net/can/j1939/j1939-priv.h
+@@ -285,6 +285,8 @@ struct j1939_session {
+ 		unsigned int block;
+ 		/* dpo - ETP.CM_DPO, Data Packet Offset */
+ 		unsigned int dpo;
++		/* retransmits - amount of received retransmit requests (including hold=
+s) */
++		unsigned int retransmits;
+ 	} pkt;
+ 	struct hrtimer txtimer, rxtimer;
+ };
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index df93d57907da..6f999b18bbca 100644
+=2D-- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -32,6 +32,14 @@
+ #define J1939_ETP_CMD_EOMA 0x17
+ #define J1939_ETP_CMD_ABORT 0xff
+=20
++/* Maximum amount of transmission attempts for a given packet number to
++ * be sent. According to SAE J1939-21 2022 - 5.12.3 Device Response Time =
+and
++ * Timeout Defaults there should be no more than 2 retries (3 requests in=
+ total)
++ * before the connection is aborted with reason 5 which corresponds to
++ * J1939_XTP_ABORT_FAULT in this implementation.
++ */
++#define J1939_CTS_MAX_NUM_TRANSMITS 3
++
+ enum j1939_xtp_abort {
+ 	J1939_XTP_NO_ABORT =3D 0,
+ 	J1939_XTP_ABORT_BUSY =3D 1,
+@@ -1457,6 +1465,19 @@ j1939_xtp_rx_cts_one(struct j1939_session *session,=
+ struct sk_buff *skb)
+ 	else if (dat[1] > session->pkt.block /* 0xff for etp */)
+ 		goto out_session_cancel;
+=20
++	/* If the 'next packet number to be sent' in the CTS is smaller or
++	 * equal to an already sent packet it is a retransmit request.
++	 */
++	if (session->pkt.tx >=3D pkt) {
++		session->pkt.retransmits++;
++		if (session->pkt.retransmits >=3D J1939_CTS_MAX_NUM_TRANSMITS) {
++			err =3D J1939_XTP_ABORT_FAULT;
++			goto out_session_cancel;
++		}
++	} else {
++		session->pkt.retransmits =3D 0;
++	}
++
+ 	/* set packet counters only when not CTS(0) */
+ 	session->pkt.tx_acked =3D pkt - 1;
+ 	j1939_session_skb_drop_old(session);
+@@ -1669,6 +1690,7 @@ j1939_session *j1939_xtp_rx_rts_session_new(struct j=
+1939_priv *priv,
+=20
+ 	session->pkt.rx =3D 0;
+ 	session->pkt.tx =3D 0;
++	session->pkt.retransmits =3D 0;
+=20
+ 	session->tskey =3D priv->rx_tskey++;
+ 	j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_RTS);
+=2D-=20
+2.55.0
+
 
