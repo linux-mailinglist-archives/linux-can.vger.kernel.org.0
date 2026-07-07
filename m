@@ -1,41 +1,41 @@
-Return-Path: <linux-can+bounces-8053-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8054-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Y5NCAFDWTGpuqgEAu9opvQ
-	(envelope-from <linux-can+bounces-8053-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 12:34:56 +0200
+	id 2UsPJvnUTGoQqgEAu9opvQ
+	(envelope-from <linux-can+bounces-8054-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 12:29:13 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A60671A70C
-	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 12:34:55 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C57671A5FE
+	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 12:29:13 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8053-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-can+bounces-8053-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8054-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8054-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A12FC310AB3C
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jul 2026 10:25:07 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id F0A8930BB7E2
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jul 2026 10:25:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A39EE3E0C7B;
-	Tue,  7 Jul 2026 10:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C99723E025F;
+	Tue,  7 Jul 2026 10:24:35 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415D53E0234;
-	Tue,  7 Jul 2026 10:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E023DF019;
+	Tue,  7 Jul 2026 10:24:34 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783419871; cv=none; b=fIv7KsQICEfvK/NDAyqD8RMa07YJrx/wH1hjzSbNEVFchVkbsYBtwpLc/dLlByxflOKXzaej+8L27XF0qnEOsdGvf9hWv2tjWtGo1IC5gu6mUjZgiMzrCgTMPmyOC4UA25xNf0wTEj99akR1pOeGodgi67fjTAwxvDI024pGTvA=
+	t=1783419875; cv=none; b=akdS6Ql8puv04dmXIDBZWMj8FVOUUeDGxZKCL5YJ+27StxFrwSDOSGFKye7BxICcD0vE9STgDAPfz8Go69MV+Gx0H0tyq2iVozfMjtNbJEnfxxNS8n9mtuO8rNqRGTCSqqyT8QiOnFEyTSDRHWT4hlZ5e02w7KUcoHiKqpZ4nXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783419871; c=relaxed/simple;
-	bh=5mUpocPjpC6daFLfX8N0a0kp2mHj3lKjSpJfrm9gFaA=;
+	s=arc-20240116; t=1783419875; c=relaxed/simple;
+	bh=LiCX5WnI83rFXZJZwi+zXy0vU6kT3GpPeeQkoAZLXfA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=auAQe3BOPsnEVxOCoHORnko+5d+kNMbShtc9SZTqL8+wLKqL8aWt1Xt7jbbSNp5Xu8vKPoBWTtNrF5PhB/IcjSARNabO0L/zQSHdEfZW3UFq5G7NMbgDVcvBpuvAG7bdT91IWrOehB+j6Y1/bC3BleRgZT7esqt/VyT4LGs/bQA=
+	 MIME-Version; b=s4ITs1ZkG7JzzYJQlk6wnCiKSOM+L7VWGIS6+gqtacZxR73hiP1yYMxakjT4cemFB3Qmz4dubTDaSEAuwAff5EgmvI4hGfwyMNfLufMRRqFbi4+RPabeRMMzJ+7n5ZeuT4WFYMquMBl/RjiD0AH6bRDd4w0ybALXTDKZURj5thE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF66E1F00A3D;
-	Tue,  7 Jul 2026 10:24:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6797D1F000E9;
+	Tue,  7 Jul 2026 10:24:30 +0000 (UTC)
 From: Claudiu Beznea <claudiu.beznea+renesas@tuxon.dev>
 To: mkl@pengutronix.de,
 	mailhol@kernel.org,
@@ -57,9 +57,9 @@ Cc: claudiu.beznea@tuxon.dev,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH 1/8] clk: r9a08g045-cpg: Add clocks and resets for CAN-FD
-Date: Tue,  7 Jul 2026 13:24:11 +0300
-Message-ID: <20260707102418.1646159-2-claudiu.beznea+renesas@tuxon.dev>
+Subject: [PATCH 2/8] dt-bindings: can: renesas,rcar-canfd: Document RZ/G3S SoC
+Date: Tue,  7 Jul 2026 13:24:12 +0300
+Message-ID: <20260707102418.1646159-3-claudiu.beznea+renesas@tuxon.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260707102418.1646159-1-claudiu.beznea+renesas@tuxon.dev>
 References: <20260707102418.1646159-1-claudiu.beznea+renesas@tuxon.dev>
@@ -75,7 +75,7 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -88,9 +88,9 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER(0.00)[claudiu.beznea@tuxon.dev,linux-can@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-8053-lists,linux-can=lfdr.de,renesas];
+	TAGGED_FROM(0.00)[bounces-8054-lists,linux-can=lfdr.de,renesas];
 	FREEMAIL_TO(0.00)[pengutronix.de,kernel.org,glider.be,gmail.com,baylibre.com,redhat.com,bp.renesas.com,renesas.com];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -103,61 +103,110 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	R_DKIM_NA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can,dt,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,tuxon.dev:mid,tuxon.dev:from_mime,renesas.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tuxon.dev:mid,tuxon.dev:from_mime,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,renesas.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 9A60671A70C
+X-Rspamd-Queue-Id: 2C57671A5FE
 
 From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Renesas RZ/G3S SoC has a CAN-FD IP. Add clocks and resets for it.
+The CAN FD controller found on the Renesas RZ/G3S SoC is largely compatible
+with the variant present on the RZ/G3E SoC. The main differences are:
+- the RZ/G3S provides only two CAN FD channels
+- the RZ/G3S supports only CAN FD operation; the Channel n CAN FD
+  Configuration Register does not implement the bits used to select
+  classical CAN-only mode (bit 30) or CAN FD-only mode (bit 28);
+  consequently, bit 31 (CAN FD Frame Distinction Enable) of the same
+  register is also not implemented
+- some bits in several registers (mainly reserved or status bits) are
+  read-write on the RZ/G3S but read-only on the RZ/G3E; their behavior is
+  otherwise identical: the bits read back as 0 on both SoCs and software
+  is allowed to write only 0 to them on the RZ/G3S
+- the RZ/G3S provides 128 acceptance filters, compared to 64 on the
+  RZ/G3E
+- the RZ/G3S can use PCLK clock as the CAN FD clock source through an
+  internal clock divider, while also supporting an external CAN FD clock
+  source
+
+Since:
+- the SoC clock generator provides to the CAN IP only the peripheral and
+  the RAM clocks
+- when sourced from the peripheral clock, the CAN-FD clock is obtained
+  inside the IP itself by dividing the peripheral clock
+- the assigned-clocks and assigned-clock-rates properties are specific to
+  the CAN-FD clock
+the assigned-clocks and assigned-clock-rates properties were dropped from
+the required properties list of the Renesas RZ/G3S SoC.
+
+Add documentation for the Renesas RZ/G3S SoC.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 ---
- drivers/clk/renesas/r9a08g045-cpg.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ .../bindings/net/can/renesas,rcar-canfd.yaml    | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/renesas/r9a08g045-cpg.c b/drivers/clk/renesas/r9a08g045-cpg.c
-index 624fc5e6fb24..8d28f2d02064 100644
---- a/drivers/clk/renesas/r9a08g045-cpg.c
-+++ b/drivers/clk/renesas/r9a08g045-cpg.c
-@@ -77,6 +77,8 @@ enum clk_ids {
- 	CLK_SEL_PLL4,
- 	CLK_P1_DIV2,
- 	CLK_P3_DIV2,
-+	CLK_P4,
-+	CLK_P4_DIV2,
- 	CLK_SD0_DIV4,
- 	CLK_SD1_DIV4,
- 	CLK_SD2_DIV4,
-@@ -171,6 +173,8 @@ static const struct cpg_core_clk r9a08g045_core_clks[] __initconst = {
- 		    dtable_1_32, 0, 0, 0, NULL),
- 	DEF_G3S_DIV("P3", R9A08G045_CLK_P3, CLK_PLL3_DIV2_4, DIVPL3C, G3S_DIVPL3C_STS,
- 		    dtable_1_32, 0, 0, 0, NULL),
-+	DEF_FIXED("P4", CLK_P4, CLK_PLL2_DIV2, 1, 5),
-+	DEF_FIXED("P4_DIV2", CLK_P4_DIV2, CLK_P4, 1, 2),
- 	DEF_FIXED("P3_DIV2", CLK_P3_DIV2, R9A08G045_CLK_P3, 1, 2),
- 	DEF_FIXED("P5", R9A08G045_CLK_P5, CLK_PLL2_DIV2, 1, 4),
- 	DEF_FIXED("ZT", R9A08G045_CLK_ZT, CLK_PLL3_DIV2_8, 1, 1),
-@@ -274,6 +278,10 @@ static const struct rzg2l_mod_clk r9a08g045_mod_clks[] = {
- 					MSTOP(BUS_MCPU2, BIT(5))),
- 	DEF_MOD("scif5_clk_pck",	R9A08G045_SCIF5_CLK_PCK, R9A08G045_CLK_P0, 0x584, 5,
- 					MSTOP(BUS_MCPU3, BIT(4))),
-+	DEF_MOD("canfd_pclk",		R9A08G045_CANFD_PCLK, CLK_P4_DIV2, 0x594, 0,
-+					MSTOP(BUS_MCPU2, BIT(9))),
-+	DEF_MOD("canfd_clk_ram",	R9A08G045_CANFD_CLK_RAM, CLK_P4, 0x594, 1,
-+					MSTOP(BUS_MCPU2, BIT(9))),
- 	DEF_MOD("gpio_hclk",		R9A08G045_GPIO_HCLK, R9A08G045_OSCCLK, 0x598, 0,
- 					MSTOP(BUS_PERI_CPU, BIT(6))),
- 	DEF_MOD("adc_adclk",		R9A08G045_ADC_ADCLK, R9A08G045_CLK_TSU, 0x5a8, 0,
-@@ -324,6 +332,8 @@ static const struct rzg2l_reset r9a08g045_resets[] = {
- 	DEF_RST(R9A08G045_SCIF3_RST_SYSTEM_N, 0x884, 3),
- 	DEF_RST(R9A08G045_SCIF4_RST_SYSTEM_N, 0x884, 4),
- 	DEF_RST(R9A08G045_SCIF5_RST_SYSTEM_N, 0x884, 5),
-+	DEF_RST(R9A08G045_CANFD_RSTP_N, 0x894, 0),
-+	DEF_RST(R9A08G045_CANFD_RSTC_N, 0x894, 1),
- 	DEF_RST(R9A08G045_GPIO_RSTN, 0x898, 0),
- 	DEF_RST(R9A08G045_GPIO_PORT_RESETN, 0x898, 1),
- 	DEF_RST(R9A08G045_GPIO_SPARE_RESETN, 0x898, 2),
+diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+index b9d9dd7a7967..f8b4d3dd54af 100644
+--- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
++++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+@@ -13,6 +13,7 @@ properties:
+   compatible:
+     oneOf:
+       - enum:
++          - renesas,r9a08g045-canfd        # RZ/G3S
+           - renesas,r9a09g047-canfd        # RZ/G3E
+           - renesas,r9a09g077-canfd        # RZ/T2H
+ 
+@@ -185,8 +186,6 @@ required:
+   - clocks
+   - clock-names
+   - power-domains
+-  - assigned-clocks
+-  - assigned-clock-rates
+   - channel0
+   - channel1
+ 
+@@ -198,6 +197,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - renesas,r9a08g045-canfd
+               - renesas,rzg2l-canfd
+     then:
+       properties:
+@@ -267,6 +267,7 @@ allOf:
+           contains:
+             enum:
+               - renesas,r9a09g077-canfd
++              - renesas,r9a08g045-canfd
+               - renesas,rcar-gen3-canfd
+               - renesas,rzg2l-canfd
+     then:
+@@ -330,6 +331,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - renesas,r9a08g045-canfd
+               - renesas,r9a09g047-canfd
+               - renesas,rzg2l-canfd
+     then:
+@@ -350,6 +352,17 @@ allOf:
+       properties:
+         reset-names: false
+ 
++  - if:
++      properties:
++        compatible:
++          not:
++            contains:
++              const: renesas,r9a08g045-canfd
++    then:
++      required:
++        - assigned-clocks
++        - assigned-clock-rates
++
+ unevaluatedProperties: false
+ 
+ examples:
 -- 
 2.43.0
 
