@@ -1,64 +1,65 @@
-Return-Path: <linux-can+bounces-8032-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8033-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id yFJXDOqwTGrioAEAu9opvQ
-	(envelope-from <linux-can+bounces-8032-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 09:55:22 +0200
+	id VyDEDsG0TGrjoQEAu9opvQ
+	(envelope-from <linux-can+bounces-8033-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 10:11:45 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92665718BE1
-	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 09:55:21 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B4AD718F22
+	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 10:11:44 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=OToifR30;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=H42KxepQ;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8032-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-can+bounces-8032-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8033-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8033-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 862843024A34
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jul 2026 07:46:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 79F643046376
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jul 2026 07:59:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D162D282F28;
-	Tue,  7 Jul 2026 07:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD1962EA154;
+	Tue,  7 Jul 2026 07:59:38 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94077231827
-	for <linux-can@vger.kernel.org>; Tue,  7 Jul 2026 07:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93552F12A1
+	for <linux-can@vger.kernel.org>; Tue,  7 Jul 2026 07:59:37 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783410415; cv=none; b=mfdI23vqbeGVRVqROZW+qRxuQT9ZloE4aL6im0M3lwffjjHBLzYNiTrxEmQNJ13oaYWuulIsfxcUpWhi9pvLqvLB5BNEPpOsXPCbnkn5SKPXTSrDPGvNzYbDpnFAxO78IrcU6mpw9OXGyEnN/vosIawdbH/EKGsG/5O/6PAOcTE=
+	t=1783411178; cv=none; b=bgDbRqNiEp5NW6eOSUlnqoDsExP1IB+FhLUK8YYM+W4eewZwXWZIowy1aoh+whldbSYcWhzD6JTQ6jOe9LGJtqkGljaxWVh6emYuUFUlpnfQoCACxBszPQscVBPqJlSJB3f21uoARCSyFU1nsrshjUtOtMXg0cImgIV6szIPQsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783410415; c=relaxed/simple;
-	bh=C1cyOiqGRaoCHDZ2ewHKGVyyljHqiN8f8rqJQH3aJTc=;
+	s=arc-20240116; t=1783411178; c=relaxed/simple;
+	bh=XPvG3A/+N88vDIFjVnadVtrKI8AX2xZS/3E/Fx6GKDQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=AgNEiFZITRpzNBEqdic4QikEDZdwVkztvMxzDpn6igpm4S8KosJj/X/qYASixpd16yOLpZ5Jbej3Aj3/QsS+wgrFyG95iqkRUZTkaWXvdusN57aoshoOUDoECiyQwJpI8Nzv57RIHPUs1RB/pf+oizQjoEWF2iI7ev5HPfRZ/ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OToifR30; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 325F01F00A3A;
-	Tue,  7 Jul 2026 07:46:54 +0000 (UTC)
+	 Message-Id; b=b0sPb7LP00ZipwFziNDqpNt+rqzgt3/dtf2ZSMl0QoW3ozPzPgQyFNp8DsdyCetWsEQGtvi+uNJhUpTcYOr9cVpgIWwt33VekMLt5+YfTt7ZPM8MsVzkk9tzXQWqJYGzHqCP+j5WC07b2j1z2Olw5fUNDqNqGjBcmcg/N/QDZKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H42KxepQ; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB93B1F000E9;
+	Tue,  7 Jul 2026 07:59:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783410414;
-	bh=S4xlE3C6DLD0d+8Ucao6L0PqnkvQkT4rdoXZRU9tGM8=;
+	s=k20260515; t=1783411177;
+	bh=ehG9/3eHpQcN9nUemA+0ZjW54EhsvJbW7CCAQfEU1v4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OToifR30++w6t4EkgysiyrFB/r/Uk01MHPeM8ZBGJobn76KX6FUW80yJOX5Gt27FQ
-	 OrI+DY/Mb/a4eg6FATeTlI/4kurI7Q4Z3OqsqYWkQvcCLNCAlUamxkh7RQM7+ubBLi
-	 bZY2d19oh6qyfBNvSgJBp07LdTlHF/KRF/UL0EAPFZaNSceM+IFtcH0WLGv4OvEfx6
-	 /uI9TKgbRFw4aFSkB+2Ck2FiIQKapc0ACdepNdOhjHxo94BNJYFXrq5aCRZuVK2F0w
-	 zIoc71TefCoKy9dXXviymeNYvNFhHIW5lNKsMgoHTc0npymhU1te6pOLKnBmxdTZzp
-	 YLotlm5ZVOfxQ==
+	b=H42KxepQVtlT0PnfhCPCaZRLZZqpKnD9F7+5qKwq34RaAqBUwc7xPjuy1HHuH5wBk
+	 OXrJm/1mnRC3hbfDyaLJn7AWcLz6l3ZXtQx3UNX0BmhbIq9kjlkMfA2QaJ9zEZl8UP
+	 /60YxZ73+F78Jwrn/Qjf4SfMDERr0GSZuxxL8dUS9FLI8lImFn/4mjTLZXtXxlhpSX
+	 WMWU3K9yw9CT1BpOF/BaSmshCodfHfZ2wOh5e7nrEJQ7jQ64lgmsWizuvmJUo3qi1a
+	 4R9J96DgVvLkQJoUb5KeOo5PC48hx7qj7jxtgNdmJkgerj8Mn/nt5XI4rStZMVYDMG
+	 bV77cN7FZEW0w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next] net: Convert %pK back to %p
+Subject: Re: [PATCH v2 1/6] can: bcm: defer rx_op deallocation to workqueue
+ to fix thrtimer UAF
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>
-Cc: "Marc Kleine-Budde" <mkl@pengutronix.de>, "Oliver Hartkopp" <socketcan@hartkopp.net>, "Oleksij
- Rempel" <o.rempel@pengutronix.de>, linux-can@vger.kernel.org, "Vincent
- Mailhol" <mailhol@kernel.org>
-In-Reply-To: <20260706073824.xixrLxoD@linutronix.de>
-References: <20260706073824.xixrLxoD@linutronix.de>
+To: "Oliver Hartkopp" <socketcan@hartkopp.net>
+Cc: "Vincent Mailhol" <mailhol@kernel.org>, "Oliver Hartkopp" <socketcan@hartkopp.net>, linux-can@vger.kernel.org, "Oleksij
+ Rempel" <o.rempel@pengutronix.de>, "Marc Kleine-Budde" <mkl@pengutronix.de>
+In-Reply-To: <20260707-bcm_fixes-v2-1-96620c534b75@hartkopp.net>
+References: <20260707-bcm_fixes-v2-0-96620c534b75@hartkopp.net>
+ <20260707-bcm_fixes-v2-1-96620c534b75@hartkopp.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 07:46:53 +0000
-Message-Id: <20260707074654.325F01F00A3A@smtp.kernel.org>
+Date: Tue, 07 Jul 2026 07:59:36 +0000
+Message-Id: <20260707075936.EB93B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -71,127 +72,152 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8032-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8033-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[smtp.kernel.org:mid,linutronix.de:email,lists.linux.dev:replyto,vger.kernel.org:from_smtp,sashiko.dev:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,lists.linux.dev:replyto,smtp.kernel.org:mid];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:bigeasy@linutronix.de,m:mkl@pengutronix.de,m:socketcan@hartkopp.net,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,m:mailhol@kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:mailhol@kernel.org,m:linux-can@vger.kernel.org,m:o.rempel@pengutronix.de,m:mkl@pengutronix.de,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FROM_NO_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6]
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 92665718BE1
+X-Rspamd-Queue-Id: 7B4AD718F22
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Critical] Replacing `%pK` with `%p` breaks userspace tracing ABI and `kp=
-tr_restrict` runtime configurability.
-- [Medium] Incomplete refactoring misses `net/bluetooth/af_bluetooth.c`, le=
-aving inconsistent pointer formatting behavior.
+
+Pre-existing issues:
+- [High] Missing list_add_rcu() when inserting into tx_ops and rx_ops cause=
+s RCU publish/subscribe rules violation, leading to data races and potentia=
+l kernel panics with concurrent procfs readers.
+- [High] Lockless updates to 64-bit ktime_t fields can cause torn reads on =
+32-bit architectures, leading to wildly incorrect timer timeouts.
+- [High] Unprotected concurrent modification of `op->frames` via `memcpy_fr=
+om_msg` in `bcm_rx_setup` and `bcm_tx_setup`.
 --
 
-commit b2c57f416d95fe882e14b5fd13915b835f475930
-Author: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+--- Patch [1]: [PATCH v2 1/6] can: bcm: defer rx_op deallocation to workque=
+ue to fix thrtimer UAF ---
+commit 66477b55911323fb4b8a9cc14c9ed91e1fa4bfa5
+Author: Lee Jones <lee@kernel.org>
 
-net: Convert %pK back to %p
+can: bcm: defer rx_op deallocation to workqueue to fix thrtimer UAF
 
-This commit reverts a 2011 change that converted %p usage to %pK in the
-networking subsystem. It replaces %pK with %p across various procfs output
-files, stating that %p now defaults to a hashed pointer anyway.
+Commit f1b4e32aca08 replaced synchronize_rcu() with call_rcu() but omitted =
+a=20
+flag check in the fast-path, causing a use-after-free when thrtimer fires.=
+=20
+This patch defers timer cancellation and memory deallocation to a dedicated=
+=20
+unbound workqueue to safely sleep and drop socket references.
 
-> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-> index 209ef7522508f..aa31af06e5e3b 100644
-> --- a/net/ipv4/tcp_ipv4.c
-> +++ b/net/ipv4/tcp_ipv4.c
+Fixes: f1b4e32aca08 ("can: bcm: use call_rcu() instead of costly synchroniz=
+e_rcu()")
+
+> ---
+> net/can/bcm.c | 37 ++++++++++++++++++++++++++++++++++---
+>  1 file changed, 34 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/net/can/bcm.c b/net/can/bcm.c
+> index a4bef2c48a559..bdf53241bd7b3 100644
+> --- a/net/can/bcm.c
+> +++ b/net/can/bcm.c
 
 [ ... ]
 
-> @@ -2806,7 +2806,7 @@ static void get_tcp4_sock(struct sock *sk, struct s=
-eq_file *f, int i)
->  				      READ_ONCE(tp->copied_seq), 0);
+> @@ -1060,6 +1081,7 @@ static int bcm_tx_setup(struct bcm_msg_head *msg_he=
+ad, struct msghdr *msg,
 > =20
->  	seq_printf(f, "%4d: %08X:%04X %08X:%04X %02X %08X:%08X %02X:%08lX "
-> -			"%08X %5u %8d %llu %d %pK %lu %lu %u %u %d",
-> +			"%08X %5u %8d %llu %d %p %lu %lu %u %u %d",
-
-[Severity: Critical]
-Does replacing %pK with %p in get_tcp4_sock() break the userspace tracing
-ABI and bypass the kernel.kptr_restrict sysctl?
-
-Under kptr_restrict=3D1 (the default on most distributions), %pK returns the
-raw kernel pointer to users with the syslog capability. By reverting to %p,
-a hashed pointer is unconditionally returned instead.=20
-
-While the commit message notes that hash_pointers can be disabled at boot,
-does this break the runtime configurability provided by the
-kernel.kptr_restrict sysctl?=20
-
-Will existing tracing tools that correlate /proc sockets with kernel memory
-receive hashes and fail instead of raw pointers?
-
-[ ... ]
-
-> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-> index f7a9d55eee8a1..6a8174977c87a 100644
-> --- a/net/unix/af_unix.c
-> +++ b/net/unix/af_unix.c
-
-[ ... ]
-
-> @@ -3554,7 +3554,7 @@ static int unix_seq_show(struct seq_file *seq, void=
- *v)
->  		struct unix_sock *u =3D unix_sk(s);
->  		unix_state_lock(s);
+>  		/* bcm_can_tx / bcm_tx_timeout_handler needs this */
+>  		op->sk =3D sk;
+> +		sock_hold(sk);
+>  		op->ifindex =3D ifindex;
 > =20
-> -		seq_printf(seq, "%pK: %08X %08X %08X %04X %02X %5llu",
-> +		seq_printf(seq, "%p: %08X %08X %08X %04X %02X %5llu",
+>  		/* initialize uninitialized (kzalloc) structure */
 
-[Severity: Critical]
-Does this also expose unix socket structures directly as hashed pointers in
-unix_seq_show(), bypassing sysctl restrictions?
+[Severity: High]
+This is a pre-existing issue, but does the list insertion in bcm_tx_setup()=
+=20
+and bcm_rx_setup() use list_add() instead of list_add_rcu()?
 
-Similar to the tcp change above, will tracing tools no longer be able to
-resolve these pointers when kptr_restrict=3D1 is set?
+If a local unprivileged user repeatedly adds new TX/RX operations while=20
+concurrently reading /proc/net/can-bcm/<inode>, can bcm_proc_show() observe=
+=20
+partially initialized bcm_op entries?=20
+
+bcm_proc_show() iterates over rx_ops using list_for_each_entry_rcu() and=20
+tx_ops using list_for_each_entry() without holding the socket lock. Could=20
+the missing smp_store_release() barrier in list_add() lead to torn reads of=
+=20
+uninitialized list pointers and potential kernel panics?
+
+[Severity: High]
+This isn't a bug introduced by this patch, but are the 64-bit ktime_t=20
+fields (op->kt_ival1 and op->kt_ival2) updated locklessly in bcm_tx_setup()=
+=20
+and bcm_rx_setup()?
+
+On 32-bit architectures, can these lockless updates cause torn reads when=20
+bcm_tx_timeout_handler() or bcm_rx_timeout_handler() concurrently read=20
+these fields in softirq context to arm the hrtimer?=20
+
+Could this lead to wildly incorrect timer expirations, potentially stalling=
+=20
+CAN transmissions indefinitely or flooding the bus?
 
 [ ... ]
 
-[Severity: Medium]
-Does this commit leave the networking subsystem in an inconsistent state by
-missing net/bluetooth/af_bluetooth.c?
+> @@ -1221,6 +1243,7 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_he=
+ad, struct msghdr *msg,
+> =20
+>  		/* bcm_can_tx / bcm_tx_timeout_handler needs this */
+>  		op->sk =3D sk;
+> +		sock_hold(sk);
+>  		op->ifindex =3D ifindex;
+> =20
+>  		/* ifindex for timeout events w/o previous frame reception */
 
-Looking at bt_seq_show() in net/bluetooth/af_bluetooth.c, it still uses %pK:
+[Severity: High]
+This is a pre-existing issue, but is it safe to write directly into the=20
+active op->frames using memcpy_from_msg() without holding a lock?
 
-    seq_printf(f, "%pK %-6d %-6u %-6u %-6u %-6llu %-6llu",
+When updating an existing BCM operation, bcm_tx_setup() and bcm_rx_setup()=
+=20
+appear to copy user data directly into op->frames locklessly. Because=20
+memcpy_from_msg() can sleep on user faults, is there a significant race=20
+window here?
 
-Is this the only remaining use of %pK in the net/ subsystem that was missed
-by the refactoring? This appears to leave bluetooth procfs files respecting
-kptr_restrict while the other protocols do not.
+Concurrently, bcm_can_tx() reads op->frames to transmit data, and=20
+bcm_rx_cmp_to_index() reads op->frames to filter incoming packets. Could=20
+this allow partially updated or torn CAN frames to be transmitted onto the=
+=20
+physical CAN bus?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260706073824.xixr=
-LxoD@linutronix.de?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707-bcm_fixes-=
+v2-0-96620c534b75@hartkopp.net?part=3D1
 
