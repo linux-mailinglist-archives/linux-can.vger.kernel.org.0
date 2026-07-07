@@ -1,67 +1,65 @@
-Return-Path: <linux-can+bounces-8066-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8067-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Om+BLnXYTGobqwEAu9opvQ
-	(envelope-from <linux-can+bounces-8066-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 12:44:05 +0200
+	id 4bARO97WTGqVqgEAu9opvQ
+	(envelope-from <linux-can+bounces-8067-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 12:37:18 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6476B71A912
-	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 12:44:05 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A94071A785
+	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 12:37:18 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=L2MkDtxc;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=BgyA0xtO;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8066-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8066-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8067-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-can+bounces-8067-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E0B5D3039A36
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jul 2026 10:34:50 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 02C0B30516B9
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jul 2026 10:35:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C8493ED135;
-	Tue,  7 Jul 2026 10:34:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5DD3E559B;
+	Tue,  7 Jul 2026 10:35:02 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3275F3D47DD;
-	Tue,  7 Jul 2026 10:34:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA1ED3EC2CD
+	for <linux-can@vger.kernel.org>; Tue,  7 Jul 2026 10:35:00 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783420490; cv=none; b=Uzo/ex6NkbqZSiVV45OHow8ApVkmwjXVSpBc6FZCO6D5BFswdYd7FxZJxMfcbhyELDx4lB7QLHCclNoZVfi3CZGQdtGdqhCMric8Mq6Mk8UZuk+M07BEmy1OyUhSqAT33e9r+py/SPvGOUvRhq8leieVRO7RFODVsHdf6IBkOow=
+	t=1783420502; cv=none; b=KWYWayqMSrqrtim7ZXjcIk6DQxonVdLIfZeBeZEWY4bhQouBfbWEuv7/JxNe8QWN21McyFaMHgXEKh4yjxz8T6MY5fVTUBmGLApgqhzc2meuCYgoobWdgLtFYiKbvEFntxgyjdjUTqx6lf9sI45LCRdquPu38KM5uryhZqvpLxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783420490; c=relaxed/simple;
-	bh=IwV6giYEfzEjkAj1zP5cBNsJEQre6GJPdaV6jt9mISU=;
+	s=arc-20240116; t=1783420502; c=relaxed/simple;
+	bh=BUH+kZeDdpwk1omadZqTkPb5WEgAnhto2BxPkQH1B9M=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IK7oUdpFSpGz003HphD3SsdhNw3ccnIIMoCVIxx0A6Ecl1eawEbYB5H+GPyCJDv1KI0X0yc1G4HrG3Tm+u8pAhX4R5h/x0qTlc+eqQjls2nMhK5MRl4bNGwGfGofSMe+UAPjBCvJx3qz81qt86ZtIZclRQkzHQMtf6bu53lGJzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L2MkDtxc; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9C2D1F000E9;
-	Tue,  7 Jul 2026 10:34:48 +0000 (UTC)
+	 Message-Id; b=Dtg8Kco6jDY/wtzfMfmVuOlFwpcurZKe1wNdaEprgszR3D2U3GEwRpiebLX+N7JeZdZ+yofBNVW3B95ODsThMngbfA8RVNF2Ju1u2kUV22CuyljoUWvx/Y0QYJmUDdGKCBKAnej4TDwsJKfkMogFrc5Crqq5cv3ly3Je1HnsZWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BgyA0xtO; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6898B1F000E9;
+	Tue,  7 Jul 2026 10:35:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783420489;
-	bh=cyJB2MIiJ2gaAoak0Kq14RiiqK9//DKMVx6unJcLtFk=;
+	s=k20260515; t=1783420500;
+	bh=gSm0fnuwY9SIPwzT2iFkKCmyD1f7cNnryV4TwSjavBg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L2MkDtxcOt+7FvX83FkLwmLWDGRTIG45y42Ord/A/I2Szb2hGJR/nqU+5lV/q333/
-	 gy94suX51z2lLiYI63OA5cZ4WB8Cejg7RqeOn8n9MApgSB+o9RQqQiA1h7FrUuw7dX
-	 G4fg5NbPwTcfOimQqR6ROXD1gz3gEGDpPc/bk1YwIJgby0IegSIm7ojY5Il5zqpSEL
-	 wX7NbjSgOKBrvWSCM7zYtxzKFMflh5tVCIZKJzGG2tP4xX9Mb4UrVwgz3y25FDm8iT
-	 NnuvlTkC2JqrJVJM4UcOZaIUUksNqdQyDtHzTLBVdiVKHzCJqeHEb8EyBb12kXmzZe
-	 v5az3VPxwY8yw==
+	b=BgyA0xtORRwe9FQb0jyK02Mb7phpiVJCmQWxfMstf+Ta4U1zvpPwwwcMtdmatBAyz
+	 6zVCv8+1zcnQUM/0VyXkIsRa5fiE9Kca+y94t3KPWWFHUvtgIzITFwsWhnnFoPNZ3m
+	 haC9elupSn6iwK4Zmc88ikkNgZukAtb2zzprPRsZm2CfIp0SUK3m1FXuqB9bfVxEt7
+	 SfJd396iCsxMwEQP+w2ELlWUbxr8297UaNsD7WItNjvwZK4x5eL6eZuMslmfb0HIKa
+	 Y2+cuv6ZHiAiARZV+MuNrSONIHvdtFu6KB+MxYdBf1H1oCRw90jhr333Ph20aHP+tf
+	 4s0Px6fl9nCIA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/8] clk: r9a08g045-cpg: Add clocks and resets for
- CAN-FD
+Subject: Re: [PATCH v3 3/7] can: bcm: add locking when updating filter and
+ timer values
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Claudiu Beznea" <claudiu.beznea+renesas@tuxon.dev>
-Cc: wsa+renesas@sang-engineering.com, "Vincent Mailhol" <mailhol@kernel.org>, robh@kernel.org, "Marc
- Kleine-Budde" <mkl@pengutronix.de>, linux-can@vger.kernel.org, "Oleksij
- Rempel" <o.rempel@pengutronix.de>, devicetree@vger.kernel.org, "Oliver
- Hartkopp" <socketcan@hartkopp.net>, conor+dt@kernel.org
-In-Reply-To: <20260707102418.1646159-2-claudiu.beznea+renesas@tuxon.dev>
-References: <20260707102418.1646159-1-claudiu.beznea+renesas@tuxon.dev>
- <20260707102418.1646159-2-claudiu.beznea+renesas@tuxon.dev>
+To: "Oliver Hartkopp" <socketcan@hartkopp.net>
+Cc: "Vincent Mailhol" <mailhol@kernel.org>, "Oliver Hartkopp" <socketcan@hartkopp.net>, linux-can@vger.kernel.org, "Marc
+ Kleine-Budde" <mkl@pengutronix.de>, "Oleksij Rempel" <o.rempel@pengutronix.de>
+In-Reply-To: <20260707-bcm_fixes-v3-3-84600ca6d889@hartkopp.net>
+References: <20260707-bcm_fixes-v3-0-84600ca6d889@hartkopp.net>
+ <20260707-bcm_fixes-v3-3-84600ca6d889@hartkopp.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 07 Jul 2026 10:34:48 +0000
-Message-Id: <20260707103448.A9C2D1F000E9@smtp.kernel.org>
+Date: Tue, 07 Jul 2026 10:35:00 +0000
+Message-Id: <20260707103500.6898B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -73,123 +71,210 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-8066-lists,linux-can=lfdr.de];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8067-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:replyto,vger.kernel.org:from_smtp,sashiko.dev:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,smtp.kernel.org:mid];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:claudiu.beznea+renesas@tuxon.dev,m:wsa+renesas@sang-engineering.com,m:mailhol@kernel.org,m:robh@kernel.org,m:mkl@pengutronix.de,m:linux-can@vger.kernel.org,m:o.rempel@pengutronix.de,m:devicetree@vger.kernel.org,m:socketcan@hartkopp.net,m:conor+dt@kernel.org,m:claudiu.beznea@tuxon.dev,m:wsa@sang-engineering.com,m:conor@kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:mailhol@kernel.org,m:linux-can@vger.kernel.org,m:mkl@pengutronix.de,m:o.rempel@pengutronix.de,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
 	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can,renesas,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-can];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FROM_NO_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,renesas.com:email,lists.linux.dev:replyto,smtp.kernel.org:mid,vger.kernel.org:from_smtp]
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 6476B71A912
+X-Rspamd-Queue-Id: 8A94071A785
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] The P4 core clock is registered using an internal enum ID instead =
-of its Device Tree exported ID, rendering it inaccessible to DT consumers.
+
+Pre-existing issues:
+- [High] Concurrent timer updates lead to hrtimer_forward_now being called =
+with a zero interval, triggering a WARN_ON.
+- [High] Missing locking in the TX path leads to data races and torn reads =
+for CAN frames and timer values.
 --
 
---- Patch [1]: [PATCH 1/8] clk: r9a08g045-cpg: Add clocks and resets for CA=
-N-FD ---
-commit 6c9b264ec67002e41ec321d8af3b04f800484a8a
-Author: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+--- Patch [3]: [PATCH v3 3/7] can: bcm: add locking when updating filter an=
+d timer values ---
+commit 29dee20a547c38c99b2b856375f9e172e6a33181
+Author: Oliver Hartkopp <socketcan@hartkopp.net>
 
-clk: r9a08g045-cpg: Add clocks and resets for CAN-FD
-   =20
-Renesas RZ/G3S SoC has a CAN-FD IP. Add clocks and resets for it.
+    can: bcm: add locking when updating filter and timer values
 
-> diff --git a/drivers/clk/renesas/r9a08g045-cpg.c b/drivers/clk/renesas/r9=
-a08g045-cpg.c
-> index 1232fec913eb5..34927d1ee4639 100644
-> --- a/drivers/clk/renesas/r9a08g045-cpg.c
-> +++ b/drivers/clk/renesas/r9a08g045-cpg.c
-> @@ -88,6 +88,8 @@ enum clk_ids {
->  	CLK_SEL_PLL4,
->  	CLK_P1_DIV2,
->  	CLK_P3_DIV2,
-> +	CLK_P4,
+    KCSAN detected a simultaneous access to timer values that can be
+    overwritten in bcm_rx_setup() when updating timer and filter content
+    while bcm_rx_handler(), bcm_rx_timeout_handler() or bcm_rx_thr_handler()
+    run concurrently on incoming CAN traffic.
+
+    Closes: https://lore.kernel.org/linux-can/6975d5cf.a00a0220.33ccc7.0022=
+.GAE@google.com/
+
+> diff --git a/net/can/bcm.c b/net/can/bcm.c
+> index b612135b017d1..fd548c6eaa913 100644
+> --- a/net/can/bcm.c
+> +++ b/net/can/bcm.c
+> @@ -293,22 +294,26 @@ static int bcm_proc_show(struct seq_file *m, void *=
+v)
+>   * bcm_can_tx - send the (next) CAN frame to the appropriate CAN interfa=
+ce
+>   *              of the given bcm tx op
+>   */
+> -static void bcm_can_tx(struct bcm_op *op)
+> +static void bcm_can_tx(struct bcm_op *op, struct canfd_frame *cf)
+>  {
+>  	struct sk_buff *skb;
+>  	struct can_skb_ext *csx;
+>  	struct net_device *dev;
+> -	struct canfd_frame *cf;
+> +	struct canfd_frame cframe;
+>  	int err;
+> =20
+>  	/* no target device? =3D> exit */
+>  	if (!op->ifindex)
+>  		return;
+> =20
+> -	/* read currframe under lock protection */
+> -	spin_lock_bh(&op->bcm_tx_lock);
+> -	cf =3D op->frames + op->cfsiz * op->currframe;
+> -	spin_unlock_bh(&op->bcm_tx_lock);
+> +	if (!cf) {
+> +		/* read currframe under lock protection */
+> +		spin_lock_bh(&op->bcm_tx_lock);
+> +		memcpy(&cframe, op->frames + op->cfsiz * op->currframe,
+> +		       op->cfsiz);
+> +		cf =3D &cframe;
+> +		spin_unlock_bh(&op->bcm_tx_lock);
+> +	}
 
 [Severity: High]
-Should this clock be exported to the device tree instead of being added as =
-an
-internal enum?
+This isn't a bug introduced by this patch, but does bcm_tx_lock actually
+prevent concurrent overwrites by bcm_tx_setup()?
 
-Because CLK_P4 is defined after LAST_DT_CORE_CLK in clk_ids, it seems device
-tree consumers requesting <&cpg CPG_CORE R9A08G045_CLK_P4> would fail to
-probe with -ENOENT.
+The commit message claims to "take a lock-protected snapshot of the currfra=
+me
+in bcm_can_tx() to avoid partly overwrites by content updates in
+bcm_tx_setup()".
 
-> +	CLK_P4_DIV2,
->  	CLK_SD0_DIV4,
+However, looking at bcm_tx_setup(), it appears to copy user data directly i=
+nto
+op->frames without holding bcm_tx_lock:
+
+net/can/bcm.c:bcm_tx_setup() {
+    ...
+    for (i =3D 0; i < msg_head->nframes; i++) {
+        cf =3D op->frames + op->cfsiz * i;
+        err =3D memcpy_from_msg((u8 *)cf, msg, op->cfsiz);
+    ...
+}
+
+If the writer never acquires the lock (since memcpy_from_msg() can sleep),
+doesn't this lock in bcm_can_tx() remain ineffective against races?
 
 [ ... ]
 
-> @@ -182,6 +184,8 @@ static const struct cpg_core_clk r9a08g045_core_clks[=
-] __initconst =3D {
->  		    dtable_1_32, 0, 0, 0, NULL),
->  	DEF_G3S_DIV("P3", R9A08G045_CLK_P3, CLK_PLL3_DIV2_4, DIVPL3C, G3S_DIVPL=
-3C_STS,
->  		    dtable_1_32, 0, 0, 0, NULL),
-> +	DEF_FIXED("P4", CLK_P4, CLK_PLL2_DIV2, 1, 5),
+> @@ -461,7 +466,7 @@ static enum hrtimer_restart bcm_tx_timeout_handler(st=
+ruct hrtimer *hrtimer)
+>  	struct bcm_msg_head msg_head;
+> =20
+>  	if (op->kt_ival1 && (op->count > 0)) {
 
 [Severity: High]
-Looking at the surrounding definitions for P1, P2, P3, and P5 in
-r9a08g045_core_clks, they all use their respective R9A08G045_CLK_* macros.
+This is a pre-existing issue, but is this lockless read of kt_ival1 vulnera=
+ble
+to torn reads on 32-bit systems?
 
-Does P4 need to be registered with the exported R9A08G045_CLK_P4 macro inst=
-ead
-of CLK_P4 to ensure the clock populates correctly at the intended device tr=
-ee
-index?
+bcm_tx_setup() appears to update kt_ival1 and kt_ival2 locklessly, and this
+handler reads them locklessly. Could this cause the timer to fire at
+unintended intervals if a 64-bit ktime_t is partially updated while being r=
+ead?
 
-> +	DEF_FIXED("P4_DIV2", CLK_P4_DIV2, CLK_P4, 1, 2),
->  	DEF_FIXED("P3_DIV2", CLK_P3_DIV2, R9A08G045_CLK_P3, 1, 2),
+> -		bcm_can_tx(op);
+> +		bcm_can_tx(op, NULL);
+>  		if (!op->count && (op->flags & TX_COUNTEVT)) {
 
 [ ... ]
 
-> @@ -285,6 +289,10 @@ static const struct rzg2l_mod_clk r9a08g045_mod_clks=
-[] =3D {
->  					MSTOP(BUS_MCPU2, BIT(5))),
->  	DEF_MOD("scif5_clk_pck",	R9A08G045_SCIF5_CLK_PCK, R9A08G045_CLK_P0, 0x5=
-84, 5,
->  					MSTOP(BUS_MCPU3, BIT(4))),
-> +	DEF_MOD("canfd_pclk",		R9A08G045_CANFD_PCLK, CLK_P4_DIV2, 0x594, 0,
-> +					MSTOP(BUS_MCPU2, BIT(9))),
-> +	DEF_MOD("canfd_clk_ram",	R9A08G045_CANFD_CLK_RAM, CLK_P4, 0x594, 1,
+> @@ -686,15 +695,22 @@ static int bcm_rx_thr_flush(struct bcm_op *op)
+>  static enum hrtimer_restart bcm_rx_thr_handler(struct hrtimer *hrtimer)
+>  {
+>  	struct bcm_op *op =3D container_of(hrtimer, struct bcm_op, thrtimer);
+> +	enum hrtimer_restart ret;
+> +
+> +	spin_lock_bh(&op->bcm_rx_update_lock);
+> =20
+>  	if (bcm_rx_thr_flush(op)) {
+>  		hrtimer_forward_now(hrtimer, op->kt_ival2);
 
 [Severity: High]
-If P4 is exported as R9A08G045_CLK_P4, should this module clock reference
-the exported macro as its parent here in r9a08g045_mod_clks?
+This is a pre-existing issue, but could hrtimer_forward_now() be called wit=
+h a
+zero interval, triggering a WARN_ON_ONCE?
 
-> +					MSTOP(BUS_MCPU2, BIT(9))),
->  	DEF_MOD("gpio_hclk",		R9A08G045_GPIO_HCLK, R9A08G045_OSCCLK, 0x598, 0,
+If a user updates an RX operation with msg_head->nframes =3D=3D 0 and ival2=
+ =3D=3D 0,
+bcm_rx_setup() updates op->kt_ival2 =3D 0 but does not clear op->last_frame=
+s.
+It drops the lock before cancelling the timer:
+
+net/can/bcm.c:bcm_rx_setup() {
+    ...
+    spin_lock_bh(&op->bcm_rx_update_lock);
+    op->ival2 =3D msg_head->ival2;
+    op->kt_ival2 =3D bcm_timeval_to_ktime(msg_head->ival2);
+    ...
+    spin_unlock_bh(&op->bcm_rx_update_lock);
+
+    /* disable an active timer due to zero value? */
+    if (!op->kt_ival1)
+        hrtimer_cancel(&op->timer);
+
+    hrtimer_cancel(&op->thrtimer);
+    ...
+}
+
+Because hrtimer_cancel(&op->thrtimer) is called without the
+bcm_rx_update_lock held, could a concurrently expiring bcm_rx_thr_handler()
+acquire the lock, flush the still-throttled frame, and call
+hrtimer_forward_now(hrtimer, op->kt_ival2) with an interval of 0?
+
+> -		return HRTIMER_RESTART;
+> +		ret =3D HRTIMER_RESTART;
+>  	} else {
+>  		/* rearm throttle handling */
+>  		op->kt_lastmsg =3D 0;
+> -		return HRTIMER_NORESTART;
+> +		ret =3D HRTIMER_NORESTART;
+>  	}
+> +
+> +	spin_unlock_bh(&op->bcm_rx_update_lock);
+> +
+> +	return ret;
+>  }
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707102418.1646=
-159-1-claudiu.beznea+renesas@tuxon.dev?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260707-bcm_fixes-=
+v3-0-84600ca6d889@hartkopp.net?part=3D3
 
