@@ -1,489 +1,406 @@
-Return-Path: <linux-can+bounces-8021-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8023-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id av3jMJucTGolnAEAu9opvQ
-	(envelope-from <linux-can+bounces-8021-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 08:28:43 +0200
+	id he6OJLSmTGqTngEAu9opvQ
+	(envelope-from <linux-can+bounces-8023-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 09:11:48 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D06F717F2D
-	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 08:28:43 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 836B1718514
+	for <lists+linux-can@lfdr.de>; Tue, 07 Jul 2026 09:11:47 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8021-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-can+bounces-8021-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=kiNtAU9l;
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8023-lists+linux-can=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-can+bounces-8023-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C81E1301B802
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jul 2026 06:28:42 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8954D30291F0
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jul 2026 07:03:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47198388E43;
-	Tue,  7 Jul 2026 06:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 646F237754B;
+	Tue,  7 Jul 2026 07:03:53 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31D3138887D
-	for <linux-can@vger.kernel.org>; Tue,  7 Jul 2026 06:28:38 +0000 (UTC)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69EA3B19BB
+	for <linux-can@vger.kernel.org>; Tue,  7 Jul 2026 07:03:51 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783405721; cv=none; b=Sy2pl4YXH7/YD8rdxLXOaPtP3LV36bYhyxOD5qcgB0hW3ePKUYUVVAKVglwATEI5KLARmGncCMS1fwhu4cg8+Ek/TnfVTQzPiIMqgRU6dIFgHFE8sl3zCpQ/ip11Rw+w/UymZPyVCZ5pHFf+xqOT3ANiWPNP56wqLXbkS+w1FoQ=
+	t=1783407833; cv=none; b=Px895ZHDi/kqBF4o4LrFZG6LVcITHzjL3KM5swTApE45BysmBrOle2f0Kps836+xOo9XcJz72tJHIe+Xc8C8n7q9BJVg+mQ4b0caAbycG/wTcL88SB9v6SqHCdKSATgZLn/cqCztaBtmvMthOcZ2ISSsw8FMJ2dnJ/SS2SXmXww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783405721; c=relaxed/simple;
-	bh=DXRtuLxEwzcJalR0RpFFYEXLIjD376aIycbzF2YrDRQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DjnQCXdkWzeWNsWPeU40sPtpzJxTQptW4AVv1ysGM5heEv0yt0Okucsu59gf90QXpEYN3NCmeLX/S5eZBql7KbWdA6hzLbLxOJGw+aY1XGGy9l1fAVI1DpZg4sh0Gakkqoyf/xY59eor4EEX88FFELKHoIUVWyL0YYodS5edCMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Received: from loongson.cn (unknown [223.64.68.155])
-	by gateway (Coremail) with SMTP id _____8Axz+uUnExq1M0AAA--.3573S3;
-	Tue, 07 Jul 2026 14:28:36 +0800 (CST)
-Received: from kernelserver (unknown [223.64.68.155])
-	by front1 (Coremail) with SMTP id qMiowJCxvMaPnExqbpoDAA--.21344S4;
-	Tue, 07 Jul 2026 14:28:35 +0800 (CST)
-From: Binbin Zhou <zhoubinbin@loongson.cn>
-To: Binbin Zhou <zhoubb.aaron@gmail.com>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Bingxiong Li <libingxiong@loongson.cn>
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>,
-	loongarch@lists.linux.dev,
-	linux-can@vger.kernel.org,
-	jeffbai@aosc.io,
-	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH v4 2/2] can: loongson_canfd: Add RXDMA support
-Date: Tue,  7 Jul 2026 14:28:25 +0800
-Message-ID: <f46c0a1607cac2d8bad84f62707ef4e07fe0b2fa.1783391759.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1783391759.git.zhoubinbin@loongson.cn>
+	s=arc-20240116; t=1783407833; c=relaxed/simple;
+	bh=meE0OlO9gs3ADxVIcYpEWWoKN2FAwZ9vd2SbDLoFdYY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=kghpYWfcchsJ08SQIfu0MTFlaJ8rPorJ/9LCT6EJARWNqQWl8yYD7HO4VfGN0iwIlUJXuSe2mH6eI9T33YvF7WlIyuwWQFAQAugmNTp0KbyvdEQ6sH2qjTU0WuT/6i1B9QoJfsZghDRmaYGEDFZxjohO+Ws/ODSciObNT0hy1Yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiNtAU9l; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A4A1F00A3D;
+	Tue,  7 Jul 2026 07:03:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783407831;
+	bh=GPPeEgkH08/zUjTWIBtkd+5RcOsa1F/cIYKNIu9vMK4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kiNtAU9lM+Juz9mt4GZqoSEiStWz3D7KwIcqCZcQWu0TlPO33+1U5Lai1ibtA0+Ta
+	 JQLW/dNcp7XCXinC2B0snwZ1a9j8HP2vMrgVUKXOKpRCLb9CHtUx/wj4JTeNsCG0xR
+	 NhUPEG+Uy9zTgxsbwe7M6j1ELrkJtmQMUcVdK8/L1KNc7Tazl6QiRBgLxX/C+mrMaC
+	 NftweQ+vsKPD3t70jUikUrHkfzGsHBUk8RlAmtvHIM+IH/K0+e4YFZaEWZIlPb5RBX
+	 cakthbeVC86XzGCKl1+3YDTGVyUMwKyjqPbwBn9RAFEwNHUgdMmzqVP9W7Eq9ZRa1u
+	 7THcOMXB5dyiw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 1/2] can: Add Loongson CAN-FD controller driver
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Binbin Zhou" <zhoubinbin@loongson.cn>
+Cc: "Oleksij Rempel" <o.rempel@pengutronix.de>, linux-can@vger.kernel.org, "Marc
+ Kleine-Budde" <mkl@pengutronix.de>, "Vincent Mailhol" <mailhol@kernel.org>, "Oliver
+ Hartkopp" <socketcan@hartkopp.net>
+In-Reply-To: <bbfa82e81607ce600126692d77b763d6f8f412e4.1783391759.git.zhoubinbin@loongson.cn>
 References: <cover.1783391759.git.zhoubinbin@loongson.cn>
+ <bbfa82e81607ce600126692d77b763d6f8f412e4.1783391759.git.zhoubinbin@loongson.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 07 Jul 2026 07:03:50 +0000
+Message-Id: <20260707070351.34A4A1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxvMaPnExqbpoDAA--.21344S4
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/1tbiAgEBCGpMhCwBJQAAsg
-X-Coremail-Antispam: 1Uk129KBj9fXoW3CF4rXF13Gr4UCFWkCw4xXwc_yoW8JF43Xo
-	WfWanxKr4rGw18Jr1UKF1fXr17Za4DZrs0yrZakr1kCa90y3WUArZ8WF4fJr18Ka4Fqa15
-	uayrWF4xGw4Sqr43l-sFpf9Il3svdjkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8wcxFpf
-	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-	UjIYCTnIWjp_UUUYA7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
-	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUAVWUZwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-	Y2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-	v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-	AKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8EoGPUUUUU==
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [1.54 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8021-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8023-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:zhoubb.aaron@gmail.com,m:chenhuacai@loongson.cn,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:libingxiong@loongson.cn,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:loongarch@lists.linux.dev,m:linux-can@vger.kernel.org,m:jeffbai@aosc.io,m:zhoubinbin@loongson.cn,m:zhoubbaaron@gmail.com,s:lists@lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com,loongson.cn,pengutronix.de,kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	DMARC_NA(0.00)[loongson.cn];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[zhoubinbin@loongson.cn,linux-can@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCVD_COUNT_THREE(0.00)[4];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,sashiko.dev:url,vger.kernel.org:from_smtp,smtp.kernel.org:mid,lists.linux.dev:replyto,loongson.cn:email];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zhoubinbin@loongson.cn,linux-can@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	R_DKIM_NA(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:zhoubinbin@loongson.cn,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:socketcan@hartkopp.net,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-can];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5D06F717F2D
+X-Rspamd-Queue-Id: 836B1718514
 
-Extend the driver with an optional DMA engine support for the receive
-path. When a DMA channel named `rx` is available (e.g., from the
-loongson2-apb-cmc-dma driver), the RX buffer is mapped to a cyclic DMA
-transfer that continuously fills a pre-allocated ring buffer. The driver
-then readds incoming CAN frames directly from the DMA buffer, reducing
-the number of MMIO accesses and improving performance under high
-traffic.
+Thank you for your contribution! Sashiko AI review found 11 potential issue=
+(s) to consider:
+- [High] Lockless queue stop in `start_xmit` races with queue wake in the T=
+X interrupt, risking a permanent deadlock.
+- [High] Failing to allocate an SKB in the RX path causes early return with=
+out draining the hardware FIFO, permanently desynchronizing the RX stream a=
+nd hanging NAPI.
+- [High] Clearing the TX Hardware Command Interrupt flag at the end of `loo=
+ngson_canfd_tx_interrupt()` creates a race condition leading to lost TX int=
+errupts.
+- [High] The driver immediately clears hardware error counters upon enterin=
+g BUS_OFF, bypassing the mandatory software restart delay.
+- [High] Overwriting the `isr` variable in `loongson_canfd_err_interrupt()`=
+ drops concurrent error interrupts and leaves them permanently masked.
+- [High] Using the logical `cfd->len` to pop payload data from the RX FIFO =
+permanently corrupts the hardware FIFO state for CAN 2.0 RTR frames.
+- [High] Incorrect constraints and silent truncation for CAN FD data phase =
+timing lead to corrupted bit-timing configurations.
+- [High] Missing volatile register definition for `LOONGSON_CANFD_TRV_DLY` =
+causes stale cached TDCV readings.
+- [Medium] The queue space check incorrectly evaluates if ALL transmit buff=
+ers are free instead of AT LEAST ONE, severely throttling transmission.
+- [Medium] The driver passes a hardcoded 0 frame length to `can_put_echo_sk=
+b()`, preventing the `tx_bytes` statistic from ever incrementing.
+- [Medium] Synchronous polling of hardware status in TX interrupt causes ru=
+naway double counting of the `tx_packets` statistic.
+--
 
-The DMA mode is completely transparent to the under networking stack;
-the driver automatically selects the appropriate RX data reading method
-based on the availability of the DMA channel.
+--- Patch [1]: [PATCH v4 1/2] can: Add Loongson CAN-FD controller driver ---
+commit ecb7c7be40459261656c18cd36d4c01fa4e29b1d
+Author: Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: can: Add Loongson CAN-FD controller driver
 
-Co-developed-by: Bingxiong Li <libingxiong@loongson.cn>
-Signed-off-by: Bingxiong Li <libingxiong@loongson.cn>
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
- drivers/net/can/Kconfig          |   2 +-
- drivers/net/can/loongson_canfd.c | 197 ++++++++++++++++++++++++++++---
- 2 files changed, 182 insertions(+), 17 deletions(-)
+This commit adds a new driver for the Loongson CAN-FD controller integrated
+into Loongson-2K series SoCs. It implements the core CAN device operations,
+including a NAPI-based receive path, TX echo support, error reporting, and
+various CAN controller modes.
 
-diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-index 55c40b0654fb..f367517ede0d 100644
---- a/drivers/net/can/Kconfig
-+++ b/drivers/net/can/Kconfig
-@@ -191,7 +191,7 @@ config CAN_KVASER_PCIEFD
- 
- config CAN_LOONGSON_CANFD
- 	tristate "Loongson CAN-FD controller"
--	depends on HAS_IOMEM
-+	depends on HAS_IOMEM && (LOONGSON2_APB_CMC_DMA || COMPILE_TEST)
- 	select REGMAP_MMIO
- 	help
- 	  This is a canfd driver switch for the Loongson platform,
-diff --git a/drivers/net/can/loongson_canfd.c b/drivers/net/can/loongson_canfd.c
-index 83aa620c9d58..17af6505bf0c 100644
---- a/drivers/net/can/loongson_canfd.c
-+++ b/drivers/net/can/loongson_canfd.c
-@@ -6,10 +6,14 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/acpi_dma.h>
- #include <linux/bitfield.h>
- #include <linux/bits.h>
- #include <linux/can/dev.h>
- #include <linux/can/error.h>
-+#include <linux/dmaengine.h>
-+#include <linux/dma-direction.h>
-+#include <linux/dma-mapping.h>
- #include <linux/ethtool.h>
- #include <linux/io.h>
- #include <linux/interrupt.h>
-@@ -339,8 +343,10 @@
- #define DEV_NAME			"loongson_canfd"
- #define LOONGSON_CANFD_ID		0xBABE
- #define LOONGSON_CANFD_DW_BYTE		4
-+#define LOONGSON_CANFD_RXBUF_SZ		SZ_1K
- #define LOONGSON_CANFD_TXBUF_NUM	8
- #define LOONGSON_CANFD_MAX_RTXTH	0xf
-+#define LOONGSON_CANFD_RXDMA_NUM	(LOONGSON_CANFD_RXBUF_SZ / DMA_SLAVE_BUSWIDTH_4_BYTES)
- 
- /**
-  * struct loongson_canfd_priv - This definition define CAN driver instance
-@@ -348,14 +354,26 @@
-  * @napi: NAPI structure
-  * @regmap: regmap of the CAN device
-  * @res: Pointer to the CAN device respurce
-+ * @rx_ch: CAN DMA rx channel
-+ * @rx_dma_buf: CAN DMA rx buffer bus address
-+ * @rx_buf: CAN DMA rx buffer cpu address
-+ * @last_res: Last rx data in DMA route
-  * @tx_lock: Lock for synchronizing TX interrupt handling
-+ * @get_rx_data:  Callback of reading CAN rx data
-+ * @get_rxbuf_empty: Callback of gets the RX buffer is empty in dma mode
-  */
- struct loongson_canfd_priv {
- 	struct can_priv		can;		/* must be first member! */
- 	struct napi_struct	napi;
- 	struct regmap		*regmap;
- 	struct resource		*res;
-+	struct dma_chan		*rx_ch;
-+	dma_addr_t		rx_dma_buf;	/* dma rx buffer bus address */
-+	unsigned int		*rx_buf;	/* dma rx buffer cpu address */
-+	u16			last_res;
- 	spinlock_t		tx_lock;	/* protect the sending queue */
-+	u32 (*get_rx_data)(struct loongson_canfd_priv *priv);
-+	bool (*get_rxbuf_empty)(struct loongson_canfd_priv *priv);
- };
- 
- /**
-@@ -546,13 +564,138 @@ static void loongson_canfd_set_txbuf_cmd(struct net_device *ndev,
- }
- 
- /**
-- * loongson_canfd_rxbuf_empty() - Gets the RX buffer is empty
-+ * loongson_canfd_get_rxdata_in_dma() - Reading RX data in DMA mode
-+ * @priv: Pointer to private data
-+ *
-+ * Return: The CANFD RX data.
-+ */
-+static u32 loongson_canfd_get_rxdata_in_dma(struct loongson_canfd_priv *priv)
-+{
-+	u32 data = 0;
-+
-+	data = priv->rx_buf[LOONGSON_CANFD_RXDMA_NUM - priv->last_res--];
-+	if (!priv->last_res)
-+		priv->last_res = LOONGSON_CANFD_RXDMA_NUM;
-+
-+	return data;
-+}
-+
-+/**
-+ * loongson_canfd_get_rxbuf_empty_in_dma() - Gets the RX buffer is empty in dma mode
-+ * @priv: Pointer to private data
-+ *
-+ * Return: True - RX buffer is empty.
-+ *	   False - RX buffer is processing
-+ */
-+static bool loongson_canfd_get_rxbuf_empty_in_dma(struct loongson_canfd_priv *priv)
-+{
-+	struct dma_tx_state state;
-+	enum dma_status status;
-+
-+	status = dmaengine_tx_status(priv->rx_ch, priv->rx_ch->cookie, &state);
-+
-+	return priv->last_res == (state.residue / DMA_SLAVE_BUSWIDTH_4_BYTES) &&
-+	       (status == DMA_IN_PROGRESS);
-+}
-+
-+static void loongson_canfd_rxdma_free(struct loongson_canfd_priv *priv, struct device *dev)
-+{
-+	dma_free_coherent(dev, LOONGSON_CANFD_RXBUF_SZ, priv->rx_buf, priv->rx_dma_buf);
-+}
-+
-+static void loongson_canfd_rxdma_remove(struct loongson_canfd_priv *priv, struct device *dev)
-+{
-+	if (!priv->rx_ch)
-+		return;
-+
-+	dmaengine_terminate_sync(priv->rx_ch);
-+	loongson_canfd_rxdma_free(priv, dev);
-+	dma_release_channel(priv->rx_ch);
-+}
-+
-+/**
-+ * loongson_canfd_rxdma_init() - Loongson canfd RXDMA initialization
-+ * @ndev: Pointer to net_device structure
-+ *
-+ * Return: The number of messages in the receive buffer
-+ */
-+static int loongson_canfd_rxdma_init(struct net_device *ndev)
-+{
-+	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-+	struct dma_async_tx_descriptor *desc = NULL;
-+	struct device *dev = ndev->dev.parent;
-+	struct dma_slave_config config;
-+	int ret;
-+
-+	if (!priv->rx_ch)
-+		return -EINVAL;
-+
-+	priv->rx_buf = dma_alloc_coherent(dev, LOONGSON_CANFD_RXBUF_SZ,
-+					  &priv->rx_dma_buf, GFP_KERNEL);
-+	if (!priv->rx_buf)
-+		return -ENOMEM;
-+
-+	/* Configure DMA channel */
-+	memset(&config, 0, sizeof(config));
-+	config.src_addr = priv->res->start + LOONGSON_CANFD_RX_DATA;
-+	config.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+
-+	ret = dmaengine_slave_config(priv->rx_ch, &config);
-+	if (ret < 0) {
-+		netdev_err(ndev, "Loongson canfd rxdma channel config failed\n");
-+		goto err_config;
-+	}
-+
-+	/* Prepare a DMA cyclic transaction */
-+	desc = dmaengine_prep_dma_cyclic(priv->rx_ch, priv->rx_dma_buf,
-+					 LOONGSON_CANFD_RXBUF_SZ, LOONGSON_CANFD_RXBUF_SZ,
-+					 DMA_DEV_TO_MEM, DMA_PREP_INTERRUPT);
-+	if (!desc) {
-+		netdev_err(ndev, "Loongson canfd rxdma cyclic transaction failed\n");
-+		ret = -EBUSY;
-+		goto err_config;
-+	}
-+
-+	/* Push current dma transaction in the pending queue */
-+	ret = dma_submit_error(dmaengine_submit(desc));
-+	if (ret) {
-+		dmaengine_terminate_sync(priv->rx_ch);
-+		goto err_config;
-+	}
-+
-+	/* Issue pending DMA requests */
-+	dma_async_issue_pending(priv->rx_ch);
-+
-+	return 0;
-+
-+err_config:
-+	loongson_canfd_rxdma_free(priv, dev);
-+	return ret;
-+}
-+
-+/**
-+ * loongson_canfd_get_rxdata_in_poll() - Reading RX data in poll mode
-+ * @priv: Pointer to private data
-+ *
-+ * Return: The CANFD RX data.
-+ */
-+static u32 loongson_canfd_get_rxdata_in_poll(struct loongson_canfd_priv *priv)
-+{
-+	u32 data;
-+
-+	regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &data);
-+
-+	return data;
-+}
-+
-+/**
-+ * loongson_canfd_get_rxbuf_empty_in_poll() - Gets the RX buffer is empty in poll mode
-  * @priv: Pointer to private data
-  *
-  * Return: True - RX buffer is empty.
-  *	   False - RX buffer is processing
-  */
--static bool loongson_canfd_rxbuf_empty(struct loongson_canfd_priv *priv)
-+static bool loongson_canfd_get_rxbuf_empty_in_poll(struct loongson_canfd_priv *priv)
- {
- 	return !!regmap_test_bits(priv->regmap, LOONGSON_CANFD_RX_STAT, REG_RX_STAT_RXE);
- }
-@@ -777,8 +920,8 @@ static int loongson_canfd_chip_start(struct net_device *ndev)
- 	loongson_canfd_set_conf_mode(priv);
- 
- 	/* Configure interrupts */
--	int_ena = REG_INT_STAT_RBNEI | REG_INT_STAT_TXBHCI |
--		  REG_INT_STAT_EWLI | REG_INT_STAT_FCSI;
-+	int_ena = REG_INT_STAT_TXBHCI | REG_INT_STAT_EWLI | REG_INT_STAT_FCSI;
-+	int_ena |= priv->rx_ch ? REG_INT_STAT_DMADI : REG_INT_STAT_RBNEI;
- 
- 	/* Bus error reporting */
- 	if (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)
-@@ -980,8 +1123,8 @@ static int loongson_canfd_rx(struct net_device *ndev)
- 	struct sk_buff *skb;
- 	bool is_can_fd;
- 
--	regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &meta0);
--	regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, &meta1);
-+	meta0 = priv->get_rx_data(priv);
-+	meta1 = priv->get_rx_data(priv);
- 
- 	/* Number of characters received */
- 	if (!FIELD_GET(REG_FRAME_META1_RWCNT, meta1))
-@@ -1028,7 +1171,7 @@ static int loongson_canfd_rx(struct net_device *ndev)
- 
- 	/* Data */
- 	for (unsigned int i = 0; i < cfd->len; i += LOONGSON_CANFD_DW_BYTE)
--		regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, (u32 *)(cfd->data + i));
-+		*(u32 *)(cf->data + i) = priv->get_rx_data(priv);
- 
- 	if (!(cfd->can_id & CAN_RTR_FLAG))
- 		stats->rx_bytes += cfd->len;
-@@ -1244,16 +1387,17 @@ static int loongson_canfd_rx_napi(struct napi_struct *napi, int quota)
- {
- 	struct net_device *ndev = napi->dev;
- 	struct loongson_canfd_priv *priv = netdev_priv(ndev);
-+	int int_ena = priv->rx_ch ? REG_INT_STAT_DMADI : REG_INT_STAT_RBNEI;
- 	int work_done = 0, ret = 1;
- 	bool rxbuf_is_empty;
- 	u32 sts;
- 
--	rxbuf_is_empty = loongson_canfd_rxbuf_empty(priv);
-+	rxbuf_is_empty = priv->get_rxbuf_empty(priv);
- 
- 	while (!rxbuf_is_empty && work_done < quota && ret > 0) {
- 		ret = loongson_canfd_rx(ndev);
- 		work_done++;
--		rxbuf_is_empty = loongson_canfd_rxbuf_empty(priv);
-+		rxbuf_is_empty = priv->get_rxbuf_empty(priv);
- 	}
- 
- 	/* Check for RX FIFO Overflow */
-@@ -1281,12 +1425,11 @@ static int loongson_canfd_rx_napi(struct napi_struct *napi, int quota)
- 	if (rxbuf_is_empty && ret != 0) {
- 		if (napi_complete_done(napi, work_done)) {
- 			/*
--			 * Clear and enable RBNEI. It is level-triggered,
-+			 * Clear and enable RBNEI/DMADI. It is level-triggered, so
- 			 * so there is no race condition.
- 			 */
--			regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, REG_INT_STAT_RBNEI);
--			regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK,
--				     (REG_INT_STAT_RBNEI << 16));
-+			regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, int_ena);
-+			regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK, (int_ena << 16));
- 		}
- 	}
- 
-@@ -1377,13 +1520,14 @@ static irqreturn_t loongson_canfd_interrupt(int irq, void *dev_id)
- 		}
- 
- 		/* Receive Buffer Not Empty Interrupt */
--		if (isr & REG_INT_STAT_RBNEI) {
-+		imask = priv->rx_ch ? REG_INT_STAT_DMADI : REG_INT_STAT_RBNEI;
-+		if (isr & imask) {
- 			/*
- 			 * Mask RXBNEI the first, then clear interrupt and schedule NAPI.
- 			 * Even if another IRQ fires, RBNEI will always be 0 (masked).
- 			 */
--			regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK, REG_INT_STAT_RBNEI);
--			regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, REG_INT_STAT_RBNEI);
-+			regmap_write(priv->regmap, LOONGSON_CANFD_INT_MASK, imask);
-+			regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, imask);
- 			napi_schedule(&priv->napi);
- 		}
- 
-@@ -1635,6 +1779,24 @@ static int loongson_canfd_probe(struct platform_device *pdev)
- 	ndev->ethtool_ops = &loongson_canfd_ethtool_ops;
- 	SET_NETDEV_DEV(ndev, dev);
- 
-+	priv->get_rx_data = loongson_canfd_get_rxdata_in_poll;
-+	priv->get_rxbuf_empty = loongson_canfd_get_rxbuf_empty_in_poll;
-+
-+	priv->rx_ch = dma_request_chan(dev, "rx");
-+	if (PTR_ERR(priv->rx_ch) == -EPROBE_DEFER)
-+		return -EPROBE_DEFER;
-+
-+	if (IS_ERR(priv->rx_ch)) {
-+		dev_warn(dev, "Fall back in poll mode for any non-deferral error.\n");
-+		priv->rx_ch = NULL;
-+	}
-+
-+	ret = loongson_canfd_rxdma_init(ndev);
-+	if (!ret) {
-+		priv->get_rx_data = loongson_canfd_get_rxdata_in_dma;
-+		priv->get_rxbuf_empty = loongson_canfd_get_rxbuf_empty_in_dma;
-+		priv->last_res = LOONGSON_CANFD_RXDMA_NUM;
-+	}
- 	netif_napi_add(ndev, &priv->napi, loongson_canfd_rx_napi);
- 
- 	ret = register_candev(ndev);
-@@ -1647,6 +1809,7 @@ static int loongson_canfd_probe(struct platform_device *pdev)
- 
- err_candev_free:
- 	netif_napi_del(&priv->napi);
-+	loongson_canfd_rxdma_remove(priv, &pdev->dev);
- 	free_candev(ndev);
- 	return ret;
- }
-@@ -1664,6 +1827,7 @@ static void loongson_canfd_remove(struct platform_device *pdev)
- 
- 	unregister_candev(ndev);
- 	netif_napi_del(&priv->napi);
-+	loongson_canfd_rxdma_remove(priv, &pdev->dev);
- 	free_candev(ndev);
- }
- 
-@@ -1683,6 +1847,7 @@ static struct platform_driver loongson_canfd_driver = {
- };
- module_platform_driver(loongson_canfd_driver);
- 
-+MODULE_SOFTDEP("pre: loongson2-apb-cmc-dma");
- MODULE_AUTHOR("Loongson Technology Corporation Limited");
- MODULE_DESCRIPTION("Loongson CAN-FD Controller driver");
- MODULE_LICENSE("GPL");
--- 
-2.52.0
+> diff --git a/drivers/net/can/loongson_canfd.c b/drivers/net/can/loongson_=
+canfd.c
+> new file mode 100644
+> index 0000000000000..83aa620c9d587
+> --- /dev/null
+> +++ b/drivers/net/can/loongson_canfd.c
+> @@ -0,0 +1,1688 @@
+[ ... ]
+> +static const struct can_bittiming_const loongson_canfd_bit_timing_data =
+=3D {
+> +	.name		=3D DEV_NAME,
+> +	.tseg1_min	=3D 2,
+> +	.tseg1_max	=3D 190,
+> +	.tseg2_min	=3D 2,
+> +	.tseg2_max	=3D 63,
 
+[Severity: High]
+Are these data phase bounds correct for the FD hardware? The struct
+loongson_canfd_bit_timing_data advertises tseg1_max as 190 and tseg2_max
+as 63. However, looking at loongson_canfd_set_btr(), the phase segments are
+passed to FIELD_PREP(REG_BTR_FD_PH1...) which is bounded by a 5-bit mask
+(GENMASK(11, 7)). Will values greater than 31 be silently truncated here?
+
+> +	.sjw_max	=3D 31,
+> +	.brp_min	=3D 1,
+> +	.brp_max	=3D 255,
+> +	.brp_inc	=3D 1,
+> +};
+[ ... ]
+> +static bool loongson_canfd_txbuf_freed(struct loongson_canfd_priv *priv)
+> +{
+> +	return !regmap_test_bits(priv->regmap, LOONGSON_CANFD_TX_STAT, REG_TX_S=
+TAT_BRP);
+> +}
+
+[Severity: Medium]
+Does this check properly evaluate if a transmit buffer is free? The use
+of !regmap_test_bits() requires all 8 Buffer Request Pending bits to be 0
+for the function to return true. In loongson_canfd_start_xmit(), this leads
+to the queue being stopped immediately after a single frame is queued,
+effectively reducing the 8-buffer queue down to a depth of 1.
+
+[ ... ]
+> +static netdev_tx_t loongson_canfd_start_xmit(struct sk_buff *skb, struct=
+ net_device *ndev)
+> +{
+[ ... ]
+> +	if (unlikely(!loongson_canfd_txbuf_freed(priv))) {
+> +		netif_stop_queue(ndev);
+> +		netdev_err(ndev, "BUG!, no TXB free when queue awake!\n");
+> +		return NETDEV_TX_BUSY;
+> +	}
+
+[Severity: High]
+Is this check safe from a race condition with the TX interrupt? The queue
+status is read locklessly outside of tx_lock. If this detects a full queue,
+but gets preempted before netif_stop_queue() is called, a concurrent TX
+interrupt could free a buffer and call netif_wake_queue().
+
+When this thread resumes, it would stop the queue despite free space being
+available, potentially resulting in a permanent stall.
+
+> +
+> +	guard(spinlock_irqsave)(&priv->tx_lock);
+[ ... ]
+> +	can_put_echo_skb(skb, ndev, buf_id, 0);
+
+[Severity: Medium]
+Is it intentional to pass 0 as the frame length to can_put_echo_skb()?
+When the TX interrupt later fires, can_get_echo_skb() will return this
+length of 0, meaning stats->tx_bytes will never increment.
+
+> +
+> +	loongson_canfd_set_txbuf_cmd(ndev, TXT_CMD_ADD, buf_id);
+> +
+> +	/* Check if all TX buffers are full */
+> +	if (!loongson_canfd_txbuf_freed(priv))
+> +		netif_stop_queue(ndev);
+> +
+> +	return NETDEV_TX_OK;
+> +}
+[ ... ]
+> +static int loongson_canfd_rx(struct net_device *ndev)
+> +{
+[ ... ]
+> +	/* Flexible Data-rate Format */
+> +	if (is_can_fd) {
+> +		skb =3D alloc_canfd_skb(ndev, &cfd);
+> +	} else {
+> +		skb =3D alloc_can_skb(ndev, &ccf);
+> +		cfd =3D (struct canfd_frame *)ccf;
+> +	}
+> +
+> +	if (unlikely(!skb))
+> +		return 0;
+
+[Severity: High]
+Can returning 0 here when skb allocation fails corrupt the hardware FIFO
+state? This early return skips popping the remaining payload words from
+the FIFO. The next read operation might then mistakenly interpret payload
+data as frame headers.
+
+Additionally, returning 0 breaks the NAPI polling loop in
+loongson_canfd_rx_napi(), which will then exit without calling
+napi_complete_done() when ret =3D=3D 0, potentially hanging the receive pat=
+h.
+
+> +
+> +	/* Extended Identifier Type */
+[ ... ]
+> +	/* Data Length Code */
+> +	dlc =3D FIELD_GET(REG_FRAME_META1_DLC, meta1);
+> +	if (is_can_fd)
+> +		cfd->len =3D can_fd_dlc2len(dlc);
+> +	else
+> +		can_frame_set_cc_len(ccf, dlc, priv->can.ctrlmode);
+> +
+> +	/* Data */
+> +	for (unsigned int i =3D 0; i < cfd->len; i +=3D LOONGSON_CANFD_DW_BYTE)
+> +		regmap_read(priv->regmap, LOONGSON_CANFD_RX_DATA, (u32 *)(cfd->data + =
+i));
+
+[Severity: High]
+Does iterating based on cfd->len safely handle CAN 2.0 RTR frames? For
+Remote Transmission Request frames, cfd->len specifies the requested
+length (up to 8) even though there is no physical payload on the wire.
+Reading from the FIFO based on this length could consume data belonging
+to the next frame, breaking stream synchronization. Would it be safer to
+read exactly REG_FRAME_META1_RWCNT words?
+
+> +
+> +	if (!(cfd->can_id & CAN_RTR_FLAG))
+> +		stats->rx_bytes +=3D cfd->len;
+> +	stats->rx_packets++;
+> +	netif_receive_skb(skb);
+> +
+> +	return 1;
+> +}
+[ ... ]
+> +static void loongson_canfd_err_interrupt(struct net_device *ndev, u32 is=
+r)
+> +{
+[ ... ]
+> +	/*
+> +	 * EWLI: error warning limit condition met
+> +	 * FCSI: fault confinement state changed
+> +	 * ALI:  arbitration lost (just informative)
+> +	 * BEI:  bus error interrupt
+> +	 */
+> +	if ((isr & REG_INT_STAT_FCSI) || (isr & REG_INT_STAT_EWLI)) {
+> +		netdev_info(ndev, "state changes from %s to %s\n",
+> +			    can_get_state_str(priv->can.state), can_get_state_str(state));
+> +
+> +		if (priv->can.state =3D=3D state)
+> +			netdev_warn(ndev, "cur and pre state is the same!(miss intr?)\n");
+> +
+> +		isr =3D REG_INT_STAT_FCSI | REG_INT_STAT_EWLI;
+
+[Severity: High]
+Does overwriting the isr variable here drop concurrent error interrupts? If
+multiple errors occur simultaneously, this assignment destroys the other
+flags (like REG_INT_STAT_ALI).
+
+Because this modified isr variable is later used to write back to
+LOONGSON_CANFD_INT_MASK at the end of the function, the dropped interrupts
+could remain permanently masked in the hardware.
+
+> +		priv->can.state =3D state;
+> +		switch (state) {
+> +		case CAN_STATE_BUS_OFF:
+> +			priv->can.can_stats.bus_off++;
+> +			if (priv->can.restart_ms)
+> +				regmap_write(priv->regmap, LOONGSON_CANFD_CMD,
+> +					     REG_CMD_ERCRST);
+
+[Severity: High]
+Does clearing the error counters here bypass the software recovery
+protocol? The REG_CMD_ERCRST command instantly zeroes the hardware TEC/REC
+counters, which could cause the controller to immediately rejoin the bus,
+bypassing the mandatory CAN subsystem recovery delay specified by
+priv->can.restart_ms.
+
+> +
+> +			can_bus_off(ndev);
+[ ... ]
+> +static void loongson_canfd_tx_interrupt(struct net_device *ndev)
+> +{
+[ ... ]
+> +	while ((buf_id =3D loongson_canfd_get_txbuf_id(priv, &sts)) < LOONGSON_=
+CANFD_TXBUF_NUM) {
+> +		switch (sts) {
+> +		case TX_BS_VALID:
+> +			stats->tx_bytes +=3D can_get_echo_skb(ndev, buf_id, NULL);
+> +			stats->tx_packets++;
+> +			break;
+> +		case TX_BS_FAIL:
+> +			u32 cnt;
+[ ... ]
+> +			stats->tx_dropped++;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +
+> +		loongson_canfd_set_txbuf_cmd(ndev, TXT_CMD_SR_CLEAN, buf_id);
+> +	}
+
+[Severity: Medium]
+Can this loop sequence artificially inflate the tx_packets statistic? The
+code issues a TXT_CMD_SR_CLEAN command and immediately continues the loop
+without verifying the status cleared.
+
+Since hardware register updates take time, the very next regmap_read() in
+loongson_canfd_get_txbuf_id() could yield the same TX_BS_VALID status. The
+buffer would then be processed again, safely returning 0 from
+can_get_echo_skb(), but unconditionally incrementing stats->tx_packets
+over and over.
+
+> +
+> +	/*
+> +	 * Clear the interrupt again. We do not want to receive again interrupt
+> +	 * for the buffer already handled. If it is the last finished one then
+> +	 * it would cause log of spurious interrupt.
+> +	 */
+> +	regmap_write(priv->regmap, LOONGSON_CANFD_INT_STAT, REG_INT_STAT_TXBHCI=
+);
+
+[Severity: High]
+Is it safe to clear the hardware interrupt flag after processing the buffers
+instead of before? If a new buffer finishes transmission between the end of
+the loop and this regmap_write, the newly set interrupt flag would be
+cleared without getting processed, potentially causing a lost interrupt.
+
+> +
+> +	/* Check if at least one TX buffer is free */
+> +	if (loongson_canfd_txbuf_freed(priv))
+> +		netif_wake_queue(ndev);
+> +}
+[ ... ]
+> +static bool loongson_canfd_volatile_reg(struct device *dev, unsigned int=
+ reg)
+> +{
+> +	switch (reg) {
+> +	case LOONGSON_CANFD_MODE:
+> +	case LOONGSON_CANFD_CONF:
+
+[Severity: High]
+Should LOONGSON_CANFD_TRV_DLY be included in this volatile register list?
+Since regmap uses REGCACHE_MAPLE, omitting this register causes the first
+read in loongson_canfd_get_auto_tdcv() to be cached indefinitely. This
+would continuously feed stale TDCV readings into the auto-TDC logic.
+
+> +	case LOONGSON_CANFD_STAT:
+> +	case LOONGSON_CANFD_INT_STAT:
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1783391759.gi=
+t.zhoubinbin@loongson.cn?part=3D1
 
