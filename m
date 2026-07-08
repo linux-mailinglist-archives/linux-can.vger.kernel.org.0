@@ -1,183 +1,201 @@
-Return-Path: <linux-can+bounces-8110-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8113-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Fz5IK3++TWrW9gEAu9opvQ
-	(envelope-from <linux-can+bounces-8110-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 05:05:35 +0200
+	id xDCfF1UXTmroCwIAu9opvQ
+	(envelope-from <linux-can+bounces-8113-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 11:24:37 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CDC47214AD
-	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 05:05:35 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9BE5723AA7
+	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 11:24:36 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=jckxlL8s;
-	dmarc=pass (policy=none) header.from=gmail.com;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8110-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-8110-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20201202 header.b=IwjFoOQG;
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8113-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8113-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C30A13018D44
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jul 2026 03:05:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 323D93015C1B
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jul 2026 09:22:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C672334C2E;
-	Wed,  8 Jul 2026 03:05:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC571409138;
+	Wed,  8 Jul 2026 09:22:49 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C362147F9
-	for <linux-can@vger.kernel.org>; Wed,  8 Jul 2026 03:05:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8877407CC7;
+	Wed,  8 Jul 2026 09:22:49 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783479933; cv=none; b=LiBlz0FLN9LaMIe1O/kXBgVI9qHkwhV8Q2SIoTc67zFrhmQiylWteNqdwOPdNmZrJIxLPfe7P/3YKzAbs595CO2Fw9WBUKXcE/OTlNqcuXc2R8+YsX2caQpkiTZiuePCmyBnmBhT0/WDWJFhrVCYrTSlHZehDjF6iiFriJwslos=
+	t=1783502569; cv=none; b=WhwoiwP6A3B7BuYZ3EQwc6PammsF0BBS1YyRmj06ttDvPhHB2pImJitP9kNx1oQVx4LhB1t7xms4VLa8hp1o774M8pCCty/r7pLJhoyf+D+lYK5XOs9FyMvT/w41Qt0Ad6h2OMJObQ4fSFkAN7Cq77yW/Jem3y9VXEp5G7En9vQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783479933; c=relaxed/simple;
-	bh=RDjNVBHsJeP5xhO7Wyb7fa29u/GNUNTqbCtElT40KWc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jSRIk4jy7zMLW4Xd/67orKigLITsc45vlJbkFys2pEnhBLab18ufHBncO3OrpL1EnohxJzl5imfSn2qxuz+lI2LmMW1aJmI0P3a7fjgMEZOSnnHhFLdsyUjgP0tVbPEKrr4t4c5SZhhxYTSq6U+K2oVxjMaxxkUsFRgYjrgmBe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jckxlL8s; arc=none smtp.client-ip=209.85.214.172
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cc7ef7ec27so3382795ad.1
-        for <linux-can@vger.kernel.org>; Tue, 07 Jul 2026 20:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783479931; x=1784084731; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fxkLrYr5aWISG484jr5FD5Wa9ToyrlfnhtwYV/kULB8=;
-        b=jckxlL8sluSO9pZ0nEwj3yGnwpn0Qk8DbDBmAazAyOxRfbMtdQ+n+OxbIRbYB+ISm4
-         XH500hWIBq3/xu9zdSwms6FSb7Sv5U0XI/Bzs4Yb+zEMQ1Oa25ZBCY9nuMxZL668jeA2
-         9MXvqFDHi4OEZwOlYHmG3CAIc1ziFWckmlmuYwhUGDTQQNrNXYHOkup6RxR2gG5kYrcK
-         y+gudrp75q7B4pBx5/Lrwab2MTgLCvZND5n1Q9ziAQ9CWKoMpIUu8U2pvl3YCW81nUVp
-         voZk4ZEdFhjP0bv7VYc7lWAKVVZWQAjn1YcLvgAhQlGjZ6eM9DnPts8QaEbdgTmvh4ak
-         KgbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783479931; x=1784084731;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fxkLrYr5aWISG484jr5FD5Wa9ToyrlfnhtwYV/kULB8=;
-        b=cpXZgaLx7DWPg3A70sMydeCm9aYXfhNdXrxshTAVE2O1nFF+pth7+nkJ13nbwkPwl7
-         Z8OnQUi1E3Mc+VNxPt50ESuu9SPKF7tGHFk6fu4TYjScA3N9IqMCLfpnkIYqIvPStJ2Y
-         AJq6DehEY/ozoE8KUXyj7nZiIg+9amojjrQbyxvEuY0W0pYjvEUtTWqQYoYdjp9kaDsY
-         6zXXWmGzTvBsCv0GiPVKS4Ig80g3Lrx+2M4TGkdfqKhpSDUFhNU3BhRIR3OphpSH9TCD
-         x73vuhCWyCLWxQUu/NzQdBNbLDbnQwfAtYaTgMSP5MNhA4NN6BmZWOZbDUb6lZ3OGQ2B
-         Zp1A==
-X-Forwarded-Encrypted: i=1; AHgh+Roh+bbLdW8Sgk+ymwPRf5V2TPY+A+FcNEPN2s/QWXMxlB9NG0xayZe0+bmpsfg/1YOU9MusVVMQyes=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZy1GPNXLIWzs90uDCdVhEWduMqmqjeE8UC2xg03tpSZqZfk5k
-	3XTX6WEzxpjTrqpq8syXYQHu3YhBZBAYmD51/52/Jm4UxP+Dx19RmkBd
-X-Gm-Gg: AfdE7cnuDDeccAl7aPh33RjK5vmttp2l89W0/1606rqDQqzJYvcRsyJEPG2KA/cL4gT
-	ViN2/XRYs/p5DH+M5zPsEy3n8tPo6/6/Je04m3wQ0kReHybtTwYGwC96yEq9MV1n5Z8CfTmLHZy
-	tRhdnWuqtMUXATl8EeN/ZlboxzrGgm2DMmDO6zfNgmvsv/EPuoonBdNx0+bkOhcZIWKi02An12E
-	oUbc02KkNtVIcw2SeX/0ZCnV4sWqibTjgEMuMMBWPZJU4lkw/8L6furd7G8Ih+sVdSngDKtT8g3
-	GoIlAPJYwyWgEeTJwHL+j6BrHTAieIqqF/enr+pCpeUIZOmOYuKWnpPyTP+wYZIdMjj9r4e5CJ/
-	zbt9zIgUGsyXqbecJBXfb3PguJIUO2d2r3skPjcDPHE/QLz1acTQ8ZeuB35GI+sBCGwwnBZK1tl
-	02/Tt+ypFfdbDA2f68mKugQH2tJk1147kqj9P4mGZHGSZsqvfBZYvOPO6daw==
-X-Received: by 2002:a17:903:1a87:b0:2cc:e620:e307 with SMTP id d9443c01a7336-2ccea3b0e71mr6494625ad.20.1783479931549;
-        Tue, 07 Jul 2026 20:05:31 -0700 (PDT)
-Received: from phuc-desktop.. ([183.91.15.56])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d3d45csm20099865ad.62.2026.07.07.20.05.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 20:05:31 -0700 (PDT)
-From: phucduc.bui@gmail.com
-To: Markus Schneider-Pargmann <msp@baylibre.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>
-Cc: Kendall Willis <k-willis@ti.com>,
-	linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bui duc phuc <phucduc.bui@gmail.com>
-Subject: [PATCH v3] can: m_can: Use of_property_present() for wakeup-source
-Date: Wed,  8 Jul 2026 10:05:12 +0700
-Message-ID: <20260708030512.8570-1-phucduc.bui@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1783502569; c=relaxed/simple;
+	bh=TmXFOBkgQXuh/lphxNg9YKyBFII+72JGehB0s3XF5Xw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TviicMWL1EsipM6GLrpK3+TPeEiSEd7MfQKEExp15fLJ72LSJt85DzkRSGIeTxW5XBBIrIhwDvQCB+U2fHjfFWuiysV0huBJXclnf8ZDWNYKTD/wlFMAqmZCHxgFQxlxo95Rwn6hJd6xjkpfbUhXcG1eIYhA7hGSAYHNiMnuieY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IwjFoOQG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6C1EFC2BCC7;
+	Wed,  8 Jul 2026 09:22:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1783502569;
+	bh=TmXFOBkgQXuh/lphxNg9YKyBFII+72JGehB0s3XF5Xw=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=IwjFoOQGik7XXo2f+MbecY+awfwn22WszLCD0AB2njZ61jbAyau3zVBExhBZZQ03c
+	 ZgbwjIt1gyKfyfJaCvb4msMoJmdUJRATAfVLal+6O0Zb2fw2hRp8AAK73hpzeo1h2w
+	 tVpcXUpjfzA4GSFtXGvFg5UL0n4DL6BDwp3uzkEL67doDI8FeDvDtmsFHsk/0SegO9
+	 H6lEFFtQ9HPNvlM1nxiGh0jinn6PPDzqVt0gUmcMpA3FSi1TUdzxs9MNGTi/mg1AVe
+	 lR9ITLA79Zajja1KFdAgXSKd9Nrwp9JthFrczP6rvyCZR+ak6+/YFiMxHpbiu2pS+S
+	 4cBOWRO3IT/nQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C47DC43458;
+	Wed,  8 Jul 2026 09:22:49 +0000 (UTC)
+From: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
+Subject: [PATCH v6 0/9] can: bcm: collected fixes - final
+Date: Wed, 08 Jul 2026 11:22:26 +0200
+Message-Id: <20260708-bcm_fixes-v6-0-80710a2bc398@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANIWTmoC/3XPwU7EIBQF0F+ZsBbzChSoK//DTMyDPiyaaRuoz
+ ZhJ/10YFxrTLm+45wI3lilFyuzpdGOJ1pjjNJagH07MDzi+EY99yUyA0KAbwZ2/vIZ4pcytCk4
+ hdhK9YKU/J7oflPrL+SfnT/dOfqkDtTHEvEzp637Z2tTe3u7acOAeRUAwRAbC84Bp+Zjm+XGkh
+ dXpVfxiA+YvFgV3WgvwrVTOtDtYHmJZsFUawKPure12sDrEqmBEa5x1XS/l3rPbQ9zWP0tvVLC
+ 9DcH8w9u2fQNiuTKqqwEAAA==
+X-Change-ID: 20260612-bcm_fixes-84fb4aa93ac2
+To: linux-can@vger.kernel.org
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, Lee Jones <lee@kernel.org>, 
+ Feng Xue <feng.xue@outlook.com>, Ginger <ginger.jzllee@gmail.com>, 
+ syzbot+75e5e4ae00c3b4bb544e@syzkaller.appspotmail.com, 
+ sashiko-reviews@lists.linux.dev, sashiko-bot@kernel.org
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783502567; l=3105;
+ i=socketcan@hartkopp.net; s=20260128; h=from:subject:message-id;
+ bh=TmXFOBkgQXuh/lphxNg9YKyBFII+72JGehB0s3XF5Xw=;
+ b=23CWX4DHykvgw75qMc60s1sFJPDihriJOeNuVUJfXAW/QWVq2HOd4tOhuUaiKRkNDD0HIWcSY
+ xpJv04CR1g8CN3RYWDWNUG46f2kH58uS7varN/Pfj1EoH4KmYlJWG5X
+X-Developer-Key: i=socketcan@hartkopp.net; a=ed25519;
+ pk=/gU/7/wBqak3kTsTeFbCCqUi9dnh+1i6ITEkfPj/BvU=
+X-Endpoint-Received: by B4 Relay for socketcan@hartkopp.net/20260128 with
+ auth_id=620
+X-Original-From: Oliver Hartkopp <socketcan@hartkopp.net>
+Reply-To: socketcan@hartkopp.net
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[ti.com,vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-8110-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8113-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:msp@baylibre.com,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:k-willis@ti.com,m:linux-can@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:phucduc.bui@gmail.com,m:phucducbui@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER(0.00)[phucducbui@gmail.com,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:mkl@pengutronix.de,m:lee@kernel.org,m:feng.xue@outlook.com,m:ginger.jzllee@gmail.com,m:syzbot+75e5e4ae00c3b4bb544e@syzkaller.appspotmail.com,m:sashiko-reviews@lists.linux.dev,m:sashiko-bot@kernel.org,m:gingerjzllee@gmail.com,m:syzbot@syzkaller.appspotmail.com,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FROM_NO_DN(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FREEMAIL_CC(0.00)[hartkopp.net,pengutronix.de,kernel.org,outlook.com,gmail.com,syzkaller.appspotmail.com,lists.linux.dev];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_COUNT_FIVE(0.00)[5];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[phucducbui@gmail.com,linux-can@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	TAGGED_RCPT(0.00)[linux-can,75e5e4ae00c3b4bb544e];
+	HAS_REPLYTO(0.00)[socketcan@hartkopp.net];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	TAGGED_RCPT(0.00)[linux-can];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,msgid.link:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linux.dev:url,hartkopp.net:replyto,hartkopp.net:mid,hartkopp.net:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0CDC47214AD
+X-Rspamd-Queue-Id: E9BE5723AA7
 
-From: bui duc phuc <phucduc.bui@gmail.com>
+Hi Marc,
 
-The 'wakeup-source' property is declared as a phandle-array in both YAML
-bindings and Device Tree source files. However, the driver currently
-uses of_property_read_bool() to check for its existence.
+as there were different patches flying arround to fix CAN_BCM issues and
+AI assisted stuff pop's up again and again, I've created this collection
+to be applied.
 
-According to the function's documentation, usage on non-boolean property
-types is deprecated. Switch to of_property_present() to comply with the
-recommended API for checking the presence of a property.
+The patch series fixes ALL issues reported by ALL kind of AI bots involved
+and the fixes were assisted by claude code and later rephrased and shortened
+by myself.
 
-Fixes: 04d5826b074e ("can: m_can: Map WoL to device_set_wakeup_enable")
-Reviewed-by: Kendall Willis <k-willis@ti.com>
-Acked-by: Markus Schneider-Pargmann <msp@baylibre.com>
-Signed-off-by: bui duc phuc <phucduc.bui@gmail.com>
+So the potential new AI reports on this patch set report problems that are
+solved later in the series. This can not be resolved.
+
+Best regards,
+Oliver
+
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
+Changes in v6:
+- patch 1: added Tested-by: tags
+- patch 3: changed commit message and comment regarding a wrong claim
+  about synchronous delivery from dev_queue_xmit() as remarked by
+  https://netdev-ai.bots.linux.dev/ai-review.html?id=6105ebab-87ef-43db-a085-7c190b9f119f
+- patch 4: rebased patch 3 comment
+- patch 9: new: fix data race on rx_stamp/rx_ifindex in bcm_rx_handler()
+  reported by sashiko-bot: https://lore.kernel.org/linux-can/20260707145135.5BC831F00A3A@smtp.kernel.org/
+- Link to v5: https://patch.msgid.link/20260707-bcm_fixes-v5-0-c3c74f8d8ff7@hartkopp.net
 
-Note:
-It was originally posted in May and has already received both 
-Reviewed-by and Acked-by tags. I'm resending it to bring it back 
-to attention in case it was overlooked.
+Changes in v5:
+- patch 6: changed comment for bcm_op::bcm_tx_lock (mkl)
+- patch 8: new: add missing device refcount for CAN filter removal
+- Link to v4: https://patch.msgid.link/20260707-bcm_fixes-v4-0-aa87b8b9d33f@hartkopp.net
+
+Changes in v4:
+- incorporated more sashiko-bot concerns from v3
+- patch 3: omit hrtimer_forward with zero interval
+- patch 4: put bcm_update_stats() under bcm_rx_update_lock
+- Link to v3: https://patch.msgid.link/20260707-bcm_fixes-v3-0-84600ca6d889@hartkopp.net
 
 Changes in v3:
- - Add Reviewed-by tag
- - Resend.
+- incorporated more sashiko-bot concerns from v2
+- patch 3: make snapshot of currframe
+- patch 6: add error patch for memcpy_from_msg()
+- patch 7: new RTR-reply validation in bcm_rx_setup() from bcm_tx_setup() 
+- Link to v2: https://patch.msgid.link/20260707-bcm_fixes-v2-0-96620c534b75@hartkopp.net
+
 Changes in v2:
- - Add Acked-by tag
- - Add Fixes tag
+- incorporated all sashiko-bot concerns from v1
+- Link to v1: https://patch.msgid.link/20260612-bcm_fixes-v1-0-ca2fa07ee70f@hartkopp.net
 
+---
+Lee Jones (1):
+      can: bcm: defer rx_op deallocation to workqueue to fix thrtimer UAF
 
- drivers/net/can/m_can/m_can.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Oliver Hartkopp (8):
+      can: bcm: fix lockless bound/ifindex race and silent RX_SETUP failure
+      can: bcm: add locking when updating filter and timer values
+      can: bcm: fix CAN frame rx/tx statistics
+      can: bcm: add missing rcu list annotations and operations
+      can: bcm: extend bcm_tx_lock usage for data and timer updates
+      can: bcm: validate frame length in bcm_rx_setup() for RTR replies
+      can: bcm: add missing device refcount for CAN filter removal
+      can: bcm: fix data race on rx_stamp/rx_ifindex in bcm_rx_handler()
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index eb856547ae7d..16f80607e150 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -2464,7 +2464,7 @@ struct m_can_classdev *m_can_class_allocate_dev(struct device *dev,
- 		return ERR_PTR(ret);
- 	}
- 
--	if (dev->of_node && of_property_read_bool(dev->of_node, "wakeup-source"))
-+	if (dev->of_node && of_property_present(dev->of_node, "wakeup-source"))
- 		device_set_wakeup_capable(dev, true);
- 
- 	/* Get TX FIFO size
--- 
-2.43.0
+ net/can/bcm.c | 484 ++++++++++++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 355 insertions(+), 129 deletions(-)
+---
+base-commit: 0e35b9b6ec0ffcc5e23cbdec09f5c622ad532b53
+change-id: 20260612-bcm_fixes-84fb4aa93ac2
+
+Best regards,
+--  
+Oliver Hartkopp <socketcan@hartkopp.net>
+
 
 
