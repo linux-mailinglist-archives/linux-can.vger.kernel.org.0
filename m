@@ -1,65 +1,65 @@
-Return-Path: <linux-can+bounces-8126-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8127-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id FFnAE10cTmrMDQIAu9opvQ
-	(envelope-from <linux-can+bounces-8126-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 11:46:05 +0200
+	id QBhLAnMdTmoJDgIAu9opvQ
+	(envelope-from <linux-can+bounces-8127-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 11:50:43 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9E6D723DBA
-	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 11:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C82F723E54
+	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 11:50:42 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=CRhJFIce;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="I5ZJB/vV";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8126-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-can+bounces-8126-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8127-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-can+bounces-8127-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A96503016276
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jul 2026 09:45:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F329F3028675
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jul 2026 09:49:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC43C420883;
-	Wed,  8 Jul 2026 09:45:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5184B314D16;
+	Wed,  8 Jul 2026 09:49:35 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27D71F130B
-	for <linux-can@vger.kernel.org>; Wed,  8 Jul 2026 09:45:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228032EDD70
+	for <linux-can@vger.kernel.org>; Wed,  8 Jul 2026 09:49:33 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783503938; cv=none; b=MzOob4HL2Kszbjp0YQsZ1uiP9gLKIg32cuf40SYbSqP8O6ieRTEIVKExiRXHc4Inl++Dm4PUDlZM/QWPTmL/ULhZ5L+cn4rPKRVU3ETMJXhyn0uAqibYI2El/HytyIFe7z4b+FM/JE9n2BEUBa1CfqAklhF5sMJPyhP2/8FWShI=
+	t=1783504175; cv=none; b=QuAgvifbKqAFuF4WjhDKhqgNaCKjgCVvpubQ6G/EB10pNEEyfE3OOu/vbrYdRUZG8ALUdz7DenKV+2Fd97X3T4gPVU9itWJcbQXnOWTQS0umebtcwQ8h8npzupJfqnR8YGA4znHE3AQgrW7feRs5yim6GAMaVjOoymnohAOnzms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783503938; c=relaxed/simple;
-	bh=oxauLrqwmmKWSdHWAAND9Tk3oSclpM4uoFn3N5gTRu4=;
+	s=arc-20240116; t=1783504175; c=relaxed/simple;
+	bh=SzaNlb8jnO46v6Bm+uaNUgz6EhfAWaG2Zbdz7b6VUPo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ELp+jDLKjDngXqm/5TrhQL+iOWSj1ZmE75h7FFAksAIvdA+FDdbsoRkJyu/GSGnqy4SaabcQ93nfhKY5myT9yOZkEAog25zNTwYlhR/+UWnmrfTunBdVUcL+B248grybQZawaakgTPeEjFkXL2wrEoV5ziV3mg8QxXeiLjVBnHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CRhJFIce; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDF821F00A3A;
-	Wed,  8 Jul 2026 09:45:36 +0000 (UTC)
+	 Message-Id; b=oRLgqGRgkX9Hm9Me4XCfdrnQcsHzNXY7/keiDUZmQFXozCWlatv9PgrGpgybThbwaWz2PdjDXevpBmdL9rNFlj+8pcTqDh3MFFtYXm+6ol09vtXuP4ULFUPQLT5P+MjIz/S/0UFFAYBhwmx8y8afFuGY66gKZS6T3cbHGXnYLLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I5ZJB/vV; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7151C1F000E9;
+	Wed,  8 Jul 2026 09:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783503937;
-	bh=3HLWmzuY/2+UztgxPcEMcvrEI/wmAE9RAYgDJSyq/+Y=;
+	s=k20260515; t=1783504173;
+	bh=dcXpjqCGIgp8q5P5H4o2Xh6TbPeYhJNTalWwi79fIYg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CRhJFIceEzYYcB0840fDXTQFZRXXYXfD9VMsKKG4EXh0Y39Rg0R3NynILMe/313wt
-	 YgLLMI9SbTtr82e7cF7jnTJufrYk5AHMr8A4S/9cUb7m2ewB8nYvvBKtcTj5YlWLiA
-	 NoSDxCj9f5/tzuyTFexwMwnPMOLYrtIMoaQGfWrXM8xZhWoWCmmmujZCxjntc5tWzo
-	 xHGuaJduPzTIyppsgAB4gboRTrLcP6T8UCMmmKh+ooZ+7ISUvUbh6SDHbtGoaZbC5i
-	 ECQ6W/VeCPGXWjn0A1UWLgoIMJKcmXugN/ib12krBXJKK8nAMkV66X8FwSXuq5ESPw
-	 Fn3CcHcl6EUQg==
+	b=I5ZJB/vVnnU+VWUc75VyMrl1mxf3gttH6IOVi8PA9Zm2VLUlrhXD22p4Gfo4/49l4
+	 cBb0vHut71YKFDrlMtmMrDBF/4IKyOdBUTbx8scv1N9SiU5rYarO8j03gNgadiUR4e
+	 J9X8NN4B5yHSBLBInqCa80llJ3QxOp3HQTthQ3bgvyO5YGzHXeGcYH+aXQSiKAOUVC
+	 o0pEuDmjDV8UO9vSYl1uQ+pYnpmB97JvgcpDmoi92Hbgjldoomigy+VaiXlhLNSVx8
+	 MKXiMf0ugmVuqBrT1UQ+6WezSMl9Km+XZOEWxolW8Jzc0SuNO6guCsKeMm0RPSbEKb
+	 HyeXPLZE9R/Cw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 8/9] can: bcm: add missing device refcount for CAN
- filter removal
+Subject: Re: [PATCH v6 9/9] can: bcm: fix data race on rx_stamp/rx_ifindex
+ in bcm_rx_handler()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Oliver Hartkopp" <socketcan@hartkopp.net>
-Cc: "Marc Kleine-Budde" <mkl@pengutronix.de>, "Vincent Mailhol" <mailhol@kernel.org>, "Oleksij
- Rempel" <o.rempel@pengutronix.de>, "Oliver Hartkopp" <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-In-Reply-To: <20260708-bcm_fixes-v6-8-80710a2bc398@hartkopp.net>
+Cc: "Vincent Mailhol" <mailhol@kernel.org>, "Marc Kleine-Budde" <mkl@pengutronix.de>, "Oliver
+ Hartkopp" <socketcan@hartkopp.net>, "Oleksij Rempel" <o.rempel@pengutronix.de>, linux-can@vger.kernel.org
+In-Reply-To: <20260708-bcm_fixes-v6-9-80710a2bc398@hartkopp.net>
 References: <20260708-bcm_fixes-v6-0-80710a2bc398@hartkopp.net>
- <20260708-bcm_fixes-v6-8-80710a2bc398@hartkopp.net>
+ <20260708-bcm_fixes-v6-9-80710a2bc398@hartkopp.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 08 Jul 2026 09:45:36 +0000
-Message-Id: <20260708094536.DDF821F00A3A@smtp.kernel.org>
+Date: Wed, 08 Jul 2026 09:49:32 +0000
+Message-Id: <20260708094933.7151C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -76,14 +76,14 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8126-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8127-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,vger.kernel.org:from_smtp,lists.linux.dev:replyto,smtp.kernel.org:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,hartkopp.net:email];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,lists.linux.dev:replyto,hartkopp.net:email,smtp.kernel.org:mid,sashiko.dev:url];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:mailhol@kernel.org,m:mkl@pengutronix.de,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -105,135 +105,82 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A9E6D723DBA
+X-Rspamd-Queue-Id: 6C82F723E54
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] BCM TX operations (tx_ops) are not cleaned up during NETDEV_UNREGI=
-STER, causing continuous timer firing and potential cross-device traffic in=
-jection upon ifindex reuse.
-- [Medium] Updating an existing BCM RX filter after device recreation silen=
-tly fails to re-register the CAN receiver.
+- [High] Ignored CAN frames incorrectly overwrite the `rx_stamp` and `rx_if=
+index` of pending throttled frames, leading to incorrect metadata delivery =
+to userspace.
 --
 
---- Patch [8]: [PATCH v6 8/9] can: bcm: add missing device refcount for CAN=
- filter removal ---
-commit e5a4c52c71d52a19d27614862f641c4332b115e5
+--- Patch [9]: [PATCH v6 9/9] can: bcm: fix data race on rx_stamp/rx_ifinde=
+x in bcm_rx_handler() ---
+commit 1f01914b41bcf86b5db9980430a19a39e9075e09
 Author: Oliver Hartkopp <socketcan@hartkopp.net>
 
-can: bcm: add missing device refcount for CAN filter removal
+can: bcm: fix data race on rx_stamp/rx_ifindex in bcm_rx_handler()
 
-This patch fixes a CAN filter removal issue where a concurrent=20
-NETDEV_UNREGISTER can cause a lookup failure for a device by ifindex.
-It prevents skipping can_rx_unregister() by holding a netdev reference on
-op->rx_reg_dev from filter registration until unregistration, rather than
-looking up the device by index again.
+This commit fixes a data race on op->rx_stamp and op->rx_ifindex by moving
+their assignment inside the bcm_rx_update_lock critical section. It also
+stops updating them for RTR-request frames.
 
-Link: https://sashiko.dev/#/patchset/20260707094716.63578-1-socketcan@hartk=
-opp.net
+Link: https://lore.kernel.org/linux-can/20260707145135.5BC831F00A3A@smtp.ke=
+rnel.org/
 
 > diff --git a/net/can/bcm.c b/net/can/bcm.c
-> index 300f1f88c4d2c..4bdca72f9327f 100644
+> index 4bdca72f9327f..73e3a5fc4342f 100644
 > --- a/net/can/bcm.c
 > +++ b/net/can/bcm.c
 [ ... ]
-> @@ -1455,7 +1454,17 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_h=
-ead, struct msghdr *msg,
->  						      bcm_rx_handler, op,
->  						      "bcm", sk);
+> @@ -805,6 +800,14 @@ static void bcm_rx_handler(struct sk_buff *skb, void=
+ *data)
 > =20
-> -				op->rx_reg_dev =3D dev;
-> +				/* keep a tracked reference so that a later
-> +				 * unregister can safely reach the device even
-> +				 * if a concurrent NETDEV_UNREGISTER has
-> +				 * already unlisted it by ifindex
-> +				 */
-> +				if (!err) {
-> +					op->rx_reg_dev =3D dev;
-> +					netdev_hold(dev,
-> +						    &op->rx_reg_dev_tracker,
-> +						    GFP_KERNEL);
-> +				}
->  				dev_put(dev);
-
-[Severity: Medium]
-This is a pre-existing issue, but does updating an existing BCM RX filter
-after a device recreation silently fail to re-register the CAN receiver?
-
-Looking at bcm_rx_setup():
-
-    op =3D bcm_find_op(&bo->rx_ops, msg_head, ifindex);
-    if (op) {
-        ...
-        /* Only an update -> do not call can_rx_register() */
-        do_rx_register =3D 0;
-
-Updates to existing ops unconditionally skip CAN registration, even if the
-previous registration was torn down by a NETDEV_UNREGISTER event leaving
-op->rx_reg_dev as NULL.
-
-Could this cause the application to silently drop incoming frames?
-
-[ ... ]
-> @@ -1832,16 +1841,14 @@ static int bcm_release(struct socket *sock)
->  			 * Only remove subscriptions that had not
->  			 * been removed due to NETDEV_UNREGISTER
->  			 * in bcm_notifier()
-> +			 *
-> +			 * op->rx_reg_dev is a tracked reference taken
-> +			 * when the subscription was registered, so it
-> +			 * stays valid here even if a concurrent
-> +			 * NETDEV_UNREGISTER already unlisted the device.
->  			 */
-> -			if (op->rx_reg_dev) {
-> -				struct net_device *dev;
-> -
-> -				dev =3D dev_get_by_index(net, op->ifindex);
-> -				if (dev) {
-> -					bcm_rx_unreg(dev, op);
-> -					dev_put(dev);
-> -				}
-> -			}
-> +			if (op->rx_reg_dev)
-> +				bcm_rx_unreg(op->rx_reg_dev, op);
+>  	spin_lock_bh(&op->bcm_rx_update_lock);
+> =20
+> +	/* save rx timestamp and originator for recvfrom() under lock.
+> +	 * For an op subscribed on all interfaces (ifindex =3D=3D 0)
+> +	 * bcm_rx_handler() can run concurrently on different CPUs so
+> +	 * the CAN content and the meta data must be bundled correctly.
+> +	 */
+> +	op->rx_stamp =3D skb->tstamp;
+> +	op->rx_ifindex =3D skb->dev->ifindex;
 
 [Severity: High]
-This isn't a bug introduced by this patch, but are TX operations properly
-cleaned up during NETDEV_UNREGISTER?
+This is a pre-existing issue, but does unconditionally overwriting these
+fields corrupt the metadata for pending throttled frames?
 
-When looking at bcm_notify():
+If a user configures a BCM socket with a filter (e.g., multiplex nframes > =
+1),
+bound to all interfaces (ifindex =3D=3D 0), with a throttle timer:
 
-    case NETDEV_UNREGISTER:
-        lock_sock(sk);
+1. A frame arrives on vcan0, matches a mask, and is throttled.
+   op->rx_ifindex becomes vcan0.
+2. A subsequent frame arrives on vcan1 but does not match any multiplex mas=
+k.
 
-        /* remove device specific receive entries */
-        list_for_each_entry(op, &bo->rx_ops, list)
-            if (op->rx_reg_dev =3D=3D dev)
-                bcm_rx_unreg(dev, op);
+Since bcm_rx_handler() unconditionally updates op->rx_ifindex here before
+applying the filters, doesn't it overwrite the metadata with vcan1 even
+though the frame is ignored?
 
-Only rx_ops are cleaned up upon NETDEV_UNREGISTER. The tx_ops appear to be
-completely ignored, and op->ifindex is never cleared to halt transmissions.
+When the throttle timer expires, bcm_send_to_user() will use this corrupted
+op->rx_ifindex to deliver the throttled frame from vcan0, making it appear =
+as
+if it came from vcan1.
 
-This seems to allow the timer to fire endlessly in bcm_tx_timeout_handler():
+Also, since the bcm_op struct only has one rx_stamp and rx_ifindex field,
+doesn't this mean it structurally lacks the capacity to store independent
+metadata per multiplex mask if multiple multiplexed frames are throttled
+simultaneously?
 
-    } else if (tx_ival2) {
-        bcm_can_tx(op, NULL);
-    }
-
-    return bcm_tx_set_expiry(op, &op->timer) ?
-        HRTIMER_RESTART : HRTIMER_NORESTART;
-
-The timer handler continues to restart the timer even when the underlying
-device has been destroyed. In bcm_can_tx(), dev_get_by_index() silently fai=
-ls,
-allowing the loop to continue endlessly.
-
-Could this lead to cross-device traffic injection if the removed ifindex is
-later reused by a new CAN interface?
+> +
+>  	if (op->flags & RX_FILTER_ID) {
+>  		/* the easiest case */
+>  		bcm_rx_update_and_send(op, op->last_frames, rxframe,
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260708-bcm_fixes-=
-v6-0-80710a2bc398@hartkopp.net?part=3D8
+v6-0-80710a2bc398@hartkopp.net?part=3D9
 
