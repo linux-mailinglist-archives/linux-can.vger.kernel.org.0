@@ -1,58 +1,58 @@
-Return-Path: <linux-can+bounces-8155-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8156-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id fMnZB/WITmprOwIAu9opvQ
-	(envelope-from <linux-can+bounces-8155-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 19:29:25 +0200
+	id LtLfFvaITmpuOwIAu9opvQ
+	(envelope-from <linux-can+bounces-8156-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 19:29:26 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACEFD72936E
-	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 19:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D5A1C729371
+	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 19:29:25 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20201202 header.b=f6putlXm;
+	dkim=pass header.d=kernel.org header.s=k20201202 header.b=paRmOilV;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8155-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8155-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8156-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8156-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A298E305BA2A
+	by sea.lore.kernel.org (Postfix) with ESMTP id B306A305C2F7
 	for <lists+linux-can@lfdr.de>; Wed,  8 Jul 2026 17:27:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABA5D41CB2E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B10E9423142;
 	Wed,  8 Jul 2026 17:27:05 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB494963B2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2B64ADD8E
 	for <linux-can@vger.kernel.org>; Wed,  8 Jul 2026 17:27:05 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783531625; cv=none; b=bCkSs8+OThE3bq203Q9OPDY83ttEWZlFm2zsXtnztSwixjjS23SNluGd+Rw2QBhURU/cbR4xKC9zMtxQ/kNM5lYVE4jmLRjhv85nMOietXC57VSINgf5eWlQzj9uWtCt3xv+kgE3H44YsOLvsyPfaGxyfRz9V52NeW0ibqDbKds=
+	t=1783531625; cv=none; b=XOX1VQb1J0UoDELe4yDBpjvvfT6FJtPIDENFOx6zEiVE8Ey+u0IQaIbkixaQpY+T3sXGjXKqAL2DhIMPJxN73GqbyidpIJhFjP9Ct+6xkvjyEjMzBYGEzXlj3bdUG92+ZsxfyUM/lLmBFNOdZJkUQi8EHhq4Eu03rhQJQLvLjPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1783531625; c=relaxed/simple;
-	bh=Mogjwyd4bErfGlbDpvtJ4bbx1Hd4lH9Y3IBx7NALOIo=;
+	bh=MuYUid1xVvQoJLvSFmjm5oh3fievMVOo3NepEzJmtZ8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rr+MrajetH8uTPfvLdqt2PZxCN2vULKIBiB36+1WYlR5zWoMNwiBPJ6cP6bu2fL4XmWJs/MWMbbAfT03QrKOc77nVmMSVpRmGkNHs1ynQJT43MR8pm/nDBVAz78YjvOwx88tVO7NzbnEy3BdNMGJOz1LAqc1XSY3j0+UNKcXcHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f6putlXm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 609F0C2BCFC;
+	 In-Reply-To:To:Cc; b=EwzBvXW79uSQaR9gtMkhvMPPPNTGZ1O/wXuo6GFlrdgH7a+bz6pheuShAAOmwNLNfTdsEqfUsDH9ClD6FS0j2qqRkXeAlkyUhOmI2vwt9N6Vc7AmiQIOAaF5X8OWkAsmJpR836w6j/oXfE3M/8kqR8bdMaX8OsVVLwtyuyIHoTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=paRmOilV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D99CC2BCB3;
 	Wed,  8 Jul 2026 17:27:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1783531625;
-	bh=Mogjwyd4bErfGlbDpvtJ4bbx1Hd4lH9Y3IBx7NALOIo=;
+	bh=MuYUid1xVvQoJLvSFmjm5oh3fievMVOo3NepEzJmtZ8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=f6putlXm7Z1YY9rZYhnDinoGm+o0MIKPLl8RgsmXHZjiCGVm9nExwDDaryHmTY58g
-	 wiv9E3BoN/Dx8AJ3/U56Brd/8zudXkhNXSTf/n7A9euqQ5euvZgU3/EHx+G4yN07vk
-	 NSnSeC0qK08nbU33W3xUuOH0vB5u9ArIW2rLA8XL0P/eBLWBkxNRoSaEyXhcDlYqzM
-	 nfvD9QceOuXIfmeUItlDh5Di+V5XlNjqU/HG7THYwRtzf+PAEy03BZTvABacMzUOto
-	 OrGH1elfIRPeMRSo7KNFJqK8jVeffGGY1WjvDd7g/qGKFQshGsoqdtVw0p/+zGMzB+
-	 IJAO3uTvIXykA==
+	b=paRmOilVc5QYo+KtzgZvf2xhnNnrlKlwI3cRuAWqrz/FE05R+X4JhlK2/ptYwqiuk
+	 RUphNcH9NPtPF4FGdSHSx0tRDiwMrS9ahuoM3lok/nwNAPmgpTZLvRYuERHZrKPesz
+	 JXo8RlmTuhuYPXziGsR689tNAV330zo4C1QYk4ne0W8a584Ge4PZwaqJoPKBgAriJW
+	 lYXkiokYY7kQuvsWWbe6sCieLZEBdLiVPTcFQ5Xg2y2717RVtd75C/YYlNgfB7xDad
+	 GLD2EebdgQHeonogsSIDxXT4hWzztKLtHtvQJ/WsDz/7arOnQMsRn1t9XUQv9aZTlr
+	 SGX/W4mviNDFA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E524C44501;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B4BBC43458;
 	Wed,  8 Jul 2026 17:27:05 +0000 (UTC)
 From: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
-Date: Wed, 08 Jul 2026 19:27:04 +0200
-Subject: [PATCH v8 07/10] can: bcm: validate frame length in bcm_rx_setup()
- for RTR replies
+Date: Wed, 08 Jul 2026 19:27:05 +0200
+Subject: [PATCH v8 08/10] can: bcm: add missing device refcount for CAN
+ filter removal
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -61,18 +61,18 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260708-bcm_fixes-v8-7-8c2f5f3bc212@hartkopp.net>
+Message-Id: <20260708-bcm_fixes-v8-8-8c2f5f3bc212@hartkopp.net>
 References: <20260708-bcm_fixes-v8-0-8c2f5f3bc212@hartkopp.net>
 In-Reply-To: <20260708-bcm_fixes-v8-0-8c2f5f3bc212@hartkopp.net>
 To: linux-can@vger.kernel.org
 Cc: Oliver Hartkopp <socketcan@hartkopp.net>, 
- Marc Kleine-Budde <mkl@pengutronix.de>
+ Marc Kleine-Budde <mkl@pengutronix.de>, sashiko-bot@kernel.org
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783531623; l=3930;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783531623; l=4807;
  i=socketcan@hartkopp.net; s=20260128; h=from:subject:message-id;
- bh=AQBMqpguyZPoLMliniKo3/68UYwttMvTSEn5kxEMHQI=;
- b=giHtfEhXcplU7Own+GZWlPy3qGYJ9atdNDF3QzUWFoRsMiibK5C0eUYKmnUQwzz/9TVfdOmOj
- pyiBk19CGwYDZRyeMHZsDA6freG+6HS5zTrU8Ajo/Ps2K/QsXgCokds
+ bh=e+4060p0TLpVYJANRm8fMWWwjGdEnSDV8K40Qsp0eoQ=;
+ b=LXzX31ZIL46xdeEU8nd1btIx2aDc5NVhIz2FxA27s3dONB45xaImM+gpgwQYejaVr7Ptgg0ZA
+ WkX7di+ohDAAwwGCwAlJrPf1quxZ5fGmmgNCEKiWEpOHQxMgQTgS+Dh
 X-Developer-Key: i=socketcan@hartkopp.net; a=ed25519;
  pk=/gU/7/wBqak3kTsTeFbCCqUi9dnh+1i6ITEkfPj/BvU=
 X-Endpoint-Received: by B4 Relay for socketcan@hartkopp.net/20260128 with
@@ -90,12 +90,12 @@ X-Spamd-Result: default: False [-5.16 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-8155-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
+	TAGGED_FROM(0.00)[bounces-8156-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
 	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:mkl@pengutronix.de,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:mkl@pengutronix.de,m:sashiko-bot@kernel.org,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -110,141 +110,148 @@ X-Spamd-Result: default: False [-5.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-can];
 	HAS_REPLYTO(0.00)[socketcan@hartkopp.net];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
+	RCPT_COUNT_THREE(0.00)[4];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,hartkopp.net:replyto,hartkopp.net:mid,hartkopp.net:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,sashiko.dev:url,vger.kernel.org:from_smtp,hartkopp.net:replyto,hartkopp.net:mid,hartkopp.net:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: ACEFD72936E
+X-Rspamd-Queue-Id: D5A1C729371
 
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-bcm_tx_setup() validates cf->len against the CAN/CAN FD DLC limits
-before installing frames for TX_SETUP, but bcm_rx_setup() never did
-the same for the RTR-reply frame configured via RX_SETUP with
-RX_RTR_FRAME.
+sashiko-bot remarked a problem with a concurrent device unregistration
+in isotp.c which also is present in the bcm.c code. A former fix for raw.c
+commit c275a176e4b6 ("can: raw: add missing refcount for memory leak fix")
+introduced a netdevice_tracker which solves the issue for bcm.c too.
 
+bcm_release(), bcm_delete_rx_op() and bcm_notifier() relied on
+dev_get_by_index(ifindex) to re-find the device for an rx_op before
+unregistering its filter. If a concurrent NETDEV_UNREGISTER has already
+unlisted the device from the ifindex table, that lookup fails and
+can_rx_unregister() is silently skipped, leaving a stale CAN filter
+pointing at the soon-to-be-freed bcm_op/socket.
+
+Hold a netdev_hold()/netdev_put() tracked reference on op->rx_reg_dev
+from the moment the rx filter is registered in bcm_rx_setup() until it
+is unregistered in bcm_rx_unreg(), and use that reference directly in
+bcm_release() and bcm_delete_rx_op() instead of re-looking the device
+up by ifindex.
+
+Reported-by: sashiko-bot@kernel.org
+Link: https://sashiko.dev/#/patchset/20260707094716.63578-1-socketcan@hartkopp.net
 Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- net/can/bcm.c | 59 +++++++++++++++++++++++++++++++++++++++++------------------
- 1 file changed, 41 insertions(+), 18 deletions(-)
+ net/can/bcm.c | 47 +++++++++++++++++++++++++++--------------------
+ 1 file changed, 27 insertions(+), 20 deletions(-)
 
 diff --git a/net/can/bcm.c b/net/can/bcm.c
-index fefa77045253..300f1f88c4d2 100644
+index 300f1f88c4d2..4bdca72f9327 100644
 --- a/net/can/bcm.c
 +++ b/net/can/bcm.c
-@@ -1213,26 +1213,41 @@ static int bcm_tx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
- 		kfree(op->frames);
- 	kfree(op);
- 	return err;
+@@ -126,10 +126,11 @@ struct bcm_op {
+ 	void *last_frames;
+ 	struct canfd_frame sframe;
+ 	struct canfd_frame last_sframe;
+ 	struct sock *sk;
+ 	struct net_device *rx_reg_dev;
++	netdevice_tracker rx_reg_dev_tracker;
+ 	spinlock_t bcm_tx_lock; /* protect tx data and timer updates */
+ 	spinlock_t bcm_rx_update_lock; /* protect filter/timer data updates */
+ };
+ 
+ struct bcm_sock {
+@@ -904,10 +905,11 @@ static void bcm_rx_unreg(struct net_device *dev, struct bcm_op *op)
+ 		can_rx_unregister(dev_net(dev), dev, op->can_id,
+ 				  REGMASK(op->can_id), bcm_rx_handler, op);
+ 
+ 		/* mark as removed subscription */
+ 		op->rx_reg_dev = NULL;
++		netdev_put(dev, &op->rx_reg_dev_tracker);
+ 	} else
+ 		printk(KERN_ERR "can-bcm: bcm_rx_unreg: registered device "
+ 		       "mismatch %p %p\n", op->rx_reg_dev, dev);
  }
  
--static void bcm_rx_setup_rtr_check(struct bcm_msg_head *msg_head,
--				   struct bcm_op *op, void *new_frames)
-+static int bcm_rx_setup_rtr_check(struct bcm_msg_head *msg_head,
-+				  struct bcm_op *op, void *new_frames)
- {
-+	struct canfd_frame *frame0 = new_frames;
-+
-+	if (!(msg_head->flags & RX_RTR_FRAME))
-+		return 0;
-+
-+	/* this frame is sent out as-is by bcm_can_tx() whenever a matching
-+	 * remote request is received, so validate its length the same way
-+	 * bcm_tx_setup() validates TX_SETUP frames before installing it
-+	 */
-+	if (msg_head->flags & CAN_FD_FRAME) {
-+		if (frame0->len > 64)
-+			return -EINVAL;
-+	} else {
-+		if (frame0->len > 8)
-+			return -EINVAL;
-+	}
-+
- 	/* funny feature in RX(!)_SETUP only for RTR-mode:
- 	 * copy can_id into frame BUT without RTR-flag to
- 	 * prevent a full-load-loopback-test ... ;-]
- 	 * normalize this on the staged buffer, before it is
- 	 * ever installed into op->frames.
- 	 */
--	if (msg_head->flags & RX_RTR_FRAME) {
--		struct canfd_frame *frame0 = new_frames;
-+	if ((msg_head->flags & TX_CP_CAN_ID) ||
-+	    frame0->can_id == op->can_id)
-+		frame0->can_id = op->can_id & ~CAN_RTR_FLAG;
+@@ -934,21 +936,18 @@ static int bcm_delete_rx_op(struct list_head *ops, struct bcm_msg_head *mh,
+ 			if (op->ifindex) {
+ 				/*
+ 				 * Only remove subscriptions that had not
+ 				 * been removed due to NETDEV_UNREGISTER
+ 				 * in bcm_notifier()
++				 *
++				 * op->rx_reg_dev is a tracked reference taken
++				 * when the subscription was registered, so it
++				 * stays valid here even if a concurrent
++				 * NETDEV_UNREGISTER already unlisted the dev.
+ 				 */
+-				if (op->rx_reg_dev) {
+-					struct net_device *dev;
+-
+-					dev = dev_get_by_index(sock_net(op->sk),
+-							       op->ifindex);
+-					if (dev) {
+-						bcm_rx_unreg(dev, op);
+-						dev_put(dev);
+-					}
+-				}
++				if (op->rx_reg_dev)
++					bcm_rx_unreg(op->rx_reg_dev, op);
+ 			} else
+ 				can_rx_unregister(sock_net(op->sk), NULL,
+ 						  op->can_id,
+ 						  REGMASK(op->can_id),
+ 						  bcm_rx_handler, op);
+@@ -1453,11 +1452,21 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+ 						      op->can_id,
+ 						      REGMASK(op->can_id),
+ 						      bcm_rx_handler, op,
+ 						      "bcm", sk);
  
--		if ((msg_head->flags & TX_CP_CAN_ID) ||
--		    frame0->can_id == op->can_id)
--			frame0->can_id = op->can_id & ~CAN_RTR_FLAG;
--	}
-+	return 0;
- }
- 
- /*
-  * bcm_rx_setup - create or update a bcm rx op (for bcm_sendmsg)
-  */
-@@ -1291,11 +1306,15 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
- 			if (err < 0) {
- 				kfree(new_frames);
- 				return err;
- 			}
- 
--			bcm_rx_setup_rtr_check(msg_head, op, new_frames);
-+			err = bcm_rx_setup_rtr_check(msg_head, op, new_frames);
-+			if (err < 0) {
-+				kfree(new_frames);
-+				return err;
-+			}
- 		}
- 
- 		spin_lock_bh(&op->bcm_rx_update_lock);
- 		op->nframes = msg_head->nframes;
- 		op->flags = msg_head->flags;
-@@ -1356,20 +1375,16 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
- 		}
- 
- 		if (msg_head->nframes) {
- 			err = memcpy_from_msg(op->frames, msg,
- 					      msg_head->nframes * op->cfsiz);
--			if (err < 0) {
--				if (op->frames != &op->sframe)
--					kfree(op->frames);
--				if (op->last_frames != &op->last_sframe)
--					kfree(op->last_frames);
--				kfree(op);
--				return err;
+-				op->rx_reg_dev = dev;
++				/* keep a tracked reference so that a later
++				 * unregister can safely reach the device even
++				 * if a concurrent NETDEV_UNREGISTER has
++				 * already unlisted it by ifindex
++				 */
++				if (!err) {
++					op->rx_reg_dev = dev;
++					netdev_hold(dev,
++						    &op->rx_reg_dev_tracker,
++						    GFP_KERNEL);
++				}
+ 				dev_put(dev);
+ 			} else {
+ 				/* the requested device is gone - do not
+ 				 * silently succeed without registering
+ 				 */
+@@ -1830,20 +1839,18 @@ static int bcm_release(struct socket *sock)
+ 		if (op->ifindex) {
+ 			/*
+ 			 * Only remove subscriptions that had not
+ 			 * been removed due to NETDEV_UNREGISTER
+ 			 * in bcm_notifier()
++			 *
++			 * op->rx_reg_dev is a tracked reference taken
++			 * when the subscription was registered, so it
++			 * stays valid here even if a concurrent
++			 * NETDEV_UNREGISTER already unlisted the device.
+ 			 */
+-			if (op->rx_reg_dev) {
+-				struct net_device *dev;
+-
+-				dev = dev_get_by_index(net, op->ifindex);
+-				if (dev) {
+-					bcm_rx_unreg(dev, op);
+-					dev_put(dev);
+-				}
 -			}
-+			if (err < 0)
-+				goto free_op;
++			if (op->rx_reg_dev)
++				bcm_rx_unreg(op->rx_reg_dev, op);
+ 		} else
+ 			can_rx_unregister(net, NULL, op->can_id,
+ 					  REGMASK(op->can_id),
+ 					  bcm_rx_handler, op);
  
--			bcm_rx_setup_rtr_check(msg_head, op, op->frames);
-+			err = bcm_rx_setup_rtr_check(msg_head, op, op->frames);
-+			if (err < 0)
-+				goto free_op;
- 		}
- 
- 		/* bcm_can_tx / bcm_tx_timeout_handler needs this */
- 		op->sk = sk;
- 		sock_hold(sk);
-@@ -1462,10 +1477,18 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
- 		/* add this bcm_op to the list of the rx_ops */
- 		list_add_rcu(&op->list, &bo->rx_ops);
- 	}
- 
- 	return msg_head->nframes * op->cfsiz + MHSIZ;
-+
-+free_op:
-+	if (op->frames != &op->sframe)
-+		kfree(op->frames);
-+	if (op->last_frames != &op->last_sframe)
-+		kfree(op->last_frames);
-+	kfree(op);
-+	return err;
- }
- 
- /*
-  * bcm_tx_send - send a single CAN frame to the CAN interface (for bcm_sendmsg)
-  */
 
 -- 
 2.53.0
