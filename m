@@ -1,58 +1,58 @@
-Return-Path: <linux-can+bounces-8133-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8131-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 4hHHJKlwTmofMwIAu9opvQ
-	(envelope-from <linux-can+bounces-8133-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 17:45:45 +0200
+	id qhe9JBFxTmpBMwIAu9opvQ
+	(envelope-from <linux-can+bounces-8131-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 17:47:29 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27BA9728363
-	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 17:45:45 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADF737283E0
+	for <lists+linux-can@lfdr.de>; Wed, 08 Jul 2026 17:47:28 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20201202 header.b="kDOEr/sD";
+	dkim=pass header.d=kernel.org header.s=k20201202 header.b=H2IVz9Dq;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8133-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-can+bounces-8133-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8131-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8131-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8498131A4D6F
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jul 2026 15:21:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A8BA9308588F
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jul 2026 15:21:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DD5F3F12DB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A1623F12C0;
 	Wed,  8 Jul 2026 15:21:23 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C1D3B813A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E4C3DD521
 	for <linux-can@vger.kernel.org>; Wed,  8 Jul 2026 15:21:22 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783524082; cv=none; b=ZUz3YtLcVgSWOcQ9diQzI7m/p3BiZS1/eZTryPHMZClfzysiUNMrZ/AkTqzp3Qp+ZX9olRkcfAYd2qNn+nnmUIL0UD5mPzdYkJkrf8qzoQYzoqimFyp2Pt/oHTquUFmxlJYhjo26Pp3BvxfwrZvygsH5p1uRyr2uvPF58gEHTOo=
+	t=1783524082; cv=none; b=T73WupVrsN3n6lhF58qlJuctb8Vf3YRk4p8uZlKQFNvkg7InpWj8Uq45ptAZgTwt4mf/hwCu9OnzZlL0HjObNkLLydFsz3dwjBn6/57jCY9trMVSM5m66Dd0ZvyGHJycOJBm0osQwEQbl+XLln23ZCeEtGLFgFlYAXP8x3bEWMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1783524082; c=relaxed/simple;
-	bh=b0VHGNfSKkdaRe44rgMgbVJ3bvrqgw1UMcsUmFbBiQY=;
+	bh=H4LT5OPHq9Tfizk7QxJahORBjO8XLDxDFxmL8kGuhFg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=N7lM8Ht6fblpr5K10BzjRvP2GvfdEZlRhZnZNwk91mC/Y44CL8wsIYsJ/UA1MaBkNRyfM033kbzYObMZWvW31ENOdXj+WNEKfhDOtyYnQyEnR2A59EClEVAt8OEuF/gNox5C70f245uHxkWYavWEeFuaO3qh/SVw3TwikMGHWU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kDOEr/sD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EFC3BC2BCB3;
-	Wed,  8 Jul 2026 15:21:21 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=T4wETb7tGmkpM5P/Uj/VmsfUnpR90I05J+MfXM2r6urAGXPYlzsx6Prv1MphusHkHB+b7s9ydsxyu5fWomIYyeCs42XiUyK7u4+a0PLvnRKN6fN7VxyGinVhgNUdQfttGPo6vYEMjoxZtKzkabxkzLkF7Tprh/KMOaU2nMiTx74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H2IVz9Dq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 11166C2BCB9;
+	Wed,  8 Jul 2026 15:21:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1783524082;
-	bh=b0VHGNfSKkdaRe44rgMgbVJ3bvrqgw1UMcsUmFbBiQY=;
+	bh=H4LT5OPHq9Tfizk7QxJahORBjO8XLDxDFxmL8kGuhFg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=kDOEr/sDTy+FfZQRabdqPQH037C49TIZurkUbOcJohkk0DD7w+ws3Oauo+TUoC5dy
-	 vZS9MfO34VCjLxg2qhAAlpeaIDCoAJ0f5xlIFchoGn1r+HIsOHd75jzkzoxC3quKPm
-	 igTu07O/gsoY4wGMskWQ8cUQvze8nBE5gyGlhNRBM1h/fTA0dWNVBMQr9iZi32bdjM
-	 by+DNpT/xHb3VxCGAABiv+co2t1lEpCcy5If5I76nSOb0Yvq349sECW6OqTeQovFr+
-	 xwIStxf/3MUIZ6CAtLgREvslLBpapughKhP+aHrflpHisk00Pgpc+mQcJEBd0ZzrcT
-	 pAa9/MoluP/tA==
+	b=H2IVz9DqcDmKmrAqolKaC5hHRQNZCZ1XlfbF+GDJY2On2tToFrp+0sQ3DuJJNlMDk
+	 jl9uMShApg7QvSnELEGPG/oFUTcLW1XUuGmhDmSA8MwwxvAnKJTJLX6WUsBPOmmaZW
+	 jxb+hFb9k6shcIpyaZZ1oJ+gzNZ6yo2pNr9VHjxHA8YYwbJHMfTVU+Cie51+5sag8y
+	 UT8ms4NdyMelFclAACGvvwPThlfIbMWdvau41CK+9g9lc7LbGq4Rclnk+RFj5f1NBZ
+	 dnoOjCRQ9LlCGuFrxgn1fVSJMazjKlySy+qCXM1K5XoK6yJxi8HzgqOEKmyqRaRY4U
+	 FG9fzgD4g9Gfw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0041C44501;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3B81C44503;
 	Wed,  8 Jul 2026 15:21:21 +0000 (UTC)
 From: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
-Date: Wed, 08 Jul 2026 17:21:11 +0200
-Subject: [PATCH v7 01/10] can: bcm: defer rx_op deallocation to workqueue
- to fix thrtimer UAF
+Date: Wed, 08 Jul 2026 17:21:12 +0200
+Subject: [PATCH v7 02/10] can: bcm: fix lockless bound/ifindex race and
+ silent RX_SETUP failure
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -61,19 +61,18 @@ List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260708-bcm_fixes-v7-1-c78896b342e4@hartkopp.net>
+Message-Id: <20260708-bcm_fixes-v7-2-c78896b342e4@hartkopp.net>
 References: <20260708-bcm_fixes-v7-0-c78896b342e4@hartkopp.net>
 In-Reply-To: <20260708-bcm_fixes-v7-0-c78896b342e4@hartkopp.net>
 To: linux-can@vger.kernel.org
 Cc: Oliver Hartkopp <socketcan@hartkopp.net>, 
- Marc Kleine-Budde <mkl@pengutronix.de>, Lee Jones <lee@kernel.org>, 
- Feng Xue <feng.xue@outlook.com>
+ Marc Kleine-Budde <mkl@pengutronix.de>, Ginger <ginger.jzllee@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783524080; l=6459;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783524080; l=6264;
  i=socketcan@hartkopp.net; s=20260128; h=from:subject:message-id;
- bh=HLu6KLqysIbTcTJRJ9fWwVQaVrLBGRp/BcX5+2NtnEw=;
- b=JAHL3E3OfFcczP5sr1gkZJViev+YIB6H0PjQfno0+Se+Q7i4Jo+T7m4z1Fz278dUoLetDTT08
- csK/bqsIcGeCkV/9XlthRHqTmvRGyXmREYP/W/bAzCrHdc3zHJ0R9q/
+ bh=+xnLOux3truzcT7oFJFYpPMF/LHoGp/rehTSc8S5r5A=;
+ b=h/No61FqR9j9Mol/Cb1S8rJwIGsP3+wG0ciUaHFvN9een7z3MGmDbndPrfs2rdMdYxbBveTVi
+ jbPwMRdqB+sC9XwdiksrDO19OWOKMhCcdiuF0LJzLgmkp5cyoqzQU0O
 X-Developer-Key: i=socketcan@hartkopp.net; a=ed25519;
  pk=/gU/7/wBqak3kTsTeFbCCqUi9dnh+1i6ITEkfPj/BvU=
 X-Endpoint-Received: by B4 Relay for socketcan@hartkopp.net/20260128 with
@@ -81,235 +80,249 @@ X-Endpoint-Received: by B4 Relay for socketcan@hartkopp.net/20260128 with
 X-Original-From: Oliver Hartkopp <socketcan@hartkopp.net>
 Reply-To: socketcan@hartkopp.net
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-5.16 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-8131-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8133-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
-	FORGED_RECIPIENTS(0.00)[m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:mkl@pengutronix.de,m:lee@kernel.org,m:feng.xue@outlook.com,s:lists@lfdr.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[hartkopp.net:replyto,hartkopp.net:mid,hartkopp.net:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp,volkswagen.de:email,outlook.com:email];
-	FORGED_SENDER(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[hartkopp.net,pengutronix.de,kernel.org,outlook.com];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:mkl@pengutronix.de,m:ginger.jzllee@gmail.com,m:gingerjzllee@gmail.com,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
+	FORGED_SENDER(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	FREEMAIL_CC(0.00)[hartkopp.net,pengutronix.de,gmail.com];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	HAS_REPLYTO(0.00)[socketcan@hartkopp.net];
 	TAGGED_RCPT(0.00)[linux-can];
-	HAS_REPLYTO(0.00)[socketcan@hartkopp.net]
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[hartkopp.net:replyto,hartkopp.net:mid,hartkopp.net:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 27BA9728363
+X-Rspamd-Queue-Id: ADF737283E0
 
-From: Lee Jones <lee@kernel.org>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-Commit f1b4e32aca08 ("can: bcm: use call_rcu() instead of costly
-synchronize_rcu()") replaced synchronize_rcu() in bcm_delete_rx_op()
-with call_rcu() and introduced the RX_NO_AUTOTIMER flag.
+bcm_sendmsg() reads bo->ifindex and checks bo->bound before taking
+lock_sock(), while bcm_notify(), bcm_connect() and bcm_release() all
+mutate both fields under that same lock. Because the lockless reads
+and the locked writes are unordered with respect to each other, a
+racing bcm_notify() (device unregister) or bcm_connect() (concurrent
+bind on another thread sharing the socket) can make bcm_sendmsg()
+observe an inconsistent combination, e.g. a stale bound=1 together
+with the now-cleared ifindex=0, silently turning a socket bound to a
+specific CAN interface into one that also matches "any" interface.
 
-However, this flag check was omitted for thrtimer in the packet rx
-fast-path. During BCM RX operation teardown, a concurrent RCU reader
-(bcm_rx_handler) can race and re-arm thrtimer via
-bcm_rx_update_and_send() after call_rcu() has been scheduled.  Once
-the RCU grace period elapses, bcm_op is freed.  The subsequently
-firing thrtimer then dereferences the deallocated op, causing a UAF.
+Keep the lockless bo->bound check purely as a fast-path reject, and
+move the ifindex read (and a bo->bound re-check) into the locked
+section, where every writer already serializes. This removes the
+possibility of observing the two fields torn against each other,
+rather than trying to fix it with more READ_ONCE()/WRITE_ONCE() pairs
+on two independently updated fields. Annotate the now-purely-lockless
+bo->bound accesses consistently across all its write sites.
 
-Adding flag checks to the rx fast-path (bcm_rx_update_and_send) does not
-fully close the TOCTOU race and introduces latency for every CAN frame.
-Conversely, calling hrtimer_cancel() directly inside the RCU callback
-(softirq context) is fatal as hrtimer_cancel() can sleep, triggering
-a "scheduling while atomic" panic.
+Also fix bcm_rx_setup() silently returning success when the target
+device disappears concurrently instead of reporting -ENODEV, so a
+broken RX op is no longer left registered as if it had succeeded.
 
-Resolve this by deferring the timer cancellation and memory free to a
-dedicated unbound workqueue (bcm_wq).  The RCU callback now queues a
-work item to bcm_wq, which safely cancels both timers and deallocates
-memory in sleepable process context.  A dedicated workqueue is used to
-prevent system-wide WQ saturation and is cleanly flushed/destroyed
-on module unload to avoid rmmod page faults.
-
-Since the deferred work can now outlive the calling context by an
-unbounded amount, also take a reference on op->sk when it is assigned
-and drop it only once the deferred work has cancelled both timers, so a
-socket can no longer be freed out from under a still-armed timer whose
-callback (bcm_send_to_user()) dereferences op->sk.
-
-Fixes: f1b4e32aca08 ("can: bcm: use call_rcu() instead of costly synchronize_rcu()")
-Tested-by: Feng Xue <feng.xue@outlook.com>
-Tested-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Lee Jones <lee@kernel.org>
+Reported-by: Ginger <ginger.jzllee@gmail.com>
+Closes: https://lore.kernel.org/linux-can/CAGp+u1aBK8QVjsvAxM2Ldzep4rEbsP9x_pV3At4g=h1kVEtyhA@mail.gmail.com/
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- net/can/bcm.c | 37 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 34 insertions(+), 3 deletions(-)
+ net/can/bcm.c | 65 ++++++++++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 51 insertions(+), 14 deletions(-)
 
 diff --git a/net/can/bcm.c b/net/can/bcm.c
-index a4bef2c48a55..bdf53241bd7b 100644
+index bdf53241bd7b..b612135b017d 100644
 --- a/net/can/bcm.c
 +++ b/net/can/bcm.c
-@@ -56,10 +56,11 @@
- #include <linux/can.h>
- #include <linux/can/core.h>
- #include <linux/can/skb.h>
- #include <linux/can/bcm.h>
- #include <linux/slab.h>
-+#include <linux/workqueue.h>
- #include <linux/spinlock.h>
- #include <net/can.h>
- #include <net/sock.h>
- #include <net/net_namespace.h>
+@@ -1321,10 +1321,15 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+ 						      bcm_rx_handler, op,
+ 						      "bcm", sk);
  
-@@ -90,10 +91,12 @@ MODULE_LICENSE("Dual BSD/GPL");
- MODULE_AUTHOR("Oliver Hartkopp <oliver.hartkopp@volkswagen.de>");
- MODULE_ALIAS("can-proto-2");
+ 				op->rx_reg_dev = dev;
+ 				dev_put(dev);
++			} else {
++				/* the requested device is gone - do not
++				 * silently succeed without registering
++				 */
++				err = -ENODEV;
+ 			}
  
- #define BCM_MIN_NAMELEN CAN_REQUIRED_SIZE(struct sockaddr_can, can_ifindex)
- 
-+static struct workqueue_struct *bcm_wq;
-+
- /*
-  * easy access to the first 64 bit of can(fd)_frame payload. cp->data is
-  * 64 bit aligned so the offset has to be multiples of 8 which is ensured
-  * by the only callers in bcm_rx_cmp_to_index() bcm_rx_handler().
+ 		} else
+ 			err = can_rx_register(sock_net(sk), NULL, op->can_id,
+ 					      REGMASK(op->can_id),
+@@ -1394,16 +1399,17 @@ static int bcm_tx_send(struct msghdr *msg, int ifindex, struct sock *sk,
   */
-@@ -103,10 +106,11 @@ static inline u64 get_u64(const struct canfd_frame *cp, int offset)
- }
+ static int bcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ {
+ 	struct sock *sk = sock->sk;
+ 	struct bcm_sock *bo = bcm_sk(sk);
+-	int ifindex = bo->ifindex; /* default ifindex for this bcm_op */
++	int ifindex;
+ 	struct bcm_msg_head msg_head;
+ 	int cfsiz;
+ 	int ret; /* read bytes or error codes as return value */
  
- struct bcm_op {
- 	struct list_head list;
- 	struct rcu_head rcu;
-+	struct work_struct work;
- 	int ifindex;
- 	canid_t can_id;
- 	u32 flags;
- 	unsigned long frames_abs, frames_filtered;
- 	struct bcm_timeval ival1, ival2;
-@@ -791,23 +795,40 @@ static struct bcm_op *bcm_find_op(struct list_head *ops,
+-	if (!bo->bound)
++	/* Lockless fast-path check for bound socket */
++	if (!READ_ONCE(bo->bound))
+ 		return -ENOTCONN;
+ 
+ 	/* check for valid message length from userspace */
+ 	if (size < MHSIZ)
+ 		return -EINVAL;
+@@ -1415,43 +1421,65 @@ static int bcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 
+ 	cfsiz = CFSIZ(msg_head.flags);
+ 	if ((size - MHSIZ) % cfsiz)
+ 		return -EINVAL;
+ 
++	lock_sock(sk);
++
++	/* Re-validate under the socket lock: a concurrent bcm_notify()
++	 * may have unbound this socket (device removal) after the
++	 * lockless fast-path check above. bo->ifindex is only ever
++	 * mutated under lock_sock(), so reading it here - instead of
++	 * before taking the lock - guarantees it can't be observed
++	 * torn against bo->bound.
++	 */
++	if (!bo->bound) {
++		ret = -ENOTCONN;
++		goto out_release;
++	}
++
++	/* default ifindex for this bcm_op */
++	ifindex = bo->ifindex;
++
+ 	/* check for alternative ifindex for this bcm_op */
+ 
+ 	if (!ifindex && msg->msg_name) {
+ 		/* no bound device as default => check msg_name */
+ 		DECLARE_SOCKADDR(struct sockaddr_can *, addr, msg->msg_name);
+ 
+-		if (msg->msg_namelen < BCM_MIN_NAMELEN)
+-			return -EINVAL;
++		if (msg->msg_namelen < BCM_MIN_NAMELEN) {
++			ret = -EINVAL;
++			goto out_release;
++		}
+ 
+-		if (addr->can_family != AF_CAN)
+-			return -EINVAL;
++		if (addr->can_family != AF_CAN) {
++			ret = -EINVAL;
++			goto out_release;
++		}
+ 
+ 		/* ifindex from sendto() */
+ 		ifindex = addr->can_ifindex;
+ 
+ 		if (ifindex) {
+ 			struct net_device *dev;
+ 
+ 			dev = dev_get_by_index(sock_net(sk), ifindex);
+-			if (!dev)
+-				return -ENODEV;
++			if (!dev) {
++				ret = -ENODEV;
++				goto out_release;
++			}
+ 
+ 			if (dev->type != ARPHRD_CAN) {
+ 				dev_put(dev);
+-				return -ENODEV;
++				ret = -ENODEV;
++				goto out_release;
+ 			}
+ 
+ 			dev_put(dev);
+ 		}
  	}
  
- 	return NULL;
+-	lock_sock(sk);
+-
+ 	switch (msg_head.opcode) {
+ 
+ 	case TX_SETUP:
+ 		ret = bcm_tx_setup(&msg_head, msg, ifindex, sk);
+ 		break;
+@@ -1497,10 +1525,11 @@ static int bcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
+ 	}
+ 
++out_release:
+ 	release_sock(sk);
+ 
+ 	return ret;
  }
  
--static void bcm_free_op_rcu(struct rcu_head *rcu_head)
-+static void bcm_free_op_work(struct work_struct *work)
- {
--	struct bcm_op *op = container_of(rcu_head, struct bcm_op, rcu);
-+	struct bcm_op *op = container_of(work, struct bcm_op, work);
-+
-+	hrtimer_cancel(&op->timer);
-+	hrtimer_cancel(&op->thrtimer);
- 
- 	if ((op->frames) && (op->frames != &op->sframe))
- 		kfree(op->frames);
- 
- 	if ((op->last_frames) && (op->last_frames != &op->last_sframe))
- 		kfree(op->last_frames);
- 
-+	/* the last possible access to op->timer/op->thrtimer has now
-+	 * happened above via hrtimer_cancel() - op->sk is no longer
-+	 * needed by any pending timer callback, so drop our reference
-+	 */
-+	sock_put(op->sk);
-+
- 	kfree(op);
- }
- 
-+static void bcm_free_op_rcu(struct rcu_head *rcu_head)
-+{
-+	struct bcm_op *op = container_of(rcu_head, struct bcm_op, rcu);
-+
-+	INIT_WORK(&op->work, bcm_free_op_work);
-+	queue_work(bcm_wq, &op->work);
-+}
-+
- static void bcm_remove_op(struct bcm_op *op)
- {
- 	hrtimer_cancel(&op->timer);
- 	hrtimer_cancel(&op->thrtimer);
- 
-@@ -1058,10 +1079,11 @@ static int bcm_tx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
- 		/* tx_ops never compare with previous received messages */
- 		op->last_frames = NULL;
- 
- 		/* bcm_can_tx / bcm_tx_timeout_handler needs this */
- 		op->sk = sk;
-+		sock_hold(sk);
- 		op->ifindex = ifindex;
- 
- 		/* initialize uninitialized (kzalloc) structure */
- 		hrtimer_setup(&op->timer, bcm_tx_timeout_handler, CLOCK_MONOTONIC,
- 			      HRTIMER_MODE_REL_SOFT);
-@@ -1219,10 +1241,11 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+@@ -1533,11 +1562,16 @@ static void bcm_notify(struct bcm_sock *bo, unsigned long msg,
+ 			if (sock_net(sk)->can.bcmproc_dir && bo->bcm_proc_read) {
+ 				remove_proc_entry(bo->procname, sock_net(sk)->can.bcmproc_dir);
+ 				bo->bcm_proc_read = NULL;
  			}
+ #endif
+-			bo->bound   = 0;
++			/* Paired with the lockless fast-path check in
++			 * bcm_sendmsg(); bo->ifindex itself is only ever
++			 * accessed under lock_sock() so it needs no
++			 * annotation.
++			 */
++			WRITE_ONCE(bo->bound, 0);
+ 			bo->ifindex = 0;
+ 			notify_enodev = 1;
  		}
  
- 		/* bcm_can_tx / bcm_tx_timeout_handler needs this */
- 		op->sk = sk;
-+		sock_hold(sk);
- 		op->ifindex = ifindex;
+ 		release_sock(sk);
+@@ -1674,11 +1708,11 @@ static int bcm_release(struct socket *sock)
+ 	list_for_each_entry_safe(op, next, &bo->rx_ops, list)
+ 		bcm_remove_op(op);
  
- 		/* ifindex for timeout events w/o previous frame reception */
- 		op->rx_ifindex = ifindex;
+ 	/* remove device reference */
+ 	if (bo->bound) {
+-		bo->bound   = 0;
++		WRITE_ONCE(bo->bound, 0);
+ 		bo->ifindex = 0;
+ 	}
  
-@@ -1837,15 +1860,19 @@ static struct notifier_block canbcm_notifier = {
+ 	sock_orphan(sk);
+ 	sock->sk = NULL;
+@@ -1744,11 +1778,14 @@ static int bcm_connect(struct socket *sock, struct sockaddr_unsized *uaddr, int
+ 			goto fail;
+ 		}
+ 	}
+ #endif /* CONFIG_PROC_FS */
  
- static int __init bcm_module_init(void)
- {
- 	int err;
+-	bo->bound = 1;
++	/* bo->ifindex above is fully assigned before this point; pairs
++	 * with the lockless fast-path check in bcm_sendmsg()
++	 */
++	WRITE_ONCE(bo->bound, 1);
  
-+	bcm_wq = alloc_workqueue("can-bcm-wq", WQ_UNBOUND, 0);
-+	if (!bcm_wq)
-+		return -ENOMEM;
-+
- 	pr_info("can: broadcast manager protocol\n");
+ fail:
+ 	release_sock(sk);
  
- 	err = register_pernet_subsys(&canbcm_pernet_ops);
- 	if (err)
--		return err;
-+		goto register_pernet_failed;
- 
- 	err = register_netdevice_notifier(&canbcm_notifier);
- 	if (err)
- 		goto register_notifier_failed;
- 
-@@ -1859,17 +1886,21 @@ static int __init bcm_module_init(void)
- 
- register_proto_failed:
- 	unregister_netdevice_notifier(&canbcm_notifier);
- register_notifier_failed:
- 	unregister_pernet_subsys(&canbcm_pernet_ops);
-+register_pernet_failed:
-+	destroy_workqueue(bcm_wq);
- 	return err;
- }
- 
- static void __exit bcm_module_exit(void)
- {
- 	can_proto_unregister(&bcm_can_proto);
- 	unregister_netdevice_notifier(&canbcm_notifier);
- 	unregister_pernet_subsys(&canbcm_pernet_ops);
-+	rcu_barrier();
-+	destroy_workqueue(bcm_wq);
- }
- 
- module_init(bcm_module_init);
- module_exit(bcm_module_exit);
+ 	return ret;
 
 -- 
 2.53.0
