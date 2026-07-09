@@ -1,41 +1,41 @@
-Return-Path: <linux-can+bounces-8234-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8235-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id nUXWEoPnT2oNqAIAu9opvQ
-	(envelope-from <linux-can+bounces-8234-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 20:25:07 +0200
+	id XW2EApXnT2oWqAIAu9opvQ
+	(envelope-from <linux-can+bounces-8235-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 20:25:25 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0A157343D7
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 20:25:06 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C4807343EA
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 20:25:24 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8234-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8234-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8235-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-8235-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2DD96305EF1F
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 18:23:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 77F9C306DAAE
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 18:24:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E474DC54C;
-	Thu,  9 Jul 2026 18:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C59C4DC527;
+	Thu,  9 Jul 2026 18:24:02 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06864DC531;
-	Thu,  9 Jul 2026 18:23:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15423876B3;
+	Thu,  9 Jul 2026 18:24:00 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783621438; cv=none; b=f/rMkgqwOFmkMemri9723JZtc9k7bDYNavYxS5sHC7wotaNatnr0CLCdwr6Vff7sbQh02TMe4U3ReU4MeWWP9qk1X7AAWdsrUPLPhwomCQtnhsh+60wSmeBHoY4dcSvTTY72q8VRhHeJhXF65oWqkLBNHNemPtxtaIgwrSzbCO8=
+	t=1783621441; cv=none; b=KS3P1YiDfkrPZn7rN60xvRtzhoARyOfhFy359bmDqsnHKd3NKcsSPNU/8jV/I/PNJq/auGZqLQEScp1vXmeSCtiOwsjrm9jHx4pbsmTK3ALsQ73YPkIOADgh/eW/WEp8jGW6RajZgssID2sC7bp6TrGqudz9r1JIAK0BnVfaHTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783621438; c=relaxed/simple;
-	bh=4oH1RzbCRFZ6L/kluneF4pSWFGuyay5BDhCtdx/x00Y=;
+	s=arc-20240116; t=1783621441; c=relaxed/simple;
+	bh=0ruG71386l2kRtCXNLG96qKhZkz/mrs6YvjMKWmmMWU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=en/2UK8Gk8G50x/4byGocki2x2jLUvKhboWKerJpqxlf7L0gMUxZifjBjR6WXqKqSh2BgK7c4SWWKar2PDlRg0NHYoN/Qp2ZKAknt34lhmpW3KwxlK61tYHrJVFV2DcT1l66Vn3tQSyaEdQ2lTuRaIuszSCiXrjkK/gIF5y3Dl8=
+	 MIME-Version; b=aiIslHy2Sz61eZKNZNuxMiQL3lsV072orxs7uV21XUC5X0Gn3Ky7cD7GXKQlR/2rkZkOJC2Mp/NqRwMrx/GJrFssxsSylePfqey76N+dyq0yQA8ZtxMp3LkOqa9r01WxwKFgB5GCF+kjItZGdTcJ+T8353u1rgvEVScKwd2zads=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7ACD1F000E9;
-	Thu,  9 Jul 2026 18:23:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A261F00A3A;
+	Thu,  9 Jul 2026 18:23:56 +0000 (UTC)
 From: Claudiu Beznea <claudiu.beznea+renesas@tuxon.dev>
 To: mkl@pengutronix.de,
 	mailhol@kernel.org,
@@ -55,9 +55,9 @@ Cc: claudiu.beznea@tuxon.dev,
 	devicetree@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH v2 4/8] can: rcar_canfd: Allow the CAN FD clock to be sourced from fck
-Date: Thu,  9 Jul 2026 21:23:28 +0300
-Message-ID: <20260709182332.876408-5-claudiu.beznea+renesas@tuxon.dev>
+Subject: [PATCH v2 5/8] can: rcar_canfd: Do not set registers selecting the CAN mode
+Date: Thu,  9 Jul 2026 21:23:29 +0300
+Message-ID: <20260709182332.876408-6-claudiu.beznea+renesas@tuxon.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260709182332.876408-1-claudiu.beznea+renesas@tuxon.dev>
 References: <20260709182332.876408-1-claudiu.beznea+renesas@tuxon.dev>
@@ -73,7 +73,7 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -85,7 +85,7 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	FREEMAIL_TO(0.00)[pengutronix.de,kernel.org,glider.be,gmail.com,baylibre.com,redhat.com,bp.renesas.com,renesas.com];
 	FORGED_SENDER(0.00)[claudiu.beznea@tuxon.dev,linux-can@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-8234-lists,linux-can=lfdr.de,renesas];
+	TAGGED_FROM(0.00)[bounces-8235-lists,linux-can=lfdr.de,renesas];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -99,111 +99,102 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can,dt,renesas];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_TWELVE(0.00)[18];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[renesas.com:email,tuxon.dev:mid,tuxon.dev:from_mime,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E0A157343D7
+X-Rspamd-Queue-Id: 9C4807343EA
 
 From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-On the Renesas RZ/G3S, the CAN FD clock can be sourced either from fck
-(the peripheral clock) or from an external clock (can_clk). When fck is
-used, it is divided internally by the CAN FD controller.
+The bits 30 (classical CAN-only mode) and 28 (FD-only enable) of the
+Channel n CAN-FD Configuration Register of the Renesas RZ/G3S SoC are not
+available. The IP supports only CAN-FD mode. RZ/G3S HW manual (revision
+1.30) specify the bits are read as zero and the write value should always
+be zero.
 
-Adjust the existing canfd clock handling code to support the RZ/G3S CAN.
+Add the mode_select_na flag in struct rcar_canfd_hw_info to cover RZ/G3S
+and avoid writing to unavailable bits.
 
 The existing struct rcar_canfd_hw_info instances were updated to address
 the request in the Link discussion.
 
+Commit prepares for the addition of the Renesas RZ/G3S SoC.
+
 Link: https://lore.kernel.org/all/1d9719e3-10ff-4cd8-b729-55fea93c37ce@wanadoo.fr
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 ---
 
 Changes in v2:
-- changed the logic to request canfd only if info->fcan_pclk and contrary
-  get the fcan clock from pclk; for this didn't collect the Rb tag
+- collected the tags
+- updated patch description to reflect this is a preparatory commit
 
- drivers/net/can/rcar/rcar_canfd.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 879f31c97276..b66f72de46c9 100644
+index b66f72de46c9..112aa9024487 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -444,6 +444,7 @@ struct rcar_canfd_hw_info {
- 	unsigned ch_interface_mode:1;	/* Has channel interface mode */
+@@ -445,6 +445,7 @@ struct rcar_canfd_hw_info {
  	unsigned shared_can_regs:1;	/* Has shared classical can registers */
  	unsigned external_clk:1;	/* Has external clock */
-+	unsigned fcan_pclk:1;		/* Has fcan sourced from pclk. */
+ 	unsigned fcan_pclk:1;		/* Has fcan sourced from pclk. */
++	unsigned mode_select_na:1;	/* Has no bits for selecting the mode. */
  };
  
  /* Channel priv data */
-@@ -617,6 +618,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
- 	.ch_interface_mode = 0,
+@@ -619,6 +620,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
  	.shared_can_regs = 0,
  	.external_clk = 1,
-+	.fcan_pclk = 0,
+ 	.fcan_pclk = 0,
++	.mode_select_na = 0,
  };
  
  static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
-@@ -634,6 +636,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
- 	.ch_interface_mode = 1,
+@@ -637,6 +639,7 @@ static const struct rcar_canfd_hw_info rcar_gen4_hw_info = {
  	.shared_can_regs = 1,
  	.external_clk = 1,
-+	.fcan_pclk = 0,
+ 	.fcan_pclk = 0,
++	.mode_select_na = 0,
  };
  
  static const struct rcar_canfd_hw_info rzg2l_hw_info = {
-@@ -651,6 +654,7 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
- 	.ch_interface_mode = 0,
+@@ -655,6 +658,7 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
  	.shared_can_regs = 0,
  	.external_clk = 1,
-+	.fcan_pclk = 0,
+ 	.fcan_pclk = 0,
++	.mode_select_na = 0,
  };
  
  static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
-@@ -668,6 +672,7 @@ static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
- 	.ch_interface_mode = 1,
+@@ -673,6 +677,7 @@ static const struct rcar_canfd_hw_info r9a09g047_hw_info = {
  	.shared_can_regs = 1,
  	.external_clk = 0,
-+	.fcan_pclk = 0,
+ 	.fcan_pclk = 0,
++	.mode_select_na = 0,
  };
  
  static const struct rcar_canfd_hw_info r9a09g077_hw_info = {
-@@ -685,6 +690,7 @@ static const struct rcar_canfd_hw_info r9a09g077_hw_info = {
- 	.ch_interface_mode = 1,
+@@ -691,6 +696,7 @@ static const struct rcar_canfd_hw_info r9a09g077_hw_info = {
  	.shared_can_regs = 1,
  	.external_clk = 1,
-+	.fcan_pclk = 0,
+ 	.fcan_pclk = 0,
++	.mode_select_na = 0,
  };
  
  /* Helper functions */
-@@ -2191,13 +2197,19 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	 */
- 	gpriv->can_clk = devm_clk_get(dev, "can_clk");
- 	if (IS_ERR(gpriv->can_clk) || (clk_get_rate(gpriv->can_clk) == 0)) {
--		gpriv->can_clk = devm_clk_get(dev, "canfd");
--		if (IS_ERR(gpriv->can_clk))
--			return dev_err_probe(dev, PTR_ERR(gpriv->can_clk),
--					     "cannot get canfd clock\n");
-+		if (info->fcan_pclk) {
-+			fcan_freq = clk_get_rate(gpriv->clkp);
-+		} else {
-+			gpriv->can_clk = devm_clk_get(dev, "canfd");
-+			if (IS_ERR(gpriv->can_clk))
-+				return dev_err_probe(dev, PTR_ERR(gpriv->can_clk),
-+						     "cannot get canfd clock\n");
-+
-+			fcan_freq = clk_get_rate(gpriv->can_clk);
-+		}
+@@ -846,6 +852,9 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
+ 		}
  
- 		/* CANFD clock may be further divided within the IP */
--		fcan_freq = clk_get_rate(gpriv->can_clk) / info->postdiv;
-+		fcan_freq /= info->postdiv;
- 	} else {
- 		fcan_freq = clk_get_rate(gpriv->can_clk);
- 		gpriv->extclk = gpriv->info->external_clk;
+ 		/* Set the controller into appropriate mode */
++		if (gpriv->info->mode_select_na)
++			continue;
++
+ 		if (gpriv->info->ch_interface_mode) {
+ 			/* Do not set CLOE and FDOE simultaneously */
+ 			if (!gpriv->fdmode) {
 -- 
 2.43.0
 
