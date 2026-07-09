@@ -1,155 +1,136 @@
-Return-Path: <linux-can+bounces-8210-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8211-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 5yWZJZ7FT2qroAIAu9opvQ
-	(envelope-from <linux-can+bounces-8210-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 18:00:30 +0200
+	id ikwACpnLT2rnoQIAu9opvQ
+	(envelope-from <linux-can+bounces-8211-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 18:26:01 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 425027333AD
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 18:00:29 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F185733706
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 18:26:00 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8210-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-8210-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=ReI3OB5Y;
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8211-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8211-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BF07430661B0
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 15:52:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 10DCF305BA0E
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 16:18:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517BE426D18;
-	Thu,  9 Jul 2026 15:52:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC26033260F;
+	Thu,  9 Jul 2026 16:18:54 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB97042A149
-	for <linux-can@vger.kernel.org>; Thu,  9 Jul 2026 15:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8B24252C6;
+	Thu,  9 Jul 2026 16:18:47 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783612373; cv=none; b=IopBv3qbpxyedcp96v+HV1khi0UmWwQeeV52oetjT9cw28uBrXJ3LbQWjbNCBXouUzaI7K0Q7Dl8JXeNgcPOO0AMlkxHdS7hXhWFY4ulSpVk3DLhC6FruSD8wdN/0eAbGqdI87FPUVfU6YIElND9UISVjfVJfXuoQqUnIMGtvIM=
+	t=1783613933; cv=none; b=Hs2eJZk14O2ZBbJhHUGwf/tp9yKoQhrPNBDnOoojIpfWf+FdHZ4UeTNRRFI+bF6M39Yw8EXRpo9X/X0tU/XEv927GHfPpd4L2gCKInJQyOinTGRv/vUUBEVc9s89+xee3tEBfEWq74GVP43fIWfX4Ra6W9EGhs+qRPxtemwFCTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783612373; c=relaxed/simple;
-	bh=FK7tiZEI0WffDbTlu07kAZuJRwj0uLdhH15mcZOjFjk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PV9R+V66Z4Zy1jU37AafXPhyl7zqxMhU9hS10w29w3aUie9tvtkPlLgQtwdUiJNDZGrSXwDD2OrjQQK9lba27/UJ86X2uXx97iOf8/bcyvmAtsFNJuUvjAURm4+C75If8zPAr6taPCuicCg2xnpJrS4TkkxrWnF4Lo04xx9ieXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.48
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7eb787dec99so23411a34.0
-        for <linux-can@vger.kernel.org>; Thu, 09 Jul 2026 08:52:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783612371; x=1784217171;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=iqrcHFDoPWS2t5kW57shcQV+qLcmaCnZOWUcXcNxWfY=;
-        b=QTmPnGKYyo6L94d/Sl+ztCb6+32b5GZwWkusqV0n327KSLSfI50rj/tVBDulguX60u
-         MC2DZotR2Hw62XymIxPCrNyydHAfkK9PLXb2qUIBQdEqWTflLni2CkPm5LuUO3kUs3UA
-         9O08YugQNi0+qMUepiQnVpxZ5NYW79nQWeEvZRk7+ia3qAqLnuDpVeBf1i+YmGmyWDhR
-         bcMHDpr6dVPycJukeD8ukYF+5U97QK91fVD6I5y9ooEkhO0leQqj9X32u+oYDSj7mL3X
-         WfRbAZNyKXMS3z+dJtMmfj2/siLzPjKhMn8yZilTJ4ylULj3ZZH75H97tnDvSfCiz5Ml
-         FzaA==
-X-Forwarded-Encrypted: i=1; AFNElJ+RWRW5qiMMrDZ9SlM6KTG1qvL+IwoIbBQJbMELn8h8FhyK957KRxNKidoPvP4xQX2d9O0SfE38M6Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQWPsI1OxhHdqg5zKDforBhHKDC0qne2IDiiHyaJV5DSwWNLgy
-	4VM5axwAL7MF43S7zuZ45e/SRO6Ym6yis8oWfxuzz6TXY0PALojfQN6GWyt2XaYR/7Q=
-X-Gm-Gg: AfdE7ckrrth2MMQikvZhYKAqttUY2SSJwJpX04rSpsMeD4JtE5NX87hkg8zd6/B+k6c
-	Oes+Tk3adSAK6RqpDCNP+dCFE0rphU/+Lbna7m1yWl7DqsTJK5zg0b+t6TtrCZKiLGho15WnTcq
-	1VqodzOnXo1pSn9PYycSwCUzyR8ZmX4n7dMFzM+SDJMqCS/sHYYMdMrPLx+J8TdTi0BhGmP32Lc
-	/63GXxWVCsZPhykwau4X9tkgb5X1WbaQFA4Qr1m4gM1TliXDdtEQDuQHoSW6dAGpwNFYpJUQkvF
-	V3bgVX3md21WRCdk4ukuHMQwqzUFll2NqKP6IK43yFAG2wyYR5ER8h00gItmFebzyVnuhpXH+CC
-	+Sp3GZGMBzyHni4JG2A3lxSscTDScWyNPsu38gliU9KfgtxOoHf6RLOAv+ZatYgo8y7zPlLAouC
-	NDa2v0Oc7RH/k+4CyWctaTGDJOsO8HyubZQhT9tMZmStY8dUgjbg==
-X-Received: by 2002:a05:6830:a8f:b0:7e7:aac:4cc9 with SMTP id 46e09a7af769-7ebcff35968mr6263555a34.3.1783612370719;
-        Thu, 09 Jul 2026 08:52:50 -0700 (PDT)
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com. [209.85.210.43])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcae1ddb8sm4489622a34.6.2026.07.09.08.52.50
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jul 2026 08:52:50 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7e6128bd9b3so14000a34.1
-        for <linux-can@vger.kernel.org>; Thu, 09 Jul 2026 08:52:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ9CWhTgh6jngwh3BOTsQOtyS3mkoTJtxwRhpB2ywxFTGjqTQAI6aJkRQdxRYBbIQwhNOE5Csc/LnrQ=@vger.kernel.org
-X-Received: by 2002:a05:6102:f8b:b0:6c2:e290:cc69 with SMTP id
- ada2fe7eead31-744e01021e1mr4657081137.23.1783611946911; Thu, 09 Jul 2026
- 08:45:46 -0700 (PDT)
+	s=arc-20240116; t=1783613933; c=relaxed/simple;
+	bh=AsailK8F37XDf6dcGFjdUTsjDgb9MVOWzdP5r9LYmHM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U64rbnHJkGop/QEbzpfTjcfLIdf9NF/zD9OQwOqcbjUhmi0+M43xsNlGt+o9n0fqinsy+LicStJj4/hXu33Ut041iHa72mIDx48IXMWH/sBQA24vxI7xW1JBOi0y9AbjG0egH38p+AkS6XgTRtPwPSC/ZdIBTS7jPPYCiSnhstY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ReI3OB5Y; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C91221F000E9;
+	Thu,  9 Jul 2026 16:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783613924;
+	bh=+c800ITVYyf0HQortvRIAgN2/p9RkJsrk68oS9gg2HE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ReI3OB5YQQMOrVPAHVH9nU9vT0kJx40oXUtXWU3yZRmSuSycR8b2uG9TiG58WMMb3
+	 pRz2BDgimBsUcM0L+vlcMoxQYENYIYCjYo7XhvIRSPYMHHiutilz6dOFm2v3vkNO/B
+	 syFeuOgoboklXNnQpz6GUaeCi3fbiDJiLJqqseX9TeNfB8Bq7R9XO9GAOnd4PiXjbz
+	 8Rqur66twNmP535APYhnaDdaLTTn6WyKDzhIV0uXSF1+f4z5P6hDdO5N+ByN/EUukL
+	 yDEqM+A8xapUb0F419oNc3kWJ4+3klSi6S+R6mv7ADyE5koVq1qKXPHdfH3gYamWMC
+	 Z46muTatq1BDA==
+Date: Thu, 9 Jul 2026 09:18:44 -0700
+From: Kees Cook <kees@kernel.org>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: linux-atm-general@lists.sourceforge.net, linux-can@vger.kernel.org,
+	linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Oliver Hartkopp <socketcan@hartkopp.net>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Remi Denis-Courmont <courmisch@gmail.com>,
+	Simon Horman <horms@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>, Petr Mladek <pmladek@suse.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Subject: Re: [PATCH net-next] net: Convert %pK back to %p
+Message-ID: <202607090916.7731D36D@keescook>
+References: <20260706073824.xixrLxoD@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260707102418.1646159-1-claudiu.beznea+renesas@tuxon.dev> <20260707102418.1646159-2-claudiu.beznea+renesas@tuxon.dev>
-In-Reply-To: <20260707102418.1646159-2-claudiu.beznea+renesas@tuxon.dev>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 9 Jul 2026 17:45:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUEQVN7VqsmQ6EKWxazrFyQdY4edaHyt8pPFEaJfGgbpQ@mail.gmail.com>
-X-Gm-Features: AUfX_mz8Do1OkGKS8SDkGEbLBy8tojYuESbee1M6XmgysSPwrDRBiIuowYvmngs
-Message-ID: <CAMuHMdUEQVN7VqsmQ6EKWxazrFyQdY4edaHyt8pPFEaJfGgbpQ@mail.gmail.com>
-Subject: Re: [PATCH 1/8] clk: r9a08g045-cpg: Add clocks and resets for CAN-FD
-To: Claudiu Beznea <claudiu.beznea+renesas@tuxon.dev>
-Cc: mkl@pengutronix.de, mailhol@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, magnus.damm@gmail.com, 
-	mturquette@baylibre.com, sboyd@kernel.org, bmasney@redhat.com, 
-	biju.das.jz@bp.renesas.com, tu.nguyen.xg@renesas.com, 
-	fabrizio.castro.jz@renesas.com, claudiu.beznea@tuxon.dev, 
-	linux-can@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-clk@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260706073824.xixrLxoD@linutronix.de>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8210-lists,linux-can=lfdr.de];
-	DMARC_NA(0.00)[linux-m68k.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:claudiu.beznea+renesas@tuxon.dev,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:magnus.damm@gmail.com,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:bmasney@redhat.com,m:biju.das.jz@bp.renesas.com,m:tu.nguyen.xg@renesas.com,m:fabrizio.castro.jz@renesas.com,m:claudiu.beznea@tuxon.dev,m:linux-can@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:claudiu.beznea.uj@bp.renesas.com,m:krzk@kernel.org,m:conor@kernel.org,m:magnusdamm@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[geert@linux-m68k.org,linux-can@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	FREEMAIL_CC(0.00)[pengutronix.de,kernel.org,gmail.com,baylibre.com,redhat.com,bp.renesas.com,renesas.com,tuxon.dev,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[22];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:bigeasy@linutronix.de,m:linux-atm-general@lists.sourceforge.net,m:linux-can@vger.kernel.org,m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:davem@davemloft.net,m:edumazet@google.com,m:herbert@gondor.apana.org.au,m:kuba@kernel.org,m:kuniyu@google.com,m:mkl@pengutronix.de,m:marcelo.leitner@gmail.com,m:ncardwell@google.com,m:socketcan@hartkopp.net,m:pabeni@redhat.com,m:courmisch@gmail.com,m:horms@kernel.org,m:steffen.klassert@secunet.com,m:willemdebruijn.kernel@gmail.com,m:lucien.xin@gmail.com,m:pmladek@suse.com,m:thomas.weissschuh@linutronix.de,m:marceloleitner@gmail.com,m:willemdebruijnkernel@gmail.com,m:lucienxin@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8211-lists,linux-can=lfdr.de];
+	FORGED_SENDER(0.00)[kees@kernel.org,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-can@vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can,renesas,dt];
-	R_DKIM_NA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kees@kernel.org,linux-can@vger.kernel.org];
+	FREEMAIL_CC(0.00)[lists.sourceforge.net,vger.kernel.org,davemloft.net,google.com,gondor.apana.org.au,kernel.org,pengutronix.de,gmail.com,hartkopp.net,redhat.com,secunet.com,suse.com,linutronix.de];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,mail.gmail.com:mid,renesas.com:email,linux-m68k.org:from_mime,linux-m68k.org:email,tuxon.dev:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,glider.be:email]
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,keescook:mid,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 425027333AD
+X-Rspamd-Queue-Id: 6F185733706
 
-On Tue, 7 Jul 2026 at 12:24, Claudiu Beznea
-<claudiu.beznea+renesas@tuxon.dev> wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> Renesas RZ/G3S SoC has a CAN-FD IP. Add clocks and resets for it.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Mon, Jul 06, 2026 at 09:38:24AM +0200, Sebastian Andrzej Siewior wrote:
+> This is a revert of commit 71338aa7d050c ("net: convert %p usage to
+> %pK") which is from 2011. Back then the default behaviour for %p was to
+> print the pointer. The %pK modifier was introduced to be able to control
+> the behaviour of specific pointer output without changing the behaviour
+> of %p for everyone. It was dedicated to avoid leaking pointers via
+> /proc.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v7.3.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+Given the policy on bare %p, and that there are so few in this list (15
+files), how about review those that can just simply be removed or
+switched to %pS, etc:
+https://docs.kernel.org/process/deprecated.html#p-format-specifier
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Kees Cook
 
