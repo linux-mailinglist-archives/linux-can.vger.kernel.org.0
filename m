@@ -1,262 +1,232 @@
-Return-Path: <linux-can+bounces-8224-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8225-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Ji//HgbhT2qVpgIAu9opvQ
-	(envelope-from <linux-can+bounces-8224-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 19:57:26 +0200
+	id XaZgLAbkT2pHpwIAu9opvQ
+	(envelope-from <linux-can+bounces-8225-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 20:10:14 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD772734108
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 19:57:25 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78641734243
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 20:10:13 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20201202 header.b=a13EjUai;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=cm1jR0qq;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8224-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8224-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8225-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8225-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 46A8D3038C6B
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 17:56:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5B5313006993
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 18:10:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF41E4DB546;
-	Thu,  9 Jul 2026 17:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E7D74DB569;
+	Thu,  9 Jul 2026 18:10:00 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FB54DB554
-	for <linux-can@vger.kernel.org>; Thu,  9 Jul 2026 17:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C664657F1
+	for <linux-can@vger.kernel.org>; Thu,  9 Jul 2026 18:09:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783619782; cv=none; b=sp4dEdGl/3mSHElM57wzoxsQwhD/XMyEbvjGgBRJN+Bzt88Wpezjbf2lSzn0ME8TeOzhJXsDcwhea/Fm7PUHOU6jQ11JT1PkzKkipIDg4sp3EZdgJXISoNvQ8I0VTqRJucPnoMpR723R2nTvwRmTbHtwFxkMP72snfneHy7qqvs=
+	t=1783620599; cv=none; b=UiifNi+xPVhENOtB8Kbbk8Fs/1YfWbACsMfkRHHhzodYzyDqm392/7M1p6UiIg+sdeeK4jOB2beK2axPqSalXjfiF+Ij5Pj+qA4X+lm19dOc8nx2pzMKeYO1jbGKsvGEPbGwYjx1nmeMmIrpvSK8ZzhkpqC6uy9pXuXn94TmnAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783619782; c=relaxed/simple;
-	bh=byxfnvcGoBF99BnLl9cbYBMzkRBf7mLhWr5EAURi3rg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZnTfLFVKWBB6HSsFAs/ByBRBUvzfpPQFJgg3EqbxQA/Przm8a2Rdw3LnZjv00wIy5xq+y1lYF4Xm6EviVW5qiBUUpM0x8kBoWEucReUPGViTSLpTOzvHGeaLtDjRVevEAXLnlu3XNrSeK0g9NoQ4FJ0NY/2QNFPIeU3wN+K3ixk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a13EjUai; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4BFBFC2BCF5;
-	Thu,  9 Jul 2026 17:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1783619782;
-	bh=byxfnvcGoBF99BnLl9cbYBMzkRBf7mLhWr5EAURi3rg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=a13EjUaizz5jQa1eZZTM1JvJp4CS9+8SrwMIJIDXAS2ATUS4aoCwETq4cd+FpiWVF
-	 59EkQ6y7n39x4wc3pdT/QHoSvs827l8+5zmJPtdXrxqf3rgDukZXpNQI2JvlqyV4JI
-	 uvKMRnq0p1Y09w5aZHVRql/vHoZERsZ8c3TAJ48zw2c2labGC+PJIww7PSeY794hQB
-	 xfXXGnss57epNzMqY77tqieN8tT7/cK4oF0RWOFY5EVfv5SQesAlISXEhGjESRgYhc
-	 Fi8l/83RN1fxAByr6pfd47+4IZ3mlODOEqe+9YIsO2oTWXpHkG5SkIEHi6boA3xayf
-	 mZmTjwLyIpm4Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A9A2C44506;
-	Thu,  9 Jul 2026 17:56:22 +0000 (UTC)
-From: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
-Date: Thu, 09 Jul 2026 19:56:25 +0200
-Subject: [PATCH v11 11/11] can: bcm: track a single source interface for
- ANYDEV timeout/throttle ops
+	s=arc-20240116; t=1783620599; c=relaxed/simple;
+	bh=wwQAHVQ29BmdX6PM4BW7Wp6P0JwnAzMmn5HV5UyQRGQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=cMsTekkdDOwDZNHeXuw3BOhV097Q2gQs1dSQ52JFZECtbyqSd5svwunjDjMiLNYlhoOlv0hxDodAuFdrE7Q41apikeNbHXXFCUAlBx4Cdpcx6js6iYTnrsX8pEpXwP1xVtBIioGu+bYyRNNVjf5uV+njyuCUlQew+OW5lJ2WAwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cm1jR0qq; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B2B1F000E9;
+	Thu,  9 Jul 2026 18:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783620598;
+	bh=237cRHXgOdEmCMJHNIBTsdmNPiuvTVDpN7ke09asIng=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=cm1jR0qqO/+2KTbWIRdpuhRDz+dTmuCZNybDnKHJO07n1phFHKtAiJ78SK4U+UgD/
+	 535tdRGNqH2fLvmFOlRQ3we4oxREhfjX5AMOi2gbK13KTof11oS+bCgvOWw0OE/W1I
+	 u6TF6XKuSsVCFWSlABgVlEX5WCMdnI8v5DxnkurwpLO7yxFRYB2z5/zyqtikBlBZ0r
+	 wigFJEKKW011/ojRFggVOx/X9d3fqE9xe6wWldBcfZPCU5hftyKrBedo6hxbbMJ3Ev
+	 sLsS8Q4Z2aIHtu/5eAOnTINwbDGb9p0xS0p45v+dt+B8K24Y3ggTfu7rmLnp/2RWEr
+	 IFdJQLZMPeuqw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v11 02/11] can: bcm: fix lockless bound/ifindex race and
+ silent RX_SETUP failure
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Oliver Hartkopp" <socketcan@hartkopp.net>
+Cc: "Oleksij Rempel" <o.rempel@pengutronix.de>, "Marc Kleine-Budde" <mkl@pengutronix.de>, "Vincent
+ Mailhol" <mailhol@kernel.org>, "Oliver Hartkopp" <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+In-Reply-To: <20260709-bcm_fixes-v11-2-067ba11bec5c@hartkopp.net>
+References: <20260709-bcm_fixes-v11-0-067ba11bec5c@hartkopp.net>
+ <20260709-bcm_fixes-v11-2-067ba11bec5c@hartkopp.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 09 Jul 2026 18:09:57 +0000
+Message-Id: <20260709180958.63B2B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260709-bcm_fixes-v11-11-067ba11bec5c@hartkopp.net>
-References: <20260709-bcm_fixes-v11-0-067ba11bec5c@hartkopp.net>
-In-Reply-To: <20260709-bcm_fixes-v11-0-067ba11bec5c@hartkopp.net>
-To: linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, 
- Marc Kleine-Budde <mkl@pengutronix.de>, sashiko-bot@kernel.org
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783619780; l=5495;
- i=socketcan@hartkopp.net; s=20260128; h=from:subject:message-id;
- bh=hvMcQga4v0uhabPGvGavaioU3QcrPTFoKSV9rjfiR9w=;
- b=eoUCvP7F2Id8WJ3z7MofCyOzOlakaR36qmjYQOfD1a7qyQcrKSSX2lGYEjMzoI5kXVytE0Gg6
- imOhguMm/1ODEr5KbdTL0vSBXCJlXTut5NrjUZjjvOUiKI1wO27lcW1
-X-Developer-Key: i=socketcan@hartkopp.net; a=ed25519;
- pk=/gU/7/wBqak3kTsTeFbCCqUi9dnh+1i6ITEkfPj/BvU=
-X-Endpoint-Received: by B4 Relay for socketcan@hartkopp.net/20260128 with
- auth_id=620
-X-Original-From: Oliver Hartkopp <socketcan@hartkopp.net>
-Reply-To: socketcan@hartkopp.net
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-5.16 / 15.00];
+X-Spamd-Result: default: False [-3.16 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-8224-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8225-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[hartkopp.net:email,vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,lists.linux.dev:replyto,sashiko.dev:url,smtp.kernel.org:mid];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:o.rempel@pengutronix.de,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:linux-can@vger.kernel.org,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:mkl@pengutronix.de,m:sashiko-bot@kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
+	FORWARDED(0.00)[lists@lfdr.de];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-can];
-	HAS_REPLYTO(0.00)[socketcan@hartkopp.net];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,hartkopp.net:replyto,hartkopp.net:mid,hartkopp.net:email]
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: CD772734108
+X-Rspamd-Queue-Id: 78641734243
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-An ANYDEV rx op (ifindex == 0) with an active RX timeout and/or
-throttle timer has no defined semantics when matching frames arrive
-from several interfaces: bcm_rx_handler() can run concurrently for
-the same op on different CPUs, racing hrtimer_cancel()/
-bcm_rx_starttimer() against bcm_rx_timeout_handler() and causing
-spurious RX_TIMEOUT notifications and last_frames corruption. The
-same concurrency lets throttled multiplex frames from different
-interfaces clobber the single rx_ifindex/rx_stamp fields shared by
-the op.
+Pre-existing issues:
+- [High] Lockless data race in BCM operation updates corrupts active TX/RX =
+CAN frames.
+--
 
-Add op->if_detected to track the first interface that delivers a
-matching frame while a timeout/throttle timer is configured, and
-reject frames from any other interface for that op. The claim is
-decided in bcm_rx_handler() before hrtimer_cancel() touches
-op->timer, so a rejected frame can never disturb the claimed
-interface's watchdog. RTR-mode ops are excluded via RX_RTR_FRAME,
-independent of kt_ival1/kt_ival2, since those may briefly hold a
-stale value from an earlier non-RTR configuration.
+--- Patch [2]: [PATCH v11 02/11] can: bcm: fix lockless bound/ifindex race =
+and silent RX_SETUP failure ---
+commit 86f16dbfed96fce9e0564ffdb9d5e63f4ec62cce
+Author: Oliver Hartkopp <socketcan@hartkopp.net>
 
-The claim is released in bcm_notify() on NETDEV_UNREGISTER and in
-bcm_rx_setup() when SETTIMER reconfigures the timer values.
+can: bcm: fix lockless bound/ifindex race and silent RX_SETUP failure
 
-Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
-Reported-by: sashiko-bot@kernel.org
-Link: https://lore.kernel.org/linux-can/20260709105031.1A39C1F000E9@smtp.kernel.org/
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- net/can/bcm.c | 44 +++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 39 insertions(+), 5 deletions(-)
+This commit fixes a race condition in bcm_sendmsg() by moving the bo->ifind=
+ex
+read and bo->bound check under the socket lock. It also ensures bcm_rx_setu=
+p()
+returns -ENODEV when the target device concurrently disappears.
 
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 10a883b50fc6..8cc0d2267582 100644
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -115,10 +115,11 @@ struct bcm_op {
- 	atomic_long_t frames_abs, frames_filtered;
- 	struct bcm_timeval ival1, ival2;
- 	struct hrtimer timer, thrtimer;
- 	ktime_t rx_stamp, kt_ival1, kt_ival2, kt_lastmsg;
- 	int rx_ifindex;
-+	int if_detected; /* first received ifindex in ANYDEV rx_op mode */
- 	int cfsiz;
- 	u32 count;
- 	u32 nframes;
- 	u32 currframe;
- 	/* void pointers to arrays of struct can[fd]_frame */
-@@ -774,10 +775,32 @@ static void bcm_rx_handler(struct sk_buff *skb, void *data)
- 	} else {
- 		if (!can_is_can_skb(skb))
- 			return;
- 	}
- 
-+	/* An ANYDEV op with an active RX timeout and/or throttle timer
-+	 * tracks a single source interface: claim the first interface that
-+	 * delivers a matching frame and reject frames from any other one,
-+	 * before hrtimer_cancel() below can touch op->timer - this avoids
-+	 * racing bcm_rx_timeout_handler() across concurrent interfaces.
-+	 * RX_RTR_FRAME ops are excluded, as kt_ival1/kt_ival2 may briefly
-+	 * hold a stale value from an earlier non-RTR configuration.
-+	 */
-+	if (!op->ifindex && !(op->flags & RX_RTR_FRAME) &&
-+	    (op->kt_ival1 || op->kt_ival2)) {
-+		bool foreign;
-+
-+		spin_lock_bh(&op->bcm_rx_update_lock);
-+		if (!op->if_detected)
-+			op->if_detected = skb->dev->ifindex;
-+		foreign = op->if_detected != skb->dev->ifindex;
-+		spin_unlock_bh(&op->bcm_rx_update_lock);
-+
-+		if (foreign)
-+			return;
-+	}
-+
- 	/* disable timeout */
- 	hrtimer_cancel(&op->timer);
- 
- 	/* op->flags/op->frames may be updated concurrently by bcm_rx_setup() */
- 	spin_lock_bh(&op->bcm_rx_update_lock);
-@@ -808,14 +831,13 @@ static void bcm_rx_handler(struct sk_buff *skb, void *data)
- 		traffic_flags |= RX_LOCAL;
- 		if (skb->sk == op->sk)
- 			traffic_flags |= RX_OWN;
- 	}
- 
--	/* save rx timestamp and originator for recvfrom() under lock.
--	 * For an op subscribed on all interfaces (ifindex == 0)
--	 * bcm_rx_handler() can run concurrently on different CPUs so
--	 * the CAN content and the meta data must be bundled correctly.
-+	/* save rx timestamp and originator for recvfrom() under lock: an
-+	 * ANYDEV op without an active timer can still run concurrently on
-+	 * different CPUs, so content and meta data must be bundled here.
- 	 */
- 	op->rx_stamp = skb->tstamp;
- 	op->rx_ifindex = skb->dev->ifindex;
- 
- 	if (op->flags & RX_FILTER_ID) {
-@@ -1439,10 +1461,11 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
- 			op->ival1 = msg_head->ival1;
- 			op->ival2 = msg_head->ival2;
- 			op->kt_ival1 = bcm_timeval_to_ktime(msg_head->ival1);
- 			op->kt_ival2 = bcm_timeval_to_ktime(msg_head->ival2);
- 			op->kt_lastmsg = 0;
-+			op->if_detected = 0; /* reclaim ifindex in ANYDEV mode */
- 			spin_unlock_bh(&op->bcm_rx_update_lock);
- 
- 			/* disable an active timer due to zero value? */
- 			if (!op->kt_ival1)
- 				hrtimer_cancel(&op->timer);
-@@ -1737,14 +1760,25 @@ static void bcm_notify(struct bcm_sock *bo, unsigned long msg,
- 
- 	case NETDEV_UNREGISTER:
- 		lock_sock(sk);
- 
- 		/* rx_ops: remove device specific receive entries */
--		list_for_each_entry(op, &bo->rx_ops, list)
-+		list_for_each_entry(op, &bo->rx_ops, list) {
- 			if (op->rx_reg_dev == dev)
- 				bcm_rx_unreg(dev, op);
- 
-+			/* release an ANYDEV op's claim (see bcm_rx_handler())
-+			 * on this now confirmed-gone interface.
-+			 */
-+			if (!op->ifindex) {
-+				spin_lock_bh(&op->bcm_rx_update_lock);
-+				if (op->if_detected == dev->ifindex)
-+					op->if_detected = 0;
-+				spin_unlock_bh(&op->bcm_rx_update_lock);
-+			}
-+		}
-+
- 		/* tx_ops: stop device specific cyclic transmissions on the
- 		 * vanishing ifindex. Cancelling the timer is enough to stop
- 		 * cyclic bcm_can_tx() calls as there is no re-arming.
- 		 */
- 		list_for_each_entry(op, &bo->tx_ops, list)
+Link: https://lore.kernel.org/linux-can/CAGp+u1aBK8QVjsvAxM2Ldzep4rEbsP9x_p=
+V3At4g=3Dh1kVEtyhA@mail.gmail.com/
 
--- 
-2.53.0
+> diff --git a/net/can/bcm.c b/net/can/bcm.c
+> index bdf53241bd7b3..b612135b017d1 100644
+> --- a/net/can/bcm.c
+> +++ b/net/can/bcm.c
+> @@ -1323,6 +1323,11 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_h=
+ead, struct msghdr *msg,
+> =20
+>  				op->rx_reg_dev =3D dev;
+>  				dev_put(dev);
+> +			} else {
+> +				/* the requested device is gone - do not
+> +				 * silently succeed without registering
+> +				 */
+> +				err =3D -ENODEV;
+>  			}
+> =20
+>  		} else
 
+[Severity: High]
+This is a pre-existing issue, but does bcm_rx_setup() modify the active
+op->frames array locklessly on the RX side?
 
+Looking at the earlier part of bcm_rx_setup():
+
+    /* update CAN frames content */
+    err =3D memcpy_from_msg(op->frames, msg,
+                          msg_head->nframes * op->cfsiz);
+
+Could this data race with the softirq reader bcm_rx_handler() while it is
+actively processing frames?
+
+[ ... ]
+
+> @@ -1436,20 +1463,21 @@ static int bcm_sendmsg(struct socket *sock, struc=
+t msghdr *msg, size_t size)
+>  			struct net_device *dev;
+> =20
+>  			dev =3D dev_get_by_index(sock_net(sk), ifindex);
+> -			if (!dev)
+> -				return -ENODEV;
+> +			if (!dev) {
+> +				ret =3D -ENODEV;
+> +				goto out_release;
+> +			}
+> =20
+>  			if (dev->type !=3D ARPHRD_CAN) {
+>  				dev_put(dev);
+> -				return -ENODEV;
+> +				ret =3D -ENODEV;
+> +				goto out_release;
+>  			}
+> =20
+>  			dev_put(dev);
+>  		}
+>  	}
+> =20
+> -	lock_sock(sk);
+> -
+>  	switch (msg_head.opcode) {
+> =20
+>  	case TX_SETUP:
+
+[Severity: High]
+This is also a pre-existing issue, but does bcm_tx_setup() write to the
+active op->frames array locklessly before validating the frame length?
+
+When TX_SETUP is called, bcm_tx_setup() copies user data:
+
+    cf =3D op->frames + op->cfsiz * i;
+    err =3D memcpy_from_msg((u8 *)cf, msg, op->cfsiz);
+
+    if (op->flags & CAN_FD_FRAME) {
+        if (cf->len > 64)
+            err =3D -EINVAL;
+
+If an invalid length is provided from userspace, it is written to op->frames
+first. The function catches the error and returns -EINVAL, but the
+corrupted frame remains in the array.
+
+Concurrently, can the high-resolution timer callback bcm_can_tx() transmit
+this corrupted frame?
+
+bcm_can_tx() reads the frame contents outside of bcm_tx_lock:
+
+    spin_lock_bh(&op->bcm_tx_lock);
+    cf =3D op->frames + op->cfsiz * op->currframe;
+    spin_unlock_bh(&op->bcm_tx_lock);
+
+    skb_put_data(skb, cf, op->cfsiz);
+
+Could this pass an unvalidated cf->len down to the hardware driver and
+potentially overflow device buffers? An attacker creating a cyclic
+transmission via TX_SETUP, then issuing a concurrent TX_SETUP update with
+an invalid length, might be able to trigger this condition.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709-bcm_fixes-=
+v11-0-067ba11bec5c@hartkopp.net?part=3D2
 
