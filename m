@@ -1,41 +1,41 @@
-Return-Path: <linux-can+bounces-8231-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8232-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id euJODUjnT2r9pwIAu9opvQ
-	(envelope-from <linux-can+bounces-8231-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 20:24:08 +0200
+	id u1v/AWPnT2oHqAIAu9opvQ
+	(envelope-from <linux-can+bounces-8232-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 20:24:35 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAC067343A4
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 20:24:07 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84CB37343BC
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 20:24:34 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8231-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8231-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8232-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-8232-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BA39630421ED
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 18:23:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 449F63053677
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 18:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93194DC53F;
-	Thu,  9 Jul 2026 18:23:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B074DBD6B;
+	Thu,  9 Jul 2026 18:23:53 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA614DB54F;
-	Thu,  9 Jul 2026 18:23:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 910514DBD98;
+	Thu,  9 Jul 2026 18:23:52 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783621429; cv=none; b=iO0FnYosEbXu0KQzjOZd/B4m7JFXfbk9mH0PCOso8Ac9tFJp2D3C67jgH9TDCW8DMxFcuNymU4H1cHvucZwl4sMd8kKOQN6bduRMbACD83AvrQIUxJtBnquz8FNl9EjvK58aCTgxuCxxo1GM0bGrAx8iOo9sG+Sj6Z/PPq1/3H8=
+	t=1783621433; cv=none; b=UyFH9iohKZi0wHAjxJ9yG8AJj2mg5pHNzf+Dxr+PLjfLlRbSDcOQopthmFMQ9D9YwhDhlml/Q+Uehk9NLxxUXTioK/peQ1dCnW/JkE5iaAI+pAOCFYPg0q1QFGlc/yIqjutE4PZBQxCfYjXsBwXcv2gwnGv9PtLC8Ij7fZkilI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783621429; c=relaxed/simple;
-	bh=SJ8ZZGLFaD9CqUATOoA5DXwmNr8smzHzV5nj3xRpLGA=;
+	s=arc-20240116; t=1783621433; c=relaxed/simple;
+	bh=qQrF8mHGLBfh8y4aCaEsXjfv+nJCeQP6mXMgQlV+m4c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R/oOVcYl6UnZWLEIMl7hqg9Py3PWiOgeEwFZVvrjLnU7gMKYU1l0vo0cbtCjHzOC/8p095Ki8PQ0bMwGzOjJB/gAaqeUJEmBdbvT1rRA2c8amsiN8+7AUuVw+95+Ts7xzAe9LCs+Ul7mzJ3apPdQlGpXGIBhEX0JpG+JXnHukJg=
+	 MIME-Version; b=gfg8mGKOoxyXNOFB5CCyLnlNNFzm9f6p8QUgz28RLcGguP1jxl/fxZRrFFXIZcSUDmyDGwQ6SGUS9q/WiQbCRGIAKsKo849xHELzIaYBuKIogTiEsIa9qDldcqWJ9KQydHXCd2RHM41vJ4P3U2CFuwTvRj8/FoOiXni7AgoCKWc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BE3F1F000E9;
-	Thu,  9 Jul 2026 18:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EE881F00A3A;
+	Thu,  9 Jul 2026 18:23:48 +0000 (UTC)
 From: Claudiu Beznea <claudiu.beznea+renesas@tuxon.dev>
 To: mkl@pengutronix.de,
 	mailhol@kernel.org,
@@ -55,9 +55,9 @@ Cc: claudiu.beznea@tuxon.dev,
 	devicetree@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH v2 2/8] dt-bindings: can: renesas,rcar-canfd: Document RZ/G3S SoC
-Date: Thu,  9 Jul 2026 21:23:26 +0300
-Message-ID: <20260709182332.876408-3-claudiu.beznea+renesas@tuxon.dev>
+Subject: [PATCH v2 3/8] can: rcar_canfd: Fix typos in macro names
+Date: Thu,  9 Jul 2026 21:23:27 +0300
+Message-ID: <20260709182332.876408-4-claudiu.beznea+renesas@tuxon.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260709182332.876408-1-claudiu.beznea+renesas@tuxon.dev>
 References: <20260709182332.876408-1-claudiu.beznea+renesas@tuxon.dev>
@@ -73,7 +73,7 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -85,7 +85,7 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	FREEMAIL_TO(0.00)[pengutronix.de,kernel.org,glider.be,gmail.com,baylibre.com,redhat.com,bp.renesas.com,renesas.com];
 	FORGED_SENDER(0.00)[claudiu.beznea@tuxon.dev,linux-can@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-8231-lists,linux-can=lfdr.de,renesas];
+	TAGGED_FROM(0.00)[bounces-8232-lists,linux-can=lfdr.de,renesas];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -99,120 +99,71 @@ X-Spamd-Result: default: False [0.54 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can,dt,renesas];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_TWELVE(0.00)[18];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[renesas.com:email,tuxon.dev:mid,tuxon.dev:from_mime,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: CAC067343A4
+X-Rspamd-Queue-Id: 84CB37343BC
 
 From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-The CAN FD controller found on the Renesas RZ/G3S SoC is largely compatible
-with the variant present on the RZ/G3E SoC. The main differences are:
-- the RZ/G3S provides only two CAN FD channels
-- the RZ/G3S supports only CAN FD operation; the Channel n CAN FD
-  Configuration Register does not implement the bits used to select
-  classical CAN-only mode (bit 30) or CAN FD-only mode (bit 28);
-  consequently, bit 31 (CAN FD Frame Distinction Enable) of the same
-  register is also not implemented
-- some bits in several registers (mainly reserved or status bits) are
-  read-write on the RZ/G3S but read-only on the RZ/G3E; their behavior is
-  otherwise identical: the bits read back as 0 on both SoCs and software
-  is allowed to write only 0 to them on the RZ/G3S
-- the RZ/G3S provides 128 acceptance filters, compared to 64 on the
-  RZ/G3E
-- the RZ/G3S can use PCLK clock as the CAN FD clock source through an
-  internal clock divider, while also supporting an external CAN FD clock
-  source
+The bits 1..0 of the Channel n Control Register are named CHMDC (Channel
+Mode select). Fix typos in macro names by replacing DMC with MDC.
 
-Since:
-- the SoC clock generator provides to the CAN IP only the peripheral and
-  the RAM clocks
-- when sourced from the peripheral clock, the CAN-FD clock is obtained
-  inside the IP itself by dividing the peripheral clock
-- the assigned-clocks and assigned-clock-rates properties are specific to
-  the CAN-FD clock
-the assigned-clocks and assigned-clock-rates properties were dropped from
-the required properties list of the Renesas RZ/G3S SoC.
-
-Add documentation for the Renesas RZ/G3S SoC.
-
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 ---
 
 Changes in v2:
-- forbid renesas,no-can-fd and renesas,fd-only since the IP supports
-  only CAN-FD; for this didn't collect Biju's tag
+- collected tags
 
- .../bindings/net/can/renesas,rcar-canfd.yaml  | 20 +++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-index b9d9dd7a7967..43ebfd73f5bf 100644
---- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-+++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-@@ -13,6 +13,7 @@ properties:
-   compatible:
-     oneOf:
-       - enum:
-+          - renesas,r9a08g045-canfd        # RZ/G3S
-           - renesas,r9a09g047-canfd        # RZ/G3E
-           - renesas,r9a09g077-canfd        # RZ/T2H
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index 4ee108abffb8..879f31c97276 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -132,9 +132,9 @@
+ #define RCANFD_CCTR_BEIE		BIT(8)
+ #define RCANFD_CCTR_CSLPR		BIT(2)
+ #define RCANFD_CCTR_CHMDC_MASK		(0x3)
+-#define RCANFD_CCTR_CHDMC_COPM		(0x0)
+-#define RCANFD_CCTR_CHDMC_CRESET	(0x1)
+-#define RCANFD_CCTR_CHDMC_CHLT		(0x2)
++#define RCANFD_CCTR_CHMDC_COPM		(0x0)
++#define RCANFD_CCTR_CHMDC_CRESET	(0x1)
++#define RCANFD_CCTR_CHMDC_CHLT		(0x2)
  
-@@ -185,8 +186,6 @@ required:
-   - clocks
-   - clock-names
-   - power-domains
--  - assigned-clocks
--  - assigned-clock-rates
-   - channel0
-   - channel1
+ /* RSCFDnCFDCmSTS / RSCFDnCmSTS */
+ #define RCANFD_CSTS_COMSTS		BIT(7)
+@@ -828,7 +828,7 @@ static int rcar_canfd_reset_controller(struct rcar_canfd_global *gpriv)
  
-@@ -198,6 +197,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - renesas,r9a08g045-canfd
-               - renesas,rzg2l-canfd
-     then:
-       properties:
-@@ -267,6 +267,7 @@ allOf:
-           contains:
-             enum:
-               - renesas,r9a09g077-canfd
-+              - renesas,r9a08g045-canfd
-               - renesas,rcar-gen3-canfd
-               - renesas,rzg2l-canfd
-     then:
-@@ -330,6 +331,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - renesas,r9a08g045-canfd
-               - renesas,r9a09g047-canfd
-               - renesas,rzg2l-canfd
-     then:
-@@ -350,6 +352,20 @@ allOf:
-       properties:
-         reset-names: false
+ 		rcar_canfd_update_bit(gpriv->base, RCANFD_CCTR(ch),
+ 				      RCANFD_CCTR_CHMDC_MASK,
+-				      RCANFD_CCTR_CHDMC_CRESET);
++				      RCANFD_CCTR_CHMDC_CRESET);
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: renesas,r9a08g045-canfd
-+    then:
-+      properties:
-+        renesas,no-can-fd: false
-+        renesas,fd-only: false
-+    else:
-+      required:
-+        - assigned-clocks
-+        - assigned-clock-rates
-+
- unevaluatedProperties: false
+ 		/* Ensure Channel reset mode */
+ 		err = readl_poll_timeout((gpriv->base + RCANFD_CSTS(ch)), sts,
+@@ -1504,7 +1504,7 @@ static int rcar_canfd_start(struct net_device *ndev)
  
- examples:
+ 	/* Set channel to Operational mode */
+ 	rcar_canfd_update_bit(priv->base, RCANFD_CCTR(ch),
+-			      RCANFD_CCTR_CHMDC_MASK, RCANFD_CCTR_CHDMC_COPM);
++			      RCANFD_CCTR_CHMDC_MASK, RCANFD_CCTR_CHMDC_COPM);
+ 
+ 	/* Verify channel mode change */
+ 	err = readl_poll_timeout((priv->base + RCANFD_CSTS(ch)), sts,
+@@ -1578,7 +1578,7 @@ static void rcar_canfd_stop(struct net_device *ndev)
+ 
+ 	/* Transition to channel reset mode  */
+ 	rcar_canfd_update_bit(priv->base, RCANFD_CCTR(ch),
+-			      RCANFD_CCTR_CHMDC_MASK, RCANFD_CCTR_CHDMC_CRESET);
++			      RCANFD_CCTR_CHMDC_MASK, RCANFD_CCTR_CHMDC_CRESET);
+ 
+ 	/* Check Channel reset mode */
+ 	err = readl_poll_timeout((priv->base + RCANFD_CSTS(ch)), sts,
 -- 
 2.43.0
 
