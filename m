@@ -1,66 +1,66 @@
-Return-Path: <linux-can+bounces-8196-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8197-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 5FedNVKAT2oniQIAu9opvQ
-	(envelope-from <linux-can+bounces-8196-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 13:04:50 +0200
+	id McUCMeCBT2p5iQIAu9opvQ
+	(envelope-from <linux-can+bounces-8197-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 13:11:28 +0200
 X-Original-To: lists+linux-can@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DDA9730073
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 13:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 20108730125
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 13:11:28 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=jnFusmiJ;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=ImbWn0Ig;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8196-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8196-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8197-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8197-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2D6BF30ED2FC
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 10:38:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C52D8308E63C
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 10:44:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ACE8403E8D;
-	Thu,  9 Jul 2026 10:38:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA799408636;
+	Thu,  9 Jul 2026 10:44:43 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01CB3BE161
-	for <linux-can@vger.kernel.org>; Thu,  9 Jul 2026 10:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FC4405844
+	for <linux-can@vger.kernel.org>; Thu,  9 Jul 2026 10:44:41 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783593518; cv=none; b=JNS6glihGjmEBFwuOICFeQCypYqriDh+GmbVyx4tYZzltPjDCzYddoIbwQxtmD0/hfJzONgUnX632C7Vy10gfe1zilz9Kgyb9Ny6Y7zCP3AM7q5V98Xb62gWpZEHXZru435p9smpbvuwYdkHV6ARYDdeUEpUK1mJJSXcr5QfHTM=
+	t=1783593883; cv=none; b=Il2dKXf19zJcUewt8f2xfB46PclsrSlJ2xpC8HJm6bQ+pHxxWkxzkKGJ37ZRnRzs9+0/N6wGXAzFSwcEp3OcQ0LIAeI0XK3McUsgHsXhcQQOIzSEGildUcfKcMwIv4ZhH3ajCLbjqRBrrt7eC7TmIDhTnnTroegWyNDJjvb8WWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783593518; c=relaxed/simple;
-	bh=EHBKTI8q9WJhF0JdhYuUYXzRKk9J9Nfc1sC9ceCyVe4=;
+	s=arc-20240116; t=1783593883; c=relaxed/simple;
+	bh=SNxWwYO03b15JQU+3WTH4BnBEQI0zXBOga2MsSYZtCc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=VdYRtuDnJ0z9pZyMO32dxaLWKZ6wvyNaN8AWvDS1LdsaFEdQbLuSsV1cmdTsy7q92GytdrJ3U4eOD6crCbOcHq/FJAu3nV6gP1Kz6JdDvHf8w6c0o4zlrEWF7chS+NquyYQLuwbAx6xI2FXvTNGlOqG3TxW12cefPX7lkXAGtuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jnFusmiJ; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F1761F000E9;
-	Thu,  9 Jul 2026 10:38:34 +0000 (UTC)
+	 Message-Id; b=OoGmsHcH2CoYXs7ouit+8sXXr9ru9Da2+9g/X7yRRLm7YP6RH6jnjrXevV4wILX8jVO9lFZt4tYBC1UT4UwWsFDAjZg6BJwBgmhbWc1gJzixCTP3lxbXZ8qFBv007eUsYJjV/RGuM5V7mCGp/6p2YAQJjmyRxmF0h5luwBJY58I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ImbWn0Ig; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E8221F000E9;
+	Thu,  9 Jul 2026 10:44:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783593514;
-	bh=mZzdINcwO9k8NL6H4Q/ZnhVp5WaDT5wmaSkgRqoZlX8=;
+	s=k20260515; t=1783593880;
+	bh=t8RNgCF/phPlkQKREtbgxQKJmrxwnXY+JEscLIpjNx4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jnFusmiJV9ZUKRviexVhdhVGj0dAqe3GwKJ+pdH+wvQ9Ba+on/VB203KVSLA4woy4
-	 AsY7Ma4HQ66qxYVbBf6T61x0DphRIQGMDwyIBTwhsI3+vL2RnE6yXADWEQh5rs8ErC
-	 m63uy2nBJHQ6XOCg+of/H7k6DYVhxKSGgOjoPtwcKNRIIS4W7X0KbYu3dH7Oozfd/e
-	 6sitzQ6kgjPeVCwB6UEimGWK500ghfjEHkMYkQTOGzWo8jnI1HjCz4Q1WyOq5oTBBG
-	 FqDqnfSXJajmEm3Mi+ajJ9Cb8zevZSA0MvcQCOuE9elGHhsnTAP1/XpkCzLlwg/xWK
-	 L34BnxkXnhhzw==
+	b=ImbWn0IggmJMJtLQvqM5OqiU6YPVis+GQQkCHNmoHHkAOJH6NJXpcDuFXf2wirXpQ
+	 GwZ3PwqOE8MY2EQrGHBkyRppHRZPhXvzawMHalKHnpPzZXv6fy+WVazB7i5t+8IGAT
+	 Rfum177O27X8PjGtNhhIYjJAtDaBC1njrV3x22w7FKtr7Fyresq0sB+FnPDoG09afv
+	 Y4e3DJMYdqH2YAxLv3pSuhbeKOJ4bpYPdh0hX1NHom0vBpNoag8fwjbm6Ml7wV8PYg
+	 4qsw6Eeg5gHt7gQ4z4436eAgVL05N/PK0toGh5+ekP1zWBkRsJ09JRiSfKPUKiPyqB
+	 TWj5QRa96otTg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v10 01/10] can: bcm: defer rx_op deallocation to
- workqueue to fix thrtimer UAF
+Subject: Re: [PATCH v10 02/10] can: bcm: fix lockless bound/ifindex race and
+ silent RX_SETUP failure
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Oliver Hartkopp" <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, "Oliver Hartkopp" <socketcan@hartkopp.net>, "Oleksij
- Rempel" <o.rempel@pengutronix.de>, "Vincent Mailhol" <mailhol@kernel.org>, "Marc
+Cc: "Oliver Hartkopp" <socketcan@hartkopp.net>, "Vincent Mailhol" <mailhol@kernel.org>, "Oleksij
+ Rempel" <o.rempel@pengutronix.de>, linux-can@vger.kernel.org, "Marc
  Kleine-Budde" <mkl@pengutronix.de>
-In-Reply-To: <20260709-bcm_fixes-v10-1-57fff38e34ce@hartkopp.net>
+In-Reply-To: <20260709-bcm_fixes-v10-2-57fff38e34ce@hartkopp.net>
 References: <20260709-bcm_fixes-v10-0-57fff38e34ce@hartkopp.net>
- <20260709-bcm_fixes-v10-1-57fff38e34ce@hartkopp.net>
+ <20260709-bcm_fixes-v10-2-57fff38e34ce@hartkopp.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 09 Jul 2026 10:38:33 +0000
-Message-Id: <20260709103834.2F1761F000E9@smtp.kernel.org>
+Date: Thu, 09 Jul 2026 10:44:39 +0000
+Message-Id: <20260709104440.6E8221F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -77,14 +77,14 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8196-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8197-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,sashiko.dev:url,lists.linux.dev:replyto,smtp.kernel.org:mid];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,smtp.kernel.org:mid,sashiko.dev:url,lists.linux.dev:replyto,hartkopp.net:email];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:linux-can@vger.kernel.org,m:o.rempel@pengutronix.de,m:mailhol@kernel.org,m:mkl@pengutronix.de,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:mailhol@kernel.org,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,m:mkl@pengutronix.de,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -106,88 +106,114 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3DDA9730073
+X-Rspamd-Queue-Id: 20108730125
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Inconsistent use of RCU list primitives can lead to data races and=
- crashes when reading `/proc/net/can-bcm/*`.
-- [High] Data race on `op->frames` during runtime updates in `bcm_tx_setup(=
-)` and `bcm_rx_setup()`.
+- [High] Missing RCU protection and memory barriers for `tx_ops` and `rx_op=
+s` list modifications and traversals.
+- [High] Lockless modification of CAN frames and filters from process conte=
+xt while they are concurrently read by softirq handlers.
 --
 
---- Patch [1]: [PATCH v10 01/10] can: bcm: defer rx_op deallocation to work=
-queue to fix thrtimer UAF ---
-commit 07fedad11f0f52be9c8ac130e930be315886f42d
-Author: Lee Jones <lee@kernel.org>
+--- Patch [2]: [PATCH v10 02/10] can: bcm: fix lockless bound/ifindex race =
+and silent RX_SETUP failure ---
+commit 14fe77d5df361ef7f02ad605d5649032b1cb3565
+Author: Oliver Hartkopp <socketcan@hartkopp.net>
 
-can: bcm: defer rx_op deallocation to workqueue to fix thrtimer UAF
+can: bcm: fix lockless bound/ifindex race and silent RX_SETUP failure
 
-Commit f1b4e32aca08 replaced synchronize_rcu() with call_rcu() but
-omitted flag checks for thrtimer, creating a TOCTOU race and UAF.
-This resolves the race by deferring timer cancellation and memory free
-to a dedicated unbound workqueue, which avoids sleeping in RCU callbacks.
+This commit fixes an unordered read/write race in bcm_sendmsg() between
+bo->bound and bo->ifindex by moving the re-check into the locked section.
+It also ensures bcm_rx_setup() returns an error if the target device
+disappears concurrently instead of silently succeeding.
+
+Link: https://lore.kernel.org/linux-can/CAGp+u1aBK8QVjsvAxM2Ldzep4rEbsP9x_p=
+V3At4g=3Dh1kVEtyhA@mail.gmail.com/
 
 > diff --git a/net/can/bcm.c b/net/can/bcm.c
-> index a4bef2c48a559..bdf53241bd7b3 100644
+> index bdf53241bd7b3..b612135b017d1 100644
 > --- a/net/can/bcm.c
 > +++ b/net/can/bcm.c
 [ ... ]
-> @@ -1060,6 +1081,7 @@ static int bcm_tx_setup(struct bcm_msg_head *msg_he=
-ad, struct msghdr *msg,
+> @@ -1436,20 +1463,21 @@ static int bcm_sendmsg(struct socket *sock, struc=
+t msghdr *msg, size_t size)
+>  			struct net_device *dev;
 > =20
->  		/* bcm_can_tx / bcm_tx_timeout_handler needs this */
->  		op->sk =3D sk;
-> +		sock_hold(sk);
->  		op->ifindex =3D ifindex;
+>  			dev =3D dev_get_by_index(sock_net(sk), ifindex);
+> -			if (!dev)
+> -				return -ENODEV;
+> +			if (!dev) {
+> +				ret =3D -ENODEV;
+> +				goto out_release;
+> +			}
 > =20
->  		/* initialize uninitialized (kzalloc) structure */
+>  			if (dev->type !=3D ARPHRD_CAN) {
+>  				dev_put(dev);
+> -				return -ENODEV;
+> +				ret =3D -ENODEV;
+> +				goto out_release;
+>  			}
+> =20
+>  			dev_put(dev);
+>  		}
+>  	}
+> =20
+> -	lock_sock(sk);
+> -
+>  	switch (msg_head.opcode) {
+> =20
+>  	case TX_SETUP:
 
 [Severity: High]
-This is a pre-existing issue, but I noticed it while reviewing the op setup
-changes. Does the list insertion in bcm_tx_setup() and bcm_rx_setup() need
-to use list_add_rcu() instead of list_add()?
+This is a pre-existing issue, but does this lack of RCU protection and memo=
+ry
+barriers allow a lockless reader to observe uninitialized fields?
 
-It looks like bcm_tx_setup() adds to the list like this:
+Looking at bcm_proc_show(), it traverses bo->tx_ops locklessly under
+rcu_read_lock():
 
-net/can/bcm.c:bcm_tx_setup() {
-    ...
+    list_for_each_entry(op, &bo->tx_ops, list) {
+
+Concurrently, bcm_tx_setup() can add a new operation to this list:
+
     list_add(&op->list, &bo->tx_ops);
-    ...
-}
 
-Since readers like bcm_proc_show() iterate the tx_ops list inside an RCU
-read-side critical section, could the lack of memory barriers in list_add()
-allow a lockless reader to observe a partially initialized list node?
-Also, bcm_proc_show() appears to use the non-RCU list_for_each_entry()
-iterator.
+Because list_add() lacks the smp_store_release() memory barrier provided
+by list_add_rcu(), and the traversal uses the non-RCU
+list_for_each_entry() macro, can concurrent readers see torn pointers or
+uninitialized bcm_op fields, potentially causing a kernel crash when
+reading uninitialized memory?
 
 [Severity: High]
-This isn't a bug introduced by this patch, but there might be a data race on
-op->frames during runtime updates.
+This is a pre-existing issue, but does this lockless modification of CAN
+frames allow softirq readers to see partially updated data?
 
-In bcm_tx_setup() and bcm_rx_setup(), it appears the memory content of
-op->frames can be updated directly from userspace messages:
+In bcm_tx_setup() and bcm_rx_setup(), op->frames are modified directly
+from process context:
 
-net/can/bcm.c:bcm_tx_setup() {
-    ...
+bcm_tx_setup():
     err =3D memcpy_from_msg((u8 *)cf, msg, op->cfsiz);
-    ...
-}
 
-Does this allow concurrent readers to access partially updated memory?
-For example, bcm_can_tx() calculates the frame pointer under op->bcm_tx_lock
-but then accesses the memory content via skb_put_data() outside the lock.
+bcm_rx_setup():
+    err =3D memcpy_from_msg(op->frames, msg, msg_head->nframes * op->cfsiz);
 
-Could this result in torn CAN frames being transmitted, or incorrect rx
-filtering if a concurrent bcm_rx_handler() reads op->frames while it is
-being modified?
+Concurrently, softirq handlers read these frames locklessly. For example,
+bcm_can_tx() reads frames from timer context to transmit:
 
-[ ... ]
+    skb_put_data(skb, cf, op->cfsiz);
+
+And bcm_rx_cmp_to_index() reads filter mask frames from RX softirq context:
+
+    if ((get_u64(cf, i) & get_u64(rxdata, i)) !=3D ...
+
+Can this data race result in transmitting torn or functionally corrupted
+CAN frames to the network bus, or incorrect evaluation of incoming packets
+against partially updated filter masks?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709-bcm_fixes-=
-v10-0-57fff38e34ce@hartkopp.net?part=3D1
+v10-0-57fff38e34ce@hartkopp.net?part=3D2
 
