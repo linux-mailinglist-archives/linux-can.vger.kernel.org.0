@@ -1,188 +1,149 @@
-Return-Path: <linux-can+bounces-8202-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8203-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id IkvaC/WFT2r8igIAu9opvQ
-	(envelope-from <linux-can+bounces-8202-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 13:28:53 +0200
+	id C2E2H4uLT2prjQIAu9opvQ
+	(envelope-from <linux-can+bounces-8203-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 13:52:43 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7DA8730549
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 13:28:52 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1B04730A7B
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 13:52:42 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.com header.s=google header.b=T3vHFBol;
-	dmarc=pass (policy=quarantine) header.from=suse.com;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8202-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8202-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=none;
+	dmarc=none;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8203-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8203-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1321D30099A8
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 11:28:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2C2C2307A8D0
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 11:49:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40CE240BCDD;
-	Thu,  9 Jul 2026 11:28:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3CCE395AF2;
+	Thu,  9 Jul 2026 11:49:33 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BFD3F86F5
-	for <linux-can@vger.kernel.org>; Thu,  9 Jul 2026 11:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F5941169E
+	for <linux-can@vger.kernel.org>; Thu,  9 Jul 2026 11:49:31 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783596522; cv=none; b=FS/GqqsG2M7RA5u3CEFWCNDQcvaUVPI9P8ABtL8oi6TaVxfdjp2XKfDf/gGvZGeG3CUmB4uEaS2u2yTTZMsW4c/EUbQ26Id1rIGrulhASzmR6NKomIJ26FIS5uenAzDfn2CILkFF+5uP3KixG7zF0eURo03LkVu8igmpcoz9GC8=
+	t=1783597773; cv=none; b=Bcy5hn4+q91SC4etgKZpZDVS1AXQ92CxNpobH7UE0pkhVhDg3DBYfPf2ZmwUin1FrupIdvLxAaz2v2PN/yaNx8a2yWMA+pUfb6FdwY71AKomtUtWefbbrYR0UJndxz8Flrt0dS6SlhcwsYRXDa00sh5tbdALnCZtprrdamxsQRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783596522; c=relaxed/simple;
-	bh=zR5IvobiX93juVmkNYxE4pwPAFvrl3VzehnUf95zxCk=;
+	s=arc-20240116; t=1783597773; c=relaxed/simple;
+	bh=MT186h/RB2KxCewTPRsm0FHr1o/yYA2Yxg43HD18v/U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MqRtirRxq6ctIQgary16MVdI4EsWW4A4KjLvetIXTT0AK44NU41Tc6oW57jvu6S7PxmltmGv4XUD82mgNdk97X5Bh9tMXUOQ3IVudRKdUThug1EKemR/diOpFFDb4imWa2RK9VDBpi9zAkriGa6KlX8fIWZ2VPGf3aJhJKrFKsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=T3vHFBol; arc=none smtp.client-ip=209.85.128.47
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-490cf322ed0so10250385e9.1
-        for <linux-can@vger.kernel.org>; Thu, 09 Jul 2026 04:28:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783596519; x=1784201319; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=MOEJtxlqclUuG5d8o3QYDqlrpx9EFuuMBV9pwtsxKdk=;
-        b=T3vHFBolJPerv4/sxeHZ4XelybmdPy1zwo5L5YJyiZWX2IkwHNdzPc0+wUkSeGCgWM
-         GAKwhS60Z9jpAD7Chbu5mdDZH44ZLGcXAAg4B3tl3Qeu6A+Z82QaxSe6A6e/69Six0vh
-         RXNbM18fAusbV0P3r5bL0hNcAT1WR6cxbePdcKMHWRJVc3MvfoclX9wrMMpogOYRbj5Q
-         Pb4r6BAC8lq7Cpg/3hqR9XJA4Gsh4uZmDxufvOQkvKUBmSU+y1qacBIjGgUcPfwxCYTr
-         WNNd+tqPFkLV/t+8c05lp67RciYKP5SlLuc/+c2JAw0hKwUeBb/FlWE7o+KDKd5i+8aO
-         Zhuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783596519; x=1784201319;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MOEJtxlqclUuG5d8o3QYDqlrpx9EFuuMBV9pwtsxKdk=;
-        b=ME3qaJwBvS2R3KVu6nb6awO5HVo1m6R86gyqwfgrMupl1pBluB0l3KIow21QDNN4O2
-         q56bfx4AGEpmZfCsoKcav2OYev45aLc4XoFVAWnLZAxBQhOYASwA9nEMNP3J8TlKzJCS
-         xf4qnTgtFN9neInlbBNqpoe2xO/2nTm17aOrqPJUEMxaV6634RAlrYeAbWBICY/sQ0du
-         XfDyjzzQbuwV31rneFMCYnFpCfJcA3ytodmK99Ut5YTemjSCYi7wxJG0OpbYbEa28TSf
-         WECP1XjCy9Qd71zAGguyWPHE2YZlUmQfdXu953M9CEkyj87xHRLgwk5h/HkYdpA4FZB+
-         Yoqw==
-X-Forwarded-Encrypted: i=1; AHgh+RqCpmvrEmemQuQt6FkwZY5m4wre1AdvhXTKpLzW3z5aRNPChoFbMR8ijiIpynMKbvjps5SbgHmmtR0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4CbTh4bmLHXsg7+E/1xLlMytiKnIYpNVSJbeAblIbqWi5dbTr
-	BcymEGMz+KYbLbwO09z8LQCyHtf1EzeLBTjNRrhu5tn/EV/E+0rzFz6Uxg5o/7mibqc=
-X-Gm-Gg: AfdE7cmYS+nwf8suCS82WfwX0c5WQGjqDrJB5w4C810w/FuKCjOs3SFdbH3N2JIdjWD
-	SjcafcsL8kl5eo+rS/1qlHfKMIW90NegYfjy/UuEGTJv7bpTHgE3z1PAoXybasWf2AckHRNAvpj
-	K1aTiQ+NtzZdzn3+LsdcwZrPKp25AruSeoYZvygyLYjVGte7PdwJ7PM6/IkxcFGloR8zKNVFGNg
-	ZyDayjiDzYSvze/PzE8VawJcKJ7yt9NyTOQSPxYSh2vAIFKDLSj+SMwKWeYg1/9VLfagxDjl5o1
-	R+ieOCnFcx9QNFv1G2osslI0XALTjPUO41BJkPvVin4qJcRXmpyD+jvf+W0xvuTq1PrGNJ3RFjU
-	GpIttXAylUs8msdnihGjKZdM8wFbI3fDluYYh+6aQQoJeHq3z3x6ts+rPLmYvNN23Vcvk9FT20w
-	Krs01p3CmC9Qw2Le8=
-X-Received: by 2002:a05:600c:c87:b0:493:e890:9e0b with SMTP id 5b1f17b1804b1-493eb0130c0mr30213605e9.26.1783596518799;
-        Thu, 09 Jul 2026 04:28:38 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb6ff432sm52559975e9.4.2026.07.09.04.28.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 04:28:38 -0700 (PDT)
-Date: Thu, 9 Jul 2026 13:28:36 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: linux-atm-general@lists.sourceforge.net, linux-can@vger.kernel.org,
-	linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Remi Denis-Courmont <courmisch@gmail.com>,
-	Simon Horman <horms@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH net-next] net: Convert %pK back to %p
-Message-ID: <ak-F5CA-R7LzEhFp@pathway.suse.cz>
-References: <20260706073824.xixrLxoD@linutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=sKVoJWrZXQ4GZz+I8wuukc+Ln+9mMP38dHAImhtnNVUKrxfHaICOjDEoOB52qkXAFVasbyK1znHucYXQhZzi5Mr0+H2l89bmLC0/Zo6VeBddTHxCIPNt2Fpcc0lbgnV4zzsbmFoO/y9pn7/JAUUuOBZKUPNtiX+Za4z9/KcUItE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.200.13
+Received: from drehscheibe.grey.stw.pengutronix.de (drehscheibe.grey.stw.pengutronix.de [IPv6:2a0a:edc0:0:c01:1d::a2])
+	(Authenticated sender: relay-from-drehscheibe.grey.stw.pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 4D0AA202773;
+	Thu, 09 Jul 2026 13:49:29 +0200 (CEST)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1whnFx-000uTK-0d;
+	Thu, 09 Jul 2026 13:49:29 +0200
+Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id E136F56406F;
+	Thu, 09 Jul 2026 11:49:28 +0000 (UTC)
+Date: Thu, 9 Jul 2026 13:49:28 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
+Cc: linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>, 
+	Lee Jones <lee@kernel.org>, Feng Xue <feng.xue@outlook.com>, 
+	Ginger <ginger.jzllee@gmail.com>, syzbot+75e5e4ae00c3b4bb544e@syzkaller.appspotmail.com, 
+	sashiko-reviews@lists.linux.dev, sashiko-bot@kernel.org
+Subject: Re: [PATCH v10 00/10] can: bcm: collected fixes - final5 :-(
+Message-ID: <20260709-amorphous-able-quetzal-37e437-mkl@pengutronix.de>
+References: <20260709-bcm_fixes-v10-0-57fff38e34ce@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="vn4pasornjpeh34t"
 Content-Disposition: inline
-In-Reply-To: <20260706073824.xixrLxoD@linutronix.de>
+In-Reply-To: <20260709-bcm_fixes-v10-0-57fff38e34ce@hartkopp.net>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-1.06 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	MID_CONTAINS_FROM(1.00)[];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-8202-lists,linux-can=lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:bigeasy@linutronix.de,m:linux-atm-general@lists.sourceforge.net,m:linux-can@vger.kernel.org,m:linux-sctp@vger.kernel.org,m:netdev@vger.kernel.org,m:davem@davemloft.net,m:edumazet@google.com,m:herbert@gondor.apana.org.au,m:kuba@kernel.org,m:kuniyu@google.com,m:mkl@pengutronix.de,m:marcelo.leitner@gmail.com,m:ncardwell@google.com,m:socketcan@hartkopp.net,m:pabeni@redhat.com,m:courmisch@gmail.com,m:horms@kernel.org,m:steffen.klassert@secunet.com,m:willemdebruijn.kernel@gmail.com,m:lucien.xin@gmail.com,m:thomas.weissschuh@linutronix.de,m:kees@kernel.org,m:marceloleitner@gmail.com,m:willemdebruijnkernel@gmail.com,m:lucienxin@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[pmladek@suse.com,linux-can@vger.kernel.org];
-	FREEMAIL_CC(0.00)[lists.sourceforge.net,vger.kernel.org,davemloft.net,google.com,gondor.apana.org.au,kernel.org,pengutronix.de,gmail.com,hartkopp.net,redhat.com,secunet.com,linutronix.de];
+	TAGGED_FROM(0.00)[bounces-8203-lists,linux-can=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,hartkopp.net,kernel.org,outlook.com,gmail.com,syzkaller.appspotmail.com,lists.linux.dev];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	DMARC_NA(0.00)[pengutronix.de];
+	FORGED_RECIPIENTS(0.00)[m:devnull+socketcan.hartkopp.net@kernel.org,m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:lee@kernel.org,m:feng.xue@outlook.com,m:ginger.jzllee@gmail.com,m:syzbot+75e5e4ae00c3b4bb544e@syzkaller.appspotmail.com,m:sashiko-reviews@lists.linux.dev,m:sashiko-bot@kernel.org,m:devnull@kernel.org,m:gingerjzllee@gmail.com,m:syzbot@syzkaller.appspotmail.com,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	RCVD_TLS_LAST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pmladek@suse.com,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[suse.com:+];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ALIAS_RESOLVED(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	TO_DN_SOME(0.00)[];
+	R_DKIM_NA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:from_mime,suse.com:email,suse.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp,pathway.suse.cz:mid]
+	TAGGED_RCPT(0.00)[linux-can,socketcan.hartkopp.net,75e5e4ae00c3b4bb544e];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,pengutronix.de:from_mime,pengutronix.de:url,pengutronix.de:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B7DA8730549
+X-Rspamd-Queue-Id: E1B04730A7B
 
-On Mon 2026-07-06 09:38:24, Sebastian Andrzej Siewior wrote:
-> This is a revert of commit 71338aa7d050c ("net: convert %p usage to
-> %pK") which is from 2011. Back then the default behaviour for %p was to
-> print the pointer. The %pK modifier was introduced to be able to control
-> the behaviour of specific pointer output without changing the behaviour
-> of %p for everyone. It was dedicated to avoid leaking pointers via
-> /proc.
-> There was also the idea to remove the check from formatting the string
-> and move to the open callback (of the /proc file) with some helpers but
-> this did not happen.
-> 
-> Things changed over time. The default behaviour for %p is now to print a
-> hash pointer which does not leak the address but allows to
-> correlate if two pointers are equal. The pointer to hash value mapping
-> is not stable across reboots so one can not precompute the values and
-> have a lookup table. There is also the `hash_pointers' boot argument
-> which allows to disable it and print real pointers if needed. The
-> default behaviour of %pK (kptr_restrict==0) is already %p (hashed
-> pointer).
-> 
-> The %pK modifier brings hardly and value over %p. Removing it allows to
-> remove the policy checks from pointer formatting.
 
-Yes, I believe that the %pK behavior has been obsoleted by hashing
-pointers printed via %p by default and hash_pointers= boot parameter.
+--vn4pasornjpeh34t
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v10 00/10] can: bcm: collected fixes - final5 :-(
+MIME-Version: 1.0
 
-> My long term goal is remove the restricted_pointer() handling from
-> vsprintf. I don't see any benefit in having it and case kptr_restrict==1
-> caused problems in terms of locking. Instead of attempting to get the
-> debug/ warn infrastructure right I am for removing it.
+On 09.07.2026 12:24:14, Oliver Hartkopp via B4 Relay wrote:
+> as there were different patches flying arround to fix CAN_BCM issues and
+> AI assisted stuff pop's up again and again, I've created this collection
+> to be applied.
 
-Yes, it would be nice because the locking is tricky.
+It seems the sashiko-bot only claims to find per-existing issues. I'll
+take them and send upstream.
 
-Acked-by: Petr Mladek <pmladek@suse.com>
+regards,
+Marc
 
-Best Regards,
-Petr
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--vn4pasornjpeh34t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCak+KxgAKCRDMOmT6rpmt
+0mk0AP9EFf8FgfeB0ySe1ETAb+kLlWuaVcmDtVDwfVOajrU+lAEA9jn8yE5SqT+H
+IJ8OaBZglcyNnvy4tP8W/Irml7JJGAc=
+=Jix9
+-----END PGP SIGNATURE-----
+
+--vn4pasornjpeh34t--
 
