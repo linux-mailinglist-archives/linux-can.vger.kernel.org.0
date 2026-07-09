@@ -1,164 +1,223 @@
-Return-Path: <linux-can+bounces-8198-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8199-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id zVm7NoiCT2qqiQIAu9opvQ
-	(envelope-from <linux-can+bounces-8198-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 13:14:16 +0200
+	id JN2vAN59T2pUiAIAu9opvQ
+	(envelope-from <linux-can+bounces-8199-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 12:54:22 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73E3A73018B
-	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 13:14:16 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57E9072FEB6
+	for <lists+linux-can@lfdr.de>; Thu, 09 Jul 2026 12:54:21 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8198-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-8198-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=X9KCqtjV;
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8199-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8199-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1C34730E01F7
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 10:47:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 06C6A3033883
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jul 2026 10:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B41B400E0C;
-	Thu,  9 Jul 2026 10:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B117B40D569;
+	Thu,  9 Jul 2026 10:50:34 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FF693FE37B;
-	Thu,  9 Jul 2026 10:47:24 +0000 (UTC)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0140140BCCC
+	for <linux-can@vger.kernel.org>; Thu,  9 Jul 2026 10:50:31 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783594052; cv=none; b=Fnac0ca7WP2kMb+nR+tcXy+zz4+pDUabc6M63hm5R2iqwxXW3Ho0mZQkISn9ynfsUzrwei+q0fnoG8kZIdpcK/NOnFAgQJl0x9xfvUSMscSAg1jf4F13WyBOBWNTzx9puSjwMsMrfXc8Q5WRbdxV9YzlWyRzOqINpFXYouH0QYw=
+	t=1783594234; cv=none; b=qPXtpcbMDxgnMwTxBm5RLF7jR5XgqkftA4IO7pB76qyL9Ku0A3/hjIqumlOGz7wvrgWz98SDNCnVtZnIBiydGnxavn6cbiO9IcDfwVxRwQyVTtkaH1KNmBS57nC/WKQTgt8LHt6dKe7CujXTTplMoTcqr+ROHOsePENHUYlWsBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783594052; c=relaxed/simple;
-	bh=rOys7p2Jn7ab8Y/7EwCP5u9VQtBk2bjr+KyXWyLXxC0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LUnU8vVvLkDv0u8wKJJ000hCZ0ArK9gURzd7jS5mCq/llJYUNFGoMR+V3RVsYTo/9N8Lr4wo7hQe2yHb9ANIoCN02OxG95gGFYPQKGYvk4fMl0eVnIAqm3rtgMQJH/bQbYzJpXkABFYkppmYgnUIJxdrJDTG/BMqoOJ3aXFhURs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=52.229.168.213
-Received: from zju.edu.cn (unknown [10.98.66.117])
-	by mtasvr (Coremail) with SMTP id _____wCXYi40fE9qRUkqAA--.9745S3;
-	Thu, 09 Jul 2026 18:47:17 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.98.66.117])
-	by mail-app2 (Coremail) with SMTP id zC_KCgB358w0fE9qoGfBAg--.21318S2;
-	Thu, 09 Jul 2026 18:47:16 +0800 (CST)
-From: Fan Wu <fanwu01@zju.edu.cn>
-To: linux-can@vger.kernel.org
-Cc: frank.jungclaus@esd.eu,
-	socketcan@esd.eu,
-	mkl@pengutronix.de,
-	mailhol@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Fan Wu <fanwu01@zju.edu.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH net] can: esd_usb: kill anchored URBs before freeing netdevs
-Date: Thu,  9 Jul 2026 10:46:20 +0000
-Message-Id: <20260709104620.133765-1-fanwu01@zju.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1783594234; c=relaxed/simple;
+	bh=PINTDcYQ1LxUhAAqtvW0bo1+aQnGzT9pwjtupaRg6+s=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Y5Aytl6q6NXAaLNk7tcmEMF1BwOfSd5c5oagi4UtzAj4AHqA1Ogy7pFjK0vXX3aybGVUjsaB/dpu9zKIQ4anyQJIhP8wlQgnlFgaIMXQD0UuUNR/DqMclHcxeB5HCuIRA+XyC/CPB3OtpHbWvQofj5wNjBIgcy4RhqzBwu8NuhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X9KCqtjV; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A39C1F000E9;
+	Thu,  9 Jul 2026 10:50:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783594231;
+	bh=kYiGhsugO65apFC9ugOHXRDGyBO1CzoJVid897b04AE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=X9KCqtjV3K6OkSbcfOuIIw1E0Gref1qY2xfjRwho+wCevsebioPdFqXBXSwpFlMv2
+	 0AxaZN+TeGPCe+tHgVKIkNA45LiHRu2EiGgqjc/UhWdXWiivaRA3c6rAN2Pko4MyuA
+	 vo5HICkmgmAEIapN6jRuD+uBRH0JTtbgeDVMnxDpCks6NZqs7uxmhonvYdu+tmJOBo
+	 aoq1YtGBo9XQH8pQxVErrx8FRqygPZXJ3o0xB/x5U8Q9DBjke/n8o4Fs9gPw9R+hMT
+	 SIIkblOsBsVRgk5ONAiQLn4268KNLtjBW/e+2FdxHE/yaxg8QJ27mn72hZ/3f0/KRy
+	 nY10H1BOH6EAA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v10 10/10] can: bcm: fix data race on
+ rx_stamp/rx_ifindex in bcm_rx_handler()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Oliver Hartkopp" <socketcan@hartkopp.net>
+Cc: linux-can@vger.kernel.org, "Oliver Hartkopp" <socketcan@hartkopp.net>, "Vincent
+ Mailhol" <mailhol@kernel.org>, "Marc Kleine-Budde" <mkl@pengutronix.de>, "Oleksij
+ Rempel" <o.rempel@pengutronix.de>
+In-Reply-To: <20260709-bcm_fixes-v10-10-57fff38e34ce@hartkopp.net>
+References: <20260709-bcm_fixes-v10-0-57fff38e34ce@hartkopp.net>
+ <20260709-bcm_fixes-v10-10-57fff38e34ce@hartkopp.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 09 Jul 2026 10:50:30 +0000
+Message-Id: <20260709105031.1A39C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zC_KCgB358w0fE9qoGfBAg--.21318S2
-X-CM-SenderInfo: qrstjiaswqq6lmxovvfxof0/
-X-CM-DELIVERINFO: =?B?3q1GtQXKKxbFmtjJiESix3B1w3vZ3A9ovKVTomAyoQazvoRs/NHSP8GI2EvgeEEW7R
-	sfncGSG+szpQCInt5Y8rbJUI0XmEHbNLUHAOx7oixcHEUmq39fhkDHBsSkNJn+RdUArEdT
-	30c1/99Jn/H1j9BRq4ip9E6mavGmQbzmcFsnzP86
-X-Coremail-Antispam: 1Uk129KBj93XoW7CFW8Xw1fZFyfAr1fJryrGrX_yoW8CrW3pa
-	yFyF1rtFWkWrs3AanxAanrJFy8CwnrC347ury7u3y3ZwsxZFy8WF18KrWj9r4kurnYkFyF
-	vwnrA3yUWFZ5urXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Gb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc804V
-	CY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AK
-	xVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48Icx
-	kI7VAKI48JM4x0Y48IcxkI7VAKI48G6xCjnVAKz4kxMxAIw28IcxkI7VAKI48JMxC20s02
-	6xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_Jr
-	I_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v2
-	6r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj4
-	0_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8
-	JrUvcSsGvfC2KfnxnUUI43ZEXa7IU85l1PUUUUU==
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-8199-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[zju.edu.cn];
-	TAGGED_FROM(0.00)[bounces-8198-lists,linux-can=lfdr.de];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:linux-can@vger.kernel.org,m:frank.jungclaus@esd.eu,m:socketcan@esd.eu,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:netdev@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:fanwu01@zju.edu.cn,m:stable@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[fanwu01@zju.edu.cn,linux-can@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_NEQ_ENVFROM(0.00)[fanwu01@zju.edu.cn,linux-can@vger.kernel.org];
-	ALIAS_RESOLVED(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_COUNT_THREE(0.00)[4];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp,sashiko.dev:url,hartkopp.net:email,smtp.kernel.org:mid,lists.linux.dev:replyto];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:linux-can@vger.kernel.org,m:mailhol@kernel.org,m:mkl@pengutronix.de,m:o.rempel@pengutronix.de,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-can];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 73E3A73018B
+X-Rspamd-Queue-Id: 57E9072FEB6
 
-esd_usb_disconnect() frees each CAN netdev with free_candev() inside
-its per-netdev loop and only calls unlink_all_urbs(dev) afterwards.
-The per-netdev private data (struct esd_usb_net_priv) is embedded in
-the net_device allocation returned by alloc_candev(), so once
-free_candev() has run, dev->nets[i] points to freed memory.
-unlink_all_urbs() then dereferences the freed dev->nets[i] to kill the
-per-netdev TX anchor (usb_kill_anchored_urbs(&priv->tx_submitted)),
-clear active_tx_jobs, and reset priv->tx_contexts[].
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Reorder the teardown so the anchored URBs are killed before the netdevs
-are freed, matching other CAN/USB drivers in the same directory such as
-ems_usb, usb_8dev and mcba_usb, which unregister, then unlink, then
-free: unregister the netdevs first (which stops their TX queues), call
-unlink_all_urbs(dev) once, then free the netdevs.
+Pre-existing issues:
+- [High] Spurious RX_TIMEOUT notification and state corruption due to a rac=
+e between concurrent bcm_rx_handler execution and op->timer expiration.
+- [High] Throttled multiplex frames share a single metadata store, leading =
+to incorrect interface index (rx_ifindex) and timestamps being sent to user=
+space.
+--
 
-This issue was found by an in-house static analysis tool.
+--- Patch [10]: [PATCH v10 10/10] can: bcm: fix data race on rx_stamp/rx_if=
+index in bcm_rx_handler() ---
+commit d4e0952720604b6c20cb44a753876e69fcdf61ec
+Author: Oliver Hartkopp <socketcan@hartkopp.net>
 
-Fixes: 96d8e90382dc336b5de401164597edfdc2e8d9f1 ("can: Add driver for esd CAN-USB/2 device")
-Cc: stable@vger.kernel.org
-Assisted-by: Codex:gpt-5.5
-Signed-off-by: Fan Wu <fanwu01@zju.edu.cn>
----
- drivers/net/can/usb/esd_usb.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+can: bcm: fix data race on rx_stamp/rx_ifindex in bcm_rx_handler()
 
-diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-index d257440fa..f41d4a0d1 100644
---- a/drivers/net/can/usb/esd_usb.c
-+++ b/drivers/net/can/usb/esd_usb.c
-@@ -1390,10 +1390,13 @@ static void esd_usb_disconnect(struct usb_interface *intf)
- 				netdev = dev->nets[i]->netdev;
- 				netdev_info(netdev, "unregister\n");
- 				unregister_netdev(netdev);
--				free_candev(netdev);
- 			}
- 		}
- 		unlink_all_urbs(dev);
-+		for (i = 0; i < dev->net_count; i++) {
-+			if (dev->nets[i])
-+				free_candev(dev->nets[i]->netdev);
-+		}
- 		kfree(dev);
- 	}
- }
--- 
-2.34.1
+For an rx op subscribed on all interfaces (ifindex =3D=3D 0), the same op
+is registered once in the shared per-netns wildcard filter list, so
+bcm_rx_handler() can run concurrently on different CPUs for frames
+arriving on different net devices.
 
+Link: https://lore.kernel.org/linux-can/20260707145135.5BC831F00A3A@smtp.ke=
+rnel.org/
+
+> diff --git a/net/can/bcm.c b/net/can/bcm.c
+> index fbf1cbb7c99fe..10a883b50fc63 100644
+> --- a/net/can/bcm.c
+> +++ b/net/can/bcm.c
+> @@ -779,11 +779,6 @@ static void bcm_rx_handler(struct sk_buff *skb, void=
+ *data)
+>  	/* disable timeout */
+>  	hrtimer_cancel(&op->timer);
+
+[Severity: High]
+This is a pre-existing issue, but could this lockless cancellation cause
+spurious RX_TIMEOUT notifications and state corruption?
+
+If a wildcard receive operation receives two frames concurrently on differe=
+nt
+CPUs:
+
+CPU1 and CPU2 execute bcm_rx_handler() and both call hrtimer_cancel() outsi=
+de
+the lock. The timer is not yet running, so both return immediately.
+
+CPU1 acquires op->bcm_rx_update_lock, handles its frame, calls
+bcm_rx_starttimer() to arm the timer, and releases the lock.
+
+CPU2 acquires op->bcm_rx_update_lock.
+
+The timer expires and bcm_rx_timeout_handler() starts on CPU3, blocking on
+the lock.
+
+CPU2 finishes handling its frame, calls bcm_rx_starttimer() to re-arm, and
+releases the lock.
+
+CPU3 acquires the lock, clears op->last_frames via memset(), and
+unconditionally sends an RX_TIMEOUT, despite CPU2 having just successfully
+received a frame?
+
+> -	/* save rx timestamp */
+> -	op->rx_stamp =3D skb->tstamp;
+> -	/* save originator for recvfrom() */
+> -	op->rx_ifindex =3D skb->dev->ifindex;
+> -
+>  	/* op->flags/op->frames may be updated concurrently by bcm_rx_setup() */
+>  	spin_lock_bh(&op->bcm_rx_update_lock);
+
+[ ... ]
+
+> @@ -815,6 +810,14 @@ static void bcm_rx_handler(struct sk_buff *skb, void=
+ *data)
+>  			traffic_flags |=3D RX_OWN;
+>  	}
+> =20
+> +	/* save rx timestamp and originator for recvfrom() under lock.
+> +	 * For an op subscribed on all interfaces (ifindex =3D=3D 0)
+> +	 * bcm_rx_handler() can run concurrently on different CPUs so
+> +	 * the CAN content and the meta data must be bundled correctly.
+> +	 */
+> +	op->rx_stamp =3D skb->tstamp;
+> +	op->rx_ifindex =3D skb->dev->ifindex;
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does sharing a single metada=
+ta
+store for throttled multiplex frames lead to incorrect interface indexes and
+timestamps being sent to userspace?
+
+If an RX_SETUP operation is created on all interfaces with multiplex filter=
+ing
+and throttling:
+
+A frame matching multiplex index 1 arrives on can0. op->rx_ifindex becomes
+can0 and the throttle timer starts.
+
+A frame matching multiplex index 2 arrives on can1. op->rx_ifindex is
+unconditionally overwritten with can1 here.
+
+When the throttle timer expires, bcm_rx_thr_flush() sends both buffered
+frames to userspace:
+
+    updated +=3D bcm_rx_do_flush(op, i);
+
+Are both frames then delivered with can_ifindex set to can1 by
+bcm_send_to_user(), destroying the origin information of the first frame?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709-bcm_fixes-=
+v10-0-57fff38e34ce@hartkopp.net?part=3D10
 
