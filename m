@@ -1,163 +1,265 @@
-Return-Path: <linux-can+bounces-8278-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8279-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id v5LeNp/IUGo35AIAu9opvQ
-	(envelope-from <linux-can+bounces-8278-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 12:25:35 +0200
+	id CJZRIhzPUGpt5QIAu9opvQ
+	(envelope-from <linux-can+bounces-8279-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 12:53:16 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 319D4739A80
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 12:25:35 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C12F4739DD2
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 12:53:15 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8278-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8278-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=AhaJ0eTO;
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8279-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-8279-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A59343035A84
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 10:19:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 358773083160
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 10:47:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13EA340682D;
-	Fri, 10 Jul 2026 10:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0576741227D;
+	Fri, 10 Jul 2026 10:47:33 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE4E3E0749
-	for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 10:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A7B411682
+	for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 10:47:28 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783678746; cv=none; b=WAYPF/0r+ruoFOl8LnJQ7AzB/Y5CXtHN7QiqV4+O3Cl9xdg9PL4KgK+ofTdxAp9lWy+pkA5tN9nFCgRTndNLnRqNFdD52xe+kzL9eIyJYX/s7Swjp3cW2usgA3bEM9WX8EteZrwh4V3nZxUU2lah8cd9PgVmwPbb+q/iSsjvEFo=
+	t=1783680452; cv=none; b=El6wJ1FT8DUfCIVnvY0C93JkqTxv9hkFDFaod4TzPhPlrk2ZI9DryfRA3JUBcVkWVXgnpItRWbSPak8dB30efN9RY7dS3OKb3i4q1GyHL+QcS/odkOjJqlFMzkSfngjFXGP8vbDju46o8BrYhrxFS9F+wsEGyKFwM4fdjXRbWSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783678746; c=relaxed/simple;
-	bh=+p5C07PlzwAnFV8W7DMxCM+4XlX762Bvt4U2R/azgio=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nm66AWYsh7Dg0pMJ/aP8unPIWRhFpuTzjycxw7u0+K6K3J3cI5WCzvg0II6aYc6Dl4fymYEmyqPZdmsJbJxP4qoMUM0fQ9DDlMmmVQmT27oSjKQ3NUN4q7LfikXQwB1xCuhnQVrUw3NxOCsAB24yCQ9OTVVMDCIzW2xgCY+CVIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.170
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-5bdbd631a6aso577251e0c.1
-        for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 03:19:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783678744; x=1784283544;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Bwp9IGUDjgmX3mBabgZGirsEvY8TKRimZIn+QIFNSvc=;
-        b=NwMPavDhruVvgRv2fdYEQHBKS13icLnR6B46ScPzoqiNvnuCMPo6gvxi3mV+DzDxN7
-         6Cdvs1WJUzs+yvcrlZjq/V4kqLU01P+g22IFD9l5kDXq91knfWYrx22ndG9BWIw5hPAo
-         anHKLsJ0wdxbJ8m91q8EfQFU14ga4vUnFDNqJbvvZVNOL7b2BACYMWMZTGqN9MQzbNIl
-         DT5eyNuKiMqQVO99hSawSuBSdCmlT9DEBlEazUIz26CxrLaqbF0JcWxmySvjIMF5Ck/Z
-         WblZS2N4ZbMWdplqOawDX/ixLVYLVl0WfemZ5qSHdbQaQdnl5hXmCTURHgm8+BM2WpIQ
-         3k8g==
-X-Forwarded-Encrypted: i=1; AHgh+RrXY0ARZoWD1VtckttPQe2I6W1sheRjDhsdorBpETWsEuUXEpBH84gMbjTFkiutIVqlR/Gcd5AtcKg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3t/p4LdiKRoLcwKrE8aTvzcK30p6+FFI+3StSZNm0xHJRgteY
-	JvtH0TSI0cIgkdY3kKjFauLTMH5YWeAG6PNTFKl/C7LKc60HC53hND0h+XaxjVrL9wM=
-X-Gm-Gg: AfdE7cmrS63qX+Jncd0QGtENKeUXDLjmMAFkTBUYk4oMeITGN7ip6AOgsrey3Q7xEpX
-	fVOXR15QWt+EEvKFAUwNBVdeg5fWOa3hrlbSYAguoxzwILIyEddN7MMcEzKToOFjybHLCoTlJED
-	6V9ZdZRgE7eJjGTWSPPRV0FOGI14gHRT9HfFg7z0f4eGuTA0TqSj1aquOOJTLYL70X4HSlf8oAL
-	m35G/l0nbHvcBlZ1V/iln+QJ07q2lNYfEq42b9tMIpnS0hhTGqFcaj7mjlC/jJFn/3dD+RGzD+y
-	9vJlPC3wX62Di2gTiSZ0JqyVP4ALNghqH+Y1qmPk0Y5CoRRA9Qak/VaPDWdYkhZFrNxtUAWzjxH
-	IrUHARBon+csst0rgknMRX7kQQ2sU/XgEwmN+s0oxIqDl+mfLUc0KfA2bSCdTScIX9m2iEGZi7q
-	xkWekTv2kqRxTI/SX5NNduW9bf2J5ZT3B6sDQXx1X7DNa0dJ0iWvVrNw==
-X-Received: by 2002:a05:6122:1d45:b0:575:f155:8cd4 with SMTP id 71dfb90a1353d-5bfa4dfe0bdmr1532934e0c.0.1783678743658;
-        Fri, 10 Jul 2026 03:19:03 -0700 (PDT)
-Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com. [209.85.221.174])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5bf6f8f4283sm4593018e0c.17.2026.07.10.03.19.03
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jul 2026 03:19:03 -0700 (PDT)
-Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-5bd8efccd11so1490395e0c.1
-        for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 03:19:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RrSVB+oqRYYrRFV5JHwG48Jrb69EhR6Lv2O6Me3M4jEEo7YAkxAT/qZbQ9SlgEt/gbYldWO0DcxTeM=@vger.kernel.org
-X-Received: by 2002:a05:6102:8516:20b0:6cc:e6b1:7f84 with SMTP id
- ada2fe7eead31-7450caa467fmr935740137.17.1783678743107; Fri, 10 Jul 2026
- 03:19:03 -0700 (PDT)
+	s=arc-20240116; t=1783680452; c=relaxed/simple;
+	bh=FOx7g8tf0nIi4und8pZcaDiNS7sJeSR4RQi1lC+GLIo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=WUJTcmJy1miO2oYZqwlG8KdxaO9sDbhizDanswJ+SI5solvNY5YqVMnM38wr9/+/2R/YrkisMs3+ig7CMHJ+D98viroSG9ejFeqIR1oDmi5ZQ2imX6+2vdalVdIq4eoMbSejr7KKzS9hE3jm9OGS3HPWMUuGE1cu8Io1RVwd02c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AhaJ0eTO; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD691F000E9;
+	Fri, 10 Jul 2026 10:47:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783680447;
+	bh=0H33BPE+BRGZw7NC32337s2MGb4dOa3g+ZnSApX9ssg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AhaJ0eTObRPFpCMdRAEde0UsZu+ggVuwg8fpfDwpOaAWz/dl+BWvIu0L1AcKfFcc+
+	 TMGbRdgOQ/3mHEpkxl8gzbuOo8F+a9JZ38SgxZSG0Q8fy+m9TvHSUhaRWCHpHCV9QF
+	 8vqBAlEJqCZuhDsSRhmwBdl7wkeLWUHmhC+h1sWaYYunvA1qU9OUryy8t9Zp08Mos7
+	 Tn1iaQCH46Ab8fpmb9YSPA/hjbniT9H9/cGXPcGnlBInf/y+2DTppRIVKQ/6mn40MJ
+	 cLz9bZ70JUHYyUE+zsvjZTMOTV+sygaHQWZNB81oUDF2RYiLN0qU4qmFHs88TNA8Ry
+	 k3J9RvYUSnXPg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net] can: esd_usb: kill anchored URBs before freeing
+ netdevs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Fan Wu" <fanwu01@zju.edu.cn>
+Cc: linux-can@vger.kernel.org, "Oliver Hartkopp" <socketcan@hartkopp.net>, "Marc
+ Kleine-Budde" <mkl@pengutronix.de>, "Oleksij Rempel" <o.rempel@pengutronix.de>, "Vincent
+ Mailhol" <mailhol@kernel.org>
+In-Reply-To: <20260709104620.133765-1-fanwu01@zju.edu.cn>
+References: <20260709104620.133765-1-fanwu01@zju.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 10 Jul 2026 10:47:26 +0000
+Message-Id: <20260710104726.EAD691F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260709182332.876408-1-claudiu.beznea+renesas@tuxon.dev> <20260709182332.876408-2-claudiu.beznea+renesas@tuxon.dev>
-In-Reply-To: <20260709182332.876408-2-claudiu.beznea+renesas@tuxon.dev>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 10 Jul 2026 12:18:51 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUGKQAuLJ-Vo7=O8E=kMCYiUZ2H=Be9T3PAkjHu+PRqhQ@mail.gmail.com>
-X-Gm-Features: AUfX_mx3pB3dkKwbzFAKhxG_in4zcQzaeWH0J8kav2JP2BfBiNLW4WLUquaQ4F0
-Message-ID: <CAMuHMdUGKQAuLJ-Vo7=O8E=kMCYiUZ2H=Be9T3PAkjHu+PRqhQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] clk: r9a08g045-cpg: Add clocks and resets for CAN-FD
-To: Claudiu Beznea <claudiu.beznea+renesas@tuxon.dev>
-Cc: mkl@pengutronix.de, mailhol@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, magnus.damm@gmail.com, 
-	mturquette@baylibre.com, sboyd@kernel.org, bmasney@redhat.com, 
-	biju.das.jz@bp.renesas.com, claudiu.beznea.uj@bp.renesas.com, 
-	fabrizio.castro.jz@renesas.com, claudiu.beznea@tuxon.dev, 
-	linux-can@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-8279-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8278-lists,linux-can=lfdr.de];
-	DMARC_NA(0.00)[linux-m68k.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:claudiu.beznea+renesas@tuxon.dev,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:magnus.damm@gmail.com,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:bmasney@redhat.com,m:biju.das.jz@bp.renesas.com,m:claudiu.beznea.uj@bp.renesas.com,m:fabrizio.castro.jz@renesas.com,m:claudiu.beznea@tuxon.dev,m:linux-can@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:linux-clk@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,m:magnusdamm@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[geert@linux-m68k.org,linux-can@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	FREEMAIL_CC(0.00)[pengutronix.de,kernel.org,gmail.com,baylibre.com,redhat.com,bp.renesas.com,renesas.com,tuxon.dev,vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,lists.linux.dev:replyto,sashiko.dev:url,zju.edu.cn:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:fanwu01@zju.edu.cn,m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:mkl@pengutronix.de,m:o.rempel@pengutronix.de,m:mailhol@kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-can@vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can,renesas,dt];
-	R_DKIM_NA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-can];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[glider.be:email,mail.gmail.com:mid,vger.kernel.org:from_smtp,tuxon.dev:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,renesas.com:email,linux-m68k.org:from_mime,linux-m68k.org:email]
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 319D4739A80
+X-Rspamd-Queue-Id: C12F4739DD2
 
-Hi Claudiu,
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
 
-On Thu, 9 Jul 2026 at 20:23, Claudiu Beznea
-<claudiu.beznea+renesas@tuxon.dev> wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> Renesas RZ/G3S SoC has a CAN-FD IP. Add clocks and resets for it.
->
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
->
-> Changes in v2:
-> - used R9A08G045_CLK_P4 ID for P4 clock
-> - still collected the tags; Biju, Geert, please let me know if you consider
->   otherwise
+Pre-existing issues:
+- [High] Malicious USB devices or normal operations can trigger a NULL poin=
+ter dereference if `esd_usb_probe_one_net()` fails for a network interface.
+- [High] A zero-length message from the USB device causes an infinite loop =
+in the RX completion handler, leading to a softirq CPU lockup.
+- [High] The driver parses and copies USB message payload into CAN frames b=
+efore validating that the message length fits within the received USB data =
+or allocated buffer.
+- [High] Double-free and Use-After-Free of echo_skb during device teardown =
+due to missing URB cancellation in `ndo_stop`.
+- [Medium] If `usb_submit_urb()` fails in `esd_usb_start_xmit()`, the alloc=
+ated TX context is never released, leading to a permanent depletion of TX c=
+ontexts.
+--
 
-Thanks, will queue this one instead of v1 in renesas-clk for v7.3.
+--- Patch [1]: [PATCH net] can: esd_usb: kill anchored URBs before freeing =
+netdevs ---
+commit f2616c0b84f4389121d1ebf004051cb8242711c9
+Author: Fan Wu <fanwu01@zju.edu.cn>
 
-Gr{oetje,eeting}s,
+can: esd_usb: kill anchored URBs before freeing netdevs
 
-                        Geert
+This commit reorders the teardown sequence in esd_usb_disconnect so that
+anchored URBs are killed before the CAN netdevs are freed. This prevents a
+use-after-free where unlink_all_urbs would otherwise dereference a
+previously freed network device structure to cancel active TX jobs.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+> index d257440fa01ff..f41d4a0d140f7 100644
+> --- a/drivers/net/can/usb/esd_usb.c
+> +++ b/drivers/net/can/usb/esd_usb.c
+> @@ -1390,10 +1390,13 @@ static void esd_usb_disconnect(struct usb_interfa=
+ce *intf)
+>  				netdev =3D dev->nets[i]->netdev;
+>  				netdev_info(netdev, "unregister\n");
+>  				unregister_netdev(netdev);
+> -				free_candev(netdev);
+>  			}
+>  		}
+>  		unlink_all_urbs(dev);
+> +		for (i =3D 0; i < dev->net_count; i++) {
+> +			if (dev->nets[i])
+> +				free_candev(dev->nets[i]->netdev);
+> +		}
+>  		kfree(dev);
+>  	}
+>  }
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+[Severity: High]
+This isn't a bug introduced by this patch, but if esd_usb_probe_one_net
+fails during initialization, could it lead to a NULL pointer dereference
+later?
+
+In esd_usb_probe:
+	for (i =3D 0; i < dev->net_count; i++)
+		esd_usb_probe_one_net(intf, i);
+
+If the probe fails for a specific network interface, dev->nets[i] remains
+NULL because the error is ignored. If a USB device sends a message for that
+uninitialized network index, is it safe to pass it directly to
+esd_usb_rx_can_msg?
+
+In esd_usb_read_bulk_callback:
+		case ESD_USB_CMD_CAN_RX:
+			if (msg->rx.net >=3D dev->net_count) {
+				dev_err(dev->udev->dev.parent, "format error\n");
+				break;
+			}
+
+			esd_usb_rx_can_msg(dev->nets[msg->rx.net], msg);
+
+[Severity: High]
+This is a pre-existing issue, but does a zero-length message from the USB
+device cause an infinite loop in the RX completion handler?
+
+In esd_usb_read_bulk_callback:
+		pos +=3D msg->hdr.len * sizeof(u32); /* convert to # of bytes */
+
+		if (pos > urb->actual_length) {
+			dev_err(dev->udev->dev.parent, "format error\n");
+			break;
+		}
+
+If a local USB device sets msg->hdr.len =3D 0, pos will not advance,
+potentially causing the loop condition pos < urb->actual_length to run
+infinitely and lock up the CPU in softirq context.
+
+[Severity: High]
+This is a pre-existing issue, but does the driver parse the USB message
+payload before ensuring it fits within the received buffer?
+
+In esd_usb_read_bulk_callback:
+	while (pos < urb->actual_length) {
+		union esd_usb_msg *msg;
+
+		msg =3D (union esd_usb_msg *)(urb->transfer_buffer + pos);
+
+		switch (msg->hdr.cmd) {
+		case ESD_USB_CMD_CAN_RX:
+// ...
+			esd_usb_rx_can_msg(dev->nets[msg->rx.net], msg);
+
+The message fields seem to be parsed and passed to handlers like
+esd_usb_rx_can_msg which read from the buffer, but the boundary check
+evaluating pos > urb->actual_length happens at the end of the loop. Can this
+lead to an out-of-bounds read if a message is positioned near the end of the
+transfer buffer?
+
+[Severity: High]
+This is a pre-existing issue, but is there a potential double-free of
+echo_skb during device teardown?
+
+In esd_usb_close:
+	priv->can.state =3D CAN_STATE_STOPPED;
+
+	netif_stop_queue(netdev);
+
+	close_candev(netdev);
+
+	return err;
+
+Since close_candev flushes the echo_skb array without locking, and
+esd_usb_close does not appear to kill active URBs before this point, could
+a concurrent TX URB completion fire in softirq?
+
+In esd_usb_tx_done_msg:
+		stats->tx_errors++;
+		can_free_echo_skb(netdev, context->echo_index, NULL);
+
+If both paths access and free the exact same echo_skb concurrently, this
+might lead to memory corruption.
+
+[Severity: Medium]
+This is a pre-existing issue, but if usb_submit_urb fails in
+esd_usb_start_xmit, does it permanently leak a TX context?
+
+In esd_usb_start_xmit:
+	err =3D usb_submit_urb(urb, GFP_ATOMIC);
+	if (err) {
+		can_free_echo_skb(netdev, context->echo_index, NULL);
+
+		atomic_dec(&priv->active_tx_jobs);
+		usb_unanchor_urb(urb);
+
+The error path frees the echo_skb, but it appears to miss resetting
+context->echo_index back to ESD_USB_MAX_TX_URBS. If this happens repeatedly
+due to transient errors, could it permanently exhaust all 16 contexts and
+stall network transmission?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709104620.1337=
+65-1-fanwu01@zju.edu.cn?part=3D1
 
