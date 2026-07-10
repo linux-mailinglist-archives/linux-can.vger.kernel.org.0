@@ -1,205 +1,234 @@
-Return-Path: <linux-can+bounces-8265-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8266-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id QJZhJeKYUGrZ2AIAu9opvQ
-	(envelope-from <linux-can+bounces-8265-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 09:01:54 +0200
+	id onysK2KsUGrl3AIAu9opvQ
+	(envelope-from <linux-can+bounces-8266-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 10:25:06 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BAFD737E3A
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 09:01:53 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1D7C738683
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 10:25:05 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0002 header.b=QaZPih9s;
-	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0003 header.b=BPR8dLNb;
-	dmarc=pass (policy=reject) header.from=hartkopp.net;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8265-lists+linux-can=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-can+bounces-8265-lists+linux-can=lfdr.de@vger.kernel.org";
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
+	dkim=none;
+	dmarc=none;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8266-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8266-lists+linux-can=lfdr.de@vger.kernel.org";
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3F779300E151
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 07:00:53 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5EDAA305FF25
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 08:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61697271443;
-	Fri, 10 Jul 2026 07:00:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016003EFFA1;
+	Fri, 10 Jul 2026 08:22:35 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310263B6364
-	for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 07:00:34 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783666849; cv=pass; b=tpoNJ+/UoG8N3DAY4dJsViN226g++1FsPOf+198nmeg65HHfO0jJfLO7vykmX7tUPVRX9c+lBR2Nv64+3Vbf7th5t8pnm/vaMUWZzntPFlijCM1sElwnxSmaNO69RrtKlQDxAdN3VBS16iRyF2lgOockIDDD+yutO4DjGvHy97A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783666849; c=relaxed/simple;
-	bh=uEQzjm/roGkDpedhS8LNaUbm0fxgeQJgOjsZ4G0h3Yg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K1uWOeJ5CUB+thVmcjnRa0w7w6kUMfgto51mszrtRrwMhCYb7ZwZoDPFxEj0gRrw5K5qNniMXpg7b1RtLlmvhF+5gGqU1kEv/GnDPKxDcVwUg02TLYaMr884m9e3+DepIZ0J5nHf4eouZ87JzZsTrEc2ZGZHg1woCT5/Z6hcYl4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=QaZPih9s; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=BPR8dLNb; arc=pass smtp.client-ip=85.215.255.25
-ARC-Seal: i=1; a=rsa-sha256; t=1783666824; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=P4jNWZ3e23VcIvDtyPgic6DTg79a/k2S+9AUqyuHZkJZv2dRnqL824hurcmCFspQlz
-    7WFDIS9rnN07n9D7LRIHlz1OHEOpKJ+YEUTB+9Q9tpU2DrRgmCMIt9EKWDqPG8g2ltQY
-    odCpWD7sMAAmUKBL+Lhgj9F85HHRNaeHyhfCY6GoGKxCt1LDOwV5zAWx0KNDCjY4QcPm
-    Igb89DH0Olxcyv4YAXhfLfrJ9/F5deYe3k/HG2vxiCDDiEWKIDO4O2ck1s0ac0V6k6vX
-    +7nJhIwjehycOJPZhWece3wYI0UVwCs/IQUHMO2Zypa8nzmH6Lz6iv0g4+Jm151Flg8e
-    1MYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1783666824;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=czu3yM1Jla68x0oZHD55EKdQktA5LFwkug6sw/72vxo=;
-    b=KgopI+MZ35kJpuoWug8Yk7MbF0p/v5MEixa4x3+1pEaQv7ILeXgufbe33XVGWLirj1
-    nICIH+iaVosSoA/6llAnxm8E95/+vq3N4s2g8Ihn5EPrVSwr7oNHZMFFCFjA6dU8gCL2
-    hbMFQD1DFUakM9FT07M31fBEVuOC+/RnPF3FTBQesThovBRjUtp188B3JIQlYbHV15iX
-    akI7B9+DITOldxcsJFw/lU4CSQZZGIsFHwoLKfYKQRSWhllU6lWUpnTrrd5vG5chZLGL
-    kyvfFEIMqgmQaCKTCkD2/o7K3m+IxKs2cVMckjIUo5ZqO0u6S9R4nfpO+CeBXIPJi10F
-    IMhQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1783666824;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=czu3yM1Jla68x0oZHD55EKdQktA5LFwkug6sw/72vxo=;
-    b=QaZPih9sMrvejGP+V1klkklI3z0nVGjsCSo36ylli5A2yOXMKErJTY+2Jt7NV1/xOA
-    edrPpj42B69g27oQz2L0gfulYEEGCnd5dekJUtn0bnvmTXRBGEqZksaOkt1XM+Tg5/8M
-    MmI5AQEyzO5JIHA/UVrzVn0DvtorRJKK1BZUgZw5M395MkU9DIGacPv9y7eQtQn7oRQX
-    YztPPKK2dbawaFXyAZdfhVqBpkKm0JFdc2IgnIIj2R9viWiDy+rqjq0EJPQCsdo/Y3Gq
-    wtEC8htS3VgfNLzo12ZnfvY1GRs3ib1rufH4wCSva72vSLigsqVdscoAuv8iVe4KaCDP
-    sadQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1783666824;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=czu3yM1Jla68x0oZHD55EKdQktA5LFwkug6sw/72vxo=;
-    b=BPR8dLNbn9VSuW1SClKhUYJaYJqbwf0/kRYwqmSYp3GNaoCk619BGToGfAZOBXO3R0
-    dk4FTTFQQkED9uXmz+Dw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tRkI16oOSW1Ti/f4PoH8="
-Received: from [192.168.20.236]
-    by smtp.strato.de (RZmta 55.5.6 DYNA|AUTH)
-    with ESMTPSA id Ka9fdb26A70O523
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Fri, 10 Jul 2026 09:00:24 +0200 (CEST)
-Message-ID: <06ac5d34-e4bf-40e8-8d2c-2b361846cb74@hartkopp.net>
-Date: Fri, 10 Jul 2026 09:00:18 +0200
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70306352C4F
+	for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 08:22:32 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783671754; cv=none; b=iPSA1C9x4cdFhJKC9Blwxq5K3QjYZmRFmt0Tu5J+L49YcE72nIewWSjGfC6JopGd5aZrZr3+UkxH55A0n0cyOUYiOUGOUHMvjDkDl9GCnNirdEUqFPxHE+ij9DqA3fOvXZfzGUiK790fbcdFXyOvXASdIUsNFHGTwNfgUuGFc7Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783671754; c=relaxed/simple;
+	bh=aED7ufYo1vygFoo6t2ncQD4nn7zxb2QWqvAIH0G29LQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XwqsR95rWbp44sJkrKXaM6oyi2J4Ra8cesNktlGZJU1RCjqiMG5JzFhe5Zs6Wju0cE/HczNT75G5aMkmT+cpuoR/uBt7VyhWnN059v6saKFBlGSCOUvzgaD3DphyYhpmEsoDfALbA3amQyU3cGowqy75uxGG0ilY8Q6P6htb9YY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Received: from loongson.cn (unknown [223.64.68.155])
+	by gateway (Coremail) with SMTP id _____8BxVerCq1Bq1jMCAA--.7809S3;
+	Fri, 10 Jul 2026 16:22:26 +0800 (CST)
+Received: from kernelserver (unknown [223.64.68.155])
+	by front1 (Coremail) with SMTP id qMiowJAxTOW8q1Bqex0IAA--.25035S2;
+	Fri, 10 Jul 2026 16:22:22 +0800 (CST)
+From: Binbin Zhou <zhoubinbin@loongson.cn>
+To: Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Bingxiong Li <libingxiong@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>,
+	loongarch@lists.linux.dev,
+	linux-can@vger.kernel.org,
+	jeffbai@aosc.io,
+	Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH v5 0/2] Add Loongson CAN-FD controller driver
+Date: Fri, 10 Jul 2026 16:22:12 +0800
+Message-ID: <cover.1783670733.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] can: isotp: use unconditional synchronize_rcu() in
- isotp_release()
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Nico Yip <zdi-disclosures@trendmicro.com>, linux-can@vger.kernel.org
-References: <20260707094716.63578-1-socketcan@hartkopp.net>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20260707094716.63578-1-socketcan@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAxTOW8q1Bqex0IAA--.25035S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/1tbiAgEECGpQeKwEYgAAsH
+X-Coremail-Antispam: 1Uk129KBj93XoWxCryDuFWkGr47KF18trW5urX_yoWrJw18pF
+	45C3srurn8Kr4xArs3JayrCF15Aw1fJr13WFZIyw10kas0vw4jg34Sk3W5uryUurZ8CFWj
+	vrWfuryrK3Z8ZFgCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUU9Yb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	XVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+	AKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
+	6r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+	CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIev
+	Ja73UjIFyTuYvjxU2MKZDUUUU
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
-	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+X-Spamd-Result: default: False [1.54 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8265-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8266-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:zdi-disclosures@trendmicro.com,m:linux-can@vger.kernel.org,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:zhoubb.aaron@gmail.com,m:chenhuacai@loongson.cn,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:libingxiong@loongson.cn,m:chenhuacai@kernel.org,m:kernel@xen0n.name,m:loongarch@lists.linux.dev,m:linux-can@vger.kernel.org,m:jeffbai@aosc.io,m:zhoubinbin@loongson.cn,m:zhoubbaaron@gmail.com,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com,loongson.cn,pengutronix.de,kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[loongson.cn];
 	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[zhoubinbin@loongson.cn,linux-can@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCPT_COUNT_THREE(0.00)[3];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[hartkopp.net:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,trendmicro.com:email]
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhoubinbin@loongson.cn,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	R_DKIM_NA(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,loongson.cn:mid,loongson.cn:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 9BAFD737E3A
+X-Rspamd-Queue-Id: D1D7C738683
 
-Hi Marc,
+Hi all:
 
-do you consider to upstream this patch together with the BCM patch set?
+This patchset adds support for the CAN-FD controller found on Loongson
+CPUs.
 
-I know sashiko-bot had again some "Pre-existing issue" remarked on this 
-patch. But this simple fix should probably go into upstream, before the 
-next "AI Pre-existing issue"-party starts with isotp.c and sashiko-bot ;-)
+Patch 1 introduces the basic CAN-FD controller driver with support
+for classic CAN and CAN FD, including bit timing, error handling,
+NAPI-based RX, and multiple TX buffers.
 
-Best regards,
-Oliver
+Patch 2 adds optional DMA support for RX path using the Loongson APB
+CMC DMA engine, which significantly reduces CPU load under high
+receive throughput.
 
-On 07.07.26 11:47, Oliver Hartkopp wrote:
-> isotp_notify() unregisters the (RCU) CAN filters via can_rx_unregister()
-> and clears so->bound without waiting for a grace period. isotp_release()
-> uses so->bound to decide whether it needs to call synchronize_rcu()
-> before cancelling so->rxtimer, so when NETDEV_UNREGISTER runs first it
-> skips that synchronize_rcu() and can cancel the timer while an
-> in-flight isotp_rcv() is still executing and about to re-arm it via
-> isotp_send_fc(), leading to a use-after-free timer callback on the
-> freed socket.
-> 
-> sakisho-bot remarked a problem with rtnl_lock held in isotp_notify(),
-> therefore make isotp_release() always call synchronize_rcu() before
-> cancelling the timers, regardless of so->bound. This still closes the
-> original race (isotp_notify() clearing so->bound without waiting for
-> in-flight isotp_rcv() callers before isotp_release() cancels the RX
-> timer) without adding any RCU wait to the netdevice notifier path.
-> 
-> Fixes: 14a4696bc311 ("can: isotp: isotp_release(): omit unintended hrtimer restart on socket release")
-> Closes: https://lore.kernel.org/linux-can/20260707085210.6B6C01F000E9@smtp.kernel.org/
-> Reported-by: Nico Yip <zdi-disclosures@trendmicro.com> (ZDI-CAN-31764)
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> ---
->   net/can/isotp.c | 9 ++++++++-
->   1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index c48b4a818297..d30937345bcd 100644
-> --- a/net/can/isotp.c
-> +++ b/net/can/isotp.c
-> @@ -1235,15 +1235,22 @@ static int isotp_release(struct socket *sock)
->   
->   				can_rx_unregister(net, dev, so->txid,
->   						  SINGLE_MASK(so->txid),
->   						  isotp_rcv_echo, sk);
->   				dev_put(dev);
-> -				synchronize_rcu();
->   			}
->   		}
->   	}
->   
-> +	/* Always wait for a grace period before touching the timers below.
-> +	 * A concurrent NETDEV_UNREGISTER may have already unregistered our
-> +	 * filters and cleared so->bound in isotp_notify() without waiting
-> +	 * for in-flight isotp_rcv() callers to finish, so this call must not
-> +	 * be skipped just because so->bound is already 0 here.
-> +	 */
-> +	synchronize_rcu();
-> +
->   	hrtimer_cancel(&so->txfrtimer);
->   	hrtimer_cancel(&so->txtimer);
->   	hrtimer_cancel(&so->rxtimer);
->   
->   	so->ifindex = 0;
+The driver has been tested on Loongson-2K3000 platforms with various
+CAN/CAN FD traffic patterns.
+
+Finally, I'd like to thank Bingxiong, the original author of this driver,
+for his efforts in working on the patch.
+
+Thanks.
+Binbin
+
+=========
+V5:
+Patch (1/2):
+ - Fix tseg1_max const value;
+ - Empty FIFO when SKB allocate failed.
+ - Use REG_FRAME_META1_RWCNT as the playload read count value;
+ - Only clean processed interrupt flags in
+   loongson_canfd_err_interrupt();
+ - Refact loongson_canfd_tx_interrupt();
+ - Add LOONGSON_CANFD_TRV_DLY into loongson_canfd_volatile_reg();
+Patch (2/2):
+ - Fix dma_request_chan() error path;
+ - Fix build error;
+ - Fix loongson_canfd_rxdma_init() error path;
+
+Link to V4:
+https://lore.kernel.org/all/cover.1783391759.git.zhoubinbin@loongson.cn/
+
+V4:
+- Fix some issues from sashiko.
+Patch (1/2):
+ - Update commit message;
+ - Use common APIs to calculate DLC;
+ - Correct CAN_RTR_FLAG judgement;
+ - Add skb check for CAN_STATE_ERROR_ACTIVE case;
+ - Use regmap_write() rather than regmap_update_bits() to
+   disable all interrupts;
+ - Add napi_disable() in error paths;
+ - Add `clock-frequency` return value check;
+ - More comments for macros.
+
+Link to V3:
+https://lore.kernel.org/all/cover.1782787997.git.zhoubinbin@loongson.cn/
+
+V3:
+Patch (1/2):
+ - Replace the switch-case statement with a calculated mask in
+   `loongson_canfd_get_txbuf_sts()`;
+ - Change `loongson_canfd_reset()` return type to `void`;
+ - Drop old code in `loongson_canfd_set_btr()`;
+ - Rename `loongson_canfd_set_mode()` to `loongson_canfd_set_conf_mode()`;
+ - Drop `cf->__res*` usage;
+ - Drop unnecessary macro definitions;
+ - Add `netif_napi_del()` in probe error route path;
+ - Replace ternary operator with `if-else`;
+ - Drop stats->rx_packets and stats->rx_bytes count in CAN error frames;
+ - Add ethtool_ops;
+ - Add CAN_CTRLMODE_CC_LEN8_DLC;
+
+Patch (2/2):
+ - Fix W=2 warning;
+ - Rename get_rx_frc() -> get_rxbuf_empty();
+ - Put `loongson_canfd_rxdma_remove()` before free_candev();
+ - Adjust the RXDMA probe process.
+
+Link to V2:
+https://lore.kernel.org/all/cover.1780908445.git.zhoubinbin@loongson.cn/
+
+V2:
+Patch (1/2):
+ - Put all code into one file;
+ - Add COMPILE_TEST Kconfig option;
+ - Rewrite Kconfig description;
+ - Use `regmap_test_bits()` to simplify bit field checks;
+ - Drop odd FIELD_GET() usage;
+ - Don't use FIELD_GET() for a single bit;
+ - Use an if/else instead of the ternary operator;
+ - Use the CAN TDC framework to get the SSP value;
+ - Use guard(spinlock)/scoped_guard(spinlock);
+ - Use netdev_debug() to be less verboss;
+ - Check for memory allocation failure;
+ - Add CAN_ERR_CNT flag;
+ - Drop unused REG_DATA_xx_yy_W_DATA_yy definition;
+ - Add more function comment;
+
+Link to V1:
+https://lore.kernel.org/all/cover.1777273055.git.zhoubinbin@loongson.cn/
+
+Binbin Zhou (2):
+  can: Add Loongson CAN-FD controller driver
+  can: loongson_canfd: Add RXDMA support
+
+ MAINTAINERS                      |    7 +
+ drivers/net/can/Kconfig          |   11 +
+ drivers/net/can/Makefile         |    1 +
+ drivers/net/can/loongson_canfd.c | 1897 ++++++++++++++++++++++++++++++
+ 4 files changed, 1916 insertions(+)
+ create mode 100644 drivers/net/can/loongson_canfd.c
+
+
+base-commit: b266bacba796ff5c4dcd2ae2fc08aacf7ab39153
+-- 
+2.52.0
 
 
