@@ -1,65 +1,65 @@
-Return-Path: <linux-can+bounces-8297-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8298-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id mzATKl0BUWpe9wIAu9opvQ
-	(envelope-from <linux-can+bounces-8297-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 16:27:41 +0200
+	id +fTxEJkhUWrv/gIAu9opvQ
+	(envelope-from <linux-can+bounces-8298-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 18:45:13 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 250BA73BBAC
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 16:27:41 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36CAF73CAC3
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 18:45:12 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=jaZo+Y5a;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=XME9wnrK;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8297-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8297-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8298-lists+linux-can=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-can+bounces-8298-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 69D9230097DD
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 14:21:50 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8EC98300B0AF
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 16:43:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECC02347BDB;
-	Fri, 10 Jul 2026 14:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 686BD3FB07F;
+	Fri, 10 Jul 2026 16:43:10 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA06346A08
-	for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 14:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57E926F293
+	for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 16:43:08 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783693309; cv=none; b=djwPkNIRk1nQmY12yX4BPFaxf6GePoVVHxi/AF/5re2L3hLKyG7qGYd5Phttxj6fCUnQ9Hb1PI5LrTcwXhgVj4NYKCCVkiG7OMd1gqsVfJvRh0kVbpMIkLeqnYIbhfB1oWmjKtnD0oNYhOS3+Bmv2SceMbM3k96SHOVadi3tN90=
+	t=1783701790; cv=none; b=Q1cxITf/b527ykblLSFgMxJNU0LqD4NrSXLixOJrAFCSsarvXsw2aRm7lN5sTB2YmRY28TND5ST7f+THQ160NSekfrsy4Mpw2ogHNFpf39NRyTRi4pW2WwQtbboti5s2S1SZkPkGFAQo8/JFgORdTMqj72fSbpTKXN4dcDHI/Iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783693309; c=relaxed/simple;
-	bh=5TrM8BE/Q9zVkI/J+cwWOxB5KYYtsKrNhArQDv7AEHw=;
+	s=arc-20240116; t=1783701790; c=relaxed/simple;
+	bh=e3loEmGXk+qF61Eu2CnkEtB73k8OPBivupAiSyRNHtU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sYFYoy0X3tPCQvQJD4e9G83NzAxv2FH1vOFqwecRwgh2L4J8XfgQgZoYJrOTY7m3wE4qjIZ8mG8+rCNaXcuzBgH8sMWrI+9LgrYVbg7qKKWp3oqfGAy0j9hHR29KbyNZjmG/7pUlGcwZ5XmD2YieYveisC0IQsZ06TBgI00lHNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jaZo+Y5a; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDAE61F000E9;
-	Fri, 10 Jul 2026 14:21:46 +0000 (UTC)
+	 Message-Id; b=hOHrZ50LZBdjU3ohp0pnIGMkqDsrYVfbc2MMO055WkBbiYnJnL3zis02bem0fM8QXPJ0VgahlHOupxxTSR9sIbWEA7EElTOz+4jANfQSVdPuQJf0id2/ctMv+jCdgl44W+l2yIJ768WPmiHG7KQBYICVG7qoS9baibR0uNy9oLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XME9wnrK; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4171F000E9;
+	Fri, 10 Jul 2026 16:43:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783693307;
-	bh=fkXRukI/v0sAhUZzPcBOOgP065VWEzalz5+PXoJ6mM4=;
+	s=k20260515; t=1783701788;
+	bh=Mle/u4hxrK1EHVfJ6LOocapL1+b9BAB6R9pt1EiaQGk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jaZo+Y5agFI0v/yeRpK5K/Zdk2vSYuCL2piheZzA1PKAT3vudGSRWf0pdbF7megua
-	 eBFJAC+0d0JinHDdE8i00yW10QiFa+cl554HDKyFIwRKGb9+W9/X4NXECRWR1kY5yn
-	 18um2uXySwlVy4xOh6nRDtDjTBBF1pG+4UYJ2hd90/YcEk78/jdkZHkS5DQk5duw8t
-	 d8IL/Ix0not4xax/2u8ckP6TGpudXJg9MnfqNcLfNr4juRzN/4gq3HGgNKQUgFPN4T
-	 jXGx+ITFot6Oz5MuxZWPyPODI9KWSGF0vPUawkJeh3tSGXZ59awhivwezDmT6SCt29
-	 tA1RsjP2A6G8w==
+	b=XME9wnrKZktFuiHU0J+yI16FyIZxGDNnQETfd8f0/fPpNFa7I9TOr5hE7/L7Cc51M
+	 CLVPBhcLGvPLtY+lCpP9lv7j4XIEdMTwjuS0417mp0FzRsIiJGXtbX8sJT7Yg+gXfe
+	 EeB4WO+j0m858SOoIVyySLflGtHSGKHzqqsM9ETX8uOOOq8bOLarqOc8Odz/4jZuD3
+	 fDtA1cP0ibY/A1+IEzFb6ppYmHH8VWyNT0TUfjgZ/G3gNGDqJUpcqdODz0+UwsEhLl
+	 KSA26c62t5VewXIvzbHvKNJJQ01DyyYIMDpuJiCtzMJuEGSnMbHqs6lQ1om4bBdKup
+	 nflz12JavQ00Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 1/2] can: isotp: use unconditional synchronize_rcu()
- in isotp_release()
+Subject: Re: [PATCH net v2] can: esd_usb: kill anchored URBs before freeing
+ netdevs
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Oliver Hartkopp" <socketcan@hartkopp.net>
-Cc: "Oliver Hartkopp" <socketcan@hartkopp.net>, "Marc Kleine-Budde" <mkl@pengutronix.de>, linux-can@vger.kernel.org, "Oleksij
- Rempel" <o.rempel@pengutronix.de>, "Vincent Mailhol" <mailhol@kernel.org>
-In-Reply-To: <20260710-isotp-fixes-v4-1-2a4af437f61b@hartkopp.net>
-References: <20260710-isotp-fixes-v4-0-2a4af437f61b@hartkopp.net>
- <20260710-isotp-fixes-v4-1-2a4af437f61b@hartkopp.net>
+To: "Fan Wu" <fanwu01@zju.edu.cn>
+Cc: "Marc Kleine-Budde" <mkl@pengutronix.de>, "Vincent Mailhol" <mailhol@kernel.org>, linux-can@vger.kernel.org, "Oliver
+ Hartkopp" <socketcan@hartkopp.net>, "Oleksij Rempel" <o.rempel@pengutronix.de>
+In-Reply-To: <20260709164159.497640-1-fanwu01@zju.edu.cn>
+References: <20260709104620.133765-1-fanwu01@zju.edu.cn>
+ <20260709164159.497640-1-fanwu01@zju.edu.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 10 Jul 2026 14:21:46 +0000
-Message-Id: <20260710142146.BDAE61F000E9@smtp.kernel.org>
+Date: Fri, 10 Jul 2026 16:43:06 +0000
+Message-Id: <20260710164307.1C4171F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -72,18 +72,18 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8297-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8298-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:replyto,smtp.kernel.org:mid,vger.kernel.org:from_smtp,sashiko.dev:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sashiko.dev:url,smtp.kernel.org:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:mkl@pengutronix.de,m:linux-can@vger.kernel.org,m:o.rempel@pengutronix.de,m:mailhol@kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:fanwu01@zju.edu.cn,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:o.rempel@pengutronix.de,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -97,7 +97,7 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
@@ -105,116 +105,171 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[6]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 250BA73BBAC
+X-Rspamd-Queue-Id: 36CAF73CAC3
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Race condition during network device unregistration causes `isotp_=
-release()` to skip CAN filter unregistration, leading to a memory leak and =
-a Use-After-Free.
-- [High] Data race on `so->rx.state` and `so->tx.state` between hrtimer cal=
-lbacks and socket operations.
+- [Critical] Missing bounds check on `dev->net_count` derived from untruste=
+d USB device input leads to an out-of-bounds array write.
+- [High] A zero-length message from the USB device causes an infinite loop =
+in the RX completion handler.
+- [High] Missing NULL check for `dev->nets[i]` array elements allows a mali=
+cious USB device to trigger a NULL pointer dereference.
+- [High] Missing bounds validation on the URB buffer length allows an attac=
+ker-controlled USB device to trigger out-of-bounds heap memory reads.
 --
 
---- Patch [1]: [PATCH v4 1/2] can: isotp: use unconditional synchronize_rcu=
-() in isotp_release() ---
-commit 6feb0d6dc5d6600aa28544bf14c75b5f268d9b41
-Author: Oliver Hartkopp <socketcan@hartkopp.net>
+--- Patch [1]: [PATCH net v2] can: esd_usb: kill anchored URBs before freei=
+ng netdevs ---
+commit 61e5cb7cf9d6a05752ca57498b34f59417480dc7
+Author: Fan Wu <fanwu01@zju.edu.cn>
 
-can: isotp: use unconditional synchronize_rcu() in isotp_release()
+can: esd_usb: kill anchored URBs before freeing netdevs
 
-isotp_notify() unregisters the (RCU) CAN filters via can_rx_unregister()
-and clears so->bound without waiting for a grace period. isotp_release()
-uses so->bound to decide whether it needs to call synchronize_rcu()
-before cancelling so->rxtimer. When NETDEV_UNREGISTER runs first, it
-skips that synchronize_rcu() and can cancel the timer while an in-flight
-isotp_rcv() is executing, leading to a use-after-free timer callback.
+This patch reorders the teardown sequence in esd_usb_disconnect() to unregi=
+ster
+netdevs, unlink all URBs, and then free the netdevs. This resolves an issue
+where the URB unlinking process accesses a freed netdev structure.
 
-Link: https://lore.kernel.org/linux-can/20260707085210.6B6C01F000E9@smtp.ke=
-rnel.org/
-
-> diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index c48b4a818297e..d30937345bcdc 100644
-> --- a/net/can/isotp.c
-> +++ b/net/can/isotp.c
-> @@ -1237,11 +1237,18 @@ static int isotp_release(struct socket *sock)
->  						  SINGLE_MASK(so->txid),
->  						  isotp_rcv_echo, sk);
->  				dev_put(dev);
-> -				synchronize_rcu();
+> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+> index d257440fa01ff..f41d4a0d140f7 100644
+> --- a/drivers/net/can/usb/esd_usb.c
+> +++ b/drivers/net/can/usb/esd_usb.c
+> @@ -1390,10 +1390,13 @@ static void esd_usb_disconnect(struct usb_interfa=
+ce *intf)
+>  				netdev =3D dev->nets[i]->netdev;
+>  				netdev_info(netdev, "unregister\n");
+>  				unregister_netdev(netdev);
+> -				free_candev(netdev);
 >  			}
 >  		}
+>  		unlink_all_urbs(dev);
+> +		for (i =3D 0; i < dev->net_count; i++) {
+> +			if (dev->nets[i])
+> +				free_candev(dev->nets[i]->netdev);
+> +		}
+>  		kfree(dev);
 >  	}
+>  }
 
 [Severity: High]
-This isn't a bug introduced by this patch, but could this cause a memory le=
-ak
-and a Use-After-Free during concurrent network device unregistration?
+This is a pre-existing issue, but does this code in esd_usb_probe() allow a
+regression where a USB device triggers an out-of-bounds heap write?
 
-In isotp_release(), the socket is prematurely removed from the notifier lis=
-t:
+In esd_usb_probe():
 
-    list_del(&so->notifier);
+	err =3D esd_usb_wait_msg(dev, msg);
+	if (err < 0) {
+		dev_err(&intf->dev, "no version message answer\n");
+		goto free_msg;
+	}
 
-If the device is concurrently being unregistered, this subsequent lookup fa=
-ils:
+	dev->net_count =3D (int)msg->version_reply.nets;
 
-    dev =3D dev_get_by_index(net, so->ifindex);
-    if (dev) {
+[ ... ]
 
-This failure causes the critical can_rx_unregister() steps to be skipped.
+	/* do per device probing */
+	for (i =3D 0; i < dev->net_count; i++)
+		esd_usb_probe_one_net(intf, i);
 
-Since the socket is no longer on the notifier list, the subsequent
-NETDEV_UNREGISTER broadcast will not call isotp_notify() to clean up the
-filters either.
+If a USB device provides a version_reply.nets value up to 255, the driver
+assigns it to dev->net_count without checking it against ESD_USB_MAX_NETS (=
+2).
 
-The socket memory is subsequently freed, leaving the stale filter in the
-device's receiver list, which retains a dangling pointer to the socket,
-leading to a Use-After-Free when a delayed CAN frame is processed.
+The initialization loop then iterates dev->net_count times, calling
+esd_usb_probe_one_net():
+
+	dev->nets[index] =3D priv;
+
+Could this write past the bounds of the dev->nets array into adjacent memor=
+y?
 
 [Severity: High]
-This is a pre-existing issue, but does this non-atomic assignment race with
-concurrent protocol state machine transitions?
+This isn't a bug introduced by this patch, but does the RX completion handl=
+er
+contain a regression leading to an infinite loop if a zero-length message is
+received?
 
-In isotp_rx_timer_handler():
+In esd_usb_read_bulk_callback():
 
-    so->rx.state =3D ISOTP_IDLE;
+	while (pos < urb->actual_length) {
+		union esd_usb_msg *msg;
 
-This modifies the RX state without holding so->rx_lock, racing with
-concurrent CAN frame reception in sendmsg and softirq RX handlers.
+		msg =3D (union esd_usb_msg *)(urb->transfer_buffer + pos);
 
-For example, isotp_rcv() acquires the lock and begins processing a frame.
-If isotp_rcv_cf() observes ISOTP_WAIT_DATA, it proceeds to cancel the timer.
-hrtimer_cancel() blocks until the racing timer callback finishes. Once the
-timer finishes, it has already changed the state to ISOTP_IDLE and signaled
-an ETIMEDOUT error. However, isotp_rcv_cf() then resumes and processes the
-frame into the buffer as if the state were still valid, hopelessly corrupti=
-ng
-the sequence.
+[ ... ]
 
-A similar data race occurs on so->tx.state in isotp_tx_timer_handler():
+		pos +=3D msg->hdr.len * sizeof(u32); /* convert to # of bytes */
 
-    so->tx.state =3D ISOTP_IDLE;
+If a USB device provides a message with msg->hdr.len =3D=3D 0, pos does not
+increase.
 
-This uses plain unprotected writes against concurrent atomic operations
-(cmpxchg) and RX softirq modifications, leading to unexpected packet drops,
-infinite wait stalls, and protocol failure.
+The loop condition pos < urb->actual_length would remain true forever, caus=
+ing
+the loop to spin indefinitely.
 
-> +	/* Always wait for a grace period before touching the timers below.
-> +	 * A concurrent NETDEV_UNREGISTER may have already unregistered our
-> +	 * filters and cleared so->bound in isotp_notify() without waiting
-> +	 * for in-flight isotp_rcv() callers to finish, so this call must not
-> +	 * be skipped just because so->bound is already 0 here.
-> +	 */
-> +	synchronize_rcu();
-> +
->  	hrtimer_cancel(&so->txfrtimer);
->  	hrtimer_cancel(&so->txtimer);
->  	hrtimer_cancel(&so->rxtimer);
+[Severity: High]
+This is a pre-existing issue, but does esd_usb_read_bulk_callback() derefer=
+ence
+a NULL pointer if a previous interface registration failed?
+
+In esd_usb_probe(), if registering a netdev fails in esd_usb_probe_one_net()
+due to memory exhaustion, it returns an error:
+
+	for (i =3D 0; i < dev->net_count; i++)
+		esd_usb_probe_one_net(intf, i);
+
+The error is ignored and dev->nets[i] remains NULL.
+
+Later in esd_usb_read_bulk_callback():
+
+		case ESD_USB_CMD_CAN_RX:
+			if (msg->rx.net >=3D dev->net_count) {
+				dev_err(dev->udev->dev.parent, "format error\n");
+				break;
+			}
+
+			esd_usb_rx_can_msg(dev->nets[msg->rx.net], msg);
+			break;
+
+If a USB device sends an ESD_USB_CMD_CAN_RX packet specifying the failed
+interface's index, it passes the dev->net_count check.
+
+Does the lack of a NULL check before passing the pointer to esd_usb_rx_can_=
+msg()
+cause a crash here?
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does esd_usb_read_bulk_callb=
+ack()
+read past the URB buffer bounds?
+
+In esd_usb_read_bulk_callback():
+
+	while (pos < urb->actual_length) {
+		union esd_usb_msg *msg;
+
+		msg =3D (union esd_usb_msg *)(urb->transfer_buffer + pos);
+
+		switch (msg->hdr.cmd) {
+
+The code accesses the message fields before checking if the message size fi=
+ts
+within urb->actual_length.
+
+Additionally, if the message length validation is missing, could this lead =
+to an
+out-of-bounds heap memory read in esd_usb_rx_can_msg()?
+
+	memcpy(cfd->data, msg->rx.data_fd, len);
+
+If msg->rx.data_fd falls near the end of the urb->transfer_buffer, this cou=
+ld
+copy adjacent heap memory into the CAN frame, leaking memory contents.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260710-isotp-fixe=
-s-v4-0-2a4af437f61b@hartkopp.net?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260709164159.4976=
+40-1-fanwu01@zju.edu.cn?part=3D1
 
