@@ -1,66 +1,65 @@
-Return-Path: <linux-can+bounces-8314-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8315-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 3uhvGLtbUWo+DAMAu9opvQ
-	(envelope-from <linux-can+bounces-8314-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 22:53:15 +0200
+	id kHTOFEBcUWpWDAMAu9opvQ
+	(envelope-from <linux-can+bounces-8315-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 22:55:28 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A245573E7DF
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 22:53:14 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4970373E808
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 22:55:27 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=M5MM1lT3;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="SX9gdo/Z";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8314-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-8314-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8315-lists+linux-can=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-can+bounces-8315-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 56B683002F9A
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 20:52:55 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 758F730072B9
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 20:55:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94B26385D61;
-	Fri, 10 Jul 2026 20:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FE8035C1A6;
+	Fri, 10 Jul 2026 20:55:23 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C067380FCA
-	for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 20:52:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E78C380FCA
+	for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 20:55:21 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783716774; cv=none; b=lbQ5jdjZn2gnsBzPU5B8Kks9k6twOvPhrts9dWqothr5uR7aRwnc+ZUWP8DVoiQECMfVo5AQDh8jyc4KpFfnIqhEKi6GjpTS2QlEkO1j+poyzcaztIzPhbMf97CamLv+zAvNy9MXKU/xhFY1R5HYaAGTXghS2pK4gxC0T98uYvw=
+	t=1783716923; cv=none; b=mPQ9uE70cZklvLekZPvADRVIdGG1o8ttjgMMO1YdUAdOVENOWZTArrqf2ZU70NL7bYEKpQf+OEw1joCcQiw2tHDTHrWPOA5Rbz1Y6B0zDJEoMVit+iKbS8nHNgCdeptNdKW+NP5oZxr2Gis6GBZZ6glGQgCbdI2/2Pqf7gJQfmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783716774; c=relaxed/simple;
-	bh=C3bY4eiMPOmE6/iWHDshA2cSQhwUbGAca7AQnVWLy5I=;
+	s=arc-20240116; t=1783716923; c=relaxed/simple;
+	bh=0izXoFkWZtpm0zIDKGeczAQS/7YnGQ5aN9v3ZSaVRd8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Q/SROeZQMKYzFqv8uviI8rd18OJI8OwduaKLAdyAaKtcxGGlDvwTpXB9/rBw2UlEOSEH37F50poJsoin5aoulKcIlksfnnQno67KvXOkBU61aXFpuyfxtjRKdsbCiigCcn1lcoqzEg8Hrp9HzKuYr8WL73q0n3pVCu8QPLIXHx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M5MM1lT3; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92B0C1F000E9;
-	Fri, 10 Jul 2026 20:52:52 +0000 (UTC)
+	 Message-Id; b=Sj0InOJVXLrS6HFMgNMw/A+++pkz+bvbV+DGpuMuzQMdV6G80U3+3hjAWpEF3rGJAH1FyaIgLAnTEauxxWgo0dNGrr4kFHojpaSOdq2QgqZ39kF+/FyjLPoSlDXfo7vIpzCJ0UXzIf8h7sDNmi7B0N7bGZfcq3VQkBJRKKJrSko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SX9gdo/Z; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D0A71F000E9;
+	Fri, 10 Jul 2026 20:55:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783716772;
-	bh=HbUlGyZ1LIqVWtDvJ6yhcPMdRhAqAPUIQKeaCkbi1Ec=;
+	s=k20260515; t=1783716921;
+	bh=lElJtwKWGeNm7GcY4ZNpmEt2iHjdyLpjfhw+XB8vbTg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=M5MM1lT3Kbz0xMPAwQoMqxwhessz2rY+5wKxYxA/I+7ds85I6NWavNt/Td1i6Z5Jg
-	 D1o2W/g45KmjWLD0/x/nuTvw7YOHOf4CBx7EzUDn1VF92SvCQEo80x7xLxG7rBEKfN
-	 EYvZFluDXr9TMOVe/b1wYo8EhEycKcyZKr45iPaQfYPmiF0AwmS2Aom9zSz4tta0wj
-	 Jp+UfHmQhuwfTnu5KKUFS0LE5oZ7nNemlYxd504XXYmzsB0YWf+j951TEvoR4wDPen
-	 weQSLBFF3QlWR4d3Bw310BvtZ94MaBPt5NBO4CrUN7BIA+tidnoXC3ZDVI6P6nEeUi
-	 2bYX8HhxFkR2w==
+	b=SX9gdo/Z2LgN3pUeLPV2tk4E0RD3KJ61S0Se09xtZjVYiTNoSTBxmFOw41WIaoXK3
+	 ONJBBk0Gr0AK0aBs6Ip7MT1VJNEwrlxYsu2L6JvbiC5y504Z1s6GOw1G2+vpwMmCIz
+	 8uzprJw0EhIE5Nlzu7yJXeSWY4g+mLXl0SCrilZ8bHlH37lZdWVpml8ClA7THCk0xy
+	 OuKFC8F9qTFsGKcmpIAv3i+SBzp0nkyycarjpgzieNuXe61adrvg7bHFXCAyz+gnsp
+	 RB5r5RkuP0xo0qW6sBGRp/Rpb2bqrkePRoUS1ocV6q9T3nP0JyNRI8hkcdyEQuXKU7
+	 HUtUHg++LPgig==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 5/5] can: isotp: fix state machine corruption on
- signal interruption
+Subject: Re: [PATCH v6 3/5] can: isotp: fix race between RX/TX timers and
+ frame reception
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Oliver Hartkopp" <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, "Oliver Hartkopp" <socketcan@hartkopp.net>, "Marc
- Kleine-Budde" <mkl@pengutronix.de>, "Vincent Mailhol" <mailhol@kernel.org>, "Oleksij
- Rempel" <o.rempel@pengutronix.de>
-In-Reply-To: <20260710-isotp-fixes-v6-5-a13c2539093d@hartkopp.net>
+Cc: "Marc Kleine-Budde" <mkl@pengutronix.de>, "Oliver Hartkopp" <socketcan@hartkopp.net>, "Vincent
+ Mailhol" <mailhol@kernel.org>, "Oleksij Rempel" <o.rempel@pengutronix.de>, linux-can@vger.kernel.org
+In-Reply-To: <20260710-isotp-fixes-v6-3-a13c2539093d@hartkopp.net>
 References: <20260710-isotp-fixes-v6-0-a13c2539093d@hartkopp.net>
- <20260710-isotp-fixes-v6-5-a13c2539093d@hartkopp.net>
+ <20260710-isotp-fixes-v6-3-a13c2539093d@hartkopp.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 10 Jul 2026 20:52:52 +0000
-Message-Id: <20260710205252.92B0C1F000E9@smtp.kernel.org>
+Date: Fri, 10 Jul 2026 20:55:20 +0000
+Message-Id: <20260710205521.6D0A71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -73,18 +72,18 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8314-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8315-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lists.linux.dev:replyto,hartkopp.net:email,vger.kernel.org:from_smtp,smtp.kernel.org:mid];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[hartkopp.net:email,vger.kernel.org:from_smtp,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,sashiko.dev:url,lists.linux.dev:replyto];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:linux-can@vger.kernel.org,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:o.rempel@pengutronix.de,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -98,7 +97,7 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
@@ -106,120 +105,154 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A245573E7DF
+X-Rspamd-Queue-Id: 4970373E808
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
 
+New issues:
+- [High] Moving `so->tx.state =3D ISOTP_IDLE` after `hrtimer_cancel()` in t=
+he `err_event_drop` path introduces a race condition with softirq receive h=
+andlers, leading to stray timers that can corrupt subsequent transmissions.
+- [High] The delayed `so->tx.state =3D ISOTP_IDLE` assignment in the error =
+path unconditionally clobbers the state, which can corrupt a new, concurren=
+tly running transfer.
+- [High] The newly added TX state checks after `hrtimer_cancel()` in `isotp=
+_rcv_fc()` and `isotp_rcv_echo()` are vulnerable to an ABA race condition, =
+allowing stale frames to corrupt new transfers.
+
 Pre-existing issues:
-- [High] Signal interruption of a transmission (e.g., during CAN_ISOTP_WAIT=
-_TX_DONE) or a TX timeout aborts an active transmission by forcing state to=
- ISOTP_IDLE but fails to clear `so->cfecho`. This exposes a race condition =
-with delayed local loopback echoes that can leak uninitialized kernel heap =
-memory or corrupt subsequent transmissions.
+- [High] Missing cleanup of `so->cfecho` in `isotp_sendmsg()` error paths a=
+llows stale local echoes to corrupt subsequent transfers.
 --
 
---- Patch [5]: [PATCH v6 5/5] can: isotp: fix state machine corruption on s=
-ignal interruption ---
-commit 0fb83cf387b5c9feb7682bf6c41fda7dbcb7b3d2
+--- Patch [3]: [PATCH v6 3/5] can: isotp: fix race between RX/TX timers and=
+ frame reception ---
+commit 4f481801d9d9059ae72ceaf6467d32f307eddbb5
 Author: Oliver Hartkopp <socketcan@hartkopp.net>
+can: isotp: fix race between RX/TX timers and frame reception
 
-can: isotp: fix state machine corruption on signal interruption
+This patch fixes a race condition between hrtimer execution and frame
+reception by checking the state after hrtimer_cancel(). It also reorders
+timer cancellation and state reset in isotp_sendmsg()'s error path to
+prevent concurrent sendmsg calls from corrupting state.
 
-If a thread blocked in isotp_sendmsg() waiting for a previous transfer
-to finish is interrupted by a signal, jumping to the cleanup labels
-incorrectly cancels active timers and forces 'so->tx.state' back to
-ISOTP_IDLE. Since this thread never owned the active transmission, it
-abruptly aborts another thread's legitimate transfer, so return the
-interruption error directly.
+Link: https://lore.kernel.org/linux-can/20260710142146.BDAE61F000E9@smtp.ke=
+rnel.org/
 
 > diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index 0826ae8372467..b8562f8c6de04 100644
+> index 44c044eb83e12..5ef2a610fc172 100644
 > --- a/net/can/isotp.c
 > +++ b/net/can/isotp.c
-> @@ -1007,7 +1007,7 @@ static int isotp_sendmsg(struct socket *sock, struc=
-t msghdr *msg, size_t size)
->  		/* wait for complete transmission of current pdu */
->  		err =3D wait_event_interruptible(so->wait, so->tx.state =3D=3D ISOTP_I=
-DLE);
->  		if (err)
-> -			goto err_event_drop;
-> +			return err;
->  	}
+[ ... ]
+> @@ -378,6 +378,15 @@ static int isotp_rcv_fc(struct isotp_sock *so, struc=
+t canfd_frame *cf, int ae)
+> =20
+>  	hrtimer_cancel(&so->txtimer);
+> =20
+> +	/* isotp_tx_timer_handler() may have raced us for so->tx.state while
+> +	 * hrtimer_cancel() above waited for it to finish, already reporting
+> +	 * the tx error and resetting the state; don't resume a tx job that
+> +	 * has already been given up on.
+> +	 */
+> +	if (so->tx.state !=3D ISOTP_WAIT_FC &&
+> +	    so->tx.state !=3D ISOTP_WAIT_FIRST_FC)
+> +		return 1;
+> +
 
 [Severity: High]
-This isn't a bug introduced by this patch, but does resetting the state to=
-=20
-ISOTP_IDLE without clearing so->cfecho expose a race condition with delayed=
-=20
-local loopback echoes?
+Is this lockless state check vulnerable to an ABA transition?
 
-For example, if a transmission is interrupted during CAN_ISOTP_WAIT_TX_DONE=
-,=20
-the wait loop is aborted and the state is reset:
+While hrtimer_cancel() spins waiting for a timer handler, the timer handler
+could reset the state to ISOTP_IDLE. If a concurrent isotp_sendmsg() from
+another thread starts a new transfer during this window, it could locklessly
+transition the state back to the exact same expected state
+(e.g., ISOTP_WAIT_FIRST_FC).
 
-net/can/isotp.c:isotp_sendmsg() {
-    ...
-err_event_drop:
-	/* got signal: force tx state machine to be ISOTP_IDLE */
-	hrtimer_cancel(&so->txfrtimer);
-	hrtimer_cancel(&so->txtimer);
-err_out_drop:
-	/* drop this PDU and unlock a potential wait queue */
-	so->tx.state =3D ISOTP_IDLE;
-	wake_up_interruptible(&so->wait);
+When hrtimer_cancel() returns, this check would pass because the state
+matches, but it would be evaluating a different transfer. Could this allow a
+stale Flow Control frame to corrupt the new transfer?
 
-	return err;
-}
+[ ... ]
+> @@ -881,6 +898,14 @@ static void isotp_rcv_echo(struct sk_buff *skb, void=
+ *data)
+>  	/* local echo skb with consecutive frame has been consumed */
+>  	so->cfecho =3D 0;
+> =20
+> +	/* isotp_tx_timer_handler() may have raced us for so->tx.state while
+> +	 * hrtimer_cancel() above waited for it to finish, already reporting
+> +	 * the tx error and resetting the state; don't resume a tx job that
+> +	 * has already been given up on.
+> +	 */
+> +	if (so->tx.state !=3D ISOTP_SENDING)
+> +		return;
+> +
 
-Similarly, a TX timeout resets the state without clearing so->cfecho:
+[Severity: High]
+Could the same ABA race happen here?
 
-net/can/isotp.c:isotp_tx_timer_handler() {
-    ...
-	if (cmpxchg(&so->tx.state, old_state, ISOTP_IDLE) !=3D old_state)
-		return HRTIMER_NORESTART;
+If a timer resets the state to ISOTP_IDLE while hrtimer_cancel() waits,
+and a concurrent isotp_sendmsg() starts a new transfer and sets the state to
+ISOTP_SENDING, this check would pass for the new transfer.
 
-	/* we did not get any flow control or echo frame in time */
-    ...
-}
+Would this allow a stale local echo to erroneously resume the newly started
+transfer?
 
-If a user starts a new transmission with a payload larger than so->tx.bufle=
-n,
-the kernel sets so->tx.state to ISOTP_SENDING and allocates a new uninitial=
-ized
-buffer.=20
+[ ... ]
+> @@ -1143,8 +1168,7 @@ static int isotp_sendmsg(struct socket *sock, struc=
+t msghdr *msg, size_t size)
+>  	return size;
+> =20
+>  err_event_drop:
+> -	/* got signal: force tx state machine to be idle */
+> -	so->tx.state =3D ISOTP_IDLE;
+> +	/* got signal: force tx state machine to be ISOTP_IDLE */
+>  	hrtimer_cancel(&so->txfrtimer);
+>  	hrtimer_cancel(&so->txtimer);
+>  err_out_drop:
 
-If a delayed loopback echo from the aborted transmission arrives at this ti=
-me,=20
-could it be erroneously processed by the echo handler?
+[Severity: High]
+Does delaying the state reset to after hrtimer_cancel() create a window
+where concurrent RX softirqs can observe an active state?
 
-net/can/isotp.c:isotp_rcv_echo() {
-    ...
-	/* local echo skb with consecutive frame has been consumed */
-	so->cfecho =3D 0;
+If isotp_sendmsg() is interrupted by a signal, it now calls
+hrtimer_cancel() while so->tx.state is still visibly active
+(e.g., ISOTP_SENDING). If a CAN receive handler (like isotp_rcv_echo())
+executes concurrently in softirq context, it locklessly checks
+so->tx.state, sees it is active, and can re-arm the transmission timers.
 
-	/* isotp_tx_timer_handler() may have raced us for so->tx.state while
-	 * hrtimer_cancel() above waited for it to finish, already reporting
-	 * the tx error and resetting the state; don't resume a tx job that
-	 * has already been given up on.
-	 */
-	if (so->tx.state !=3D ISOTP_SENDING)
-		return;
+When this error path completes, it sets the state to ISOTP_IDLE, leaving
+the newly armed timers active. When a subsequent sendmsg() begins, could
+these stray timers fire unexpectedly and corrupt the new transfer's
+sequence?
 
-	if (so->tx.idx >=3D so->tx.len) {
-		/* we are done */
-    ...
-}
+[Severity: High]
+Does the delayed assignment of ISOTP_IDLE in err_out_drop clobber
+concurrently claimed state?
 
-Because so->cfecho still matches and so->tx.state is now ISOTP_SENDING, cou=
-ld
-this result in transmitting uninitialized kernel heap memory over the CAN b=
-us
-by continuing transmission using the old so->tx.idx and so->tx.len but the =
-new
-uninitialized so->tx.buf?
+While hrtimer_cancel() waits for a timer handler to finish (which resets
+the state to ISOTP_IDLE), a concurrent thread could call isotp_sendmsg(),
+successfully claim the ISOTP_IDLE state, and begin a new transfer.
+
+When the original thread finishes hrtimer_cancel(), it unconditionally
+executes so->tx.state =3D ISOTP_IDLE (located under err_out_drop:). Could
+this abruptly clobber the new transfer's state and expose its buffer to
+concurrent overwrites?
+
+[Severity: High]
+This is a pre-existing issue, but does the error path fail to clean up
+so->cfecho?
+
+If a transmission is aborted via a signal, the state is forced to
+ISOTP_IDLE but so->cfecho is not cleared and continues to hold the local
+echo tag of the aborted frame.
+
+When a subsequent sendmsg() sets the state to ISOTP_SENDING and begins
+preparing the buffer, a stale echo could arrive. If isotp_rcv_echo() sees
+a matching so->cfecho and an active ISOTP_SENDING state, could it process
+the echo and initiate a transmission containing uninitialized heap data?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260710-isotp-fixe=
-s-v6-0-a13c2539093d@hartkopp.net?part=3D5
+s-v6-0-a13c2539093d@hartkopp.net?part=3D3
 
