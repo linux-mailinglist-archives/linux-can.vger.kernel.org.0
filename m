@@ -1,185 +1,523 @@
-Return-Path: <linux-can+bounces-8284-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8285-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Yy3pA5jcUGre6QIAu9opvQ
-	(envelope-from <linux-can+bounces-8284-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 13:50:48 +0200
+	id 6W7UCErgUGrU6gIAu9opvQ
+	(envelope-from <linux-can+bounces-8285-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 14:06:34 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2CEF73A6CE
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 13:50:47 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D08F73A839
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 14:06:33 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=mdz9HbYE;
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8284-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8284-lists+linux-can=lfdr.de@vger.kernel.org";
+	dkim=none;
+	dmarc=none;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8285-lists+linux-can=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-can+bounces-8285-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 26350302ECC1
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 11:50:20 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 247E63001392
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 12:06:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B0C342A78A;
-	Fri, 10 Jul 2026 11:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB9493F54B4;
+	Fri, 10 Jul 2026 12:06:28 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF95A42669E
-	for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 11:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C493BC696;
+	Fri, 10 Jul 2026 12:06:24 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783684149; cv=none; b=easCwf+qbka1UAzHoINP17aHXVV/ZPgSEmme1xhccPAXaiEs7XiSeoZYldkyxc5vrOdF/uhOwCtyNF9X9GUn1SKWoahBnmjhMho3kCbngsBFNy4s6QBQE+B8H6XFTzA73xnlAeL75QttsypxgYr2NDTGfuSAMpkZDE3ZgHQBr2I=
+	t=1783685188; cv=none; b=jxveRjVhG5wGePbFycJ4hXDIqKL0IAXBYcE/W4ecto5G0LAdZajOxX6lh2WSGjy0/DQ+iulZ1Ru5etiARYsTrOLd4SUItBFq2p8WctueVSxxzyP2PkPY646mgWiVDhzgP9u7aoYp8OMAzPtWkBUTUbDcBnLZ2jwWDJYcl54B1UA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783684149; c=relaxed/simple;
-	bh=8xHeJXG8oxT9LQ98Bpi1smvkdxzikICAGJF5IzhuE7Q=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QkKWn9GsZuBRaOpEfq3mSHUre2qxDrn9QL8tDS28AqtqM8M1mbRy/fttdkReexYbc08WweU8QByMJN1m95t8I+BKWBYmRiyK9D1PuSWtJr7m4fiwhuZlfx50NZFH2eU2SZ2LKeSy6y1UDiOB7MTYVXbabSfU89nlLhQDUyv/0Lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdz9HbYE; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CBD41F000E9;
-	Fri, 10 Jul 2026 11:48:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783684131;
-	bh=Objfi6YL8rR+z+eayn4BTVMFcQUIrBLn8hfZXR/a6BA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mdz9HbYERPij4ZmZMwcrYW1CUUfUr2CXDmtJLC2Q/i7DguMxL9hvLhtnnTn2Vf7Sx
-	 RHmQou6aFy7bL2P4yudynatC/Oi7zdOEeA+9JbkFv+f0I4NjFgtr5/Xcxemb7uTIHi
-	 iH93r18XnNMb5TP2zFyLVsuSgZvip2xtnENpM5CpPwZRBaD75wtJ7lmUVOh28l4mOV
-	 xuGkljk47CR6S+8xxK2f+9NjdPJNIPP7rlqSMYmcPZHTN7Pjn7/ePNvR/rJvPrCez/
-	 tTeguvDMyZJ2oat4NTftQP7gtiaib1buSWz9jWpqA1GlRRtSwOaL9mt+en8jLt9DKy
-	 Dagka0OMDSVbA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/2] can: isotp: use unconditional synchronize_rcu()
- in isotp_release()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Oliver Hartkopp" <socketcan@hartkopp.net>
-Cc: "Oliver Hartkopp" <socketcan@hartkopp.net>, "Oleksij Rempel" <o.rempel@pengutronix.de>, "Vincent
- Mailhol" <mailhol@kernel.org>, "Marc Kleine-Budde" <mkl@pengutronix.de>, linux-can@vger.kernel.org
-In-Reply-To: <20260710-isotp-fixes-v2-1-bc57e26594b2@hartkopp.net>
-References: <20260710-isotp-fixes-v2-0-bc57e26594b2@hartkopp.net>
- <20260710-isotp-fixes-v2-1-bc57e26594b2@hartkopp.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 10 Jul 2026 11:48:49 +0000
-Message-Id: <20260710114850.4CBD41F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1783685188; c=relaxed/simple;
+	bh=MSQBMx5zpiHKFLhws3XUuZXLrjS4VTkDwO6oi6fjIdE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=sfrS0NK8BFf2Z/1G1jAsCHNKFAJET6tHTwS0WGPvlmgBV/qqGcPRVNLQpSKezCEl6RxUn//wZw4KyB6FW6LEkuFdPGF/fUm5gvwtkVjkysG66uWLF5lJkomDVvYk9o6QLUWs4DfN1k3R/RO+UuNpOmrvlONJIwOTvbBxJlO/TJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.200.13
+Received: from drehscheibe.grey.stw.pengutronix.de (drehscheibe.grey.stw.pengutronix.de [IPv6:2a0a:edc0:0:c01:1d::a2])
+	(Authenticated sender: relay-from-drehscheibe.grey.stw.pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id D2FFC201FD8;
+	Fri, 10 Jul 2026 14:06:22 +0200 (CEST)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1wi9zq-0014gJ-2M;
+	Fri, 10 Jul 2026 14:06:22 +0200
+Received: from hardanger.blackshift.org (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 3C16E56505D;
+	Fri, 10 Jul 2026 11:50:42 +0000 (UTC)
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+Date: Fri, 10 Jul 2026 13:50:39 +0200
+Subject: [PATCH can-next v2] can: m_can: switch to rx-offload
+ implementation
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260710-m_can-rx-offload-v2-1-aa6597eb194e@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAI7cUGoC/3WNwQ6CMBBEf8Xs2ZpSVMCT/2GIWekW1mhL2kJqC
+ P8u4NnjZN68mSCQZwpw2U3gaeTAzi5B7XfQdGhbEqyXDEqqsyxkJd73Bq3wSThjXg61QKXKk5S
+ 6MjnCMus9GU6b8gYraylFqH9NGB5PauJqXNmOQ3T+s72P2bb4fzRmIhNocjJY0lEV6tqTbYfon
+ eV00AT1PM9fxupiY9EAAAA=
+X-Change-ID: 20260709-m_can-rx-offload-a228500d9f3a
+To: Markus Schneider-Pargmann <msp@baylibre.com>, 
+ Vincent Mailhol <mailhol@kernel.org>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=12791; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=MSQBMx5zpiHKFLhws3XUuZXLrjS4VTkDwO6oi6fjIdE=;
+ b=owGbwMvMwCV2xirl17qZay8xnlZLYsgKuDMh6mnekWtz9naJ3GllSwjym3HoX02x4Mq3/tqzk
+ oS+/9wv3FHKwiDGxSArpsiy9McJRYFAh9LelwmTYOawMoEMYeDiFICJhIUw/LN637w76OE94Qn/
+ pZh2r+4UrZDu+rZLnLPs1gKlSeIFD+wZGeau/L56x6+Nnza+UoxTt6x8OP/publ3F8+vlW+f7nq
+ aP4EZAA==
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8284-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8285-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,sashiko.dev:url,lists.linux.dev:replyto,vger.kernel.org:from_smtp,smtp.kernel.org:mid,hartkopp.net:email];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:o.rempel@pengutronix.de,m:mailhol@kernel.org,m:mkl@pengutronix.de,m:linux-can@vger.kernel.org,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	DMARC_NA(0.00)[pengutronix.de];
+	FORGED_RECIPIENTS(0.00)[m:msp@baylibre.com,m:mailhol@kernel.org,m:linux-can@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:kernel@pengutronix.de,m:mkl@pengutronix.de,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_NO_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-can@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,pengutronix.de:from_mime,pengutronix.de:email,pengutronix.de:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,msgid.link:url,baylibre.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A2CEF73A6CE
+X-Rspamd-Queue-Id: 0D08F73A839
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+The current m_can driver uses NAPI for mmio devices to handle RX'ed CAN
+frames, the RX IRQ is disabled and a NAPI poll is scheduled. Then in
+m_can_poll() the RX'ed CAN frames are read from the device.
 
-Pre-existing issues:
-- [Critical] Race condition between `isotp_release()` and netdevice unregis=
-tration skips CAN filter unregistration, leading to a permanent memory leak=
- and potential use-after-free.
---
+The driver already uses rx-offload for SPI devices like the tcan4x5x,
+indicated by struct m_can_classdev::is_peripheral being set.
 
---- Patch [1]: [PATCH v2 1/2] can: isotp: use unconditional synchronize_rcu=
-() in isotp_release() ---
-commit 554fcaa84431e4410ac9203b4f4a5bfeadc94ccf
-Author: Oliver Hartkopp <socketcan@hartkopp.net>
+This approach has 2 drawbacks:
 
-can: isotp: use unconditional synchronize_rcu() in isotp_release()
+- Under high system load it might take too long from the initial RX IRQ to
+  the NAPI poll function to run. This causes RX buffer overflows.
+- The driver contains several checks if it handles a peripheral or a memory
+  mapped device, that makes maintenance harder.
 
-This commit makes isotp_release() unconditionally call synchronize_rcu()
-before cancelling timers. This closes a race where a concurrent
-NETDEV_UNREGISTER could clear so->bound without waiting for in-flight
-isotp_rcv() callers.
+Convert the driver to unconditionally call m_can_rx_handler() from the IRQ
+handler (m_can_interrupt_handler()), which reads the RX'ed CAN frames from
+the hardware and adds it to a list sorted by RX timestamp. This list of
+RX'ed SKBs is then passed to the networking stack in a later NAPI context.
 
-Link: https://lore.kernel.org/linux-can/20260707085210.6B6C01F000E9@smtp.ke=
-rnel.org/
+Remove all manual napi handling from the driver and keep the
+can_rx_offload_*().
 
-> diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index c48b4a818297e..d30937345bcdc 100644
-> --- a/net/can/isotp.c
-> +++ b/net/can/isotp.c
-> @@ -1237,11 +1237,18 @@ static int isotp_release(struct socket *sock)
->  						  SINGLE_MASK(so->txid),
->  						  isotp_rcv_echo, sk);
->  				dev_put(dev);
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+Changes in v2:
+- m_can_receive_skb(): remove double accounting of RX packets (found by sashiko)
+- remove obsolete struct m_can_classdev::napi (found by sashiko)
+- m_can_do_rx_poll(): remove quota, read all RX'ed messages (found by sashiko)
+- Link to v1: https://patch.msgid.link/20260709-m_can-rx-offload-v1-1-af3efa8e4272@pengutronix.de
 
-[Severity: Critical]
-This is a pre-existing issue, but is there a race condition between
-isotp_release() and netdevice unregistration that can skip CAN filter
-unregistration?
+To: Markus Schneider-Pargmann <msp@baylibre.com>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol@kernel.org>
+Cc: linux-can@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/net/can/m_can/m_can.c | 151 +++++++++++-------------------------------
+ drivers/net/can/m_can/m_can.h |   2 -
+ 2 files changed, 38 insertions(+), 115 deletions(-)
 
-If unregister_netdevice_many() unlists the netdevice from net->dev_by_index
-using unlist_netdevice(), and isotp_release() runs immediately after this b=
-ut
-before the NETDEV_UNREGISTER notifier is dispatched:
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index eb856547ae7d..866c4b501dad 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -530,26 +530,17 @@ static void m_can_clean(struct net_device *net)
+ 	spin_unlock_irqrestore(&cdev->tx_handling_spinlock, irqflags);
+ }
+ 
+-/* For peripherals, pass skb to rx-offload, which will push skb from
+- * napi. For non-peripherals, RX is done in napi already, so push
+- * directly. timestamp is used to ensure good skb ordering in
+- * rx-offload and is ignored for non-peripherals.
+- */
+ static void m_can_receive_skb(struct m_can_classdev *cdev,
+ 			      struct sk_buff *skb,
+ 			      u32 timestamp)
+ {
+-	if (cdev->is_peripheral) {
+-		struct net_device_stats *stats = &cdev->net->stats;
+-		int err;
++	struct net_device_stats *stats = &cdev->net->stats;
++	int err;
+ 
+-		err = can_rx_offload_queue_timestamp(&cdev->offload, skb,
+-						     timestamp);
+-		if (err)
+-			stats->rx_fifo_errors++;
+-	} else {
+-		netif_receive_skb(skb);
+-	}
++	err = can_rx_offload_queue_timestamp(&cdev->offload, skb,
++					     timestamp);
++	if (err)
++		stats->rx_fifo_errors++;
+ }
+ 
+ static int m_can_read_fifo(struct net_device *dev, u32 fgi)
+@@ -600,10 +591,7 @@ static int m_can_read_fifo(struct net_device *dev, u32 fgi)
+ 				      cf->data, DIV_ROUND_UP(cf->len, 4));
+ 		if (err)
+ 			goto out_free_skb;
+-
+-		stats->rx_bytes += cf->len;
+ 	}
+-	stats->rx_packets++;
+ 
+ 	timestamp = FIELD_GET(RX_BUF_RXTS_MASK, fifo_header.dlc) << 16;
+ 
+@@ -618,10 +606,9 @@ static int m_can_read_fifo(struct net_device *dev, u32 fgi)
+ 	return err;
+ }
+ 
+-static int m_can_do_rx_poll(struct net_device *dev, int quota)
++static int m_can_do_rx_poll(struct net_device *dev)
+ {
+ 	struct m_can_classdev *cdev = netdev_priv(dev);
+-	u32 pkts = 0;
+ 	u32 rxfs;
+ 	u32 rx_count;
+ 	u32 fgi;
+@@ -638,13 +625,11 @@ static int m_can_do_rx_poll(struct net_device *dev, int quota)
+ 	rx_count = FIELD_GET(RXFS_FFL_MASK, rxfs);
+ 	fgi = FIELD_GET(RXFS_FGI_MASK, rxfs);
+ 
+-	for (i = 0; i < rx_count && quota > 0; ++i) {
++	for (i = 0; i < rx_count; ++i) {
+ 		err = m_can_read_fifo(dev, fgi);
+ 		if (err)
+ 			break;
+ 
+-		quota--;
+-		pkts++;
+ 		ack_fgi = fgi;
+ 		fgi = (++fgi >= cdev->mcfg[MRAM_RXF0].num ? 0 : fgi);
+ 	}
+@@ -652,10 +637,7 @@ static int m_can_do_rx_poll(struct net_device *dev, int quota)
+ 	if (ack_fgi != -1)
+ 		m_can_write(cdev, M_CAN_RXF0A, ack_fgi);
+ 
+-	if (err)
+-		return err;
+-
+-	return pkts;
++	return err;
+ }
+ 
+ static int m_can_handle_lost_msg(struct net_device *dev)
+@@ -678,8 +660,7 @@ static int m_can_handle_lost_msg(struct net_device *dev)
+ 	frame->can_id |= CAN_ERR_CRTL;
+ 	frame->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
+ 
+-	if (cdev->is_peripheral)
+-		timestamp = m_can_get_timestamp(cdev);
++	timestamp = m_can_get_timestamp(cdev);
+ 
+ 	m_can_receive_skb(cdev, skb, timestamp);
+ 
+@@ -750,8 +731,7 @@ static int m_can_handle_lec_err(struct net_device *dev,
+ 	if (unlikely(!skb))
+ 		return 0;
+ 
+-	if (cdev->is_peripheral)
+-		timestamp = m_can_get_timestamp(cdev);
++	timestamp = m_can_get_timestamp(cdev);
+ 
+ 	m_can_receive_skb(cdev, skb, timestamp);
+ 
+@@ -883,8 +863,7 @@ static int m_can_handle_state_change(struct net_device *dev,
+ 		break;
+ 	}
+ 
+-	if (cdev->is_peripheral)
+-		timestamp = m_can_get_timestamp(cdev);
++	timestamp = m_can_get_timestamp(cdev);
+ 
+ 	m_can_receive_skb(cdev, skb, timestamp);
+ 
+@@ -973,8 +952,7 @@ static int m_can_handle_protocol_error(struct net_device *dev, u32 irqstatus)
+ 		return 0;
+ 	}
+ 
+-	if (cdev->is_peripheral)
+-		timestamp = m_can_get_timestamp(cdev);
++	timestamp = m_can_get_timestamp(cdev);
+ 
+ 	m_can_receive_skb(cdev, skb, timestamp);
+ 
+@@ -1055,7 +1033,7 @@ static int m_can_rx_handler(struct net_device *dev, int quota, u32 irqstatus)
+ 						     m_can_read(cdev, M_CAN_PSR));
+ 
+ 	if (irqstatus & IR_RF0N) {
+-		rx_work_or_err = m_can_do_rx_poll(dev, (quota - work_done));
++		rx_work_or_err = m_can_do_rx_poll(dev);
+ 		if (rx_work_or_err < 0)
+ 			return rx_work_or_err;
+ 
+@@ -1065,32 +1043,6 @@ static int m_can_rx_handler(struct net_device *dev, int quota, u32 irqstatus)
+ 	return work_done;
+ }
+ 
+-static int m_can_poll(struct napi_struct *napi, int quota)
+-{
+-	struct net_device *dev = napi->dev;
+-	struct m_can_classdev *cdev = netdev_priv(dev);
+-	int work_done;
+-	u32 irqstatus;
+-
+-	irqstatus = cdev->irqstatus | m_can_read(cdev, M_CAN_IR);
+-
+-	work_done = m_can_rx_handler(dev, quota, irqstatus);
+-
+-	/* Don't re-enable interrupts if the driver had a fatal error
+-	 * (e.g., FIFO read failure).
+-	 */
+-	if (work_done >= 0 && work_done < quota) {
+-		napi_complete_done(napi, work_done);
+-		m_can_enable_all_interrupts(cdev);
+-	}
+-
+-	return work_done;
+-}
+-
+-/* Echo tx skb and update net stats. Peripherals use rx-offload for
+- * echo. timestamp is used for peripherals to ensure correct ordering
+- * by rx-offload, and is ignored for non-peripherals.
+- */
+ static unsigned int m_can_tx_update_stats(struct m_can_classdev *cdev,
+ 					  unsigned int msg_mark, u32 timestamp)
+ {
+@@ -1098,14 +1050,11 @@ static unsigned int m_can_tx_update_stats(struct m_can_classdev *cdev,
+ 	struct net_device_stats *stats = &dev->stats;
+ 	unsigned int frame_len;
+ 
+-	if (cdev->is_peripheral)
+-		stats->tx_bytes +=
+-			can_rx_offload_get_echo_skb_queue_timestamp(&cdev->offload,
+-								    msg_mark,
+-								    timestamp,
+-								    &frame_len);
+-	else
+-		stats->tx_bytes += can_get_echo_skb(dev, msg_mark, &frame_len);
++	stats->tx_bytes +=
++		can_rx_offload_get_echo_skb_queue_timestamp(&cdev->offload,
++							    msg_mark,
++							    timestamp,
++							    &frame_len);
+ 
+ 	stats->tx_packets++;
+ 
+@@ -1265,21 +1214,10 @@ static int m_can_interrupt_handler(struct m_can_classdev *cdev)
+ 	if (cdev->ops->clear_interrupts)
+ 		cdev->ops->clear_interrupts(cdev);
+ 
+-	/* schedule NAPI in case of
+-	 * - rx IRQ
+-	 * - state change IRQ
+-	 * - bus error IRQ and bus error reporting
+-	 */
+ 	if (ir & (IR_RF0N | IR_RF0W | IR_ERR_ALL_30X)) {
+-		cdev->irqstatus = ir;
+-		if (!cdev->is_peripheral) {
+-			m_can_disable_all_interrupts(cdev);
+-			napi_schedule(&cdev->napi);
+-		} else {
+-			ret = m_can_rx_handler(dev, NAPI_POLL_WEIGHT, ir);
+-			if (ret < 0)
+-				return ret;
+-		}
++		ret = m_can_rx_handler(dev, NAPI_POLL_WEIGHT, ir);
++		if (ret < 0)
++			return ret;
+ 	}
+ 
+ 	if (cdev->version == 30) {
+@@ -1288,8 +1226,7 @@ static int m_can_interrupt_handler(struct m_can_classdev *cdev)
+ 			u32 timestamp = 0;
+ 			unsigned int frame_len;
+ 
+-			if (cdev->is_peripheral)
+-				timestamp = m_can_get_timestamp(cdev);
++			timestamp = m_can_get_timestamp(cdev);
+ 			frame_len = m_can_tx_update_stats(cdev, 0, timestamp);
+ 			m_can_finish_tx(cdev, 1, frame_len);
+ 		}
+@@ -1304,6 +1241,8 @@ static int m_can_interrupt_handler(struct m_can_classdev *cdev)
+ 
+ 	if (cdev->is_peripheral)
+ 		can_rx_offload_threaded_irq_finish(&cdev->offload);
++	else
++		can_rx_offload_irq_finish(&cdev->offload);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -1752,9 +1691,6 @@ static int m_can_dev_setup(struct m_can_classdev *cdev)
+ 	if (err)
+ 		return err;
+ 
+-	if (!cdev->is_peripheral)
+-		netif_napi_add(dev, &cdev->napi, m_can_poll);
+-
+ 	/* Shared properties of all M_CAN versions */
+ 	cdev->version = m_can_version;
+ 	cdev->can.do_set_mode = m_can_set_mode;
+@@ -1846,11 +1782,10 @@ static int m_can_close(struct net_device *dev)
+ 	if (cdev->is_peripheral) {
+ 		destroy_workqueue(cdev->tx_wq);
+ 		cdev->tx_wq = NULL;
+-		can_rx_offload_disable(&cdev->offload);
+-	} else {
+-		napi_disable(&cdev->napi);
+ 	}
+ 
++	can_rx_offload_disable(&cdev->offload);
++
+ 	close_candev(dev);
+ 
+ 	reset_control_assert(cdev->rst);
+@@ -2069,8 +2004,8 @@ static enum hrtimer_restart m_can_polling_timer(struct hrtimer *timer)
+ 
+ 	ret = m_can_interrupt_handler(cdev);
+ 
+-	/* On error or if napi is scheduled to read, stop the timer */
+-	if (ret < 0 || napi_is_scheduled(&cdev->napi))
++	/* On error stop the timer */
++	if (ret < 0)
+ 		return HRTIMER_NORESTART;
+ 
+ 	hrtimer_forward_now(timer, ms_to_ktime(HRTIMER_POLL_INTERVAL_MS));
+@@ -2102,10 +2037,7 @@ static int m_can_open(struct net_device *dev)
+ 		goto out_reset_control_assert;
+ 	}
+ 
+-	if (cdev->is_peripheral)
+-		can_rx_offload_enable(&cdev->offload);
+-	else
+-		napi_enable(&cdev->napi);
++	can_rx_offload_enable(&cdev->offload);
+ 
+ 	/* register interrupt handler */
+ 	if (cdev->is_peripheral) {
+@@ -2144,16 +2076,13 @@ static int m_can_open(struct net_device *dev)
+ 	return 0;
+ 
+ exit_start_fail:
+-	if (cdev->is_peripheral || dev->irq)
++	if (dev->irq)
+ 		free_irq(dev->irq, dev);
+ exit_irq_fail:
+ 	if (cdev->is_peripheral)
+ 		destroy_workqueue(cdev->tx_wq);
+ out_wq_fail:
+-	if (cdev->is_peripheral)
+-		can_rx_offload_disable(&cdev->offload);
+-	else
+-		napi_disable(&cdev->napi);
++	can_rx_offload_disable(&cdev->offload);
+ 	close_candev(dev);
+ out_reset_control_assert:
+ 	reset_control_assert(cdev->rst);
+@@ -2533,12 +2462,10 @@ int m_can_class_register(struct m_can_classdev *cdev)
+ 	if (ret)
+ 		goto clk_disable;
+ 
+-	if (cdev->is_peripheral) {
+-		ret = can_rx_offload_add_manual(cdev->net, &cdev->offload,
+-						NAPI_POLL_WEIGHT);
+-		if (ret)
+-			goto out_reset_control_assert;
+-	}
++	ret = can_rx_offload_add_manual(cdev->net, &cdev->offload,
++					NAPI_POLL_WEIGHT);
++	if (ret)
++		goto out_reset_control_assert;
+ 
+ 	if (!cdev->net->irq) {
+ 		netdev_dbg(cdev->net, "Polling enabled, initialize hrtimer");
+@@ -2575,8 +2502,7 @@ int m_can_class_register(struct m_can_classdev *cdev)
+ 	return 0;
+ 
+ rx_offload_del:
+-	if (cdev->is_peripheral)
+-		can_rx_offload_del(&cdev->offload);
++	can_rx_offload_del(&cdev->offload);
+ out_reset_control_assert:
+ 	reset_control_assert(cdev->rst);
+ clk_disable:
+@@ -2589,8 +2515,7 @@ EXPORT_SYMBOL_GPL(m_can_class_register);
+ void m_can_class_unregister(struct m_can_classdev *cdev)
+ {
+ 	unregister_candev(cdev->net);
+-	if (cdev->is_peripheral)
+-		can_rx_offload_del(&cdev->offload);
++	can_rx_offload_del(&cdev->offload);
+ }
+ EXPORT_SYMBOL_GPL(m_can_class_unregister);
+ 
+diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+index 4743342b2fba..9223a77b55d7 100644
+--- a/drivers/net/can/m_can/m_can.h
++++ b/drivers/net/can/m_can/m_can.h
+@@ -81,7 +81,6 @@ struct m_can_tx_op {
+ struct m_can_classdev {
+ 	struct can_priv can;
+ 	struct can_rx_offload offload;
+-	struct napi_struct napi;
+ 	struct net_device *net;
+ 	struct device *dev;
+ 	struct clk *hclk;
+@@ -96,7 +95,6 @@ struct m_can_classdev {
+ 	const struct m_can_ops *ops;
+ 
+ 	int version;
+-	u32 irqstatus;
+ 
+ 	int pm_clock_support;
+ 	int pm_wake_source;
 
-isotp_release() {
-    ...
-    list_del(&so->notifier);
-    ...
-    dev =3D dev_get_by_index(net, so->ifindex);
-    if (dev) {
-        ...
-    }
-}
+---
+base-commit: 08030ddb87b4c6c6a2c03c82731b5e188f02f5b9
+change-id: 20260709-m_can-rx-offload-a228500d9f3a
 
-Since the device is unlisted, this returns NULL, causing isotp_release() to
-silently skip unregistering the CAN RX filters.
+Best regards,
+--  
+Marc Kleine-Budde <mkl@pengutronix.de>
 
-When the NETDEV_UNREGISTER notifier eventually runs in isotp_notifier(), it
-misses the socket because it was already unlinked from isotp_notifier_list.
-
-Could this permanently leak the CAN filters with a dangling pointer to the
-freed socket, leading to a use-after-free? Can this be triggered by an
-unprivileged user in a user namespace with CAP_NET_ADMIN by repeatedly
-creating and destroying vcan interfaces while simultaneously creating and
-closing ISOTP sockets?
-
-> -				synchronize_rcu();
->  			}
->  		}
->  	}
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260710-isotp-fixe=
-s-v2-0-bc57e26594b2@hartkopp.net?part=3D1
 
