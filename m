@@ -1,66 +1,65 @@
-Return-Path: <linux-can+bounces-8317-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8318-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 4K3uFNZcUWqnDAMAu9opvQ
-	(envelope-from <linux-can+bounces-8317-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 22:57:58 +0200
+	id bx+wKhldUWq9DAMAu9opvQ
+	(envelope-from <linux-can+bounces-8318-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 22:59:05 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A177B73E894
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 22:57:57 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 273D273E8A8
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 22:59:05 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=lq4FMST5;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=XpmtKCk9;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8317-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8317-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8318-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8318-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 745053007F76
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 20:57:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 84BC9300A516
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jul 2026 20:58:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020833AA4F8;
-	Fri, 10 Jul 2026 20:57:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E23635C1A6;
+	Fri, 10 Jul 2026 20:58:31 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12D43AFD08
-	for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 20:57:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6080F380FCA
+	for <linux-can@vger.kernel.org>; Fri, 10 Jul 2026 20:58:30 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783717075; cv=none; b=bJk2qsrQEx2oQWRHkw6AU7K4Ei60isPZTy7Eunt+gYQ9EKs0ynDtIhWnhxiOZ9olHymfXi0yjMjlsMVM8p7sKsP5AF7xFazxfy380ZOHtjtRYOps6+F1/TZEV0LEWA59idRWD58IeY2one60ZT3Xm+XMBwRqACEbsn/8v0IC850=
+	t=1783717111; cv=none; b=mqx+5Wd2F9dF3WGOQAxZjJM8heKUjhsA9i0tjSNRwijPh94DM7DhDhrlhH/DQDLziJswCY9AGr3jO+RJ5exSIkiIgQPkSCl3szKhKqOwutIzrLg13zgL/vw3rMQh7gk79IUbCxkUGcQ+rtNsd2CGAGkeB19YzX9JSKtRD1jokJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783717075; c=relaxed/simple;
-	bh=ps6rXrtwpgYUXgNZhS2dLZbJX14LcwSgsHeN9GCAHcM=;
+	s=arc-20240116; t=1783717111; c=relaxed/simple;
+	bh=xwZ1HrP0Qs9Lflg4igSsoJ4ckPpO1p3MxU6FrPk01kA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=aB7D/hIPgtZ5anyXnNDE7jAKJmQg/YUH6X3WcgDJG3EfKzXDy8zC0zhwVw0oeY+GuGB7PlvTp8Nw2Cf0DbgOGnOBOWqDeDWIk1uOTA/wRCt4Lv0v0bEsq2ql3GOuXHXykZYfjmuazHXDVsyx+aMRR1VHRYRhh6wZ5PCbdj2wjmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lq4FMST5; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C291F000E9;
-	Fri, 10 Jul 2026 20:57:52 +0000 (UTC)
+	 Message-Id; b=gXfm4UJoycS9jnkw48XI28KCwqEv4MiW87nLG/OKH+Lox1jBTCdFpDpGtIYncDFJZdzbQSsgx79axmxDtERGoLrMjUrwaH1hn8yHfiuEAkeDeQSZrcLbV5wRLSdOFFVfDzEiLc1g+a3AtJ1ldCaO3ZzakDGo+Y8LOg2vicqvfBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XpmtKCk9; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B9411F000E9;
+	Fri, 10 Jul 2026 20:58:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783717073;
-	bh=X5ON+JYzDAd9qRWY+6MIEn6YtZwud3cTwyF7m9UfzTE=;
+	s=k20260515; t=1783717110;
+	bh=QRxlOoDy/Z0zVAmMeS7Z6lI1l6e6Tfs5VwdJgz5fVt8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lq4FMST5fkIHh+zHv7keMylCKElBFyUWgT7J7xEM9qYwPkFjT++yFI4Ghb1l6opSA
-	 5OzfkvSFyu1rvhsMykHrTR33T8dqi+VPVclSwDfnJmtXGRzCXVupEFy02pCX0r7Vah
-	 jQs1ERz3/svqOxV5OD7NKHXsaPfIKQsLPkK3jyP6J04mHB1HSi2A1HJ82Z4kfIokVg
-	 fAtcd08parM2vYuvfPvooZkBjxOE29CQs2AOWpQ83UzQtajlGhfa6dcf39oB94A5Zt
-	 eTCzKb9m9kPCBWMKoPU+p0v+Rgcqj0wU8qK2OdDrmV++PzvFAVePkViMJzfTvN9VsL
-	 cfTetJJxj/D1w==
+	b=XpmtKCk993GaWL+8mRqfX1smFwPs6+UR0ha50BGICgfS7aeUFweiA7SvggQ7Fo5AC
+	 9pb34i+QvrkaFp8ui0WxM1+n962Mli2aOpJ4NCVZQjCU6k5jlhc120UtGWQleAAixo
+	 J5mDEXFlFhV6ORc664/wj5LRahi3I1vg1aIaBfQkSV4ZKdd4VhEd2QFpIWZQYBE6Lg
+	 7dwI68pWaiMLCfAX/K3jYJnvP9WkcfCHUEhOnhBTWc0RnLzxWX2WB/KLKbco8nRulq
+	 c5CP2jL96Z14iDPnTHgx+HCykMXrG+Vw44JTNHyVtkNtwX+VN48EcbNHwbQHwXbYAM
+	 0gNzdgN6pQfuA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 4/5] can: isotp: fix lock-free state transition in tx
- timer handler
+Subject: Re: [PATCH v6 1/5] can: isotp: use unconditional synchronize_rcu()
+ in isotp_release()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Oliver Hartkopp" <socketcan@hartkopp.net>
-Cc: "Vincent Mailhol" <mailhol@kernel.org>, linux-can@vger.kernel.org, "Marc
- Kleine-Budde" <mkl@pengutronix.de>, "Oleksij Rempel" <o.rempel@pengutronix.de>, "Oliver
- Hartkopp" <socketcan@hartkopp.net>
-In-Reply-To: <20260710-isotp-fixes-v6-4-a13c2539093d@hartkopp.net>
+Cc: "Marc Kleine-Budde" <mkl@pengutronix.de>, "Vincent Mailhol" <mailhol@kernel.org>, "Oliver
+ Hartkopp" <socketcan@hartkopp.net>, "Oleksij Rempel" <o.rempel@pengutronix.de>, linux-can@vger.kernel.org
+In-Reply-To: <20260710-isotp-fixes-v6-1-a13c2539093d@hartkopp.net>
 References: <20260710-isotp-fixes-v6-0-a13c2539093d@hartkopp.net>
- <20260710-isotp-fixes-v6-4-a13c2539093d@hartkopp.net>
+ <20260710-isotp-fixes-v6-1-a13c2539093d@hartkopp.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 10 Jul 2026 20:57:52 +0000
-Message-Id: <20260710205752.A7C291F000E9@smtp.kernel.org>
+Date: Fri, 10 Jul 2026 20:58:29 +0000
+Message-Id: <20260710205829.9B9411F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
@@ -73,18 +72,18 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8317-lists,linux-can=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8318-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,lists.linux.dev:replyto,sashiko.dev:url,hartkopp.net:email];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lists.linux.dev:replyto,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp,hartkopp.net:email,smtp.kernel.org:mid,sashiko.dev:url,trendmicro.com:email];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:mailhol@kernel.org,m:linux-can@vger.kernel.org,m:mkl@pengutronix.de,m:o.rempel@pengutronix.de,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -98,7 +97,7 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
@@ -106,100 +105,126 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A177B73E894
+X-Rspamd-Queue-Id: 273D273E8A8
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
-New issues:
-- [High] Early state transition to ISOTP_IDLE in the TX timer handler intro=
-duces a race condition that can corrupt the error state of a concurrent tra=
-nsmission.
-
 Pre-existing issues:
-- [High] A signal during the `isotp_sendmsg()` wait loop can abort another =
-thread's active transmission on a shared socket.
+- [High] Race conditions between isotp_release/isotp_bind and NETDEV_UNREGI=
+STER cause CAN filters to be leaked, leading to a Use-After-Free of the soc=
+ket.
 --
 
---- Patch [4]: [PATCH v6 4/5] can: isotp: fix lock-free state transition in=
- tx timer handler ---
-commit 3453d78776681a05466b1147a03618091e6287bc
+--- Patch [1]: [PATCH v6 1/5] can: isotp: use unconditional synchronize_rcu=
+() in isotp_release() ---
+commit 9e3b5ef819dd616609004db7956c6318a9ae781a
 Author: Oliver Hartkopp <socketcan@hartkopp.net>
-can: isotp: fix lock-free state transition in tx timer handler
 
-This commit introduces a cmpxchg to safely transition the state machine
-to ISOTP_IDLE in the tx timer handler. It ensures the state is only updated
-if it hasn't been changed concurrently.
+can: isotp: use unconditional synchronize_rcu() in isotp_release()
 
-Link: https://lore.kernel.org/linux-can/20260710142146.BDAE61F000E9@smtp.ke=
-rnel.org/
+isotp_notify() unregisters the (RCU) CAN filters via can_rx_unregister()
+and clears so->bound without waiting for a grace period. isotp_release()
+uses so->bound to decide whether it needs to call synchronize_rcu()
+before cancelling so->rxtimer, so when NETDEV_UNREGISTER runs first it
+skips that synchronize_rcu() and can cancel the timer while an
+in-flight isotp_rcv() is still executing and about to re-arm it via
+isotp_send_fc(), leading to a use-after-free timer callback on the
+freed socket.
+
+sakisho-bot remarked a problem with rtnl_lock held in isotp_notify(),
+therefore make isotp_release() always call synchronize_rcu() before
+cancelling the timers, regardless of so->bound. This still closes the
+original race (isotp_notify() clearing so->bound without waiting for
+in-flight isotp_rcv() callers before isotp_release() cancels the RX
+timer) without adding any RCU wait to the netdevice notifier path.
+
+Fixes: 14a4696bc311 ("can: isotp: isotp_release(): omit unintended hrtimer =
+restart on socket release")
+Closes: https://lore.kernel.org/linux-can/20260707085210.6B6C01F000E9@smtp.=
+kernel.org/
+Reported-by: Nico Yip <zdi-disclosures@trendmicro.com> (ZDI-CAN-31764)
 
 > diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index 5ef2a610fc172..0826ae8372467 100644
+> index c48b4a818297e..d30937345bcdc 100644
 > --- a/net/can/isotp.c
 > +++ b/net/can/isotp.c
-> @@ -939,9 +939,16 @@ static enum hrtimer_restart isotp_tx_timer_handler(s=
-truct hrtimer *hrtimer)
-
-[ ... ]
-
-> +	/* Only claim timeout if state is unchanged to avoid overwriting
-> +	 * concurrent state updates from isotp_sendmsg/isotp_rcv_echo.
+> @@ -1237,11 +1237,18 @@ static int isotp_release(struct socket *sock)
+>  						  SINGLE_MASK(so->txid),
+>  						  isotp_rcv_echo, sk);
+>  				dev_put(dev);
+> -				synchronize_rcu();
+>  			}
+>  		}
+>  	}
+> =20
+> +	/* Always wait for a grace period before touching the timers below.
+> +	 * A concurrent NETDEV_UNREGISTER may have already unregistered our
+> +	 * filters and cleared so->bound in isotp_notify() without waiting
+> +	 * for in-flight isotp_rcv() callers to finish, so this call must not
+> +	 * be skipped just because so->bound is already 0 here.
 > +	 */
-> +	if (cmpxchg(&so->tx.state, old_state, ISOTP_IDLE) !=3D old_state)
->  		return HRTIMER_NORESTART;
-> =20
->  	/* we did not get any flow control or echo frame in time */
-> @@ -951,8 +958,6 @@ static enum hrtimer_restart isotp_tx_timer_handler(st=
-ruct hrtimer *hrtimer)
->  	if (!sock_flag(sk, SOCK_DEAD))
->  		sk_error_report(sk);
+> +	synchronize_rcu();
+> +
 
 [Severity: High]
-Does this early state transition to ISOTP_IDLE introduce a race condition?
+This is a pre-existing issue, but can race conditions between isotp_release=
+()
+or isotp_bind() and NETDEV_UNREGISTER cause CAN filters to be leaked,
+potentially leading to a use-after-free of the socket?
 
-If the cmpxchg successfully sets the state to ISOTP_IDLE, another thread=20
-calling isotp_sendmsg() on a different CPU could see the IDLE state and
-immediately start a new transmission before this timer handler completes.
+If a user creates a CAN interface, binds an ISOTP socket, and concurrently
+unregisters the interface while closing the socket, isotp_release() removes
+the socket from the notifier list:
 
-If that happens, the timer thread would resume and execute sk->sk_err =3D E=
-COMM
-and sk_error_report(sk), which might incorrectly taint the new transmission
-with a communication error.
+net/can/isotp.c:isotp_release() {
+        ...
+        list_del(&so->notifier);
+        spin_unlock(&isotp_notifier_lock);
+       =20
+        lock_sock(sk);
+        ...
+}
 
-> -	/* reset tx state */
-> -	so->tx.state =3D ISOTP_IDLE;
->  	wake_up_interruptible(&so->wait);
-> =20
->  	return HRTIMER_NORESTART;
+This blinds the NETDEV_UNREGISTER notifier. If isotp_release() executes bef=
+ore
+isotp_notify(), the notifier skips the socket. When isotp_release() then tr=
+ies
+to clean up the filters, if the netdevice is already unlisted, it might skip
+the can_rx_unregister() call. The socket would then be freed, but the active
+CAN filter could still point to it.
 
-[Severity: High]
-This is a pre-existing issue, but can a signal during the wait loop in
-isotp_sendmsg() abort another thread's active transmission?
+A similar window exists in isotp_bind(), where the filters are registered
+before so->ifindex is updated:
 
-Looking at isotp_sendmsg(), if a concurrent sender fails to acquire the
-state and waits:
+net/can/isotp.c:isotp_bind() {
+        ...
+        if (isotp_register_rxid(so))
+                can_rx_register(net, dev, rx_id, SINGLE_MASK(rx_id), ...);
+       =20
+        can_rx_register(net, dev, tx_id, SINGLE_MASK(tx_id), ...);
+        dev_put(dev);
+       =20
+        /* switch to new settings */
+        so->ifindex =3D ifindex;
+        so->rxid =3D rx_id;
+        ...
+}
 
-net/can/isotp.c:isotp_sendmsg()
-        err =3D wait_event_interruptible(so->wait, so->tx.state =3D=3D ISOT=
-P_IDLE);
-        if (err)
-                goto err_event_drop;
+If a concurrent NETDEV_UNREGISTER runs during this window, isotp_notify()
+ignores the socket because it locklessly checks if (so->ifindex !=3D dev->i=
+findex),
+bypassing the unregister and leaking the filter when the socket is later
+released.
 
-If a signal interrupts this wait, the thread jumps to err_event_drop where
-it unconditionally cancels the timers and resets the state:
+Could this allow a local unprivileged user utilizing virtual CAN (vcan)
+devices to trigger a use-after-free?
 
-err_event_drop:
-        hrtimer_cancel(&so->txfrtimer);
-        hrtimer_cancel(&so->txtimer);
-err_out_drop:
-        so->tx.state =3D ISOTP_IDLE;
-
-Since this thread was only waiting and never claimed the state machine, will
-this forcefully cancel the active transmission of the thread that actually
-owned it?
+>  	hrtimer_cancel(&so->txfrtimer);
+>  	hrtimer_cancel(&so->txtimer);
+>  	hrtimer_cancel(&so->rxtimer);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260710-isotp-fixe=
-s-v6-0-a13c2539093d@hartkopp.net?part=3D4
+s-v6-0-a13c2539093d@hartkopp.net?part=3D1
 
