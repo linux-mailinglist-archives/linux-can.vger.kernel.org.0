@@ -1,218 +1,191 @@
-Return-Path: <linux-can+bounces-8338-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8343-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id HSgGKtaPU2qhbwMAu9opvQ
-	(envelope-from <linux-can+bounces-8338-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sun, 12 Jul 2026 15:00:06 +0200
+	id 6hIfGsiaU2rScAMAu9opvQ
+	(envelope-from <linux-can+bounces-8343-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Sun, 12 Jul 2026 15:46:48 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EF8D744BF6
-	for <lists+linux-can@lfdr.de>; Sun, 12 Jul 2026 15:00:06 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFFA3744DBB
+	for <lists+linux-can@lfdr.de>; Sun, 12 Jul 2026 15:46:47 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=UZb0mEO8;
+	dkim=pass header.d=kernel.org header.s=k20201202 header.b=onCqd9GC;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8338-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8338-lists+linux-can=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8343-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-8343-lists+linux-can=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 24DB430028B0
-	for <lists+linux-can@lfdr.de>; Sun, 12 Jul 2026 13:00:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 51B393036EC0
+	for <lists+linux-can@lfdr.de>; Sun, 12 Jul 2026 13:44:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EF2E3A9616;
-	Sun, 12 Jul 2026 13:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D083A5435;
+	Sun, 12 Jul 2026 13:44:07 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270E423D2A1
-	for <linux-can@vger.kernel.org>; Sun, 12 Jul 2026 13:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5471E39656D
+	for <linux-can@vger.kernel.org>; Sun, 12 Jul 2026 13:44:07 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783861202; cv=none; b=ujnIhS4msZA//2H4aSyk0bcnsyMaLCZCtfNn0IZaCb9VXmLBlglNshpeVCJiRTj8AY77MjSrhjp1+NPFUXmNbhFJfaRoD79DJltEM36EXs2CEoOQWXAMiKONQydjs4d+9WLutFLYJaHdf4YiaPNVPCh+jEbQN36N1WcpsdXT4EA=
+	t=1783863847; cv=none; b=q837V6nrs57Ut169wdNnZ71rI4YAjGP2+uY1P5o7pz6ESgMpx8RhpTJ46+fZHFxo7OxJVu4VrYCnIbOmbIH5UgV5Sq0A0csNMplk7FaJIIv1wn0wrIO9rjWOcWtiP/lKHJFXlObSwvlznMQwfrcwM13uGNtTMaV/O7pqUdsNdgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783861202; c=relaxed/simple;
-	bh=txGIww4JwZ3i0U3cA2+wh7ArONzbcH5OdXB0jYvITgY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NRo7ceJQQfgb8JLWIJu+AJfBLu19MDuFd63JpTRBL93Y3ocuha7oAk+NIsL2D+m4UzRqKyKqtkZ6ZYKoB55efEYvIUgagWzrGOeKWtjPJIU2VjjBHfnKpeUnfjzo+xUsIlD15zASV2NFycpR3J/2+JOtwSwyPthjowQbaVSBN4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UZb0mEO8; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B72EF1F000E9;
-	Sun, 12 Jul 2026 12:59:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783861200;
-	bh=WP/1+a78JJyGqG97iVn1yPeRJIoNxpTuAIGTbD+Pimk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UZb0mEO8VyGMKWbhlFDYgYq7maR4WwK4mXUhFWG78nhtcdlzkZdwu0wgjM++UIaoN
-	 cB/4lPthC8VvV1LlUQ9WMHwKKqMSUJSx0GoQnPPotUMI2ChCzHv1u4Kz9BCnMwy05w
-	 ul02u5Qs6n5HFUiUaEDD9G3+0+KGmSC/ZuFY9jsdy896qm5DSmz4VwZjRrF+L1JfqA
-	 CDELFdnvJPEWJm8Q+d4yIMNhYWUa+5ivNycxhnymATrOQIUIgbQxqMrRVbH+7sq+cb
-	 xgb4yJ8AfZSx1/z3my6QXty517VINnOlOufRjXOIpGN86uGXggZ+S4m61funW8AKMG
-	 GXs1khxr+9vgA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v8 2/4] can: isotp: fix use-after-free race with
- concurrent NETDEV_UNREGISTER
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Oliver Hartkopp" <socketcan@hartkopp.net>
-Cc: linux-can@vger.kernel.org, "Vincent Mailhol" <mailhol@kernel.org>, "Oliver
- Hartkopp" <socketcan@hartkopp.net>, "Oleksij Rempel" <o.rempel@pengutronix.de>, "Marc
- Kleine-Budde" <mkl@pengutronix.de>
-In-Reply-To: <20260712-isotp-fixes-v8-2-c39220a4e442@hartkopp.net>
-References: <20260712-isotp-fixes-v8-0-c39220a4e442@hartkopp.net>
- <20260712-isotp-fixes-v8-2-c39220a4e442@hartkopp.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 12 Jul 2026 12:59:59 +0000
-Message-Id: <20260712125959.B72EF1F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1783863847; c=relaxed/simple;
+	bh=FSrfVZrwwzE15HNSz1SU20TdCyh17KljLIlTF9UHTbE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=K+Hw091NaRx0kk+iROGCpJ3eqYA7S3ZPFxjO13CpBGvnW2JoCuXl412rkWpecrrKN1aDloWUTwIKsa9FfHVdLmgGw/fUiSOCBfIB9xfNMXZb8GVyQW9eRxlZlHBg9PR1zYZnK9MFevj/CExfk8GEBHa10tHmkvSPwXF6rAToxYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=onCqd9GC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E62E6C2BCB9;
+	Sun, 12 Jul 2026 13:44:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1783863847;
+	bh=FSrfVZrwwzE15HNSz1SU20TdCyh17KljLIlTF9UHTbE=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=onCqd9GC63vGbLBKRRhs0BVn/s7j+rHGi9iwP6av3jsujf7PkWr68tDZne4qUXeXB
+	 xYtiSroRMYn0EGHcuZ3h8Amb40bWIqQlGWqPWMKzv71VRZKA5+3Eve4kjqt+m1Z9MK
+	 rkc2glmrdjrts441JyngmScb3ybe9u33yVcyBd1g8fyH1TEIeab1yuV5Vv/RZ36Z9B
+	 fl47Xq3OQoASWPjayppyXDCO1mYZfwhLzPwBT7Bki7p6U0Oya8a9OfBJnMYOHgum45
+	 3wQas9QzuJMEqXl2vBfIAbtVu4ZMZmMLHMvZMS0jdxQ1gAZmzXfyOa2lvf4n0kPs62
+	 hjPi3hLVhCJkg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3ED5C43458;
+	Sun, 12 Jul 2026 13:44:06 +0000 (UTC)
+From: Oliver Hartkopp via B4 Relay <devnull+socketcan.hartkopp.net@kernel.org>
+Subject: [PATCH v9 0/4] net: can: isotp-fixes
+Date: Sun, 12 Jul 2026 15:44:04 +0200
+Message-Id: <20260712-isotp-fixes-v9-0-137840d7f0f4@hartkopp.net>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACSaU2oC/33QTWrEMAwF4KsMXtfFlv/iWfUepQs7lhu3MAlxG
+ lqG3L3KdDNTTJYP6XsCXVnFuWBl59OVzbiWWsYLBf90Yv0QLu/IS6LMQIAVTgpe6rhMPJdvrBx
+ DcroTybqYGYlpxtuAwOvbX65f8QP7Za/YN4ZSl3H+uZ1b5b7Xbl4lF9yZIJOUyaXsX4YwL5/jN
+ D1fcGF7+QoHHIjH3jgEa7yO0ODqgCviokvRdgguidjg+oBr4hB0yFq5bGWLmwNuiEsjnU4dJJt
+ lg9sDbokHqXowyguvUoO7ey4fuSOehQoZ6L7yrsG7ew6PvCPeKw8ggkat/39+27ZfSGedWnQCA
+ AA=
+X-Change-ID: 20260710-isotp-fixes-ead7480d67bf
+To: linux-can@vger.kernel.org
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, 
+ Nico Yip <zdi-disclosures@trendmicro.com>, sashiko-bot@kernel.org
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783863845; l=3097;
+ i=socketcan@hartkopp.net; s=20260128; h=from:subject:message-id;
+ bh=FSrfVZrwwzE15HNSz1SU20TdCyh17KljLIlTF9UHTbE=;
+ b=NO8cVjPYDJjJe5Qz+w19UqMbK9acC3YKyA0cbydraN5d/zpfKIBJS1mTfMTX8QU7Z2N8ommAN
+ eAa46JuYYMfAPrhF07Q5GZ7TopsPNgUpIIw0vLGT49L+Y+e5gmxb0y4
+X-Developer-Key: i=socketcan@hartkopp.net; a=ed25519;
+ pk=/gU/7/wBqak3kTsTeFbCCqUi9dnh+1i6ITEkfPj/BvU=
+X-Endpoint-Received: by B4 Relay for socketcan@hartkopp.net/20260128 with
+ auth_id=620
+X-Original-From: Oliver Hartkopp <socketcan@hartkopp.net>
+Reply-To: socketcan@hartkopp.net
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
+X-Spamd-Result: default: False [-5.16 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8338-lists,linux-can=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:linux-can@vger.kernel.org,m:mailhol@kernel.org,m:o.rempel@pengutronix.de,m:mkl@pengutronix.de,s:lists@lfdr.de];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-8343-lists,linux-can=lfdr.de,socketcan.hartkopp.net];
+	FORGED_RECIPIENTS(0.00)[m:linux-can@vger.kernel.org,m:socketcan@hartkopp.net,m:mkl@pengutronix.de,m:zdi-disclosures@trendmicro.com,m:sashiko-bot@kernel.org,s:lists@lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,hartkopp.net:replyto,hartkopp.net:mid,hartkopp.net:email];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	FORGED_SENDER(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-can];
-	ALIAS_RESOLVED(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_NO_DN(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-can@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6]
+	RCPT_COUNT_FIVE(0.00)[5];
+	ALIAS_RESOLVED(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-can];
+	HAS_REPLYTO(0.00)[socketcan@hartkopp.net]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 2EF8D744BF6
+X-Rspamd-Queue-Id: AFFA3744DBB
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+As sashiko-bot was not able to check the second patch this bundle is
+re-posted with b4 preparation.
 
-Pre-existing issues:
-- [Critical] A TOCTOU race condition in `isotp_sendmsg` allows concurrent m=
-odification of socket options, leading to an SKB heap overflow and `skb_ove=
-r_panic`.
-- [High] The check in `isotp_bind()` to prevent rebinding during an active =
-state machine does not fully prevent cross-interface packet injection from =
-RCU-delayed softirqs.
---
+Fixed the remarks reported by sashiko-bot of V8 patchset.
 
---- Patch [2]: [PATCH v8 2/4] can: isotp: fix use-after-free race with conc=
-urrent NETDEV_UNREGISTER ---
-commit 508c0cfe152e6936d33176beb93ef03692ea4ea7
-Author: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+Changes in v9:
+- patch 3: fix two reported issues and explain why issue 3&4 (-ECOMM sk_err
+  handling) will not be changed
+- Link to v8: https://patch.msgid.link/20260712-isotp-fixes-v8-0-c39220a4e442@hartkopp.net
 
-can: isotp: fix use-after-free race with concurrent NETDEV_UNREGISTER
+Changes in v8:
+- patch 3: properly terminate the former transmission before starting
+- patch 4: formerly patch 5 as the former patch 4 is squashed into patch 3
+- Link to v7: https://patch.msgid.link/20260711-isotp-fixes-v7-0-f03af24d8397@hartkopp.net
 
-This tracks the bound net_device with a reference instead of re-resolving
-it from ifindex during isotp_release(). It also rejects isotp_bind() with
--EAGAIN if the state machines aren't idle yet, avoiding timers acting on a
-newly bound interface.
+Changes in v7:
+- patch 3: add helper so->tx_gen to monitor new ISOTP_SENDING attempts
+- patch 4: prevent missasignment of sk_err report with new so->tx_gen
+- Link to v6: https://patch.msgid.link/20260710-isotp-fixes-v6-0-a13c2539093d@hartkopp.net
 
-Link: https://lore.kernel.org/linux-can/20260707101420.47F261F000E9@smtp.ke=
-rnel.org/
+Changes in v6:
+- patch 2: check for rx state and tx state to be IDLE in isotp_bind() (sashiko-bot)
+- patch 3: double check rx/tx states after all hrtimer_cancel() calls (sashiko-bot)
+           move ISOTP_IDLE in err_event_drop for the same reason
+- patch 4: use READ_ONCE() to prevent compiler load tearing as remarked by sashiko-bot
+- Link to v5: https://patch.msgid.link/20260710-isotp-fixes-v5-0-15174d82d6f1@hartkopp.net
 
-> diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index d30937345bcdc..44c044eb83e12 100644
-> --- a/net/can/isotp.c
-> +++ b/net/can/isotp.c
-> @@ -978,6 +980,14 @@ static int isotp_sendmsg(struct socket *sock, struct=
- msghdr *msg, size_t size)
->  			goto err_event_drop;
->  	}
-> =20
-> +	/* so->bound is only checked once above - a wakeup may have
-> +	 * unbound/rebound the socket meanwhile, so re-validate it
-> +	 */
-> +	if (!so->bound) {
-> +		err =3D -EADDRNOTAVAIL;
-> +		goto err_out_drop;
-> +	}
+Changes in v5:
+- patch 3: new: state change re-check after hrtimer_cancel()
+- patch 4: new: handle state transistion with cmpxchg()
+- Link to v4: https://patch.msgid.link/20260710-isotp-fixes-v4-0-2a4af437f61b@hartkopp.net
 
-[Severity: Critical]
-This is a pre-existing issue, but does a time-of-check to time-of-use race
-still exist here if sock_alloc_send_skb() blocks later in isotp_sendmsg()?
+Changes in v4:
+- patch 2: use a simpler method to reject a re-binding that can be implemented
+  inside the lock: No waitqueue waiting just exit.
+- Link to v3: https://patch.msgid.link/20260710-isotp-fixes-v3-0-08db68e27d0b@hartkopp.net
 
-If sock_alloc_send_skb(sk, so->ll.mtu) blocks during allocation, a concurre=
-nt
-NETDEV_UNREGISTER could trigger isotp_notify(), which acquires lock_sock()
-and sets so->bound =3D 0.
+Changes in v3:
+- patch 2: go back to initial idea without hard resetting the state machine and
+  timers but let these come to a graceful end. Even a new bind() at netdev
+  shutdown now leads to this graceful statemachine shutdown via the wait queue.
+- Link to v2: https://patch.msgid.link/20260710-isotp-fixes-v2-0-bc57e26594b2@hartkopp.net
 
-Userspace could then call setsockopt(CAN_ISOTP_LL_OPTS), which passes its
-!so->bound check and modifies so->ll.mtu and so->tx.ll_dl.
+Changes in v2:
+- patch 2: shutdown state machine to fix sashiko-bot complains
+  Link: https://lore.kernel.org/linux-can/20260710094807.A50DD1F000E9@smtp.kernel.org/
+- Link to v1: https://patch.msgid.link/20260710-isotp-fixes-v1-0-75a1d11d7df9@hartkopp.net
 
-When isotp_sendmsg() resumes, it has a smaller SKB but could use the new
-larger MTU, or isotp_fill_dataframe() could use the new so->tx.ll_dl to copy
-too many bytes into the small SKB:
+---
+Oliver Hartkopp (4):
+      can: isotp: use unconditional synchronize_rcu() in isotp_release()
+      can: isotp: fix use-after-free race with concurrent NETDEV_UNREGISTER
+      can: isotp: fix race between RX/TX timers and frame reception
+      can: isotp: fix state machine corruption on signal interruption
 
-net/can/isotp.c:isotp_fill_dataframe() {
-    ...
-    for (i =3D 0; i < num; i++)
-        cf->data[pcilen + i] =3D so->tx.buf[so->tx.idx++];
-    ...
-}
+ net/can/isotp.c | 286 +++++++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 220 insertions(+), 66 deletions(-)
+---
+base-commit: dd3210c47e8d3ac6b4e9141fc68acc03b38c0ba3
+change-id: 20260710-isotp-fixes-ead7480d67bf
 
-Could this lead to a heap out-of-bounds write overwriting skb_shared_info?
+Best regards,
+--  
+Oliver Hartkopp <socketcan@hartkopp.net>
 
-[ ... ]
 
-> @@ -1317,6 +1327,17 @@ static int isotp_bind(struct socket *sock, struct =
-sockaddr_unsized *uaddr, int l
->  		goto out;
->  	}
-> =20
-> +	/* A transmission or reception that outlived a previous binding
-> +	 * (unbound by NETDEV_UNREGISTER) may still be draining; the FC/echo
-> +	 * and RX watchdog timers bound how long this takes. Checked together
-> +	 * with so->bound in the same lock_sock() section above, so there is
-> +	 * no window in which a concurrent isotp_notify() could be missed.
-> +	 */
-> +	if (so->tx.state !=3D ISOTP_IDLE || so->rx.state !=3D ISOTP_IDLE) {
-> +		err =3D -EAGAIN;
-> +		goto out;
-> +	}
-
-[Severity: High]
-This is a pre-existing issue, but does this state machine check fully preve=
-nt
-cross-interface packet injection from RCU-delayed softirqs?
-
-If a packet arrives on an old device and is queued via can_rx_register()'s
-softirq, and concurrently the device is unregistered (clearing so->bound),
-userspace could call bind() for a new device.
-
-Since isotp_rcv() hasn't acquired so->rx_lock to change the state yet, the
-lockless check here passes and so->dev is updated. Could the delayed softirq
-then acquire so->rx_lock, transition the state, and send a Flow Control fra=
-me
-using the newly bound so->ifindex?
-
-Would isotp_rcv() need to verify that skb->dev matches the currently bound
-so->dev after acquiring so->rx_lock?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260712-isotp-fixe=
-s-v8-0-c39220a4e442@hartkopp.net?part=3D2
 
