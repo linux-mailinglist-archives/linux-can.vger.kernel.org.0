@@ -1,251 +1,203 @@
-Return-Path: <linux-can+bounces-8362-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8363-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id G1CAHF2oVGrPowMAu9opvQ
-	(envelope-from <linux-can+bounces-8362-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Mon, 13 Jul 2026 10:57:01 +0200
+	id XN6/DASrVGqIpAMAu9opvQ
+	(envelope-from <linux-can+bounces-8363-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 13 Jul 2026 11:08:20 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3B02749031
-	for <lists+linux-can@lfdr.de>; Mon, 13 Jul 2026 10:57:00 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 245557491EF
+	for <lists+linux-can@lfdr.de>; Mon, 13 Jul 2026 11:08:19 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=NXP1.onmicrosoft.com header.s=selector1-NXP1-onmicrosoft-com header.b=cSl01qZ0;
-	dmarc=fail reason="SPF not aligned (relaxed), DKIM not aligned (relaxed)" header.from=nxp.com (policy=none);
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8362-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8362-lists+linux-can=lfdr.de@vger.kernel.org";
-	arc=reject ("cv is fail on i=2")
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=cX8x03Cb;
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8363-lists+linux-can=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-can+bounces-8363-lists+linux-can=lfdr.de@vger.kernel.org";
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7D8043045081
-	for <lists+linux-can@lfdr.de>; Mon, 13 Jul 2026 08:53:50 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D89E630013AA
+	for <lists+linux-can@lfdr.de>; Mon, 13 Jul 2026 09:07:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 489DB3D6493;
-	Mon, 13 Jul 2026 08:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDEF63DD51D;
+	Mon, 13 Jul 2026 09:07:07 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010044.outbound.protection.outlook.com [52.101.84.44])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059063D6461;
-	Mon, 13 Jul 2026 08:53:28 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783932810; cv=fail; b=MaMFAc2+KJnjafJbjtk78BuO4K4pgQyFnGi2p0+hlKvo2RgFfpLTO6YEcXg7NdTZazEnwDlRkz6w0ASggQZzZCwjjJ+cPCy+1XcFXomqBD9OjwHf1fp5G4zOfvznnhk8OtxPILOmmmuUw071uyd4I7H7QRhj6QYFXcHFyek8tqM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783932810; c=relaxed/simple;
-	bh=9ygVd/9wOYBvYuQKxlnmXiqG0N3u51+iaQgO8LhlNIo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=n3HWLAqKdkX41grAXGDVyiUsZ0CaunDCgkqYueJc+rCDTqRJtAgxoug8e82SWs2eMgw3/smMZbzA+xdZk4kZutUj9KtJh4Kl8uKSq0vQ2LDJcFQG6iD4UEotMJhpgV6vkj2d38gVHVy5jbCWYxuSZVEisM9p/cMV1EpmmSdh2V8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=cSl01qZ0; arc=fail smtp.client-ip=52.101.84.44
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=htoFUmDeCuVVW1S5jJtpHCZ2NPxi8R2jo0wX3sWqxUJ+QeynzT4A3Ss+wQIomU00QTFa5pfyO7SE1MqB5KCcWRbHTtE7Qs0/R43UeD6MDCW4tPZwFp6/a7hAn1m//7xjsVB5bRaF+BIocb1Ve0t8e3LDBvhn6J7L0Xn0QYXC/s2ptcNggvkUiKS+2EK97+vIFrCLxRiKL95ET+0cDXkFlcE/pUqhVmwBUVpQhZC5BQ88Y1BAfuikj2rY/dip+BjyILBXkZZfsgi78BCdkcay/edCaKx+X76h8aL78A5o1r2sEsVVrBLyON/C8sqaIpE7HKB0sgtZB+qlAmrl9CBnLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BICuwCHVHi03s3I2/r7mErJ4O70LPSuo2IX7EewVGyE=;
- b=KpkNdU96AUZ2cL906aHDgc82SmE7YuOhQhEEnodx7RHjmCcDqoRZ+8t733E7qrEMaPaU060btSPAE0PPjZz3OnMU7X8bD3UYfm4xCxdHB4FDbuFus5+MdSPT6FBQnsIoEd5+jRXlvp9Ho1jYEa3NmnJQebWxeODE53Wol1WAbBbOCBnHz9F6+A4Y61yQbh1Qzz+YK7BMHGvN28I4ToGD39m4DyPn86rOFhbWhh4seGR7feZ3YabBGsnsBHdFFeauD8TSSIWvzpMLitzin9UqwLjEwLsyy7C6FT4WK7B3LBXuh+jg8EsPBA4GYadwqopVFnmlALeF9c0Vsgga9du8Ig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BICuwCHVHi03s3I2/r7mErJ4O70LPSuo2IX7EewVGyE=;
- b=cSl01qZ0/Jb7tEG2u4LM3DKO676/G404fZ5M07Kwsx8H0u2phORet4rW+c1YHH6wMlKfsAmCLuOgLR4JfuV9rlJXpg2yQ4ATW3cuqecc6kx4MRpUU3V+/soFQQSCRQNeNyLtLRbDHUomgvTMml3Qp9NyJRG7GkP6+Zwdg5pgLcx6dElZ2Fub42ZP/3IdFJtaQeaYFCo2UV1oOeHjNXSjAs6h5j33oFHigT9vlQfmJIhw62sLqnZk5StR/ZHay071Jtfhc6LrI1Jn86IU15l7vNB4fMD2Aw2DKyiJ/WfsYhzTp/yef9tvzWHBPWg1MsKK91he15XP402btNI6TV6Vxw==
-Received: from AM0PR04MB5858.eurprd04.prod.outlook.com (2603:10a6:208:132::23)
- by PAXPR04MB9139.eurprd04.prod.outlook.com (2603:10a6:102:22e::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.202.18; Mon, 13 Jul
- 2026 08:53:17 +0000
-Received: from AM0PR04MB5858.eurprd04.prod.outlook.com
- ([fe80::bdf4:c9d1:4e3f:68c6]) by AM0PR04MB5858.eurprd04.prod.outlook.com
- ([fe80::bdf4:c9d1:4e3f:68c6%4]) with mapi id 15.21.0181.017; Mon, 13 Jul 2026
- 08:53:16 +0000
-From: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>
-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Angelo Dureghello <angelo@kernel-space.org>
-Cc: linux-can@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev,
-	NXP S32 Linux Team <s32@nxp.com>,
-	Christophe Lizzi <clizzi@redhat.com>,
-	Alberto Ruiz <aruizrui@redhat.com>,
-	Enric Balletbo <eballetb@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>,
-	Andra-Teodora Ilie <andra.ilie@nxp.com>,
-	Larisa Grigore <larisa.grigore@nxp.com>,
-	Haibo Chen <haibo.chen@nxp.com>
-Subject: [PATCH v6 6/6] can: flexcan: add NXP S32N79 SoC support
-Date: Mon, 13 Jul 2026 10:53:06 +0200
-Message-ID: <20260713085306.2643794-7-ciprianmarian.costea@oss.nxp.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260713085306.2643794-1-ciprianmarian.costea@oss.nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF583DC87B;
+	Mon, 13 Jul 2026 09:07:06 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783933627; cv=none; b=q2u8G0rTqxsUVAzsBrAGcsUTsvbFOFAu/pG315yXA4nDBWtfVpdaZntBpPpYSk9JEk1pH7xbjAPxotFaflaw33kVtehQb8jCF4oPkA+Yae6xQqpfIMpPgfaCYL/RgpW2hihzN99ieR4e3qLXp8M7S2JttsIl4vWiYB1TIqWYCL4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783933627; c=relaxed/simple;
+	bh=n0fopzEJDgafWJwnl40yoyqqaIfVImlLlNER9JEgabg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=i/NnPzO/6OR8E0KzJ3sOFZ2glNO9wKeVL0v1uWO6mF+da+5XU8Yn8eJTkC8wcksnd6X/7YDADvDVDPvvmvGHdab2JIV+mWT2XOtW3stvjPCRLhVVvcSTpMpq7uAtwhnqRwTWmlDa75SvIUA96tUW1IMRgCWaeHnR3v35MiXZVCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cX8x03Cb; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F7671F000E9;
+	Mon, 13 Jul 2026 09:07:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783933626;
+	bh=j/4/GWm2mQ+EBWNv2DIOgwT1Fhljfr9slMv5bDH/jFA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=cX8x03CbWSr8biz2ae7QW1K2mikjRIAd6qpatzrdSo1TeXOsLmN4+KLK6y6ZIezai
+	 U+p1rntzCCLw2HtGH46X6dheVRbG9rcy6CSzvtol7mmsZXy9acQvXEf/3ia6qj+0dg
+	 5ETazTe2fD/WxtkcHqh9PYWKOJvkU8EeSMj7Jh0dbZi06OAjiSK+q6OQNkXOj35JCh
+	 kTHx+hVavZB1p+WQ++xYeyFKMnGuJE+KKQfydV9Gg89b2Qrc60bAys5Xho5Nc/lXIn
+	 C4AiWAvQ41flDvwqmXiDMjqptjgytc3U+HsXYhMHwFAEMoq545DVCGO3hQAEV2OezX
+	 CPSukPoCeClWA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v6 2/6] can: flexcan: disable all IRQ lines in
+ flexcan_chip_interrupts_enable()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ciprian Costea" <ciprianmarian.costea@oss.nxp.com>
+Cc: linux-can@vger.kernel.org, imx@lists.linux.dev, robh@kernel.org, Frank.Li@kernel.org, "Marc
+ Kleine-Budde" <mkl@pengutronix.de>, "Vincent Mailhol" <mailhol@kernel.org>, conor+dt@kernel.org, "Oleksij
+ Rempel" <o.rempel@pengutronix.de>, "Oliver Hartkopp" <socketcan@hartkopp.net>, devicetree@vger.kernel.org
+In-Reply-To: <20260713085306.2643794-3-ciprianmarian.costea@oss.nxp.com>
 References: <20260713085306.2643794-1-ciprianmarian.costea@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS4P190CA0069.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:656::15) To AM0PR04MB5858.eurprd04.prod.outlook.com
- (2603:10a6:208:132::23)
+ <20260713085306.2643794-3-ciprianmarian.costea@oss.nxp.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 13 Jul 2026 09:07:04 +0000
+Message-Id: <20260713090705.9F7671F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB5858:EE_|PAXPR04MB9139:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ae66843-288a-4590-1936-08dee0bc2e2b
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|7416014|23010399003|376014|19092799006|366016|1800799024|56012099006|11063799006|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
- wgF9pszZeJgMpeZRQydxn9aCupz807U2sZifa9fEadDaVqJEldqk++YUytvv28tmGOBuBH6HlZB6IdWV4WLkV/HjYdxIjh4RMeCJXliAbtgKVrI3/G4+WAHmDH6uRubhZLgucZFhs98Xc376YmpkFa486h7aJyh+3fFDKujg5kHazvioKsBJ+LuzvFNj5VIk7DavBZlL38/V+FYlXuXplTGjKsOG834LLGhrzqasXMjkAtJKhtaT9JuqsP7fXj3wkCaveSsnoASB1tWC9OxaPRpS/8YthtZxzhYCO2mh/haDl+VpxZHmfwhhlD7AcS2ikcPySU+iv514GZxe5s19Yde7U1e+CjQUHbaKDbw80qSyfwugmautK3KnyZ0eei0p4k+omz4Nw7Tek1YovzSIWBT+xC2TV9DeqxqcyL5xxcm1Og3CMwIes7gXRhGUvQaiyQ0/e7QuvtYVBeQAoyImizYIDnDwbenCwzJ+kacaxcJoLtDXvL/lyzZ8kWDpeYdogV2VbaDM8/QkZbusI8HjdcYAhsk167q8ta7+U3h4OnWchdnsyGV+/wCp6GF4V7qn1nDW3RSa3MRpqdJk2djOx+4aygXjPIFUr0/d/dBmtmt11uNXe6ZFy9/oWDOVz39pFEMZM8c6SG4vV+UA6kpPF+5VyprldSQtNm0AOC2x+Ww=
-X-Forefront-Antispam-Report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB5858.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(23010399003)(376014)(19092799006)(366016)(1800799024)(56012099006)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
- =?utf-8?B?K2pTZ1VWUUc1S2NoWHR3aTJmU1Z4MGloTGZWOUt5RU5DTVZOT3ZGV2Zqc1ZQ?=
- =?utf-8?B?NThHVDZGS2Fib3ZyZXVudnlud243NWhuYTJ0VE1PVzdvVFlqQWFrWWRBeFdw?=
- =?utf-8?B?bStBL0FMcHR0Q1ZjRGxvQ0JpRkRXdFZsNnNmWVFFc3dUVFdJM09pVmpVeTQ5?=
- =?utf-8?B?cFJzZEZKMkRlc2MzSnVvZHBEVWw5YTFmRm9Ld3hmWnVEbGlCSWgxS2VqNWdY?=
- =?utf-8?B?SGZVeTRLOStLRVBnaUIrRXVoeG5vd1JxTEVPVUxLUnpzQnd0Qk5Ld04zeHlq?=
- =?utf-8?B?YXhyWEE5ajdqeVF2S1dlMC91UGJ2VHI1bGJlMGFZYkh4QStXbDN1WjFkUktC?=
- =?utf-8?B?dFY0MEpjNkZENTJCMHpjdWUxLzRaUnBRQXVRMHhlK2FZZzMwOWg5S3pUTW9x?=
- =?utf-8?B?YUJSaXVONVhmU1A1VGRwWGZEYlNkTXlsRU5sblRBNC9qZ0I2QzJsZ2llMmtq?=
- =?utf-8?B?QnVQbGcwbEhIK1JiY2w2U1QvQ2loR0pLM0oxNDJtaGxUSDVWcGxEaUhDWlFr?=
- =?utf-8?B?L0lLb0xZcXg4T0VKRkdXVjdxT1pDMTZETCtYTGxBSUtabnZHaHlTNDFDTGh3?=
- =?utf-8?B?QXppMnNNSXVYSXl0KzVWL2lsOWsvdEw1cVpyU1J3RmxsaUI2V3VhV2drMmVS?=
- =?utf-8?B?ano3RTVvQ1hhZElaWjIwSDY5Y21SRXBBQUVqZ3F3Q2Zsc1ZLWUtqV3A5YVdX?=
- =?utf-8?B?Z1l2eVJNd0x1UlpjVUZxcmhITC9qUVE3cmI5YWE0L0V0cUdqSGhRcjgweUpl?=
- =?utf-8?B?MEUzSFlOQTFWTmRJN0Zrd0dBZlAyNGpNK0ZjTHhWMkdyMEFaN3QyYlllR1lM?=
- =?utf-8?B?eXlRRjlvR1VpVzhlcklFNWR0YjVmR1BVeVhOTHdLTFJ4RVU4M0k3czZWNm1I?=
- =?utf-8?B?VVJZOUViNFlVMEJLT3NmeU9rODlmcnJzYU9SN25CK2RPTnBNOXlIWVZrNGY1?=
- =?utf-8?B?cUdKZzBXOTZaZE5XcTZiWmt1WmxlY2pBd1dsMlIxanZQSGdSdnRzSGFvMEM4?=
- =?utf-8?B?c3NrNzBxUzNDQ1pDUTJzTGsxY2tNajJpSU9XU25XcDh6bTg3b2I2NGhaeW1Q?=
- =?utf-8?B?RVgwbkRPS05MV3UzTjY1dzJYaXk2YjJXZTl6M3lod0dDQUMwR2RTZHo4bXpt?=
- =?utf-8?B?ZzRtekFyeUYwckwwU09pSlg4QW1hQlpyY2NPbDBsd29zdy85K0JRZm9TclFP?=
- =?utf-8?B?QXY4NUxCWjNUcDJqaUZqOFZwN2VsNlFIL1dHOGQ2TWNwRW9RaWlMeHVZcDkz?=
- =?utf-8?B?WTlmdHFZOGdSQjFhSm9CaEVtOWt1ZXpIT04xS0dUYytvT2RvdjQ4TS9Jc2dW?=
- =?utf-8?B?bTBCMDhxMit2RFR5V1FDaUZlVFl1Q2c1Qmo4N05wYzFvNDBUV2ZtUUp0ejRl?=
- =?utf-8?B?ZkFndjI2Z2JiRldVNG9oeDd2blU4K1l5bTlHNmJ5ZnBiY24yMGYwSEJNN1gw?=
- =?utf-8?B?Y21hdmRMbExqRjRRNmttdE5DTW5ScHI0RjZaN0hKbVVoRDVCYWxnSExxcndt?=
- =?utf-8?B?VC83S0ZaNFFnRGUzT2hUekVPazhQKzMvd3hSNTIvTWRwa3lBVmVyQjhOeXho?=
- =?utf-8?B?RG40TXFFMDM2S2FzdGVKZXBWeGJKUkNjMGoraVArUGx0UkpyUVFqZktPUFBO?=
- =?utf-8?B?YUxSTDlsMHFUVU9vZ2RReEFmZ2R5YzVCTHh5UGJudHVwQ0VIbzlHTjQwTmlQ?=
- =?utf-8?B?djYrWlV0NDJiV0w3MitGVU9HMTl5azhDa0tQOVJoY3NqU2FXRTJhYmw5b2FV?=
- =?utf-8?B?em5UY2hHUXA1RVRZWDgyNDRvYnc1MmFnWDBjZ0QwYTIxb1dZMnBUVVFaNlRs?=
- =?utf-8?B?RWY4MWZlZ3BPV1lLbHVocUlENG5QcWxoWDBnWWkwYWRqTGF3aGRldGM1c2Rp?=
- =?utf-8?B?NjJmNW1iR0NhK1pzMGgybXB4enFwOURKNGwreTJ0STVWbDJsOWUvMjF4ZDRT?=
- =?utf-8?B?eGVZeUswRitLeVA5UWNMRU9ROWwzSWtqNkZWUjZ4WWhiNzBDOS9aUUQ4STYz?=
- =?utf-8?B?WkpOTEVSb2cvK3F4azZ6c05yNThTVkZ1d214Y1hUVjdpWU5BQlY3VGRoaHlE?=
- =?utf-8?B?YWE5VGk4UkVOOER1Z0VqOTg3aDVnVVlXYmZuc3FOZHUyZjBRa0w4eUpwajNM?=
- =?utf-8?B?KzJvZjU1WVJnUkhkVTdncmpHU0NWUEZGa3NsWCtLaG5iMmVDaHAwZHEzN2Fp?=
- =?utf-8?B?UndsR09HeVNsVUNtWkkxOWk2bFd3KzE0TVRnLzNoMlNMMGtCMENCaC9wc2kr?=
- =?utf-8?B?QkZPSk9ZSlpnSlQ1enBCSXRlOEdKOGFJTnBhY1ZiNktlRmpVc0RJZUVBbGtp?=
- =?utf-8?B?K0tVMUhDVzkxM2FnUGk5bDdnOEYrUjdiNytCcGpVeDRHalFkdEFyTi9yRDdl?=
- =?utf-8?Q?kn4ZXatUYhCSKt0k=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ae66843-288a-4590-1936-08dee0bc2e2b
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB5858.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2026 08:53:16.8177
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q043nVh6Y8H55GhLE/jGclYxjYqs0aTNs3zpOm4jDFkEtJ7+0ZLgA1/FH8jOPXlX9O/DquaqEoWRbe82PO9X0kD0EixwzWz7wDsbooEHPu8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9139
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [2.94 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[NXP1.onmicrosoft.com:s=selector1-NXP1-onmicrosoft-com];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[nxp.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	TAGGED_FROM(0.00)[bounces-8362-lists,linux-can=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:mailhol@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:angelo@kernel-space.org,m:linux-can@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:imx@lists.linux.dev,m:s32@nxp.com,m:clizzi@redhat.com,m:aruizrui@redhat.com,m:eballetb@redhat.com,m:echanude@redhat.com,m:ciprianmarian.costea@oss.nxp.com,m:andra.ilie@nxp.com,m:larisa.grigore@nxp.com,m:haibo.chen@nxp.com,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[ciprianmarian.costea@oss.nxp.com,linux-can@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[NXP1.onmicrosoft.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ciprianmarian.costea@oss.nxp.com,linux-can@vger.kernel.org];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-8363-lists,linux-can=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:ciprianmarian.costea@oss.nxp.com,m:linux-can@vger.kernel.org,m:imx@lists.linux.dev,m:robh@kernel.org,m:Frank.Li@kernel.org,m:mkl@pengutronix.de,m:mailhol@kernel.org,m:conor+dt@kernel.org,m:o.rempel@pengutronix.de,m:socketcan@hartkopp.net,m:devicetree@vger.kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-can,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp,NXP1.onmicrosoft.com:dkim,oss.nxp.com:mid,oss.nxp.com:from_mime]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp,nxp.com:email,smtp.kernel.org:mid,sashiko.dev:url,lists.linux.dev:replyto]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D3B02749031
+X-Rspamd-Queue-Id: 245557491EF
 
-From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Add device data and compatible string for NXP S32N79 SoC.
+Pre-existing issues:
+- [High] On multi-IRQ platforms, Wake-on-CAN is broken because `flexcan_sus=
+pend` only arms the primary IRQ (`dev->irq`) for wakeup, completely ignorin=
+g the state/BOFF interrupt (`priv->irq_boff`) which actually handles the wa=
+keup event.
+- [High] In `flexcan_resume`, the network queue is restarted (`netif_device=
+_attach` and `netif_start_queue`) before the hardware is initialized (`flex=
+can_chip_start`). This creates a race condition where a packet can be queue=
+d for transmission just before the hardware undergoes a soft reset, leading=
+ to a permanent TX stall.
+--
 
-FlexCAN IP integration on S32N79 SoC uses two interrupts:
-- one for mailboxes 0-127
-- one for signaling bus errors and device state changes
+--- Patch [2]: [PATCH v6 2/6] can: flexcan: disable all IRQ lines in flexca=
+n_chip_interrupts_enable() ---
+commit ca7ea75d45df1ecf13f11dcec0bd19377eccf3c6
+Author: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
 
-Co-developed-by: Andra-Teodora Ilie <andra.ilie@nxp.com>
-Signed-off-by: Andra-Teodora Ilie <andra.ilie@nxp.com>
-Co-developed-by: Larisa Grigore <larisa.grigore@nxp.com>
-Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
-Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
-Reviewed-by: Vincent Mailhol <mailhol@kernel.org>
-Reviewed-and-tested-by: Haibo Chen <haibo.chen@nxp.com>
-Tested-by: Enric Balletbo i Serra <eballetb@redhat.com>
----
- drivers/net/can/flexcan/flexcan-core.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+can: flexcan: disable all IRQ lines in flexcan_chip_interrupts_enable()
 
-diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
-index e7e3fb41f55e..54279b91cf5e 100644
---- a/drivers/net/can/flexcan/flexcan-core.c
-+++ b/drivers/net/can/flexcan/flexcan-core.c
-@@ -403,6 +403,15 @@ static const struct flexcan_devtype_data nxp_s32g2_devtype_data = {
- 		FLEXCAN_QUIRK_SECONDARY_MB_IRQ,
- };
- 
-+static const struct flexcan_devtype_data nxp_s32n_devtype_data = {
-+	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
-+		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_USE_RX_MAILBOX |
-+		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_SUPPORT_FD |
-+		FLEXCAN_QUIRK_SUPPORT_ECC | FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR |
-+		FLEXCAN_QUIRK_IRQ_BERR,
-+};
-+
- static const struct can_bittiming_const flexcan_bittiming_const = {
- 	.name = DRV_NAME,
- 	.tseg1_min = 4,
-@@ -2222,6 +2231,7 @@ static const struct of_device_id flexcan_of_match[] = {
- 	{ .compatible = "fsl,ls1021ar2-flexcan", .data = &fsl_ls1021a_r2_devtype_data, },
- 	{ .compatible = "fsl,lx2160ar1-flexcan", .data = &fsl_lx2160a_r1_devtype_data, },
- 	{ .compatible = "nxp,s32g2-flexcan", .data = &nxp_s32g2_devtype_data, },
-+	{ .compatible = "nxp,s32n79-flexcan", .data = &nxp_s32n_devtype_data, },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, flexcan_of_match);
--- 
-2.43.0
+flexcan_chip_interrupts_enable() disables only the primary IRQ line while
+writing to the IMASK and CTRL registers. On multi-IRQ platforms, the
+additional IRQ lines remain active so their handlers can fire while registe=
+rs
+are inconsistent. This commit disables all registered IRQ lines around the
+IMASK/CTRL writes.
 
+> diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/fle=
+xcan/flexcan-core.c
+> index f73ff442d5304..7dde2e623defe 100644
+> --- a/drivers/net/can/flexcan/flexcan-core.c
+> +++ b/drivers/net/can/flexcan/flexcan-core.c
+> @@ -1519,14 +1519,28 @@ static void flexcan_chip_interrupts_enable(const =
+struct net_device *dev)
+>  {
+>  	const struct flexcan_priv *priv =3D netdev_priv(dev);
+>  	struct flexcan_regs __iomem *regs =3D priv->regs;
+> +	u32 quirks =3D priv->devtype_data.quirks;
+>  	u64 reg_imask;
+> =20
+>  	disable_irq(dev->irq);
+> +	if (quirks & FLEXCAN_QUIRK_NR_IRQ_3) {
+> +		disable_irq(priv->irq_boff);
+
+[Severity: High]
+This is a pre-existing issue, but on multi-IRQ platforms, is Wake-on-CAN
+broken because we only arm the primary IRQ during suspend?
+
+In drivers/net/can/flexcan/flexcan-core.c:flexcan_suspend(), we see:
+
+	if (device_may_wakeup(device)) {
+		enable_irq_wake(dev->irq);
+		err =3D flexcan_enter_stop_mode(priv);
+
+Since the hardware asserts irq_boff (which handles FLEXCAN_ESR_WAK_INT) for
+wakeup events, doesn't irq_boff need to be armed with enable_irq_wake() as
+well? Otherwise, the system might fail to wake from suspend since the
+interrupt controller won't treat the asserted IRQ line as a wakeup source.
+
+[Severity: High]
+This is also a pre-existing issue, but does flexcan_resume() restart the
+network queue prematurely?
+
+In drivers/net/can/flexcan/flexcan-core.c:flexcan_resume(), the queue is
+restarted before hardware initialization:
+
+	if (netif_running(dev)) {
+		netif_device_attach(dev);
+		netif_start_queue(dev);
+		if (device_may_wakeup(device)) {
+			...
+		} else {
+			...
+			err =3D flexcan_chip_start(dev);
+
+If netif_start_queue() is called before flexcan_chip_start() reinitializes
+the hardware, could the networking stack concurrently call ndo_start_xmit
+(flexcan_start_xmit) and queue a packet?
+
+If so, would the subsequent flexcan_chip_start() soft reset wipe out the
+freshly populated message buffers, aborting the transmission and leading to=
+ a
+permanent TX stall since the completion interrupt will never fire?
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260713085306.2643=
+794-1-ciprianmarian.costea@oss.nxp.com?part=3D2
 
