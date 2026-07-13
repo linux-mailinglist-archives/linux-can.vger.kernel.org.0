@@ -1,164 +1,208 @@
-Return-Path: <linux-can+bounces-8354-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8355-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id XlBwBWMIVGrJhAMAu9opvQ
-	(envelope-from <linux-can+bounces-8354-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Sun, 12 Jul 2026 23:34:27 +0200
+	id 8j86LmObVGrEoAMAu9opvQ
+	(envelope-from <linux-can+bounces-8355-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Mon, 13 Jul 2026 10:01:39 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 985D374607A
-	for <lists+linux-can@lfdr.de>; Sun, 12 Jul 2026 23:34:26 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 639E0748760
+	for <lists+linux-can@lfdr.de>; Mon, 13 Jul 2026 10:01:34 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=J5F4Wnev;
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8354-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-can+bounces-8354-lists+linux-can=lfdr.de@vger.kernel.org";
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0002 header.b=hmdMNuu3;
+	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0003 header.b="/aZs55V1";
+	dmarc=pass (policy=reject) header.from=hartkopp.net;
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8355-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8355-lists+linux-can=lfdr.de@vger.kernel.org";
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0D2053002B0C
-	for <lists+linux-can@lfdr.de>; Sun, 12 Jul 2026 21:34:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C9D65304D467
+	for <lists+linux-can@lfdr.de>; Mon, 13 Jul 2026 07:57:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D59D376A0E;
-	Sun, 12 Jul 2026 21:34:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8445B399377;
+	Mon, 13 Jul 2026 07:56:59 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F4D376BE0
-	for <linux-can@vger.kernel.org>; Sun, 12 Jul 2026 21:34:23 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783892064; cv=none; b=MZvv29+D/+NBquIy1KGSjk0oASPSq/jjqsxWvKnc8RHuAZvAueEhgQ4UgDkheYGcsbLqylNvDp99gNzcRMRXuDHgv2O9p1pDkIb1ynCAcKD8Gpl1Qu2I9BL14EFGeZH5TpTYv590hkShpxxXq6DJE6nUnIEprnnwGjlmHv2Sw5I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783892064; c=relaxed/simple;
-	bh=691QnKVCikUEeOzK2iPober+r8rx1L+vF3+ElTFwI+Y=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=efzbYNA5Ack+mL5KcdUYNOnRepmWp/DNa1jFEoUKpeec4epNGwlBcJ7lapvuea8poyV2407pO73BZ163or3lh7YBZQyczxb5ftMWGhrUz/yggcoG4A/1b4YDfHMV0sGFKBpYgu0c/zg2W60TicfxFM6ql4rMsKDAzsJ2/UgG+Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5F4Wnev; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB1111F000E9;
-	Sun, 12 Jul 2026 21:34:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783892063;
-	bh=oZMBOvaH9k5qv9bXtn7fmBZR0CqLKKeItlVHzx3NEts=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=J5F4WnevB07QH47IAopn1kazdsfpSym1xKXR1kPDUJpNH26FPV6GqglRrYbpJdxvQ
-	 0Hr2D901kIq5hJqsUhTV7i8Ei1+nRloG5OZDPmrFlwwceae6lOKIZ1XLI+yhhZf0xg
-	 GegLXoSRcaG2Q8PjagRw6BZLkJTA4C/ZmzhLzUV3soGNNKOD/9K/9Qd9HNdD4SEr3s
-	 o0NMCoVEb8r7iYFouaX/IDZRox2RGQmutOr2IKezVSk1vTpbkpgSsF817R1e3EwO9L
-	 THK6gFauMcJP0hZgQKrZ+GsKgOb37EDsE66UR4cCSkA3aqO1ICsnsVfVKArWVdXZH9
-	 uMzBUacee77dA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1] vxcan: Support per-netns device unregistration.
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kuniyuki Iwashima" <kuniyu@google.com>
-Cc: "Oliver Hartkopp" <socketcan@hartkopp.net>, linux-can@vger.kernel.org, "Oleksij
- Rempel" <o.rempel@pengutronix.de>, "Marc Kleine-Budde" <mkl@pengutronix.de>, "Vincent
- Mailhol" <mailhol@kernel.org>
-In-Reply-To: <20260712212113.181121-1-kuniyu@google.com>
-References: <20260712212113.181121-1-kuniyu@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 12 Jul 2026 21:34:22 +0000
-Message-Id: <20260712213422.DB1111F000E9@smtp.kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB24399346
+	for <linux-can@vger.kernel.org>; Mon, 13 Jul 2026 07:56:56 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783929419; cv=pass; b=i7ft6wvdsvWCjKhSROWvep1ilM/0OJqbm+geMXgAKppLkBOD/xP8Tt0DurL5Ce6OOOjEoKJao4ntbUoEqmWg5xJUCPYEAI0t3UGGudgM7yq/Hx3MqlJlDyb4Wg9Syq1L/R5nGGqY1S7OWDr2Nz32Leev8wl+BVHFYGLdislewNk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783929419; c=relaxed/simple;
+	bh=JIJxtZg9pirwXwbQzi1OU+lzXYNe9iPkV0Vhrx7LQVE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IDYUrfM5skJO7iOmNvh1p759/hJZv5ZJ0PDvUFbG6RzrswHrbWVOb1LwzUdNYSQh1j6eYPZR8/GThe0OUdS/6yAAfA/Mk2pVLspi18GXxbcsdb4yl+CH37ltPbQMpeTFmkq8Sx6dC26DqDLqPpp4e6qxQmlW+7lI2xLDZmlakhA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=hmdMNuu3; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=/aZs55V1; arc=pass smtp.client-ip=85.215.255.22
+ARC-Seal: i=1; a=rsa-sha256; t=1783929398; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=fhK2HNqM8ASFqkgFXxojtD6YxfAy/G0xUTcHa/+heAP4zBN6YyXb9/CDkZOj2n69Jz
+    o6QsQnng4d+KnJtU3JU/XyQY/LmFZQOUCB2b1phvFceIKOJs3A/803L+/wAAHG3yudxH
+    mfPOajmqRV1hdpPpWRaslrSJjwdwOztZh9BjXVBEtemBQprRuWPpo/m2vSVIyRlhDv2d
+    wHbc9g/Jh/zi0vRRoOhMY/OZlCUGfJ2KhK9KnH4IM+FWchx4Jo+cF2HbdNzpW5Qhjq+V
+    GkawGVPcMSQzQrqeBqRSH15KjbVer9EtXAgOqhoX03vxZsRmaqcxjfbVNhmdXRGHUWHy
+    W4Gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1783929398;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=G6fwV1lsybGLIy4+Ze2TBEYeosUmqc6lpy1oP3kJ5XY=;
+    b=LdQ6GvFGhHEgFohBXN2pfBMOT9A30ymfjZqKAtQGT6if0tka2HVh2gljsX1wJNcysf
+    k/vWNyOM7PIff9Jq14ww01O9qi+27m/z6XtqeEH5vr3JxGB/rTp5UinOvD8h/NG42nQA
+    xCMfDM58reSuAjhdHkFVZ2eGj46rCUG8AKpOiFPP/hAbLODsMjHQToci6uBJ+BP3gjS9
+    QxRnLC7WIp5cEkUao+7vtatjomrvrkWhfO7v5K3GxmBwIjEej3mhJCyF4rfkeB/j7R45
+    BNm4OdEKq2yxqzCNu0FrtMcpkCF4HGMF+E99Fu9S168EKIb6RLJqSBfMZeoxs+6jgpSV
+    DV4Q==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1783929398;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=G6fwV1lsybGLIy4+Ze2TBEYeosUmqc6lpy1oP3kJ5XY=;
+    b=hmdMNuu3EzmoI+GL/OjllHXhyeOF+Tn4I7bC/UBwMqwSv24JYQHE18oxcpVQuqvO2a
+    PKAzk5kqy0gamgahdF10AKErq1ZnkwkqR9r+suu1xzlJSMZ5ls6TIyl0ERGevEVrE5tl
+    iZzqcGWmD+ThZ85C3ioRxoDj0oEz0Fp4026/PCGQuojef4F3oOd8fgAaNY3w7elw+ztx
+    HOUOh/0VceN7RuSxqpdSUdCakBzKuy/6TI0rOVl5SVJGwauo//glccJqezzaT8PkPXXE
+    zIpzPRH2RJdVBHE90CZ2UiwSveKPH2xaq240GzQanQ7P4mqFq/sout9aWAKl6ajlQwEa
+    ufgA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1783929398;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=G6fwV1lsybGLIy4+Ze2TBEYeosUmqc6lpy1oP3kJ5XY=;
+    b=/aZs55V1FT5F/NMRQrhaJNce2E9dGWOM7RmwHH4vBh/0O/aJnm/C6Tu2H5oHX2wiJR
+    gaFjyhm7CgV6z4AivFBA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tRkI16oOSW1Ti/f4PoH8="
+Received: from [192.168.20.236]
+    by smtp.strato.de (RZmta 55.5.6 DYNA|AUTH)
+    with ESMTPSA id Ka9fdb26D7ubZEa
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Mon, 13 Jul 2026 09:56:37 +0200 (CEST)
+Message-ID: <a2afe72f-5098-4a6f-9df7-b993f186337a@hartkopp.net>
+Date: Mon, 13 Jul 2026 09:56:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] vxcan: Support per-netns device unregistration.
+To: sashiko-reviews@lists.linux.dev, Kuniyuki Iwashima <kuniyu@google.com>
+Cc: linux-can@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, Vincent Mailhol <mailhol@kernel.org>
+References: <20260712212113.181121-1-kuniyu@google.com>
+ <20260712213422.DB1111F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20260712213422.DB1111F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MISSING_MIME_VERSION(2.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8354-lists,linux-can=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8355-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,lists.linux.dev:replyto,vger.kernel.org:from_smtp,smtp.kernel.org:mid,sashiko.dev:url];
-	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:kuniyu@google.com,m:socketcan@hartkopp.net,m:linux-can@vger.kernel.org,m:o.rempel@pengutronix.de,m:mkl@pengutronix.de,m:mailhol@kernel.org,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:sashiko-reviews@lists.linux.dev,m:kuniyu@google.com,m:linux-can@vger.kernel.org,m:o.rempel@pengutronix.de,m:mkl@pengutronix.de,m:mailhol@kernel.org,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-can];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DKIM_TRACE(0.00)[hartkopp.net:+];
+	RSPAMD_EMAILBL_FAIL(0.00)[socketcan@hartkopp.net:query timed out];
 	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_NO_DN(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-can];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 985D374607A
+X-Rspamd-Queue-Id: 639E0748760
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The patch calls the undefined function `unregister_netdevice_queue_=
-net()`, resulting in a compilation error.
---
 
---- Patch [1]: [PATCH v1] vxcan: Support per-netns device unregistration. -=
---
-commit 882fcd31630d9ce6b0a57cc99738c2ad0579763f
-Author: Kuniyuki Iwashima <kuniyu@google.com>
 
-vxcan: Support per-netns device unregistration.
+On 12.07.26 23:34, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Low] The patch calls the undefined function `unregister_netdevice_queue_net()`, resulting in a compilation error.
+> --
+> 
+> --- Patch [1]: [PATCH v1] vxcan: Support per-netns device unregistration. ---
+> commit 882fcd31630d9ce6b0a57cc99738c2ad0579763f
+> Author: Kuniyuki Iwashima <kuniyu@google.com>
+> 
+> vxcan: Support per-netns device unregistration.
+> 
+> This commit updates vxcan_dellink() to unregister local and peer devices
+> safely across different namespaces by using xchg(). The change aims to
+> prevent double-queuing of device destruction when RTNL is removed.
+> 
+>> diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
+>> --- a/drivers/net/can/vxcan.c
+>> +++ b/drivers/net/can/vxcan.c
+> 
+> [ ... ]
+> 
+>> @@ -281,24 +284,25 @@ static int vxcan_newlink(struct net_device *dev,
+>>   
+>>   static void vxcan_dellink(struct net_device *dev, struct list_head *head)
+>>   {
+> 
+> [ ... ]
+> 
+>>   	unregister_netdevice_queue(dev, head);
+>>   
+>> -	if (peer) {
+>> -		priv = netdev_priv(peer);
+>> -		RCU_INIT_POINTER(priv->peer, NULL);
+>> -		unregister_netdevice_queue(peer, head);
+>> -	}
+>> +	priv = netdev_priv(peer);
+>> +	dev = unrcu_pointer(xchg(&priv->peer, NULL));
+>> +	if (dev)
+>> +		unregister_netdevice_queue_net(dev_net(dev), peer, head);
+> 
+> [Severity: Low]
+> Is this missing a prerequisite patch? It appears that
+> unregister_netdevice_queue_net() is not defined anywhere in the kernel
+> tree, which leads to a compilation error when building vxcan.c.
 
-This commit updates vxcan_dellink() to unregister local and peer devices
-safely across different namespaces by using xchg(). The change aims to
-prevent double-queuing of device destruction when RTNL is removed.
+The referenced veth.c patch was applied to net-next:
 
-> diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
-> --- a/drivers/net/can/vxcan.c
-> +++ b/drivers/net/can/vxcan.c
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=d7fda2c776b2a969b9d78c5ad00e30824df43add
 
-[ ... ]
+where also unregister_netdevice_queue_net() exists.
 
-> @@ -281,24 +284,25 @@ static int vxcan_newlink(struct net_device *dev,
-> =20
->  static void vxcan_dellink(struct net_device *dev, struct list_head *head)
->  {
+So this is a net-next resp. can-next patch.
 
-[ ... ]
+Regards,
+Oliver
 
->  	unregister_netdevice_queue(dev, head);
-> =20
-> -	if (peer) {
-> -		priv =3D netdev_priv(peer);
-> -		RCU_INIT_POINTER(priv->peer, NULL);
-> -		unregister_netdevice_queue(peer, head);
-> -	}
-> +	priv =3D netdev_priv(peer);
-> +	dev =3D unrcu_pointer(xchg(&priv->peer, NULL));
-> +	if (dev)
-> +		unregister_netdevice_queue_net(dev_net(dev), peer, head);
 
-[Severity: Low]
-Is this missing a prerequisite patch? It appears that
-unregister_netdevice_queue_net() is not defined anywhere in the kernel
-tree, which leads to a compilation error when building vxcan.c.
+> 
+>> +
+>> +	netdev_put(peer, peer_tracker);
+>> +	netdev_put(dev, &priv->peer_tracker);
+>>   }
+> 
 
-> +
-> +	netdev_put(peer, peer_tracker);
-> +	netdev_put(dev, &priv->peer_tracker);
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260712212113.1811=
-21-1-kuniyu@google.com?part=3D1
 
