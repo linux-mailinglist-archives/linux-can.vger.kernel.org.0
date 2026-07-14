@@ -1,173 +1,235 @@
-Return-Path: <linux-can+bounces-8414-lists+linux-can=lfdr.de@vger.kernel.org>
+Return-Path: <linux-can+bounces-8415-lists+linux-can=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-can@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id KqI6Ai8mVmpP0AAAu9opvQ
-	(envelope-from <linux-can+bounces-8414-lists+linux-can=lfdr.de@vger.kernel.org>)
-	for <lists+linux-can@lfdr.de>; Tue, 14 Jul 2026 14:06:07 +0200
+	id asItAE0mVmpi0AAAu9opvQ
+	(envelope-from <linux-can+bounces-8415-lists+linux-can=lfdr.de@vger.kernel.org>)
+	for <lists+linux-can@lfdr.de>; Tue, 14 Jul 2026 14:06:37 +0200
 X-Original-To: lists+linux-can@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA235754426
-	for <lists+linux-can@lfdr.de>; Tue, 14 Jul 2026 14:06:05 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57367754449
+	for <lists+linux-can@lfdr.de>; Tue, 14 Jul 2026 14:06:36 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0002 header.b=UlJn+NuA;
-	dkim=pass header.d=hartkopp.net header.s=strato-dkim-0003 header.b=7U4Hb6dC;
-	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8414-lists+linux-can=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-can+bounces-8414-lists+linux-can=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=hartkopp.net;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="m/7GtgZO";
+	spf=pass (mail.lfdr.de: domain of "linux-can+bounces-8415-lists+linux-can=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-can+bounces-8415-lists+linux-can=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0835732ACE73
-	for <lists+linux-can@lfdr.de>; Tue, 14 Jul 2026 11:53:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 309EC31DF1DD
+	for <lists+linux-can@lfdr.de>; Tue, 14 Jul 2026 11:54:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FEDE381EAD;
-	Tue, 14 Jul 2026 11:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016ED380FE7;
+	Tue, 14 Jul 2026 11:49:04 +0000 (UTC)
 X-Original-To: linux-can@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B60B38399B
-	for <linux-can@vger.kernel.org>; Tue, 14 Jul 2026 11:47:53 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784029676; cv=pass; b=kZTbx9+Dg3CJtqhBpfUDiZVTGSM+pdy8up3WET9xim8H9Yq6OAlX8F6TVkmQOjOBuHbBxyd54Pq/9ml+1tnMhLGMMwn+J5HfgjAxRZqEcJULGDn97El9EI3zluIGzW67+U2NiY6dMkh3juw5g26Mie/eCZHOv4lGCim1A+6zAzE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784029676; c=relaxed/simple;
-	bh=f3TqkgRoXgFadJ3Zw5quD61+Nj3I+Wq9hEgD37F0W48=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dTz1yT/xwoc6ED+Bsyp4H9UaA84gqvhjA7yNWCpv2GdA2N5XudJezNTdPmd+/yikv/DKFcae3+4R7XooMFGZ73RqAgOurQl0Pt0HbQZ/yurxthxlBsioUWBhDKnJvpxS54LxWbd36c55Do7a7iZzpVjIdQWt8Cn1fM30C5kMO1Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hartkopp.net; spf=fail smtp.mailfrom=hartkopp.net; dkim=pass (2048-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=UlJn+NuA; dkim=permerror (0-bit key) header.d=hartkopp.net header.i=@hartkopp.net header.b=7U4Hb6dC; arc=pass smtp.client-ip=85.215.255.54
-ARC-Seal: i=1; a=rsa-sha256; t=1784029655; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=NXMVUufWkfQ0ulRHtoPwlMEiSktyluEwLhxRPJFT2hIZZIK/agRBSj5/9qowc0wZHM
-    AH2bkE6s1E+nq65apZEVTI8uJwiaweg1DNDYhxbA1nlwcyod2cVVMTwvlLe0yRsn+EkT
-    rE89SjJ6LIDdbOS41Mt35Y8pZLPaxPJYkQG5q6wREFcqWXvbCK1G8gWr5BrMXr0LF0hA
-    pVq/2nCLOpXLXRIhctZchaAd5l+VOT/rlK3eO7ZsRC0adjNYk3/WIFBaz/nGgfdZZMFC
-    sH9xygtkYSsO7bCRyI9abKila1XIaqEl+PXTDTST+awn8ddyNJueI7VW3HQWtr1Z9GTc
-    w4jQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1784029655;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ulGlExmyGIJwwDpR21HQW+x4M19jopiWKr2LjYr80os=;
-    b=nOS2DsnYTuV2YR9ETCqrH0gIzE8jTQompGgorXKUW73PrRavQrfOoLJSkebpuI7+Qq
-    te6FJvpIyKwNuq9rMdj7A8n25z7cQ0pOgjaimZIUWpNqhZr9EatVF4gVJlhLm79qdXnL
-    USgTyR99VrAbPaKC+eEnLaFmxJ32BTmt1uUItdKlzvI4AT7FCvzORUh1dCl0xFW4tRns
-    uNzYOkIbDjqajECmxwqaw4rUv4OlWbnoboqJbWcg2C8oH6es8Ddmca3RBLDDAk/mTkt6
-    C9s2HsOq8PF2fp1y32FaIP1nzs9/EmEwTnYDkdfkH2QEy+Xfa53brtuv01tGsFkYjNxR
-    81gA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1784029655;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ulGlExmyGIJwwDpR21HQW+x4M19jopiWKr2LjYr80os=;
-    b=UlJn+NuAog3tTVNSgMUqyLnmydhrJ6p2iPOlFTjfNLlJ+UkdzxV+n0mVJZnuomdMUp
-    Ht9smUIX445+E+DceGXBMUMv0hV07jnuQSQCNrzhJmEJgLZY5PqxD3bDiE+TnsF6m52U
-    xdcuMvlQU2nsNvrrv5bduPTQWi0Lrhhv3Fm6lnfsgwUsWZh47/JRBeJh6uNaSOL1JeeO
-    Q/eN95ROUTUEsEKOXFJDFXDas8v2vH1QzZrIMk4aw5Pp5j5tg1BzQjsTSjTrON/0IIZr
-    KyK9D2Y2iK7gyWPCZkH57fLPhE2sxuqrCLx21K1wXSZpZaIdVZoyiKZvXj9RtYbvIxRw
-    SVuA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1784029655;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=ulGlExmyGIJwwDpR21HQW+x4M19jopiWKr2LjYr80os=;
-    b=7U4Hb6dC8FhHiK5r5xfadiuQgOGcmIP4HUixDU0avcF1NLUGVFhyW19LcUenWlkb9V
-    VOYbLltWjKBqzQGFJgCA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjH4JKvMdQv2tRkI16oOSW1Ti/f4PoH8="
-Received: from [192.168.20.190]
-    by smtp.strato.de (RZmta 55.5.6 DYNA|AUTH)
-    with ESMTPSA id Ka9fdb26EBlZjt3
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Tue, 14 Jul 2026 13:47:35 +0200 (CEST)
-Message-ID: <1a521f25-0aee-4eae-a0da-3eb7f0702e84@hartkopp.net>
-Date: Tue, 14 Jul 2026 13:47:35 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40D01F5821
+	for <linux-can@vger.kernel.org>; Tue, 14 Jul 2026 11:49:02 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784029743; cv=none; b=YNnjvBTdXpdQ6ZGUWS1RM7aOuQcXtc4O+5+lxuCvUhQ8Pvf0ehLpY2lj0p60dUcsWmGTV+lFRnyrbQQUXidyGXL9iF3B/gQtc03uUiKMpKpgZk+jWZyCMOhSMLVftKTsF3/zWwOlexNG+4VHDmRag772go+aGRqeEPFNiNb86nE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784029743; c=relaxed/simple;
+	bh=Hkg2Sd8ypbtw/xd+z5mSjVmR7kHV6fogT0jHi9H3u7w=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ebXP1BJ/1uq4Z/xUsJ/f9AabKPk6zLMdIc0pXL6bSP4DdRcD5P8JXvAWS2Mdkr1TjPo0DMG0vHu7BFvynwnjcV+gRTPIguDAqk7dQcy510xIJVOG/dU/KkeIs4tancC60QcpIeOJ5CF09WkCeqwKf0CQtXFHz6C/xBRszkdARq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/7GtgZO; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D9341F000E9;
+	Tue, 14 Jul 2026 11:49:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784029742;
+	bh=LvPQoE0xfAgWCKP9BCe7eS2EW2VlmWVyyqj8e4E7o7Q=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=m/7GtgZOlwgf7Lt3piOGiODziOArv+TyekIqXxwWHVIklHgvvsUMWUy9TIN3dNZhV
+	 CNi9lIkroqpIZkPB86SGFl42ok3coI+LfXtu/ktaJN0qdCboKDZpJVNxGgrmfnjnxD
+	 /K8qSGTNW/FWLjPzDquOlOEpLtOsFRDzQrVLOGTIF/AXZX87owVx9JYl7sO7FB+6oU
+	 qLjFvTggunvHNNQ2kYCTgfZFaLH+zv/YW0HrwNHgwLaHASEOBiIp3w/2mRrw+TZyWT
+	 53ZkqYJKd95mzr8iSBRErOecAoCZQR8K2CSHoFdsKfLmjPkdbgXwT8sh7bIq7lm7Zs
+	 eOMRPOPxPwUcA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v14 06/11] can: bcm: extend bcm_tx_lock usage for data
+ and timer updates
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Oliver Hartkopp" <socketcan@hartkopp.net>
+Cc: "Oleksij Rempel" <o.rempel@pengutronix.de>, linux-can@vger.kernel.org, "Marc
+ Kleine-Budde" <mkl@pengutronix.de>, "Oliver Hartkopp" <socketcan@hartkopp.net>, "Vincent
+ Mailhol" <mailhol@kernel.org>
+In-Reply-To: <20260714-bcm_fixes-v14-6-867a4be60a61@hartkopp.net>
+References: <20260714-bcm_fixes-v14-0-867a4be60a61@hartkopp.net>
+ <20260714-bcm_fixes-v14-6-867a4be60a61@hartkopp.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 14 Jul 2026 11:49:01 +0000
+Message-Id: <20260714114902.0D9341F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-can@vger.kernel.org
 List-Id: <linux-can.vger.kernel.org>
 List-Subscribe: <mailto:linux-can+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-can+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 09/11] can: bcm: fix stale rx/tx ops after device
- removal
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: sashiko-reviews@lists.linux.dev, Oleksij Rempel
- <o.rempel@pengutronix.de>, linux-can@vger.kernel.org,
- Vincent Mailhol <mailhol@kernel.org>
-References: <20260714-bcm_fixes-v13-0-fd667c61099a@hartkopp.net>
- <20260714-bcm_fixes-v13-9-fd667c61099a@hartkopp.net>
- <20260714104431.65C751F000E9@smtp.kernel.org>
- <2c2bc659-fd26-4c48-a5f4-e9e6a3c43003@hartkopp.net>
- <20260714-towering-phenomenal-nyala-ad406f-mkl@pengutronix.de>
-Content-Language: en-US
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20260714-towering-phenomenal-nyala-ad406f-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[hartkopp.net,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[hartkopp.net:s=strato-dkim-0002,hartkopp.net:s=strato-dkim-0003];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-8415-lists,linux-can=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:mkl@pengutronix.de,m:sashiko-reviews@lists.linux.dev,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,m:mailhol@kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,hartkopp.net:email,sashiko.dev:url,lists.linux.dev:replyto,smtp.kernel.org:mid];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8414-lists,linux-can=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:socketcan@hartkopp.net,m:o.rempel@pengutronix.de,m:linux-can@vger.kernel.org,m:mkl@pengutronix.de,m:mailhol@kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-can@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[socketcan@hartkopp.net,linux-can@vger.kernel.org];
-	DKIM_TRACE(0.00)[hartkopp.net:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-can];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,hartkopp.net:from_mime,hartkopp.net:dkim,hartkopp.net:mid]
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: EA235754426
+X-Rspamd-Queue-Id: 57367754449
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
+Pre-existing issues:
+- [High] Preexisting TOCTOU race in `bcm_can_tx` causes CAN frame sequence =
+corruption and skipped frames when an operation is updated concurrently.
+--
 
-On 14.07.26 13:41, Marc Kleine-Budde wrote:
-> On 14.07.2026 13:24:17, Oliver Hartkopp wrote:
->> On 14.07.26 12:44, sashiko-bot@kernel.org wrote:
->>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
->>>
->>> Pre-existing issues:
->>> - [High] Unprotected concurrent access to op->rx_stamp and op->rx_ifindex in bcm_rx_handler causes data races and torn 64-bit reads on 32-bit architectures.
->>
->> Fixed in patch 10
-> 
-> Pre-existing issues are not a shot stopper, _new_ issues for a patch
-> series are...usually are.
-> 
-> Hopefully upstream will accept that you fix issues in a later patch that
-> sashiko claim to be introduced by a patch in the series.
+--- Patch [6]: [PATCH v14 06/11] can: bcm: extend bcm_tx_lock usage for dat=
+a and timer updates ---
+commit 2415d37e8cc6682239aca2edf2ea4608c5e64f24
+Author: Oliver Hartkopp <socketcan@hartkopp.net>
 
-Is it?
+can: bcm: extend bcm_tx_lock usage for data and timer updates
 
-Patch 10 Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
+This commit stages new CAN frame content into a dynamically allocated
+buffer to validate before acquiring the lock, and updates timer variables
+under lock to fix a torn 64-bit ktime_t read on 32-bit platforms.
 
-not anything in patch 9.
+> diff --git a/net/can/bcm.c b/net/can/bcm.c
+> index 940cd9df1cca3..d5ca5ca472f1f 100644
+> --- a/net/can/bcm.c
+> +++ b/net/can/bcm.c
 
-Best regards,
-Oliver
+[ ... ]
 
+> @@ -1052,36 +1094,38 @@ static int bcm_tx_setup(struct bcm_msg_head *msg_=
+head, struct msghdr *msg,
+>  					err =3D -EINVAL;
+>  			}
+> =20
+> -			if (err < 0)
+> +			if (err < 0) {
+> +				kfree(new_frames);
+>  				return err;
+> +			}
+> =20
+>  			if (msg_head->flags & TX_CP_CAN_ID) {
+>  				/* copy can_id into frame */
+>  				cf->can_id =3D msg_head->can_id;
+>  			}
+>  		}
+> +
+> +		spin_lock_bh(&op->bcm_tx_lock);
+> +
+> +		/* update CAN frames content */
+> +		memcpy(op->frames, new_frames, msg_head->nframes * op->cfsiz);
+> +
+>  		op->flags =3D msg_head->flags;
+> =20
+> -		/* only lock for unlikely count/nframes/currframe changes */
+>  		if (op->nframes !=3D msg_head->nframes ||
+> -		    op->flags & TX_RESET_MULTI_IDX ||
+> -		    op->flags & SETTIMER) {
+> -
+> -			spin_lock_bh(&op->bcm_tx_lock);
+> =20
+> -			if (op->nframes !=3D msg_head->nframes ||
+> -			    op->flags & TX_RESET_MULTI_IDX) {
+> -				/* potentially update changed nframes */
+> -				op->nframes =3D msg_head->nframes;
+> -				/* restart multiple frame transmission */
+> -				op->currframe =3D 0;
+> -			}
+> +		    op->flags & TX_RESET_MULTI_IDX) {
+> +			/* potentially update changed nframes */
+> +			op->nframes =3D msg_head->nframes;
+> +			/* restart multiple frame transmission */
+> +			op->currframe =3D 0;
+> +		}
+
+[Severity: High]
+This is a pre-existing issue, but does bcm_can_tx in net/can/bcm.c have a=20
+race condition with TX_RESET_MULTI_IDX that corrupts the sequence state?
+
+When bcm_can_tx is called by the timer, it reads op->currframe under
+op->bcm_tx_lock, drops the lock to send the frame, and reacquires the lock
+to update the sequence state:
+
+CPU1 (Timer context in bcm_can_tx)
+    spin_lock_bh(&op->bcm_tx_lock);
+    // reads currframe
+    spin_unlock_bh(&op->bcm_tx_lock);
+   =20
+    can_send(skb, 1);
+
+If a concurrent sendmsg triggers bcm_tx_setup while the lock is dropped:
+
+CPU2 (User context in bcm_tx_setup)
+    spin_lock_bh(&op->bcm_tx_lock);
+    if (op->flags & TX_RESET_MULTI_IDX)
+        op->currframe =3D 0;
+    if (op->flags & SETTIMER)
+        op->count =3D msg_head->count;
+    spin_unlock_bh(&op->bcm_tx_lock);
+
+Then CPU1 resumes and unconditionally increments the state:
+
+CPU1 (Resuming in bcm_can_tx)
+    spin_lock_bh(&op->bcm_tx_lock);
+    op->currframe++;=20
+    if (op->count > 0)
+        op->count--;
+    spin_unlock_bh(&op->bcm_tx_lock);
+
+Could this unconditional increment change the newly reset currframe from 0
+to 1, causing frame 0 of the new sequence to be skipped? Also, wouldn't
+this incorrectly decrement the new op->count limit?
+
+> =20
+> -			if (op->flags & SETTIMER)
+> -				op->count =3D msg_head->count;
+> +		if (op->flags & SETTIMER)
+> +			op->count =3D msg_head->count;
+> =20
+> -			spin_unlock_bh(&op->bcm_tx_lock);
+> -		}
+> +		spin_unlock_bh(&op->bcm_tx_lock);
+> =20
+> -		kfree(new_frames);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260714-bcm_fixes-=
+v14-0-867a4be60a61@hartkopp.net?part=3D6
 
